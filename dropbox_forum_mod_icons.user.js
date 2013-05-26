@@ -47,7 +47,7 @@ function changePage(checkPart, checkFor, checkForSubClass, metaData){
         var authorProfile = authorSmall[0].getElementsByTagName("a");
         var authorRole = authorProfile[0].innerHTML;
         if (authorRole == "Super User" && authorName == "Andy Y."){
-          authorProfile[0].innerHTML = "Supreme ruler and guardian of all that he sees and everything he touches turns to gold if he so pleases! Master of Chuck Norris and awesomist of awesome. Also king. All hail the king!";
+          authorProfile[0].innerHTML = "Master of Super Users";
         }
       }
     }
