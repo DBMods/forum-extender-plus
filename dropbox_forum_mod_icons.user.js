@@ -7,7 +7,7 @@
 // ==/UserScript==
 
 //Set internal version
-var internalVersion = 2013.6;
+var internalVersion = 2013.7;
 
 //Set all required variables
 var elems = document.getElementsByTagName("*"), i;
@@ -16,45 +16,106 @@ var elems = document.getElementsByTagName("*"), i;
 addFooter();
 
 //Run necessary checks and changes
-changePage("author", "role", "Super User", "<img src='http://www.techgeek01.com/just-for-fun/nyancatright.gif' height='16px' width='40px' >&nbsp;");
+addIcon("role", "Super User", getIcon("mod"));
+postHighlight("Super User", "#ffee88");
+changeRoleName("1618104", "Master of Super Users");
 
-//Manipulate page
-function changePage(checkPart, checkFor, checkForSubClass, metaData){
-  //Process and direct page check
-  if (checkPart == "author"){
-    if (checkFor == "role"){
-      var authorIndex = "</a></small>";
-    } else if (checkFor == "id"){
-      var authorIndex = checkForSubClass;
-      var checkForSubclass = '<small><a href="https://forums.dropbox.com/profile.php?id=';
-    }
-    checkAuthor("threadauthor", checkForSubClass, authorIndex, metaData);
-  }
+//Add icons to users
+function addIcon(checkFor, checkForSubClass, icon) {
+	//Process call and pass in appropriate variables
+	if(checkFor == "role") {
+		var referenceIndex = "</a></small>";
+	} else if(checkFor == "id") {
+		var referenceIndex = checkForSubClass;
+		var checkForSubclass = '<small><a href="https://forums.dropbox.com/profile.php?id=';
+	}
+	processedIconRequest(checkForSubClass, referenceIndex, icon);
 
-  //Check author information
-  function checkAuthor(matchClass, indexA, indexB, contentAddition){
-    for (i in elems){
-      if ((" " + elems[i].className + " ").indexOf(" " + matchClass + " ") > -1 && elems[i].innerHTML.indexOf(indexB) - indexA.length == elems[i].innerHTML.indexOf(indexA)){
-        elems[i].innerHTML = "<p><strong>" + contentAddition + elems[i].innerHTML.substring(26, elems[i].innerHTML.length);
-        var authorPar = elems[i].getElementsByTagName("p");
-        var authorStrong = authorPar[0].getElementsByTagName("strong");
-        var authorName = authorStrong[0].innerHTML;
-        if (authorName.indexOf("<a href") > -1){
-          authorName = authorStrong[0].getElementsByTagName("a");
-          authorName = authorName[0].innerHTML;
-        }
-        var authorSmall = authorPar[0].getElementsByTagName("small");
-        var authorProfile = authorSmall[0].getElementsByTagName("a");
-        var authorRole = authorProfile[0].innerHTML;
-        if (authorRole == "Super User" && authorName == "Andy Y."){
-          authorProfile[0].innerHTML = "Master of Super Users";
-        }
-      }
-    }
-  }
+	//Execute the processed request
+	function processedIconRequest(indexA, indexB, selectedIcon) {
+		for(i in elems) {
+			if((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(indexA) > -1) {
+				elems[i].innerHTML = "<p><strong>" + selectedIcon + elems[i].innerHTML.substring(26, elems[i].innerHTML.length);
+			}
+		}
+	}
+
+}
+
+//Change role name
+function changeRoleName(checkFor, newRole) {
+	for(i in elems) {
+		if((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(checkFor) > -1) {
+			var authorPar = elems[i].getElementsByTagName("p");
+			var authorSmall = authorPar[0].getElementsByTagName("small");
+			var authorProfile = authorSmall[0].getElementsByTagName("a");
+			authorProfile[0].innerHTML = newRole;
+		}
+	}
+}
+
+//Highlight posts
+function postHighlight(highlightRole, highlightColor) {
+	//Reset count variables
+	var rolePostCount = 0;
+	var totalPostCount = 0;
+
+	//Count total posts and posts by certain users
+	for(i in elems) {
+		if((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1) {
+			totalPostCount = totalPostCount + 1;
+			if(elems[i].innerHTML.indexOf(highlightRole) > -1) {
+				rolePostCount = rolePostCount + 1;
+			}
+		}
+	}
+
+	//Default status
+	var highlightStatus = "enabled";
+
+	//Turn of highlighting under correct conditions
+	if(totalPostCount > 5 && rolePostCount / totalPostCount > 0.2) {
+		highlightStatus = "disabled";
+	} else if(totalPostCount == 5 && rolePostCount > 2) {
+		highlightStatus = "disabled";
+	} else if(totalPostCount < 5 && rolePostCount > 1) {
+		highlightStatus = "disabled";
+	}
+
+	var navFound = false;
+
+	//Display message above top nav element
+	for(i in elems) {
+		if((" " + elems[i].className + " ").indexOf(" nav ") > -1 && navFound === false) {
+			elems[i].innerHTML = "<div>Highlighting " + highlightStatus + " for all " + highlightRole + "s</div><br>" + elems[i].innerHTML;
+			navFound = true;
+		}
+	}
+
+	//Highlight posts if enabled
+	for(i in elems) {
+		if((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && highlightStatus == "enabled" && elems[i].innerHTML.indexOf(highlightRole) > -1) {
+			var authorPostContainer = elems[i].parentNode;
+			var authorPostDiv = authorPostContainer.getElementsByTagName("div");
+			authorPostDiv[1].style.cssText = "background: " + highlightColor + ";";
+		}
+	}
+}
+
+//Process icon requests
+function getIcon(role) {
+	if(role == "mod") {
+		return "<img src='http://www.techgeek01.com/just-for-fun/nyancatright.gif' height='16px' width='40px'>&nbsp;";
+	} else if(role == "pro") {
+		return "<img align='top' src='https://forums.dropbox.com/bb-templates/dropbox/images/star.gif'>&nbsp;";
+	} else if(role == "emp") {
+		return "<img align='absmiddle' src='https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif'>&nbsp;";
+	} else {
+		return null;
+	}
 }
 
 //Append footer
-function addFooter(){
-  document.getElementById("footer").innerHTML = document.getElementById("footer").innerHTML + "<div style='text-align: right; color: rgb(102, 102, 102); font-size: 11px; clear:both;'>Dropbox Forum Mod Icons Version " + internalVersion + "</div>";
+function addFooter() {
+	document.getElementById("footer").innerHTML = document.getElementById("footer").innerHTML + "<div style='text-align: right; color: rgb(102, 102, 102); font-size: 11px; clear:both;'>Dropbox Forum Mod Icons Version " + internalVersion + "</div>";
 }
