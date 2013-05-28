@@ -2,6 +2,7 @@
 // @name Dropbox Forum Mod Icons
 // @namespace IdeativeSoftware.Dropbox
 // @description Gives Dropbox Forum Super Users icons
+// @version 1.0
 // @include https://forums.dropbox.com/*
 // @grant none
 // ==/UserScript==
