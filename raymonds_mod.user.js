@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Dropbox Forum Mod Icons
 // @description Gives Dropbox Forum Super Users icons, Raymond's Mod
-// @version 0.1
+// @version 0.2
 // @include https://forums.dropbox.com/*
 // @grant none
 // ==/UserScript==
