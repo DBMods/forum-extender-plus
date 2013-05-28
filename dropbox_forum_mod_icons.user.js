@@ -7,6 +7,9 @@
 // @grant none
 // ==/UserScript==
 
+//Set internal version
+var internalVersion = 2013.7;
+
 //Set all required variables
 var elems = document.getElementsByTagName("*"), i;
 
