@@ -103,11 +103,11 @@ authorPostDiv[1].style.cssText = "background: " + highlightColor + ";";
 //Process icon requests
 function getIcon(role) {
 if(role == "mod") {
-return "<img src='http://cdn.dropboxwiki.com/static/star.png' />&nbsp;";
+return "<img src='http://cdn.dropboxwiki.com/static/star.png'>&nbsp;";
 } else if(role == "pro") {
-return "<img align='top' src='https://forums.dropbox.com/bb-templates/dropbox/images/star.gif' />&nbsp;";
+return "<img align='top' src='https://forums.dropbox.com/bb-templates/dropbox/images/star.gif'>&nbsp;";
 } else if(role == "emp") {
-return "<img align='absmiddle' src='https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif' />&nbsp;";
+return "<img align='absmiddle' src='https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif'>&nbsp;";
 } else {
 return null;
 }
