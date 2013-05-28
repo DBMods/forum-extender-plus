@@ -82,7 +82,7 @@ authorPostDiv[1].style.cssText = "background: " + highlightColor + ";";
 //Process icon requests
 function getIcon(role) {
 if(role == "mod") {
-return "<img src='https://dl.dropboxusercontent.com/u/9979966/forums/star.gif' />&nbsp;";
+return "<img src='https://dl.dropboxusercontent.com/u/9979966/forums/star.png' />&nbsp;";
 } else if(role == "pro") {
 return "<img align='top' src='https://forums.dropbox.com/bb-templates/dropbox/images/star.gif' />&nbsp;";
 } else if(role == "emp") {
