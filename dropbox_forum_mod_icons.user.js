@@ -2,13 +2,10 @@
 // @name Dropbox Forum Mod Icons
 // @namespace IdeativeSoftware.Dropbox
 // @description Gives Dropbox Forum Super Users icons
-// @version 1.0
+// @version 1.0.1
 // @include https://forums.dropbox.com/*
 // @grant none
 // ==/UserScript==
-
-//Set internal version
-var internalVersion = 2013.7;
 
 //Set all required variables
 var elems = document.getElementsByTagName("*"), i;
@@ -106,7 +103,7 @@ authorPostDiv[1].style.cssText = "background: " + highlightColor + ";";
 //Process icon requests
 function getIcon(role) {
 if(role == "mod") {
-return "<img src='http://www.techgeek01.com/just-for-fun/nyancatright.gif' height='16px' width='40px'>&nbsp;";
+return "<img src='https://dl.dropboxusercontent.com/u/9979966/forums/nyancatright.gif' height='16px' width='40px'>&nbsp;";
 } else if(role == "pro") {
 return "<img align='top' src='https://forums.dropbox.com/bb-templates/dropbox/images/star.gif'>&nbsp;";
 } else if(role == "emp") {
