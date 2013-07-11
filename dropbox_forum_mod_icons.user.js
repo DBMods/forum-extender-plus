@@ -49,7 +49,10 @@ revertHome("8.8.2012");
 reloadFront(120);
 reloadStickies(120);
 
-//Manage threads fron the front page
+/*
+  Manage threads from the front page
+  Currently being developed
+*/
 function threadHandlers(){
 	if(pageUrl == "https://forums.dropbox.com" && document.getElementById("header").getElementsByTagName("p")[0].getElementsByTagName("a").length > 2){
 		var latestTr = document.getElementById("latest").getElementsByTagName("tr");
