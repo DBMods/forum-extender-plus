@@ -1,0 +1,22 @@
++ Added
+- Removed
+* Fixed
+# Changed
+
+
+Dropbox Forum Mod Icons Changelog
+
+-----2013.9-----
++ Front page automatic refreshing (2 minutes default)
++ Sticky automatic refreshing (2 minutes default)
++ Page detection in order to restrict script parts to certain pages
++ Greasemonkey versioning and update and download URLs
++ Added an option to revert to the original theme as well as the revamp
+- Highlight status on pages other than topic threads
+* Highlight status indication behavior on topics
+* Super User icons are now hosted via a secure connection to avoid mixed SSL signals
+* The header image is now hosted via a secure connection to avoid mixed SSL signals
+# Commented out experimental features
+# Labeled experimentals, and listed functions to allow for executing by uncommenting lines
+# Cleaned up code
+# Improvements to 8.8.2012 theme
