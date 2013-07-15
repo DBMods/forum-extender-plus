@@ -4,18 +4,23 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.9
+// @version 2013.9.1
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
 // @grant none
 // ==/UserScript==
 
 //Set internal version
-var internalVersion = 2013.9;
+var internalVersion = "2013.9.1";
 
 //Set global variables
 var elems = document.getElementsByTagName("*"), i;
 var pageUrl = getPageUrl();
+
+/*
+* Everything above this line is crucial to the operation of this program
+* Do not modify anything above this line unless you know what you're doing
+*/
 
 //Add footer
 addFooter();
@@ -26,71 +31,117 @@ postHighlight("Super User", "#fff19d");
 changeRoleName("1618104", "Master of Super Users");
 
 /*
-  Add slideout panel
-  This is an experimental feature, and may cause some rendering issues
-*/
-//addSlideOut();
-
-/*
- Modify the homepage to look like the original revamp
- Comment out this line if you want to keep the current layout
-
-  "8.8.2012" ................ The original of the 3 revamps
-  "original" ................ The original layout
-	  This version currently causes automatic reload to fail, so you'll have to refresh manually
-*/
+ * Modify the homepage to look like the original revamp
+ * Comment out this line if you want to keep the current layout
+ *
+ * "8.8.2012" ................ The original of the 3 revamps
+ * "original" ................ The original layout
+ *     This version currently causes automatic reload to fail, so you'll have to refresh manually
+ */
 revertHome("8.8.2012");
 
 /*
-  Reload pages
-  The delay passed in is in seconds
-  Use 0 to disable
-*/
+ * Reload pages
+ * The delay passed in is in seconds
+ * Use 0 to disable
+ */
 reloadFront(120);
 reloadStickies(120);
 
 /*
-  Manage threads from the front page
-  Currently being developed
+* Run indev stuff
+* Everything here is currently in development, so uncomment this line at your own risk
 */
-function threadHandlers(){
-	if(pageUrl == "https://forums.dropbox.com" && document.getElementById("header").getElementsByTagName("p")[0].getElementsByTagName("a").length > 2){
-		var latestTr = document.getElementById("latest").getElementsByTagName("tr");
-		for(i in latestTr){
-			if(i > 0){
-				var postLink = latestTr[i].getElementsByTagName("td")[0].getElementsByTagName("a")[0];
-				var postId = postLink.href.substring(postLink.href.indexOf("id=") + 3, postLink.href.length);
-			}
+//inDev();
+
+/*
+* Everything below this line is crucial to the operation of this script
+* Do not modify anything below this line unless you know what you're doing
+*/
+
+//Handle indev stuff
+function inDev() {
+	/*
+	* This function contains all of the things currently either in development or being debugged
+	* Any of these functions can be run by uncommenting the function call below
+	* Feel free to modify these functions
+	*/
+	//addSlideOut();
+
+	//Add slideout panel
+	function addSlideOut() {
+		//Add panel
+		document.getElementsByTagName("body")[0].innerHTML = "<div id='hidden-info-container' style='display:none;'></div><div id='moderator-slideout-panel'><div id='slideout-panel-content'><h1 id='slideout-panel-header'>Recent Moderator (+ Ryan) Activity</h1><p id='slideout-panel-info'></p></div></div>" + bodySelect[0].innerHTML;
+
+		//Grab and parse information
+		var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
+		var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
+		var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
+		for (i in activityList) {
+			document.getElementById("hidden-info-container").innerHTML = "<iframe src='https://forums.dropbox.com/profile.php?id=" + userList[i] + "' id='user-profile-page'></iframe>";
+			var iframeContent = userProfileIframe.contentDocument || userProfileIframe.contentWindow;
+			var userActivityList = iframeContent.getElementsByTagName("body")[0].getElementById("user-replies").getElementsByTagName("ol")[0].getElementsByTagName("li")[0].innerHTML;
+			alert(userActivityList.indexOf(" last replied: ") + 15);
+			alert(userActivityList.indexOf(" ago</a> |") + 10);
+			var userRecentActivity = userActivityList.substring(userActivityList.indexOf(" last replied: ") + 15, userActivityList.indexOf(" ago</a> |") + 10);
+			activityList[i] = userRecentActivity.substring(userRecentActivity.indexOf('">') + 2, userRecentActivity.indexOf(" ago</a> |") + 10);
 		}
+
+		//Add information
+		for (i in nameList) {
+			document.getElementById("slideout-panel-info").innerHTML = document.getElementById("slideout-panel-info").innerHTML + "<li><strong>" + nameList[i] + "</strong> - " + activityList[i] + "</li>";
+		}
+		document.getElementById("slideout-panel-info").innerHTML = "<ul>" + document.getElementById("slideout-panel-info").innerHTML + "</ul>";
+
+		//Style panel
+		var panelStyling = "background: #ffffff; position: fixed; bottom: 0; left: 0; border-top: 8px solid #bbeeff; border-right: 8px solid #bbeeff; border-top-right-radius: 35px; z-index: 10";
+		document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 75px; width: 75px;" + panelStyling);
+		document.getElementById("slideout-panel-content").setAttribute("style", "display: none;");
+
+		//Set up hover animation
+		document.getElementById("moderator-slideout-panel").onmouseover = function() {
+			document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 500px; width: 800px;" + panelStyling);
+			document.getElementById("slideout-panel-content").setAttribute("style", "width: 600px; margin: 50px auto; text-align: center;");
+		};
+		document.getElementById("moderator-slideout-panel").onmouseout = function() {
+			document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 75px; width: 75px;" + panelStyling);
+			document.getElementById("slideout-panel-content").setAttribute("style", "display: none;");
+		};
 	}
+
 }
 
 //Reload stickies
-function reloadStickies(reloadDelay){
-	if (reloadDelay > 0 && pageUrl == "https://forums.dropbox.com/topic.php" && document.getElementById("topic_labels").innerHTML.indexOf("[sticky]") > -1 && document.getElementById("topic").value == "" && document.getElementById("post_content").value == "")
-		setTimeout(function() {document.location.reload();}, reloadDelay * 1000);
+function reloadStickies(reloadDelay) {
+	if (reloadDelay > 0 && pageUrl == "https://forums.dropbox.com/topic.php" && document.getElementById("topic_labels").innerHTML.indexOf("[sticky]") > -1)
+		setTimeout(function() {
+			if (document.getElementById("topic").value == "" && document.getElementById("post_content").value == "")
+				document.location.reload();
+		}, reloadDelay * 1000);
 }
 
 //Reload the front page
 function reloadFront(reloadDelay) {
-	if(reloadDelay > 0 && pageUrl == "https://forums.dropbox.com")
-		setTimeout(function() {document.location.reload();}, reloadDelay * 1000);
+	if (reloadDelay > 0 && pageUrl == "https://forums.dropbox.com")
+		setTimeout(function() {
+			document.location.reload();
+		}, reloadDelay * 1000);
 }
 
 //Add icons to users
 function addIcon(checkFor, checkForSubClass, icon) {
-	if(pageUrl == "https://forums.dropbox.com/topic.php") {
+	if (pageUrl == "https://forums.dropbox.com/topic.php") {
 		//Process call and pass in appropriate variables
-		if(checkFor == "role")
+		if (checkFor == "role")
 			processedIconRequest(checkForSubClass, "</a></small>", icon);
-		else if(checkFor == "id")
+		else if (checkFor == "id")
 			processedIconRequest('<small><a href="https://forums.dropbox.com/profile.php?id=', checkForSubClass, icon);
 	}
 
 	//Execute the processed request
 	function processedIconRequest(indexA, indexB, selectedIcon) {
-		for(i in elems) {
-			if((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(indexA) > -1)
+		for (i in elems) {
+			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(indexA) > -1)
 				elems[i].innerHTML = "<p><strong>" + selectedIcon + elems[i].innerHTML.substring(26, elems[i].innerHTML.length);
 		}
 	}
@@ -99,9 +150,9 @@ function addIcon(checkFor, checkForSubClass, icon) {
 
 //Change role name
 function changeRoleName(checkFor, newRole) {
-	if(pageUrl == "https://forums.dropbox.com/topic.php") {
-		for(i in elems) {
-			if((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(checkFor) > -1)
+	if (pageUrl == "https://forums.dropbox.com/topic.php") {
+		for (i in elems) {
+			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(checkFor) > -1)
 				elems[i].getElementsByTagName("p")[0].getElementsByTagName("small")[0].getElementsByTagName("a")[0].innerHTML = newRole;
 		}
 	}
@@ -109,15 +160,15 @@ function changeRoleName(checkFor, newRole) {
 
 //Highlight posts
 function postHighlight(highlightRole, highlightColor) {
-	if(pageUrl == "https://forums.dropbox.com/topic.php") {
+	if (pageUrl == "https://forums.dropbox.com/topic.php") {
 		//Reset count variables
 		var rolePostCount = 0, totalPostCount = 0;
 
 		//Count total posts and posts by certain users
-		for(i in elems) {
-			if((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1) {
+		for (i in elems) {
+			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1) {
 				totalPostCount++;
-				if(elems[i].innerHTML.indexOf(highlightRole) > -1)
+				if (elems[i].innerHTML.indexOf(highlightRole) > -1)
 					rolePostCount++;
 			}
 		}
@@ -129,8 +180,8 @@ function postHighlight(highlightRole, highlightColor) {
 		document.getElementById("thread").innerHTML = "<li style='text-align: center;'>Highlighting " + highlightStatus + " for all " + highlightRole + "s</li>" + document.getElementById("thread").innerHTML + "<li style='text-align: center;'>Highlighting " + highlightStatus + " for all " + highlightRole + "s</li>";
 
 		//Highlight posts if enabled
-		for(i in elems) {
-			if((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && highlightStatus == "enabled" && elems[i].innerHTML.indexOf(highlightRole) > -1) {
+		for (i in elems) {
+			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && highlightStatus == "enabled" && elems[i].innerHTML.indexOf(highlightRole) > -1) {
 				var authorPostContainer = elems[i].parentNode;
 				var authorPostDiv = authorPostContainer.getElementsByTagName("div");
 				authorPostDiv[1].style.cssText = "background: " + highlightColor + ";";
@@ -139,55 +190,14 @@ function postHighlight(highlightRole, highlightColor) {
 	}
 }
 
-//Add slideout panel
-function addSlideOut() {
-	//Add panel
-	document.getElementsByTagName("body")[0].innerHTML = "<div id='hidden-info-container' style='display:none;'></div><div id='moderator-slideout-panel'><div id='slideout-panel-content'><h1 id='slideout-panel-header'>Recent Moderator (+ Ryan) Activity</h1><p id='slideout-panel-info'></p></div></div>" + bodySelect[0].innerHTML;
-
-	//Grab and parse information
-	var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
-	var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
-	var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
-	for(i in activityList) {
-		document.getElementById("hidden-info-container").innerHTML = "<iframe src='https://forums.dropbox.com/profile.php?id=" + userList[i] + "' id='user-profile-page'></iframe>";
-		var iframeContent = userProfileIframe.contentDocument || userProfileIframe.contentWindow;
-		var userActivityList = iframeContent.getElementsByTagName("body")[0].getElementById("user-replies").getElementsByTagName("ol")[0].getElementsByTagName("li")[0].innerHTML;
-		alert(userActivityList.indexOf(" last replied: ") + 15);
-		alert(userActivityList.indexOf(" ago</a> |") + 10);
-		var userRecentActivity = userActivityList.substring(userActivityList.indexOf(" last replied: ") + 15, userActivityList.indexOf(" ago</a> |") + 10);
-		activityList[i] = userRecentActivity.substring(userRecentActivity.indexOf('">') + 2, userRecentActivity.indexOf(" ago</a> |") + 10);
-	}
-
-	//Add information
-	for(i in nameList) {
-		document.getElementById("slideout-panel-info").innerHTML = document.getElementById("slideout-panel-info").innerHTML + "<li><strong>" + nameList[i] + "</strong> - " + activityList[i] + "</li>";
-	}
-	document.getElementById("slideout-panel-info").innerHTML = "<ul>" + document.getElementById("slideout-panel-info").innerHTML + "</ul>";
-
-	//Style panel
-	var panelStyling = "background: #ffffff; position: fixed; bottom: 0; left: 0; border-top: 8px solid #bbeeff; border-right: 8px solid #bbeeff; border-top-right-radius: 35px; z-index: 10";
-	document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 75px; width: 75px;" + panelStyling);
-	document.getElementById("slideout-panel-content").setAttribute("style", "display: none;");
-
-	//Set up hover animation
-	document.getElementById("moderator-slideout-panel").onmouseover = function() {
-		document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 500px; width: 800px;" + panelStyling);
-		document.getElementById("slideout-panel-content").setAttribute("style", "width: 600px; margin: 50px auto; text-align: center;");
-	};
-	document.getElementById("moderator-slideout-panel").onmouseout = function() {
-		document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 75px; width: 75px;" + panelStyling);
-		document.getElementById("slideout-panel-content").setAttribute("style", "display: none;");
-	};
-}
-
 //Revert homepage
 function revertHome(versionDate) {
-	if(pageUrl == "https://forums.dropbox.com") {
+	if (pageUrl == "https://forums.dropbox.com") {
 		var header = document.getElementById("header");
 		var latestTr = document.getElementById("latest").getElementsByTagName("tr");
 		var forumList = document.getElementById("forumlist");
 		var forumListTr = forumList.getElementsByTagName("tr");
-		if(versionDate == "original") {
+		if (versionDate == "original") {
 			//Original theme
 
 			//Add tag list and reorder elements
@@ -202,28 +212,29 @@ function revertHome(versionDate) {
 			document.getElementById("hottags").setAttribute("style", "position: absolute; right: 0px; left: auto;");
 			document.getElementById("main").setAttribute("style", "width: 866px;");
 			header.setAttribute("style", "width: 866px;");
-			header.getElementsByTagName("a")[0].getElementsByTagName("img")[0].setAttribute("src", "http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png"); elems = document.getElementsByTagName('*'), i;
-			for(i in latestTr) {
-				if(i > 0)
+			header.getElementsByTagName("a")[0].getElementsByTagName("img")[0].setAttribute("src", "http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png");
+			elems = document.getElementsByTagName('*'), i;
+			for (i in latestTr) {
+				if (i > 0)
 					latestTr[i].setAttribute("style", "background: #f7f7f7");
 			}
-			for(i in elems) {
-				if((" " + elems[i].className + " ").indexOf(" bb-root ") > -1)
+			for (i in elems) {
+				if ((" " + elems[i].className + " ").indexOf(" bb-root ") > -1)
 					elems[i].setAttribute("style", "background: #f7f7f7;");
-				if((" " + elems[i].className + " ").indexOf(" alt ") > -1)
+				if ((" " + elems[i].className + " ").indexOf(" alt ") > -1)
 					elems[i].setAttribute("style", "background: #ffffff;");
-				if((" " + elems[i].className + " ").indexOf(" super-sticky ") > -1)
+				if ((" " + elems[i].className + " ").indexOf(" super-sticky ") > -1)
 					elems[i].setAttribute("style", "background: #deeefc;");
 			}
 			document.getElementById("latest").setAttribute("style", "background: #ffffff; border-top: 1px dotted #cccccc;");
 			forumList.setAttribute("style", "background: #ffffff; border-top: 1px dotted #cccccc;");
 			document.getElementById("frontpageheatmap").setAttribute("style", "border-top: 1px dotted #cccccc;");
 			var pageHeadings = document.getElementsByTagName("h2");
-			for(i in pageHeadings) {
+			for (i in pageHeadings) {
 				pageHeadings[i].setAttribute("style", "color: #000000; margin-bottom: 0;");
 			}
 		}
-		if(versionDate == "8.8.2012") {
+		if (versionDate == "8.8.2012") {
 			//8-8-2012 original image revamp
 
 			//Set variables
@@ -238,10 +249,10 @@ function revertHome(versionDate) {
 
 			//Reformat header
 			header.setAttribute("style", "width: 990px; height: 174px; padding: 0; background: url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg);");
-			for(i in elems) {
-				if((" " + elems[i].className + " ").indexOf(" login ") > -1)
+			for (i in elems) {
+				if ((" " + elems[i].className + " ").indexOf(" login ") > -1)
 					elems[i].setAttribute("style", "float: left; clear: none; margin-top: 5px; position: static; font-size: 12px; font-weight: normal;");
-				if((" " + elems[i].className + " ").indexOf(" search ") > -1)
+				if ((" " + elems[i].className + " ").indexOf(" search ") > -1)
 					elems[i].setAttribute("style", "float: right; clear: none; margin: 5px 5px 0 0; position: static;");
 			}
 
@@ -261,14 +272,14 @@ function revertHome(versionDate) {
 			//latestHeader widths: 545, 46, 90, 69px
 
 			//Style stickies
-			for(i in elems) {
-				if((" " + elems[i].className + " ").indexOf(" super-sticky ") > -1)
+			for (i in elems) {
+				if ((" " + elems[i].className + " ").indexOf(" super-sticky ") > -1)
 					elems[i].setAttribute("style", "background: #f4faff;");
 			}
 
 			//Add and style headings
 			var forumHeadingStyle = "border-bottom: 1px solid #dddddd; padding-bottom: 6px;";
-			with(document) {
+			with (document) {
 				getElementById("discussions").innerHTML = "<h2 class='forumheading'>Latest Discussions</h2>" + getElementById("discussions").innerHTML;
 				getElementById("forumlist-container").innerHTML = "<h2 class='forumheading'>Forums</h2>" + getElementById("forumlist-container").innerHTML;
 				getElementById("discussions").getElementsByTagName("h2")[0].setAttribute("style", forumHeadingStyle);
@@ -283,11 +294,11 @@ function revertHome(versionDate) {
 
 //Process icon requests
 function getIcon(role) {
-	if(role == "mod")
+	if (role == "mod")
 		return "<img src='https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif' height='16px' width='40px'>&nbsp;";
-	else if(role == "pro")
+	else if (role == "pro")
 		return "<img align='top' src='https://forums.dropbox.com/bb-templates/dropbox/images/star.gif'>&nbsp;";
-	else if(role == "emp")
+	else if (role == "emp")
 		return "<img align='absmiddle' src='https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif'>&nbsp;";
 }
 
@@ -295,7 +306,7 @@ function importInformation(link, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", link, true);
 	xhr.onreadystatechange = function() {
-		if(xhr.readyState === 4)
+		if (xhr.readyState === 4)
 			callback(xhr.responseText);
 	};
 	xhr.send(null);
@@ -304,9 +315,9 @@ function importInformation(link, callback) {
 //Get URL of current page
 function getPageUrl() {
 	var currentPage = window.location.href;
-	if(currentPage.indexOf("?") > -1)
+	if (currentPage.indexOf("?") > -1)
 		currentPage = currentPage.substring(0, currentPage.indexOf("?"));
-	if(currentPage[currentPage.length - 1] == "/")
+	if (currentPage[currentPage.length - 1] == "/")
 		currentPage = currentPage.substring(0, currentPage.length - 1);
 	return currentPage;
 }
