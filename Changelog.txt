@@ -6,6 +6,13 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.9.1-----
+* Corrected behavior of reloadStickies() function
+# Denoted the user-customizable part of the code with comments
+# Made comments more human-readable
++ Added an inDev() function to hold functions being developed
+# Moved addSlideOut() to the indev portion of the code
+
 -----2013.9-----
 + Front page automatic refreshing (2 minutes default)
 + Sticky automatic refreshing (2 minutes default)
