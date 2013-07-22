@@ -4,14 +4,14 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.9.1
+// @version 2013.9.2
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
 // @grant none
 // ==/UserScript==
 
 //Set internal version
-var internalVersion = "2013.9.1";
+var internalVersion = "2013.9.2";
 
 //Set global variables
 var elems = document.getElementsByTagName("*"), i;
@@ -30,20 +30,24 @@ addIcon("role", "Super User", getIcon("mod"));
 postHighlight("Super User", "#fff19d");
 changeRoleName("1618104", "Master of Super Users");
 
+//Highlight posts by forum regulars green
+idHighlight("6845", "#b5ff90");
+
 /*
- * Modify the homepage to look like the original revamp
+ * Reskin the forums
  * Comment out this line if you want to keep the current layout
  *
  * "8.8.2012" ................ The original of the 3 revamps
  * "original" ................ The original layout
  *     This version currently causes automatic reload to fail, so you'll have to refresh manually
  */
-revertHome("8.8.2012");
+forumVersion("8.8.2012");
 
 /*
  * Reload pages
- * The delay passed in is in seconds
- * Use 0 to disable
+ *
+ * reloadPage(reloadDelay)
+ * reloadDelay .......... The number of seconds between refreshes (0 to disable)
  */
 reloadFront(120);
 reloadStickies(120);
@@ -62,51 +66,55 @@ reloadStickies(120);
 //Handle indev stuff
 function inDev() {
 	/*
-	* This function contains all of the things currently either in development or being debugged
-	* Any of these functions can be run by uncommenting the function call below
-	* Feel free to modify these functions
-	*/
-	//addSlideOut();
+	 * This function contains all of the things currently either in development or being debugged
+	 * Everything's designed to catch errors, so no rendering issues should arise
+	 * Feel free to modify these functions
+	 */
+	addSlideOut();
 
 	//Add slideout panel
 	function addSlideOut() {
-		//Add panel
-		document.getElementsByTagName("body")[0].innerHTML = "<div id='hidden-info-container' style='display:none;'></div><div id='moderator-slideout-panel'><div id='slideout-panel-content'><h1 id='slideout-panel-header'>Recent Moderator (+ Ryan) Activity</h1><p id='slideout-panel-info'></p></div></div>" + bodySelect[0].innerHTML;
+		try {
+			//Add panel
+			document.getElementsByTagName("body")[0].innerHTML = "<div id='hidden-info-container' style='display:none;'></div><div id='moderator-slideout-panel'><div id='slideout-panel-content'><h1 id='slideout-panel-header'>Recent Moderator (+ Ryan) Activity</h1><p id='slideout-panel-info'></p></div></div>" + document.getElementsByTagName("body")[0].innerHTML;
 
-		//Grab and parse information
-		var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
-		var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
-		var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
-		for (i in activityList) {
-			document.getElementById("hidden-info-container").innerHTML = "<iframe src='https://forums.dropbox.com/profile.php?id=" + userList[i] + "' id='user-profile-page'></iframe>";
-			var iframeContent = userProfileIframe.contentDocument || userProfileIframe.contentWindow;
-			var userActivityList = iframeContent.getElementsByTagName("body")[0].getElementById("user-replies").getElementsByTagName("ol")[0].getElementsByTagName("li")[0].innerHTML;
-			alert(userActivityList.indexOf(" last replied: ") + 15);
-			alert(userActivityList.indexOf(" ago</a> |") + 10);
-			var userRecentActivity = userActivityList.substring(userActivityList.indexOf(" last replied: ") + 15, userActivityList.indexOf(" ago</a> |") + 10);
-			activityList[i] = userRecentActivity.substring(userRecentActivity.indexOf('">') + 2, userRecentActivity.indexOf(" ago</a> |") + 10);
-		}
+			//Grab and parse information
+			var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
+			var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
+			var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
+			for (i in activityList) {
+				document.getElementById("hidden-info-container").innerHTML = "<iframe src='https://forums.dropbox.com/profile.php?id=" + userList[i] + "' id='user-profile-page'></iframe>";
+				var userProfileIframe = document.getElementById("user-profile-page");
+				var iframeContent = userProfileIframe.contentDocument || userProfileIframe.contentWindow;
+				var userActivityList = iframeContent.document.getElementById("user-replies");
+				//.getElementsByTagName("ol")[0].getElementsByTagName("li")[0].innerHTML;
+				var userRecentActivity = userActivityList.substring(userActivityList.indexOf(" last replied: ") + 15, userActivityList.indexOf(" ago</a> |") + 10);
+				activityList[i] = userRecentActivity.substring(userRecentActivity.indexOf('">') + 2, userRecentActivity.indexOf(" ago</a> |") + 10);
+			}
 
-		//Add information
-		for (i in nameList) {
-			document.getElementById("slideout-panel-info").innerHTML = document.getElementById("slideout-panel-info").innerHTML + "<li><strong>" + nameList[i] + "</strong> - " + activityList[i] + "</li>";
-		}
-		document.getElementById("slideout-panel-info").innerHTML = "<ul>" + document.getElementById("slideout-panel-info").innerHTML + "</ul>";
+			//Add information
+			for (i in nameList) {
+				document.getElementById("slideout-panel-info").innerHTML = document.getElementById("slideout-panel-info").innerHTML + "<li><strong>" + nameList[i] + "</strong> - " + activityList[i] + "</li>";
+			}
+			document.getElementById("slideout-panel-info").innerHTML = "<ul>" + document.getElementById("slideout-panel-info").innerHTML + "</ul>";
 
-		//Style panel
-		var panelStyling = "background: #ffffff; position: fixed; bottom: 0; left: 0; border-top: 8px solid #bbeeff; border-right: 8px solid #bbeeff; border-top-right-radius: 35px; z-index: 10";
-		document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 75px; width: 75px;" + panelStyling);
-		document.getElementById("slideout-panel-content").setAttribute("style", "display: none;");
-
-		//Set up hover animation
-		document.getElementById("moderator-slideout-panel").onmouseover = function() {
-			document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 500px; width: 800px;" + panelStyling);
-			document.getElementById("slideout-panel-content").setAttribute("style", "width: 600px; margin: 50px auto; text-align: center;");
-		};
-		document.getElementById("moderator-slideout-panel").onmouseout = function() {
+			//Style panel
+			var panelStyling = "background: #ffffff; position: fixed; bottom: 0; left: 0; border-top: 8px solid #bbeeff; border-right: 8px solid #bbeeff; border-top-right-radius: 35px; z-index: 10";
 			document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 75px; width: 75px;" + panelStyling);
 			document.getElementById("slideout-panel-content").setAttribute("style", "display: none;");
-		};
+
+			//Set up hover animation
+			document.getElementById("moderator-slideout-panel").onmouseover = function() {
+				document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 500px; width: 800px;" + panelStyling);
+				document.getElementById("slideout-panel-content").setAttribute("style", "width: 600px; margin: 50px auto; text-align: center;");
+			};
+			document.getElementById("moderator-slideout-panel").onmouseout = function() {
+				document.getElementById("moderator-slideout-panel").setAttribute("style", "height: 75px; width: 75px;" + panelStyling);
+				document.getElementById("slideout-panel-content").setAttribute("style", "display: none;");
+			};
+		} catch(e) {
+			alert(e);
+		}
 	}
 
 }
@@ -115,7 +123,7 @@ function inDev() {
 function reloadStickies(reloadDelay) {
 	if (reloadDelay > 0 && pageUrl == "https://forums.dropbox.com/topic.php" && document.getElementById("topic_labels").innerHTML.indexOf("[sticky]") > -1)
 		setTimeout(function() {
-			if (document.getElementById("topic").value == "" && document.getElementById("post_content").value == "")
+			if (!document.getElementById("topic").value && !document.getElementById("post_content").value)
 				document.location.reload();
 		}, reloadDelay * 1000);
 }
@@ -181,19 +189,47 @@ function postHighlight(highlightRole, highlightColor) {
 
 		//Highlight posts if enabled
 		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && highlightStatus == "enabled" && elems[i].innerHTML.indexOf(highlightRole) > -1) {
-				var authorPostContainer = elems[i].parentNode;
-				var authorPostDiv = authorPostContainer.getElementsByTagName("div");
-				authorPostDiv[1].style.cssText = "background: " + highlightColor + ";";
+			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && highlightStatus == "enabled" && elems[i].innerHTML.indexOf(highlightRole) > -1)
+				elems[i].parentNode.getElementsByTagName("div")[1].style.cssText = "background: " + highlightColor + ";";
+		}
+	}
+}
+
+//Highlight posts by a certain user
+function idHighlight(highlightId, highlightColor) {
+	if (pageUrl == "https://forums.dropbox.com/topic.php") {
+		//Highlight posts if enabled
+		for (i in elems) {
+			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1) {
+				var authorLinks = elems[i].getElementsByTagName("p")[0].getElementsByTagName("a");
+				var authorProfileLink = authorLinks[authorLinks.length - 1].href;
+				if (highlightId == authorProfileLink.substring(42, authorProfileLink.length))
+					elems[i].parentNode.getElementsByTagName("div")[1].style.cssText = "background: " + highlightColor + ";";
 			}
 		}
 	}
 }
 
 //Revert homepage
-function revertHome(versionDate) {
+function forumVersion(versionDate) {
+	var header = document.getElementById("header");
+
+	if (["https://forums.dropbox.com/topic.php", "https://forums.dropbox.com/profile.php", "https://forums.dropbox.com"].indexOf(pageUrl) > -1) {
+		if (versionDate == "8.8.2012") {
+			//Hide logo
+			header.innerHTML = header.innerHTML.substring(header.innerHTML.indexOf('<p class="login">'), header.innerHTML.length);
+
+			//Reformat header
+			header.setAttribute("style", "width: 990px; height: 174px; padding: 0; background: url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg);");
+			for (i in elems) {
+				if ((" " + elems[i].className + " ").indexOf(" login ") > -1)
+					elems[i].setAttribute("style", "float: left; clear: none; margin-top: 5px; position: static; font-size: 12px; font-weight: normal;");
+				if ((" " + elems[i].className + " ").indexOf(" search ") > -1)
+					elems[i].setAttribute("style", "float: right; clear: none; margin: 5px 5px 0 0; position: static;");
+			}
+		}
+	}
 	if (pageUrl == "https://forums.dropbox.com") {
-		var header = document.getElementById("header");
 		var latestTr = document.getElementById("latest").getElementsByTagName("tr");
 		var forumList = document.getElementById("forumlist");
 		var forumListTr = forumList.getElementsByTagName("tr");
@@ -243,18 +279,6 @@ function revertHome(versionDate) {
 			var latestTd = latestTr[1].getElementsByTagName("td");
 			var latestHeader = latestTr[0].getElementsByTagName("th");
 			var newThreadLink = latestHeader[0].getElementsByTagName("a");
-
-			//Hide logo
-			header.innerHTML = header.innerHTML.substring(header.innerHTML.indexOf('<p class="login">'), header.innerHTML.length);
-
-			//Reformat header
-			header.setAttribute("style", "width: 990px; height: 174px; padding: 0; background: url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg);");
-			for (i in elems) {
-				if ((" " + elems[i].className + " ").indexOf(" login ") > -1)
-					elems[i].setAttribute("style", "float: left; clear: none; margin-top: 5px; position: static; font-size: 12px; font-weight: normal;");
-				if ((" " + elems[i].className + " ").indexOf(" search ") > -1)
-					elems[i].setAttribute("style", "float: right; clear: none; margin: 5px 5px 0 0; position: static;");
-			}
 
 			//Style table headers
 			forumListHeader[0].setAttribute("style", grayBar);
