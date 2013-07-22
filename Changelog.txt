@@ -6,6 +6,11 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.9.2-----
+# Made 8.8.2012 theme much more immersive, including topic and profile pages
++ Added option to highlight posts based on user ID
++ Forum regulars' posts are now highlighted green
+
 -----2013.9.1-----
 * Corrected behavior of reloadStickies() function
 # Denoted the user-customizable part of the code with comments
