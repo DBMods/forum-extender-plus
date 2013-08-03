@@ -6,6 +6,11 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----1.0-----
++ Implemented jQuery
+# Replaced versioning scheme
+- Almost completely removed the addSlideOut indev function, in preparation for a complete rewrite
+
 -----2013.9.2-----
 # Made 8.8.2012 theme much more immersive, including topic and profile pages
 + Added option to highlight posts based on user ID
