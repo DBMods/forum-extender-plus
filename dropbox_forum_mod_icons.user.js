@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 1.0
+// @version 1.0.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
@@ -12,7 +12,7 @@
 // ==/UserScript==
 
 //Set internal version
-var internalVersion = "1.0";
+var internalVersion = "1.0.1";
 
 //Set global variables
 var elems = document.getElementsByTagName("*"), i;
@@ -33,6 +33,10 @@ changeRoleName("1618104", "Master of Super Users");
 
 //Highlight posts by forum regulars green
 idHighlight("6845", "#b5ff90");
+idHighlight("3581696", "#b5ff90");
+idHighlight("816535", "#b5ff90");
+idHighlight("2122867", "#b5ff90");
+idHighlight("434127", "#b5ff90");
 
 /*
  * Reskin the forums
@@ -54,36 +58,9 @@ reloadFront(120);
 reloadStickies(120);
 
 /*
-* Run indev stuff
-* Everything here is currently in development, so uncomment this line at your own risk
-*/
-//inDev();
-
-/*
 * Everything below this line is crucial to the operation of this script
 * Do not modify anything below this line unless you know what you're doing
 */
-
-//Handle indev stuff
-function inDev() {
-	/*
-	 * This function contains all of the things currently either in development or being debugged
-	 * Everything's designed to catch errors, so no rendering issues should arise
-	 * Feel free to modify these functions
-	 */
-	addSlideOut();
-
-	//Add slideout panel
-	function addSlideOut() {
-		try {
-			var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
-			var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
-			var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
-		} catch(e) {
-			alert(e);
-		}
-	}
-}
 
 //Reload stickies
 function reloadStickies(reloadDelay) {
