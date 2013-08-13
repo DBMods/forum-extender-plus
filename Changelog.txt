@@ -6,6 +6,11 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----1.0.1-----
+* Restored regulars' highlighting
+- Removed inDev function
++ Added beta version, which includes all stable versions as well
+
 -----1.0-----
 + Implemented jQuery
 # Replaced versioning scheme
