@@ -46,7 +46,7 @@ idHighlight("434127", "#b5ff90");
  * "original" ................ The original layout
  *     This version currently causes automatic reload to fail, so you'll have to refresh manually
  */
-forumVersion("8.8.2012");
+forumVersion("original");
 
 /*
  * Reload pages
@@ -58,34 +58,18 @@ reloadFront(120);
 reloadStickies(120);
 
 /*
-* Run indev stuff
-* Everything here is currently in development, so uncomment this line at your own risk
-*/
-//inDev();
-
-/*
 * Everything below this line is crucial to the operation of this script
 * Do not modify anything below this line unless you know what you're doing
 */
 
-//Handle indev stuff
-function inDev() {
-	/*
-	 * This function contains all of the things currently either in development or being debugged
-	 * Everything's designed to catch errors, so no rendering issues should arise
-	 * Feel free to modify these functions
-	 */
-	addSlideOut();
-
-	//Add slideout panel
-	function addSlideOut() {
-		try {
-			var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
-			var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
-			var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
-		} catch(e) {
-			alert(e);
-		}
+//Add slideout panel
+function addSlideOut() {
+	try {
+		var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
+		var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
+		var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
+	} catch(e) {
+		alert(e);
 	}
 }
 
@@ -186,15 +170,73 @@ function idHighlight(highlightId, highlightColor) {
 function forumVersion(versionDate) {
 	var header = document.getElementById("header");
 
-	if (["https://forums.dropbox.com/topic.php", "https://forums.dropbox.com/profile.php", "https://forums.dropbox.com"].indexOf(pageUrl) > -1) {
-		if (versionDate == "8.8.2012") {
+	if (["https://forums.dropbox.com/topic.php", "https://forums.dropbox.com/profile.php", "https://forums.dropbox.com", "https://forums.dropbox.com/search.php", "https://forums.dropbox.com/forum.php"].indexOf(pageUrl) > -1) {
+		if (versionDate == "8.8.2012" || versionDate == "dropbox") {
 			//Hide logo
 			header.innerHTML = header.innerHTML.substring(header.innerHTML.indexOf('<p class="login">'), header.innerHTML.length);
 
 			//Reformat header
-			$('#header').css({'width': '990px', 'height': '174px', 'padding': '0', 'background': 'url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg)'});
-			$('.login').css({'float': 'left', 'clear': 'none', 'margin-top': '5px', 'position': 'static', 'font-size': '12px', 'font-weight': 'normal'});
-			$('.search').css({'float': 'right', 'clear': 'none', 'margin': '5px 5px 0 0', 'position': 'static'});
+			$('#header').css({
+				'width' : '990px',
+				'height' : '174px',
+				'padding' : '0',
+				'background' : 'url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg)'
+			});
+			$('.login').css({
+				'float' : 'left',
+				'clear' : 'none',
+				'margin-top' : '5px',
+				'position' : 'static',
+				'font-size' : '12px',
+				'font-weight' : 'normal'
+			});
+			$('.search').css({
+				'float' : 'right',
+				'clear' : 'none',
+				'margin' : '5px 5px 0 0',
+				'position' : 'static'
+			});
+		}
+		if (versionDate == "dropbox") {
+			$('#footer').css({
+				'border-top' : '1px solid #bbb',
+				'border-left' : '1px solid #bbb',
+				'border-right' : '1px solid #bbb',
+				'border-top-left-radius' : '25px',
+				'border-top-right-radius' : '25px'
+			});
+			var hiddenFooter = $('span:last').clone();
+			$('#footer').append($(hiddenFooter));
+			$('span:last').remove();
+			$('#footer').wrapInner('<div id="footercontent"></div>');
+			$('#footer').prepend('<div id="footertoggle"><div id="footertogglearrow"></div></div>');
+			$('#footertoggle').css({
+				'height' : '25px',
+				'width' : '25px',
+				'margin-left' : 'auto',
+				'margin-right' : 'auto'
+			});
+			$('#footertogglearrow').css({
+				'height' : '0',
+				'width' : '0',
+				'border-left' : '5px solid transparent',
+				'border-right' : '5px solid transparent',
+				'border-bottom' : '10px solid #bbb',
+				'margin' : '12px auto 0 auto'
+			});
+			$('#footercontent').toggle();
+			var footerHidden = true;
+			$('#footertoggle').click(function() {
+				$('#footercontent').slideToggle('slow', function() {
+					footerHidden = footerHidden ? false : true;
+					var toggleBottom = footerHidden ? '10px solid #bbb' : 'none';
+					var toggleTop = footerHidden ? 'none' : '10px solid #bbb';
+					$('#footertogglearrow').css({
+						'border-top' : toggleTop,
+						'border-bottom' : toggleBottom
+					});
+				});
+			});
 		}
 	}
 	if (pageUrl == "https://forums.dropbox.com") {
@@ -205,49 +247,78 @@ function forumVersion(versionDate) {
 			//Original theme
 
 			//Add tag list and reorder elements
-			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap"><a href="#" style="font-size: 8.72300469484pt;">all</a> <a href="#" style="font-size: 8.74491392801pt;">of</a> <a href="#" style="font-size: 18.2535211268pt;">the</a> <a href="#" style="font-size: 12.2942097027pt;">Dropbox</a> <a href="#" style="font-size: 14.234741784pt;">moderators</a> <a href="#" style="font-size: 13.2801251956pt;">are</a> <a href="#" style="font-size: 9.77464788732pt;">awesome</a> <a href="#" style="font-size: 14.1126760563pt;">R.M.</a> <a href="#" style="font-size: 8.8544600939pt;">is</a> <a href="#" style="font-size: 10.3004694836pt;">king</a> <a href="#" style="font-size: 15.0109546166pt;">Andy</a> <a href="#" style="font-size: 9.55555555556pt;">is</a> <a href="#" style="font-size: 8.48200312989pt;">the</a> <a href="#" style="font-size: 10.4538341158pt;">man</a> <a href="#" style="font-size: 8.08763693271pt;">thightower</a> <a href="#" style="font-size: 9.11737089202pt;">is</a> <a href="#" style="font-size: 10.4976525822pt;">awesome</a> <a href="#" style="font-size: 9.1392801252pt;">yay</a> <a href="#" style="font-size: 16.5007824726pt;">I</a> <a href="#" style="font-size: 18.1001564945pt;">added</a> <a href="#" style="font-size: 8.89827856025pt;">a</a> <a href="#" style="font-size: 8.72300469484pt;">tag</a> <a href="#" style="font-size: 8.37245696401pt;">too!</a> <a href="#" style="font-size: 8.41627543036pt;">love</a> <a href="#" style="font-size: 8.9420970266pt;">sponge</a> <a href="#" style="font-size: 8.35054773083pt;">dropbox</a> <a href="#" style="font-size: 10.3881064163pt;">is</a> <a href="#" style="font-size: 8.10954616588pt;">the</a> <a href="#" style="font-size: 10.7605633803pt;">best</a> <a href="#" style="font-size: 10.9577464789pt;">Nathan</a> <a href="#" style="font-size: 8.92018779343pt;">Chris</a> <a href="#" style="font-size: 8.35054773083pt;">Tommy</a> <a href="#" style="font-size: 12.8638497653pt;">Chen</a> <a href="#" style="font-size: 8pt;">Mark</a> <a href="#" style="font-size: 8.39436619718pt;">and</a> <a href="#" style="font-size: 8.2848200313pt;">Ren&#233;</a> <a href="#" style="font-size: 8.48200312989pt;">are</a> <a href="#" style="font-size: 22pt;">awesome</a> <a href="#" style="font-size: 9.62128325509pt;">as</a> <a href="#" style="font-size: 11.8779342723pt;">well</a> <a href="#" style="font-size: 8.87636932707pt;">Ryan\'s</a> <a href="#" style="font-size: 13.3020344288pt;">the</a> <a href="#" style="font-size: 8.63536776213pt;">most</a> <a href="#" style="font-size: 8.39436619718pt;">awesome</a> <a href="#" style="font-size: 11.5492957746pt;">Dropboxer</a></p></div>');
-			var forumListContent = $(forumList).html();
-			$(forumList).remove();
-			document.getElementById("discussions").innerHTML = '<h2>Forums</h2><table id="forumlist"><tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr><tr class="bb-precedes-sibling bb-root"><td><a href="forum.php?id=2">Bugs &amp; Troubleshooting</a><small> &#8211; Tell us what\'s wrong</small></td><td class="num"></td><td class="num"></td></tr><tr class="bb-precedes-sibling bb-follows-sibling bb-root alt"><td><a href="forum.php?id=4">Mobile Apps</a><small> &#8211; Questions and suggestions for our mobile apps</small></td><td class="num"></td><td class="num"></td></tr><tr class="bb-precedes-sibling bb-follows-sibling bb-root"><td><a href="forum.php?id=3">Feature Requests</a><small> &#8211; What should be improved?</small></td><td class="num"></td><td class="num"></td></tr><tr class="bb-precedes-sibling bb-follows-sibling bb-root alt"><td><a href="forum.php?id=5">API Development</a><small> &#8211; Questions relating to our API</small></td><td class="num"></td><td class="num"></td></tr><tr class="bb-last-child bb-follows-sibling bb-root"><td><a href="forum.php?id=1">Everything Else</a><small> &#8211; For stuff that doesn\'t fit elsewhere</small></td><td class="num"></td><td class="num"></td></tr></table><h2>Latest Discussions</h2>' + document.getElementById("discussions").innerHTML;
+			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
+			
+			//Tag index for future addition of dynamic tag selection
+			var tagIndex = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap"></p></div>');
+			for (i in tagList) {
+				$('#frontpageheatmap').append('<a href="#" style="font-size: ' + ((Math.random() * 17) + 8) + 'px">' + tagList[i] + '</a>');
+				if (i < tagList.length)
+					$('#frontpageheatmap').append(' ');
+			}
+			$('#forumlist').attr('id', 'forumlist-temp');
+			var topicDesc = [$('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[1]];
+			var topicPosts = [$('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[2].split(' topics')[0]];
+
+			$('#forumlist-temp').remove();
+			$('#discussions').prepend('<h2>Forums</h2><table id="forumlist"></table><h2>Latest Discussions</h2>');
+			$('#forumlist').html('<tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr>');
+			for (i in topicPosts) {
+				$('#forumlist').append('<tr class="bb-precedes-sibling bb-root"><td>' + topicDesc[i] + '</td><td class="num">' + topicPosts[i] + '</td><td class="num">' + topicPosts[i] + '+</td></tr>');
+			}
 
 			//Style elements
-			document.getElementById("discussions").setAttribute("style", "width: 680px; margin-right: 170px; margin-left: 0;");
-			document.getElementById("hottags").setAttribute("style", "position: absolute; right: 0px; left: auto;");
-			document.getElementById("main").setAttribute("style", "width: 866px;");
+			$('#discussions').css({
+				'width' : '680px',
+				'margin-right' : '170px',
+				'margin-left' : '0'
+			});
+			$('#hottags').css({
+				'position' : 'absolute',
+				'right' : '0',
+				'left' : 'auto'
+			});
+			$('#main').css('width', '866ps');
 			$('#header').css('width', '866px');
-			$('#header').getElementsByTagName("a")[0].getElementsByTagName("img")[0].setAttribute("src", "http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png");
-			elems = document.getElementsByTagName('*'), i;
-			for (i in $(latestTr)) {
-				if (i > 0)
-					latestTr[i].setAttribute("style", "background: #f7f7f7");
-			}
+			$('#header').find('a').eq(0).find('img').eq(0).attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
+			$(latestTr).not(':first').css('background', '#f7f7f7');
 			$('.bb-root').css('background', '#f7f7f7');
 			$('.alt').css('background', '#fff');
 			$('.super-sticky').css('background', '#deeefc');
-			$('latest').css({'background': '#fff', 'border-top': '1px dotted #ccc'});
-			$('#forumList').css({'background': '#fff', 'border-top': '1px dotted #ccc'});
+			$('#latest').css({
+				'background' : '#fff',
+				'border-top' : '1px dotted #ccc'
+			});
+			$('#forumList').css({
+				'background' : '#fff',
+				'border-top' : '1px dotted #ccc'
+			});
 			$('frontpageheatmap').css('border-top', '1px dotted #ccc');
-			$('h2').css({'color': '#000', 'margin-bottom': '0'});
+			$('h2').css({
+				'color' : '#000',
+				'margin-bottom' : '0'
+			});
 		}
-		if (versionDate == "8.8.2012") {
+		if (versionDate == "8.8.2012" || versionDate == "dropbox") {
 			//8-8-2012 original image revamp
 
 			//Set variables
-			var forumListHeader = $(forumListTr).eq(0).find('th');
 			var latestHeader = $(latestTr).eq(0).find('th');
 
 			//Style table headers
-			$(forumListTr).eq(0).find('th').eq(0).css({'background': '#666', 'color': '#fff'});
-			$(forumListTr).eq(0).css({'height': '25px', 'padding': 'none'});
-			$(forumListTr).eq(1).css('font-weight', 'bold');
-			$(forumListTr).eq(2).css('font-weight', 'bold');
-			$(forumListTr).eq(3).css('font-weight', 'bold');
-			$(forumListTr).eq(4).css('font-weight', 'bold');
-			$(forumListTr).eq(5).css('font-weight', 'bold');
-			$(latestHeader).eq(0).css({'background': '#666', 'color': '#fff'});
-			$(latestHeader).eq(1).css({'background': '#666', 'color': '#fff'});
-			$(latestHeader).eq(2).css({'background': '#666', 'color': '#fff'});
-			$(latestHeader).eq(3).css({'background': '#666', 'color': '#fff'});
+			$(forumListTr).eq(0).find('th').eq(0).css({
+				'background' : '#666',
+				'color' : '#fff'
+			});
+			$(forumListTr).eq(0).css({
+				'height' : '25px',
+				'padding' : 'none'
+			});
+			$(latestHeader).css({
+				'background' : '#666',
+				'color' : '#fff'
+			});
 			$(latestHeader).eq(0).find('a').eq(0).css('color', '#aaa');
 			//latestHeader widths: 545, 46, 90, 69px
 
@@ -255,11 +326,12 @@ function forumVersion(versionDate) {
 			$('.super-sticky').css('background', '#f4faff');
 
 			//Add and style headings
-			//var forumHeadingStyle = "border-bottom: 1px solid #dddddd; padding-bottom: 6px;";
 			$('#discussions').prepend('<h2 class="forumheading">Latest Discussions</h2>');
 			$('#forumlist-container').prepend('<h2 class="forumheading">Forums</h2>');
-			$('#discussions').find('h2').eq(0).css({'border-bottom': '1px solid #ddd', 'padding-bottom': '6px'});
-			$('#forumlist-container').find('h2').eq(0).css({'border-bottom': '1px solid #ddd', 'padding-bottom': '6px'});
+			$('.forumheading').css({
+				'border-bottom' : '1px solid #ddd',
+				'padding-bottom' : '6px'
+			});
 			$('#forumlist').find('tr').eq(0).find('th').eq(0).html('Name');
 		}
 	}
