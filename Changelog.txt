@@ -11,6 +11,7 @@ Dropbox Forum Mod Icons Changelog
 # Changed original theme's tag selection
 + Dynamic tag font sizing in original theme
 - Removed unnecessary code
++ Added slide-out panel for page footer to save space
 
 -----1.0.1-----
 * Restored regulars' highlighting
