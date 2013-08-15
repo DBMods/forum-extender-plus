@@ -6,6 +6,12 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----1.1.0-----
+* Fixed original theme refresh behavior
+# Changed original theme's tag selection
++ Dynamic tag font sizing in original theme
+- Removed unnecessary code
+
 -----1.0.1-----
 * Restored regulars' highlighting
 - Removed inDev function
