@@ -12,7 +12,7 @@
 // ==/UserScript==
 
 //Set internal version
-var internalVersion = 'Nightly Build';
+var internalVersion = 'Nightly Build'
 
 //Set global variables
 var pageUrl = getPageUrl();
