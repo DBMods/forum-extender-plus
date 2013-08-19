@@ -67,18 +67,18 @@ reloadStickies(120);
 * Do not modify anything below this line unless you know what you're doing
 */
 
-//TODO Add slideout panel
+//ADDME slideout panel
 function addSlideOut() {
 	try {
-		var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
+		var nameList = ['Andy Y.', 'Chen S.', 'Chris J.', 'KC', 'Nathan C.', 'N.N.', 'Mark Mc', 'R.M.', 'René S.', 'Ryan M.', 'Sebastian H.', 'T. Hightower', 'Trevor B.'];
 		var userList = [1618104, 11096, 175532, 561902, 857279, 67305, 30385, 643099, 182504, 1510497, 32911, 222573, 1588860];
-		var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
+		var activityList = ['Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information'];
 	} catch(e) {
 		alert(e);
 	}
 }
 
-//Reload stickies TODO minify this
+//Reload stickies
 function reloadStickies(reloadDelay) {
 	if (pageUrl == 'https://forums.dropbox.com/topic.php' && reloadDelay > 0 && $('#topic_labels:contains("[sticky]")').length > 0)
 		setTimeout(function() {
@@ -91,7 +91,7 @@ function reloadStickies(reloadDelay) {
 
 //Reload the front page
 function reloadFront(reloadDelay) {
-	if (reloadDelay > 0 && pageUrl == "https://forums.dropbox.com")
+	if (reloadDelay > 0 && pageUrl == 'https://forums.dropbox.com')
 		setTimeout(function() {
 			document.location.reload();
 		}, reloadDelay * 1000);
@@ -126,7 +126,7 @@ function postHighlight(highlightFor, color) {
 			var totalPosts = $('.threadauthor').length;
 
 			//Set highlighting status
-			var status = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? "disabled" : "enabled";
+			var status = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? 'disabled' : 'enabled';
 
 			//Display message above and below message thread
 			var message = '<li style="text-align: center;">Highlighting ' + status + ' for all ' + highlightFor + 's</li>';
@@ -143,8 +143,8 @@ function postHighlight(highlightFor, color) {
 
 //Revert homepage
 function forumVersion(versionDate) {
-	if (["https://forums.dropbox.com/topic.php", "https://forums.dropbox.com/profile.php", "https://forums.dropbox.com", "https://forums.dropbox.com/search.php", "https://forums.dropbox.com/forum.php"].indexOf(pageUrl) > -1) {
-		if (versionDate == "8.8.2012" || versionDate == "beta") {
+	if (['https://forums.dropbox.com/topic.php', 'https://forums.dropbox.com/profile.php', 'https://forums.dropbox.com', 'https://forums.dropbox.com/search.php', 'https://forums.dropbox.com/forum.php'].indexOf(pageUrl) > -1) {
+		if (versionDate == '8.8.2012' || versionDate == 'beta') {
 			//Hide logo
 			$('#header').find('a').eq(0).remove();
 
@@ -170,7 +170,7 @@ function forumVersion(versionDate) {
 				'position': 'static'
 			});
 		}
-		if (versionDate == "beta") {
+		if (versionDate == 'beta') {
 			//Style footer
 			$('#footer').css({
 				'border-top': '1px solid #bbb',
@@ -218,11 +218,11 @@ function forumVersion(versionDate) {
 			});
 		}
 	}
-	if (pageUrl == "https://forums.dropbox.com") {
+	if (pageUrl == 'https://forums.dropbox.com') {
 		var latestTr = $('#latest').find('tr');
 		var forumList = $('#forumlist');
 		var forumListTr = $(forumList).find('tr');
-		if (versionDate == "original") {
+		if (versionDate == 'original') {
 			//Add tag list and reorder elements
 			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
 
@@ -254,8 +254,7 @@ function forumVersion(versionDate) {
 				'right': '0',
 				'left': 'auto'
 			});
-			$('#main').css('width', '866ps');
-			$('#header').css('width', '866px');
+			$('#main, #header').css('width', '866ps');
 			$('#header').find('a').eq(0).find('img').eq(0).attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
 			$(latestTr).not(':first').css('background', '#f7f7f7');
 			$('.bb-root').css('background', '#f7f7f7');
@@ -271,7 +270,7 @@ function forumVersion(versionDate) {
 				'margin-bottom': '0'
 			});
 		}
-		if (versionDate == "8.8.2012" || versionDate == "beta") {
+		if (versionDate == '8.8.2012' || versionDate == 'beta') {
 			//Set variables
 			var latestHeader = $(latestTr).eq(0).find('th');
 
@@ -289,7 +288,7 @@ function forumVersion(versionDate) {
 				'color': '#fff'
 			});
 			$(latestHeader).eq(0).find('a').eq(0).css('color', '#aaa');
-			//latestHeader widths: 545, 46, 90, 69px
+			//ADDME latestHeader widths: 545, 46, 90, 69px
 
 			//Style stickies
 			$('.super-sticky').css('background', '#f4faff');
@@ -309,9 +308,9 @@ function forumVersion(versionDate) {
 //Get URL of current page
 function getPageUrl() {
 	var url = window.location.href;
-	if (url.indexOf("?") > -1)
+	if (url.indexOf('?') > -1)
 		url = url.substring(0, url.indexOf('?'));
-	if (url[url.length - 1] == "/")
+	if (url[url.length - 1] == '/')
 		url = url.substring(0, url.length - 1);
 	return url;
 }
