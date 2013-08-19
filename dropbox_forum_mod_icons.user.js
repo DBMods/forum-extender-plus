@@ -4,19 +4,24 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 1.0.1
+// @version 1.2.0
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
+// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/beta_included.user.js
+// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/beta_included.user.js
 // @grant none
 // ==/UserScript==
 
 //Set internal version
-var internalVersion = "1.0.1";
+var internalVersion = "1.2.0";
 
 //Set global variables
-var elems = document.getElementsByTagName("*"), i;
 var pageUrl = getPageUrl();
+var iconIndex = {
+	'Super User': '<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" height="16px" width="40px"> ',
+	'Pro User': '<img align="top" src="https://forums.dropbox.com/bb-templates/dropbox/images/star.gif"> ',
+	'Dropboxer': '<img align="absmiddle" src="https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif"> ',
+	'default': ''
+};
 
 /*
 * Everything above this line is crucial to the operation of this program
@@ -27,16 +32,17 @@ var pageUrl = getPageUrl();
 addFooter();
 
 //Modify Super User posts
-addIcon("role", "Super User", getIcon("mod"));
-postHighlight("Super User", "#fff19d");
-changeRoleName("1618104", "Master of Super Users");
+//addIcon('Super User');
+postHighlight('Super User', '#fff19d');
+changeRole(1618104, 'Master of Super Users');
+//changeRoleName("1618104", "Master of Super Users");
 
 //Highlight posts by forum regulars green
-idHighlight("6845", "#b5ff90");
-idHighlight("3581696", "#b5ff90");
-idHighlight("816535", "#b5ff90");
-idHighlight("2122867", "#b5ff90");
-idHighlight("434127", "#b5ff90");
+postHighlight(6845, '#b5ff90');
+postHighlight(3581696, '#b5ff90');
+postHighlight(816535, '#b5ff90');
+postHighlight(2122867, '#b5ff90');
+postHighlight(434127, '#b5ff90');
 
 /*
  * Reskin the forums
@@ -44,9 +50,9 @@ idHighlight("434127", "#b5ff90");
  *
  * "8.8.2012" ................ The original of the 3 revamps
  * "original" ................ The original layout
- *     This version currently causes automatic reload to fail, so you'll have to refresh manually
+ * "beta" .................... A beta skin currently in development
  */
-forumVersion("8.8.2012");
+forumVersion('beta');
 
 /*
  * Reload pages
@@ -62,11 +68,22 @@ reloadStickies(120);
 * Do not modify anything below this line unless you know what you're doing
 */
 
-//Reload stickies
+//TODO Add slideout panel
+function addSlideOut() {
+	try {
+		var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
+		var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
+		var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
+	} catch(e) {
+		alert(e);
+	}
+}
+
+//Reload stickies TODO minify this
 function reloadStickies(reloadDelay) {
-	if (reloadDelay > 0 && pageUrl == "https://forums.dropbox.com/topic.php" && document.getElementById("topic_labels").innerHTML.indexOf("[sticky]") > -1)
+	if (pageUrl == 'https://forums.dropbox.com/topic.php' && reloadDelay > 0 && $('#topic_labels:contains("[sticky]")').length > 0)
 		setTimeout(function() {
-			if (!document.getElementById("topic").value && !document.getElementById("post_content").value)
+			if (!$('#topic').val() && !$('#post_content').val())
 				document.location.reload();
 		}, reloadDelay * 1000);
 }
@@ -80,94 +97,124 @@ function reloadFront(reloadDelay) {
 }
 
 //Add icons to users
-function addIcon(checkFor, checkForSubClass, icon) {
-	if (pageUrl == "https://forums.dropbox.com/topic.php") {
-		//Process call and pass in appropriate variables
-		if (checkFor == "role")
-			processedIconRequest(checkForSubClass, "</a></small>", icon);
-		else if (checkFor == "id")
-			processedIconRequest('<small><a href="https://forums.dropbox.com/profile.php?id=', checkForSubClass, icon);
+function addIcon(addTo) {
+	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+		if ( typeof addTo == 'string')
+			$('.threadauthor small a:contains("' + addTo + '")').parent().parent().find('strong').prepend(iconIndex[addTo]);
+		else if ( typeof addTo == 'number')
+			$('.threadauthor small a[href$="=' + addTo + '"]').parent().parent().find('strong').prepend(iconIndex['default']);
 	}
-
-	//Execute the processed request
-	function processedIconRequest(indexA, indexB, selectedIcon) {
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(indexA) > -1)
-				elems[i].innerHTML = "<p><strong>" + selectedIcon + elems[i].innerHTML.substring(26, elems[i].innerHTML.length);
-		}
-	}
-
 }
 
 //Change role name
-function changeRoleName(checkFor, newRole) {
-	if (pageUrl == "https://forums.dropbox.com/topic.php") {
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(checkFor) > -1)
-				elems[i].getElementsByTagName("p")[0].getElementsByTagName("small")[0].getElementsByTagName("a")[0].innerHTML = newRole;
-		}
+function changeRole(changeFor, newRole) {
+	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+		if ( typeof changeFor == 'string')
+			$('.threadauthor small a:contains("' + changeFor + '")').html(newRole);
+		else if ( typeof changeFor == 'number')
+			$('.threadauthor small a[href$="=' + changeFor + '"]').html(newRole);
 	}
 }
 
 //Highlight posts
-function postHighlight(highlightRole, highlightColor) {
-	if (pageUrl == "https://forums.dropbox.com/topic.php") {
-		//Reset count variables
-		var rolePostCount = totalPostCount = 0;
+function postHighlight(highlightFor, color) {
+	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+		if ( typeof highlightFor == 'string') {
+			//Count posts
+			var rolePosts = $('.threadauthor p small a:contains("' + highlightFor + '")').length;
+			var totalPosts = $('.threadauthor').length;
 
-		//Count total posts and posts by certain users
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1) {
-				totalPostCount++;
-				if (elems[i].innerHTML.indexOf(highlightRole) > -1)
-					rolePostCount++;
-			}
-		}
+			//Set highlighting status
+			var highlightStatus = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? "disabled" : "enabled";
 
-		//Set highlighting status
-		var highlightStatus = ((totalPostCount > 5 && rolePostCount / totalPostCount > 0.2) || (totalPostCount == 5 && rolePostCount > 2) || (totalPostCount < 5 && rolePostCount > 1)) ? "disabled" : "enabled";
+			//Display message above and below message thread
+			var statusMessage = '<li style="text-align: center;">Highlighting ' + highlightStatus + ' for all ' + highlightFor + 's</li>';
+			$('#thread').prepend(statusMessage);
+			$('#thread').append(statusMessage);
 
-		//Display message above and below message thread
-		var statusMessage = '<li style="text-align: center;">Highlighting ' + highlightStatus + ' for all ' + highlightRole + 's</li>';
-		$('#thread').prepend(statusMessage);
-		$('#thread').append(statusMessage);
-
-		//Highlight posts if enabled
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && highlightStatus == "enabled" && elems[i].innerHTML.indexOf(highlightRole) > -1)
-				elems[i].parentNode.getElementsByTagName("div")[1].style.cssText = "background: " + highlightColor + ";";
-		}
-	}
-}
-
-//Highlight posts by a certain user
-function idHighlight(highlightId, highlightColor) {
-	if (pageUrl == "https://forums.dropbox.com/topic.php") {
-		//Highlight posts if enabled
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1) {
-				var authorLinks = elems[i].getElementsByTagName("p")[0].getElementsByTagName("a");
-				var authorProfileLink = authorLinks[authorLinks.length - 1].href;
-				if (highlightId == authorProfileLink.substring(42, authorProfileLink.length))
-					elems[i].parentNode.getElementsByTagName("div")[1].style.cssText = "background: " + highlightColor + ";";
-			}
-		}
+			//Highlight posts if enabled
+			if (highlightStatus == 'enabled')
+				$('.threadauthor p small a:contains("' + highlightFor + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
+		} else if ( typeof highlightFor == 'number')
+			$('.threadauthor small a[href$="=' + highlightFor + '"]').parent().parent().parent().parent().find('.threadpost').css('background', color);
 	}
 }
 
 //Revert homepage
 function forumVersion(versionDate) {
-	var header = document.getElementById("header");
-
-	if (["https://forums.dropbox.com/topic.php", "https://forums.dropbox.com/profile.php", "https://forums.dropbox.com"].indexOf(pageUrl) > -1) {
-		if (versionDate == "8.8.2012") {
+	if (["https://forums.dropbox.com/topic.php", "https://forums.dropbox.com/profile.php", "https://forums.dropbox.com", "https://forums.dropbox.com/search.php", "https://forums.dropbox.com/forum.php"].indexOf(pageUrl) > -1) {
+		if (versionDate == "8.8.2012" || versionDate == "beta") {
 			//Hide logo
-			header.innerHTML = header.innerHTML.substring(header.innerHTML.indexOf('<p class="login">'), header.innerHTML.length);
+			$('#header').find('a').eq(0).remove();
 
 			//Reformat header
-			$('#header').css({'width': '990px', 'height': '174px', 'padding': '0', 'background': 'url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg)'});
-			$('.login').css({'float': 'left', 'clear': 'none', 'margin-top': '5px', 'position': 'static', 'font-size': '12px', 'font-weight': 'normal'});
-			$('.search').css({'float': 'right', 'clear': 'none', 'margin': '5px 5px 0 0', 'position': 'static'});
+			$('#header').css({
+				'width': '990px',
+				'height': '174px',
+				'padding': '0',
+				'background': 'url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg)'
+			});
+			$('.login').css({
+				'float': 'left',
+				'clear': 'none',
+				'margin-top': '5px',
+				'position': 'static',
+				'font-size': '12px',
+				'font-weight': 'normal'
+			});
+			$('.search').css({
+				'float': 'right',
+				'clear': 'none',
+				'margin': '5px 5px 0 0',
+				'position': 'static'
+			});
+		}
+		if (versionDate == "beta") {
+			//Style footer
+			$('#footer').css({
+				'border-top': '1px solid #bbb',
+				'border-left': '1px solid #bbb',
+				'border-right': '1px solid #bbb',
+				'border-top-left-radius': '25px',
+				'border-top-right-radius': '25px'
+			});
+
+			//Clone hidden text for later use
+			var hiddenFooter = $('span:last').clone();
+
+			//Bring text into the footer div
+			$('#footer').append($(hiddenFooter));
+			$('span:last').remove();
+			$('#footer').wrapInner('<div id="footercontent"></div>');
+			$('#footer').prepend('<div id="footertoggle"><div id="footertogglearrow"></div></div>');
+
+			//Add and style toggle animations
+			$('#footertoggle').css({
+				'height': '25px',
+				'width': '25px',
+				'margin': '0 auto'
+			});
+			$('#footertogglearrow').css({
+				'height': '0',
+				'width': '0',
+				'border-left': '5px solid transparent',
+				'border-right': '5px solid transparent',
+				'border-bottom': '10px solid #bbb',
+				'margin': '12px auto 0 auto'
+			});
+			$('#footercontent').toggle();
+			var footerHidden = true;
+			$('#footertoggle').click(function() {
+				$('#footercontent').slideToggle('slow', function() {
+					footerHidden = footerHidden ? false : true;
+					var toggleBottom = footerHidden ? '10px solid #bbb' : 'none';
+					var toggleTop = footerHidden ? 'none' : '10px solid #bbb';
+					$('#footertogglearrow').css({
+						'border-top': toggleTop,
+						'border-bottom': toggleBottom
+					});
+				});
+			});
 		}
 	}
 	if (pageUrl == "https://forums.dropbox.com") {
@@ -175,52 +222,71 @@ function forumVersion(versionDate) {
 		var forumList = $('#forumlist');
 		var forumListTr = $(forumList).find('tr');
 		if (versionDate == "original") {
-			//Original theme
-
 			//Add tag list and reorder elements
-			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap"><a href="#" style="font-size: 8.72300469484pt;">all</a> <a href="#" style="font-size: 8.74491392801pt;">of</a> <a href="#" style="font-size: 18.2535211268pt;">the</a> <a href="#" style="font-size: 12.2942097027pt;">Dropbox</a> <a href="#" style="font-size: 14.234741784pt;">moderators</a> <a href="#" style="font-size: 13.2801251956pt;">are</a> <a href="#" style="font-size: 9.77464788732pt;">awesome</a> <a href="#" style="font-size: 14.1126760563pt;">R.M.</a> <a href="#" style="font-size: 8.8544600939pt;">is</a> <a href="#" style="font-size: 10.3004694836pt;">king</a> <a href="#" style="font-size: 15.0109546166pt;">Andy</a> <a href="#" style="font-size: 9.55555555556pt;">is</a> <a href="#" style="font-size: 8.48200312989pt;">the</a> <a href="#" style="font-size: 10.4538341158pt;">man</a> <a href="#" style="font-size: 8.08763693271pt;">thightower</a> <a href="#" style="font-size: 9.11737089202pt;">is</a> <a href="#" style="font-size: 10.4976525822pt;">awesome</a> <a href="#" style="font-size: 9.1392801252pt;">yay</a> <a href="#" style="font-size: 16.5007824726pt;">I</a> <a href="#" style="font-size: 18.1001564945pt;">added</a> <a href="#" style="font-size: 8.89827856025pt;">a</a> <a href="#" style="font-size: 8.72300469484pt;">tag</a> <a href="#" style="font-size: 8.37245696401pt;">too!</a> <a href="#" style="font-size: 8.41627543036pt;">love</a> <a href="#" style="font-size: 8.9420970266pt;">sponge</a> <a href="#" style="font-size: 8.35054773083pt;">dropbox</a> <a href="#" style="font-size: 10.3881064163pt;">is</a> <a href="#" style="font-size: 8.10954616588pt;">the</a> <a href="#" style="font-size: 10.7605633803pt;">best</a> <a href="#" style="font-size: 10.9577464789pt;">Nathan</a> <a href="#" style="font-size: 8.92018779343pt;">Chris</a> <a href="#" style="font-size: 8.35054773083pt;">Tommy</a> <a href="#" style="font-size: 12.8638497653pt;">Chen</a> <a href="#" style="font-size: 8pt;">Mark</a> <a href="#" style="font-size: 8.39436619718pt;">and</a> <a href="#" style="font-size: 8.2848200313pt;">Ren&#233;</a> <a href="#" style="font-size: 8.48200312989pt;">are</a> <a href="#" style="font-size: 22pt;">awesome</a> <a href="#" style="font-size: 9.62128325509pt;">as</a> <a href="#" style="font-size: 11.8779342723pt;">well</a> <a href="#" style="font-size: 8.87636932707pt;">Ryan\'s</a> <a href="#" style="font-size: 13.3020344288pt;">the</a> <a href="#" style="font-size: 8.63536776213pt;">most</a> <a href="#" style="font-size: 8.39436619718pt;">awesome</a> <a href="#" style="font-size: 11.5492957746pt;">Dropboxer</a></p></div>');
-			var forumListContent = $(forumList).html();
-			$(forumList).remove();
-			document.getElementById("discussions").innerHTML = '<h2>Forums</h2><table id="forumlist"><tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr><tr class="bb-precedes-sibling bb-root"><td><a href="forum.php?id=2">Bugs &amp; Troubleshooting</a><small> &#8211; Tell us what\'s wrong</small></td><td class="num"></td><td class="num"></td></tr><tr class="bb-precedes-sibling bb-follows-sibling bb-root alt"><td><a href="forum.php?id=4">Mobile Apps</a><small> &#8211; Questions and suggestions for our mobile apps</small></td><td class="num"></td><td class="num"></td></tr><tr class="bb-precedes-sibling bb-follows-sibling bb-root"><td><a href="forum.php?id=3">Feature Requests</a><small> &#8211; What should be improved?</small></td><td class="num"></td><td class="num"></td></tr><tr class="bb-precedes-sibling bb-follows-sibling bb-root alt"><td><a href="forum.php?id=5">API Development</a><small> &#8211; Questions relating to our API</small></td><td class="num"></td><td class="num"></td></tr><tr class="bb-last-child bb-follows-sibling bb-root"><td><a href="forum.php?id=1">Everything Else</a><small> &#8211; For stuff that doesn\'t fit elsewhere</small></td><td class="num"></td><td class="num"></td></tr></table><h2>Latest Discussions</h2>' + document.getElementById("discussions").innerHTML;
+			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
+
+			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap"></p></div>');
+			for (i in tagList) {
+				$('#frontpageheatmap').append('<a href="#" style="font-size: ' + ((Math.random() * 17) + 8) + 'px">' + tagList[i] + '</a>');
+				if (i < tagList.length)
+					$('#frontpageheatmap').append(' ');
+			}
+			$('#forumlist').attr('id', 'forumlist-temp');
+			var topicDesc = [$('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[1]];
+			var topicPosts = [$('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[2].split(' topics')[0]];
+
+			$('#forumlist-temp').remove();
+			$('#discussions').prepend('<h2>Forums</h2><table id="forumlist"></table><h2>Latest Discussions</h2>');
+			$('#forumlist').html('<tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr>');
+			for (i in topicPosts) {
+				$('#forumlist').append('<tr class="bb-precedes-sibling bb-root"><td>' + topicDesc[i] + '</td><td class="num">' + topicPosts[i] + '</td><td class="num">' + topicPosts[i] + '+</td></tr>');
+			}
 
 			//Style elements
-			document.getElementById("discussions").setAttribute("style", "width: 680px; margin-right: 170px; margin-left: 0;");
-			document.getElementById("hottags").setAttribute("style", "position: absolute; right: 0px; left: auto;");
-			document.getElementById("main").setAttribute("style", "width: 866px;");
+			$('#discussions').css({
+				'width': '680px',
+				'margin-right': '170px',
+				'margin-left': '0'
+			});
+			$('#hottags').css({
+				'position': 'absolute',
+				'right': '0',
+				'left': 'auto'
+			});
+			$('#main').css('width', '866ps');
 			$('#header').css('width', '866px');
-			$('#header').getElementsByTagName("a")[0].getElementsByTagName("img")[0].setAttribute("src", "http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png");
-			elems = document.getElementsByTagName('*'), i;
-			for (i in $(latestTr)) {
-				if (i > 0)
-					latestTr[i].setAttribute("style", "background: #f7f7f7");
-			}
+			$('#header').find('a').eq(0).find('img').eq(0).attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
+			$(latestTr).not(':first').css('background', '#f7f7f7');
 			$('.bb-root').css('background', '#f7f7f7');
 			$('.alt').css('background', '#fff');
 			$('.super-sticky').css('background', '#deeefc');
-			$('latest').css({'background': '#fff', 'border-top': '1px dotted #ccc'});
-			$('#forumList').css({'background': '#fff', 'border-top': '1px dotted #ccc'});
+			$('#forumlist, #latest').css({
+				'background': '#fff',
+				'border-top': '1px dotted #ccc'
+			});
 			$('frontpageheatmap').css('border-top', '1px dotted #ccc');
-			$('h2').css({'color': '#000', 'margin-bottom': '0'});
+			$('h2').css({
+				'color': '#000',
+				'margin-bottom': '0'
+			});
 		}
-		if (versionDate == "8.8.2012") {
-			//8-8-2012 original image revamp
-
+		if (versionDate == "8.8.2012" || versionDate == "beta") {
 			//Set variables
-			var forumListHeader = $(forumListTr).eq(0).find('th');
 			var latestHeader = $(latestTr).eq(0).find('th');
 
 			//Style table headers
-			$(forumListTr).eq(0).find('th').eq(0).css({'background': '#666', 'color': '#fff'});
-			$(forumListTr).eq(0).css({'height': '25px', 'padding': 'none'});
-			$(forumListTr).eq(1).css('font-weight', 'bold');
-			$(forumListTr).eq(2).css('font-weight', 'bold');
-			$(forumListTr).eq(3).css('font-weight', 'bold');
-			$(forumListTr).eq(4).css('font-weight', 'bold');
-			$(forumListTr).eq(5).css('font-weight', 'bold');
-			$(latestHeader).eq(0).css({'background': '#666', 'color': '#fff'});
-			$(latestHeader).eq(1).css({'background': '#666', 'color': '#fff'});
-			$(latestHeader).eq(2).css({'background': '#666', 'color': '#fff'});
-			$(latestHeader).eq(3).css({'background': '#666', 'color': '#fff'});
+			$(forumListTr).eq(0).find('th').eq(0).css({
+				'background': '#666',
+				'color': '#fff'
+			});
+			$(forumListTr).eq(0).css({
+				'height': '25px',
+				'padding': 'none'
+			});
+			$(latestHeader).css({
+				'background': '#666',
+				'color': '#fff'
+			});
 			$(latestHeader).eq(0).find('a').eq(0).css('color', '#aaa');
 			//latestHeader widths: 545, 46, 90, 69px
 
@@ -228,47 +294,28 @@ function forumVersion(versionDate) {
 			$('.super-sticky').css('background', '#f4faff');
 
 			//Add and style headings
-			//var forumHeadingStyle = "border-bottom: 1px solid #dddddd; padding-bottom: 6px;";
 			$('#discussions').prepend('<h2 class="forumheading">Latest Discussions</h2>');
 			$('#forumlist-container').prepend('<h2 class="forumheading">Forums</h2>');
-			$('#discussions').find('h2').eq(0).css({'border-bottom': '1px solid #ddd', 'padding-bottom': '6px'});
-			$('#forumlist-container').find('h2').eq(0).css({'border-bottom': '1px solid #ddd', 'padding-bottom': '6px'});
-			$('#forumlist').find('tr').eq(0).find('th').eq(0).html('Name');
+			$('.forumheading').css({
+				'border-bottom': '1px solid #ddd',
+				'padding-bottom': '6px'
+			});
+			$('#forumlist').find('tr').eq(0).find('th').html('Name');
 		}
 	}
 }
 
-//Process icon requests
-function getIcon(role) {
-	if (role == "mod")
-		return "<img src='https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif' height='16px' width='40px'>&nbsp;";
-	else if (role == "pro")
-		return "<img align='top' src='https://forums.dropbox.com/bb-templates/dropbox/images/star.gif'>&nbsp;";
-	else if (role == "emp")
-		return "<img align='absmiddle' src='https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif'>&nbsp;";
-}
-
-function importInformation(link, callback) {
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", link, true);
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState === 4)
-			callback(xhr.responseText);
-	};
-	xhr.send(null);
-}
-
 //Get URL of current page
 function getPageUrl() {
-	var currentPage = window.location.href;
-	if (currentPage.indexOf("?") > -1)
-		currentPage = currentPage.substring(0, currentPage.indexOf("?"));
-	if (currentPage[currentPage.length - 1] == "/")
-		currentPage = currentPage.substring(0, currentPage.length - 1);
-	return currentPage;
+	var url = window.location.href;
+	if (url.indexOf("?") > -1)
+		url = url.substring(0, url.indexOf('?'));
+	if (url[url.length - 1] == "/")
+		url = url.substring(0, url.length - 1);
+	return url;
 }
 
 //Append footer
 function addFooter() {
-	$('#footer').append('<div style="text-align: right; color: rgb(102, 102, 102); font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
+	$('#footer').append('<div style="text-align: right; font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
 }
