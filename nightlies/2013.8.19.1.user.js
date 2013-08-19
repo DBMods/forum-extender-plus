@@ -72,7 +72,11 @@ function addSlideOut() {
 	try {
 		var nameList = ['Andy Y.', 'Chen S.', 'Chris J.', 'KC', 'Nathan C.', 'N.N.', 'Mark Mc', 'R.M.', 'René S.', 'Ryan M.', 'Sebastian H.', 'T. Hightower', 'Trevor B.'];
 		var userList = [1618104, 11096, 175532, 561902, 857279, 67305, 30385, 643099, 182504, 1510497, 32911, 222573, 1588860];
-		var activityList = ['Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information'];
+		var activityList = [];
+		for (i in userList){
+			activityList[i] = 'Unable to retrieve information';
+		}
+		var activityListOld = ['Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information'];
 	} catch(e) {
 		alert(e);
 	}
