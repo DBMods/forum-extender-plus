@@ -32,10 +32,9 @@ var iconIndex = {
 addFooter();
 
 //Modify Super User posts
-//addIcon('Super User');
+addIcon('Super User');
 postHighlight('Super User', '#fff19d');
 changeRole(1618104, 'Master of Super Users');
-//changeRoleName("1618104", "Master of Super Users");
 
 //Highlight posts by forum regulars green
 postHighlight(6845, '#b5ff90');
