@@ -6,8 +6,8 @@
 // @exclude https://forums.dropbox.com/bb-admin/*
 // @version 2013.8.18.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
+// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.18.1.user.js
+// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.18.1.user.js
 // @grant none
 // ==/UserScript==
 
