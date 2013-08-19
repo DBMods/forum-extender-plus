@@ -6,8 +6,8 @@
 // @exclude https://forums.dropbox.com/bb-admin/*
 // @version 1.2.0
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
+// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/beta_included.user.js
+// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/beta_included.user.js
 // @grant none
 // ==/UserScript==
 
