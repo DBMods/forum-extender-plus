@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 1.1.0
+// @version 1.2.0
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
@@ -12,11 +12,16 @@
 // ==/UserScript==
 
 //Set internal version
-var internalVersion = "1.1.0";
+var internalVersion = "1.2.0";
 
 //Set global variables
-var elems = document.getElementsByTagName("*"), i;
 var pageUrl = getPageUrl();
+var iconIndex = {
+	'Super User': '<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" height="16px" width="40px"> ',
+	'Pro User': '<img align="top" src="https://forums.dropbox.com/bb-templates/dropbox/images/star.gif"> ',
+	'Dropboxer': '<img align="absmiddle" src="https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif"> ',
+	'default': ''
+};
 
 /*
 * Everything above this line is crucial to the operation of this program
@@ -27,16 +32,17 @@ var pageUrl = getPageUrl();
 addFooter();
 
 //Modify Super User posts
-addIcon("role", "Super User", getIcon("mod"));
-postHighlight("Super User", "#fff19d");
-changeRoleName("1618104", "Master of Super Users");
+//addIcon('Super User');
+postHighlight('Super User', '#fff19d');
+changeRole(1618104, 'Master of Super Users');
+//changeRoleName("1618104", "Master of Super Users");
 
 //Highlight posts by forum regulars green
-idHighlight("6845", "#b5ff90");
-idHighlight("3581696", "#b5ff90");
-idHighlight("816535", "#b5ff90");
-idHighlight("2122867", "#b5ff90");
-idHighlight("434127", "#b5ff90");
+postHighlight(6845, '#b5ff90');
+postHighlight(3581696, '#b5ff90');
+postHighlight(816535, '#b5ff90');
+postHighlight(2122867, '#b5ff90');
+postHighlight(434127, '#b5ff90');
 
 /*
  * Reskin the forums
@@ -44,9 +50,9 @@ idHighlight("434127", "#b5ff90");
  *
  * "8.8.2012" ................ The original of the 3 revamps
  * "original" ................ The original layout
- *     This version currently causes automatic reload to fail, so you'll have to refresh manually
+ * "beta" .................... A beta skin currently in development
  */
-forumVersion("original");
+forumVersion('beta');
 
 /*
  * Reload pages
@@ -62,7 +68,7 @@ reloadStickies(120);
 * Do not modify anything below this line unless you know what you're doing
 */
 
-//Add slideout panel
+//TODO Add slideout panel
 function addSlideOut() {
 	try {
 		var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
@@ -73,11 +79,11 @@ function addSlideOut() {
 	}
 }
 
-//Reload stickies
+//Reload stickies TODO minify this
 function reloadStickies(reloadDelay) {
-	if (reloadDelay > 0 && pageUrl == "https://forums.dropbox.com/topic.php" && document.getElementById("topic_labels").innerHTML.indexOf("[sticky]") > -1)
+	if (pageUrl == 'https://forums.dropbox.com/topic.php' && reloadDelay > 0 && $('#topic_labels:contains("[sticky]")').length > 0)
 		setTimeout(function() {
-			if (!document.getElementById("topic").value && !document.getElementById("post_content").value)
+			if (!$('#topic').val() && !$('#post_content').val())
 				document.location.reload();
 		}, reloadDelay * 1000);
 }
@@ -91,138 +97,110 @@ function reloadFront(reloadDelay) {
 }
 
 //Add icons to users
-function addIcon(checkFor, checkForSubClass, icon) {
-	if (pageUrl == "https://forums.dropbox.com/topic.php") {
-		//Process call and pass in appropriate variables
-		if (checkFor == "role")
-			processedIconRequest(checkForSubClass, "</a></small>", icon);
-		else if (checkFor == "id")
-			processedIconRequest('<small><a href="https://forums.dropbox.com/profile.php?id=', checkForSubClass, icon);
+function addIcon(addTo) {
+	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+		if ( typeof addTo == 'string')
+			$('.threadauthor small a:contains("' + addTo + '")').parent().parent().find('strong').prepend(iconIndex[addTo]);
+		else if ( typeof addTo == 'number')
+			$('.threadauthor small a[href$="=' + addTo + '"]').parent().parent().find('strong').prepend(iconIndex['default']);
 	}
-
-	//Execute the processed request
-	function processedIconRequest(indexA, indexB, selectedIcon) {
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(indexA) > -1)
-				elems[i].innerHTML = "<p><strong>" + selectedIcon + elems[i].innerHTML.substring(26, elems[i].innerHTML.length);
-		}
-	}
-
 }
 
 //Change role name
-function changeRoleName(checkFor, newRole) {
-	if (pageUrl == "https://forums.dropbox.com/topic.php") {
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && elems[i].innerHTML.indexOf(checkFor) > -1)
-				elems[i].getElementsByTagName("p")[0].getElementsByTagName("small")[0].getElementsByTagName("a")[0].innerHTML = newRole;
-		}
+function changeRole(changeFor, newRole) {
+	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+		if ( typeof changeFor == 'string')
+			$('.threadauthor small a:contains("' + changeFor + '")').html(newRole);
+		else if ( typeof changeFor == 'number')
+			$('.threadauthor small a[href$="=' + changeFor + '"]').html(newRole);
 	}
 }
 
 //Highlight posts
-function postHighlight(highlightRole, highlightColor) {
-	if (pageUrl == "https://forums.dropbox.com/topic.php") {
-		//Reset count variables
-		var rolePostCount = totalPostCount = 0;
+function postHighlight(highlightFor, color) {
+	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+		if ( typeof highlightFor == 'string') {
+			//Count posts
+			var rolePosts = $('.threadauthor p small a:contains("' + highlightFor + '")').length;
+			var totalPosts = $('.threadauthor').length;
 
-		//Count total posts and posts by certain users
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1) {
-				totalPostCount++;
-				if (elems[i].innerHTML.indexOf(highlightRole) > -1)
-					rolePostCount++;
-			}
-		}
+			//Set highlighting status
+			var highlightStatus = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? "disabled" : "enabled";
 
-		//Set highlighting status
-		var highlightStatus = ((totalPostCount > 5 && rolePostCount / totalPostCount > 0.2) || (totalPostCount == 5 && rolePostCount > 2) || (totalPostCount < 5 && rolePostCount > 1)) ? "disabled" : "enabled";
+			//Display message above and below message thread
+			var statusMessage = '<li style="text-align: center;">Highlighting ' + highlightStatus + ' for all ' + highlightFor + 's</li>';
+			$('#thread').prepend(statusMessage);
+			$('#thread').append(statusMessage);
 
-		//Display message above and below message thread
-		var statusMessage = '<li style="text-align: center;">Highlighting ' + highlightStatus + ' for all ' + highlightRole + 's</li>';
-		$('#thread').prepend(statusMessage);
-		$('#thread').append(statusMessage);
-
-		//Highlight posts if enabled
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1 && highlightStatus == "enabled" && elems[i].innerHTML.indexOf(highlightRole) > -1)
-				elems[i].parentNode.getElementsByTagName("div")[1].style.cssText = "background: " + highlightColor + ";";
-		}
-	}
-}
-
-//Highlight posts by a certain user
-function idHighlight(highlightId, highlightColor) {
-	if (pageUrl == "https://forums.dropbox.com/topic.php") {
-		//Highlight posts if enabled
-		for (i in elems) {
-			if ((" " + elems[i].className + " ").indexOf(" threadauthor ") > -1) {
-				var authorLinks = elems[i].getElementsByTagName("p")[0].getElementsByTagName("a");
-				var authorProfileLink = authorLinks[authorLinks.length - 1].href;
-				if (highlightId == authorProfileLink.substring(42, authorProfileLink.length))
-					elems[i].parentNode.getElementsByTagName("div")[1].style.cssText = "background: " + highlightColor + ";";
-			}
-		}
+			//Highlight posts if enabled
+			if (highlightStatus == 'enabled')
+				$('.threadauthor p small a:contains("' + highlightFor + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
+		} else if ( typeof highlightFor == 'number')
+			$('.threadauthor small a[href$="=' + highlightFor + '"]').parent().parent().parent().parent().find('.threadpost').css('background', color);
 	}
 }
 
 //Revert homepage
 function forumVersion(versionDate) {
-	var header = document.getElementById("header");
-
 	if (["https://forums.dropbox.com/topic.php", "https://forums.dropbox.com/profile.php", "https://forums.dropbox.com", "https://forums.dropbox.com/search.php", "https://forums.dropbox.com/forum.php"].indexOf(pageUrl) > -1) {
-		if (versionDate == "8.8.2012" || versionDate == "dropbox") {
+		if (versionDate == "8.8.2012" || versionDate == "beta") {
 			//Hide logo
-			header.innerHTML = header.innerHTML.substring(header.innerHTML.indexOf('<p class="login">'), header.innerHTML.length);
+			$('#header').find('a').eq(0).remove();
 
 			//Reformat header
 			$('#header').css({
-				'width' : '990px',
-				'height' : '174px',
-				'padding' : '0',
-				'background' : 'url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg)'
+				'width': '990px',
+				'height': '174px',
+				'padding': '0',
+				'background': 'url(https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forumsheader.jpg)'
 			});
 			$('.login').css({
-				'float' : 'left',
-				'clear' : 'none',
-				'margin-top' : '5px',
-				'position' : 'static',
-				'font-size' : '12px',
-				'font-weight' : 'normal'
+				'float': 'left',
+				'clear': 'none',
+				'margin-top': '5px',
+				'position': 'static',
+				'font-size': '12px',
+				'font-weight': 'normal'
 			});
 			$('.search').css({
-				'float' : 'right',
-				'clear' : 'none',
-				'margin' : '5px 5px 0 0',
-				'position' : 'static'
+				'float': 'right',
+				'clear': 'none',
+				'margin': '5px 5px 0 0',
+				'position': 'static'
 			});
 		}
-		if (versionDate == "dropbox") {
+		if (versionDate == "beta") {
+			//Style footer
 			$('#footer').css({
-				'border-top' : '1px solid #bbb',
-				'border-left' : '1px solid #bbb',
-				'border-right' : '1px solid #bbb',
-				'border-top-left-radius' : '25px',
-				'border-top-right-radius' : '25px'
+				'border-top': '1px solid #bbb',
+				'border-left': '1px solid #bbb',
+				'border-right': '1px solid #bbb',
+				'border-top-left-radius': '25px',
+				'border-top-right-radius': '25px'
 			});
+
+			//Clone hidden text for later use
 			var hiddenFooter = $('span:last').clone();
+
+			//Bring text into the footer div
 			$('#footer').append($(hiddenFooter));
 			$('span:last').remove();
 			$('#footer').wrapInner('<div id="footercontent"></div>');
 			$('#footer').prepend('<div id="footertoggle"><div id="footertogglearrow"></div></div>');
+
+			//Add and style toggle animations
 			$('#footertoggle').css({
-				'height' : '25px',
-				'width' : '25px',
-				'margin-left' : 'auto',
-				'margin-right' : 'auto'
+				'height': '25px',
+				'width': '25px',
+				'margin': '0 auto'
 			});
 			$('#footertogglearrow').css({
-				'height' : '0',
-				'width' : '0',
-				'border-left' : '5px solid transparent',
-				'border-right' : '5px solid transparent',
-				'border-bottom' : '10px solid #bbb',
-				'margin' : '12px auto 0 auto'
+				'height': '0',
+				'width': '0',
+				'border-left': '5px solid transparent',
+				'border-right': '5px solid transparent',
+				'border-bottom': '10px solid #bbb',
+				'margin': '12px auto 0 auto'
 			});
 			$('#footercontent').toggle();
 			var footerHidden = true;
@@ -232,8 +210,8 @@ function forumVersion(versionDate) {
 					var toggleBottom = footerHidden ? '10px solid #bbb' : 'none';
 					var toggleTop = footerHidden ? 'none' : '10px solid #bbb';
 					$('#footertogglearrow').css({
-						'border-top' : toggleTop,
-						'border-bottom' : toggleBottom
+						'border-top': toggleTop,
+						'border-bottom': toggleBottom
 					});
 				});
 			});
@@ -244,13 +222,9 @@ function forumVersion(versionDate) {
 		var forumList = $('#forumlist');
 		var forumListTr = $(forumList).find('tr');
 		if (versionDate == "original") {
-			//Original theme
-
 			//Add tag list and reorder elements
 			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
-			
-			//Tag index for future addition of dynamic tag selection
-			var tagIndex = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+
 			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap"></p></div>');
 			for (i in tagList) {
 				$('#frontpageheatmap').append('<a href="#" style="font-size: ' + ((Math.random() * 17) + 8) + 'px">' + tagList[i] + '</a>');
@@ -270,14 +244,14 @@ function forumVersion(versionDate) {
 
 			//Style elements
 			$('#discussions').css({
-				'width' : '680px',
-				'margin-right' : '170px',
-				'margin-left' : '0'
+				'width': '680px',
+				'margin-right': '170px',
+				'margin-left': '0'
 			});
 			$('#hottags').css({
-				'position' : 'absolute',
-				'right' : '0',
-				'left' : 'auto'
+				'position': 'absolute',
+				'right': '0',
+				'left': 'auto'
 			});
 			$('#main').css('width', '866ps');
 			$('#header').css('width', '866px');
@@ -286,38 +260,32 @@ function forumVersion(versionDate) {
 			$('.bb-root').css('background', '#f7f7f7');
 			$('.alt').css('background', '#fff');
 			$('.super-sticky').css('background', '#deeefc');
-			$('#latest').css({
-				'background' : '#fff',
-				'border-top' : '1px dotted #ccc'
-			});
-			$('#forumList').css({
-				'background' : '#fff',
-				'border-top' : '1px dotted #ccc'
+			$('#forumlist, #latest').css({
+				'background': '#fff',
+				'border-top': '1px dotted #ccc'
 			});
 			$('frontpageheatmap').css('border-top', '1px dotted #ccc');
 			$('h2').css({
-				'color' : '#000',
-				'margin-bottom' : '0'
+				'color': '#000',
+				'margin-bottom': '0'
 			});
 		}
-		if (versionDate == "8.8.2012" || versionDate == "dropbox") {
-			//8-8-2012 original image revamp
-
+		if (versionDate == "8.8.2012" || versionDate == "beta") {
 			//Set variables
 			var latestHeader = $(latestTr).eq(0).find('th');
 
 			//Style table headers
 			$(forumListTr).eq(0).find('th').eq(0).css({
-				'background' : '#666',
-				'color' : '#fff'
+				'background': '#666',
+				'color': '#fff'
 			});
 			$(forumListTr).eq(0).css({
-				'height' : '25px',
-				'padding' : 'none'
+				'height': '25px',
+				'padding': 'none'
 			});
 			$(latestHeader).css({
-				'background' : '#666',
-				'color' : '#fff'
+				'background': '#666',
+				'color': '#fff'
 			});
 			$(latestHeader).eq(0).find('a').eq(0).css('color', '#aaa');
 			//latestHeader widths: 545, 46, 90, 69px
@@ -329,45 +297,25 @@ function forumVersion(versionDate) {
 			$('#discussions').prepend('<h2 class="forumheading">Latest Discussions</h2>');
 			$('#forumlist-container').prepend('<h2 class="forumheading">Forums</h2>');
 			$('.forumheading').css({
-				'border-bottom' : '1px solid #ddd',
-				'padding-bottom' : '6px'
+				'border-bottom': '1px solid #ddd',
+				'padding-bottom': '6px'
 			});
-			$('#forumlist').find('tr').eq(0).find('th').eq(0).html('Name');
+			$('#forumlist').find('tr').eq(0).find('th').html('Name');
 		}
 	}
 }
 
-//Process icon requests
-function getIcon(role) {
-	if (role == "mod")
-		return "<img src='https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif' height='16px' width='40px'>&nbsp;";
-	else if (role == "pro")
-		return "<img align='top' src='https://forums.dropbox.com/bb-templates/dropbox/images/star.gif'>&nbsp;";
-	else if (role == "emp")
-		return "<img align='absmiddle' src='https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif'>&nbsp;";
-}
-
-function importInformation(link, callback) {
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", link, true);
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState === 4)
-			callback(xhr.responseText);
-	};
-	xhr.send(null);
-}
-
 //Get URL of current page
 function getPageUrl() {
-	var currentPage = window.location.href;
-	if (currentPage.indexOf("?") > -1)
-		currentPage = currentPage.substring(0, currentPage.indexOf("?"));
-	if (currentPage[currentPage.length - 1] == "/")
-		currentPage = currentPage.substring(0, currentPage.length - 1);
-	return currentPage;
+	var url = window.location.href;
+	if (url.indexOf("?") > -1)
+		url = url.substring(0, url.indexOf('?'));
+	if (url[url.length - 1] == "/")
+		url = url.substring(0, url.length - 1);
+	return url;
 }
 
 //Append footer
 function addFooter() {
-	$('#footer').append('<div style="text-align: right; color: rgb(102, 102, 102); font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
+	$('#footer').append('<div style="text-align: right; font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
 }
