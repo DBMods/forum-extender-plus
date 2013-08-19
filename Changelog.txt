@@ -6,12 +6,23 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----1.2.0-----
+# Rewrote postHighlight() function
+- Removed unnecessary importInformation() function
+# Simplified footer
+- Removed getIcon() function
+# Rewrote addIcon() function
+# Rewrote changeRoleName() function
+- Eliminated need for a list of elements
+- Eliminated need for getElementById calls
+
 -----1.1.0-----
 * Fixed original theme refresh behavior
 # Changed original theme's tag selection
 + Dynamic tag font sizing in original theme
 - Removed unnecessary code
 + Added slide-out panel for page footer to save space
++ Added modified 8.8.2012 theme for testing purposes - will have an official name later
 
 -----1.0.1-----
 * Restored regulars' highlighting
