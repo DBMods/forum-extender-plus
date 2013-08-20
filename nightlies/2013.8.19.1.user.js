@@ -324,11 +324,11 @@ function reportError(error, description) {
 	$('#error-report-processing').html('<form method="post" action="https://www.github.com/DBMods/forum-mod-icons/issues" id="issue-form"></form>');
 	$('#issue-form').html('<input id="issue_title" name="issue[title]" /><textarea id="issue_body" name="issue[body]" />');
 
-	var reportError = confirm('We\'ve encountered a ' + err.name + '. Report it to the devs?');
+	var reportError = confirm('forum-mod-icons has encountered an error. Report it?');
 	if (reportError) {
-		$('#issue_title').val('Error in script: ' + err.name);
+		$('#issue_title').val('Error in script: ' + error.name);
 		$('#issue_body').val('Name: ' + error.name + '\nMessage: ' + error.message);
-		//$('#issue-form').submit();
+		$('#issue-form').submit();
 	}
 	
 	//Clean up
