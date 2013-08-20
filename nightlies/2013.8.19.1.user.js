@@ -73,12 +73,12 @@ function addSlideOut() {
 		var nameList = ['Andy Y.', 'Chen S.', 'Chris J.', 'KC', 'Nathan C.', 'N.N.', 'Mark Mc', 'R.M.', 'René S.', 'Ryan M.', 'Sebastian H.', 'T. Hightower', 'Trevor B.'];
 		var userList = [1618104, 11096, 175532, 561902, 857279, 67305, 30385, 643099, 182504, 1510497, 32911, 222573, 1588860];
 		var activityList = [];
-		far (i in userList) {
+		for (i in userList) {
 			activityList[i] = 'Unable to retrieve information';
 		}
 		var activityListOld = ['Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information'];
 	} catch(err) {
-		reportError(err, 'addSlideOut()');
+		alert(err);
 	}
 }
 
@@ -319,12 +319,20 @@ function getPageUrl() {
 	return url;
 }
 
+function grabPreferences(userPreference){
+	if (!GM_getValue(userPreference))(
+		GM_setValue(userPreference, prompt('Default value for ' + userPreference + '?'));
+		return GM_getValue(userPreference);
+	)
+}
+
 function reportError(error, description) {
+	//Temporarily deprecated for further testing FIXME
 	$('body').append('<div id="error-report-processing" style="display: block;"></div>');
 	$('#error-report-processing').html('<form method="post" action="https://www.github.com/DBMods/forum-mod-icons/issues" id="issue-form"></form>');
 	$('#issue-form').html('<input id="issue_title" name="issue[title]" /><textarea id="issue_body" name="issue[body]" />');
 
-	var reportError = confirm('forum-mod-icons has encountered an error. Report it?\n\nNote: Make sure you\'re logged into GitHub, otherwise, this won\'t work.'');
+	var reportError = confirm('forum-mod-icons has encountered an error. Report it?\n\nNote: Make sure you\'re logged into GitHub, otherwise, this won\'t work.');
 	if (reportError) {
 		$('#issue_title').val('Error in script: ' + error.name);
 		$('#issue_body').val('Name: ' + error.name + '\nMessage: ' + error.message);
