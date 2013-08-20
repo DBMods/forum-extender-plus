@@ -77,9 +77,8 @@ function addSlideOut() {
 			activityList[i] = 'Unable to retrieve information';
 		}
 		var activityListOld = ['Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information'];
-	} catch(e) {
+	} catch(e)
 		alert(e);
-	}
 }
 
 //Reload stickies
