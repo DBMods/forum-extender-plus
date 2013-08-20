@@ -68,18 +68,7 @@ reloadStickies(120);
 * Do not modify anything below this line unless you know what you're doing
 */
 
-//TODO Add slideout panel
-function addSlideOut() {
-	try {
-		var nameList = ["Andy Y.", "Chen S.", "Chris J.", "KC", "Nathan C.", "N.N.", "Mark Mc", "R.M.", "René S.", "Ryan M.", "Sebastian H.", "T. Hightower", "Trevor B."];
-		var userList = ["1618104", "11096", "175532", "561902", "857279", "67305", "30385", "643099", "182504", "1510497", "32911", "222573", "1588860"];
-		var activityList = ["Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information", "Unable to retrieve information"];
-	} catch(e) {
-		alert(e);
-	}
-}
-
-//Reload stickies TODO minify this
+//Reload stickies
 function reloadStickies(reloadDelay) {
 	if (pageUrl == 'https://forums.dropbox.com/topic.php' && reloadDelay > 0 && $('#topic_labels:contains("[sticky]")').length > 0)
 		setTimeout(function() {
