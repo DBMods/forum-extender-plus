@@ -77,7 +77,6 @@ function addSlideOut() {
 		for (i in userList) {
 			activityList[i] = 'Unable to retrieve information';
 		}
-		var activityListOld = ['Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information', 'Unable to retrieve information'];
 	} catch(err) {
 		alert(err);
 	}
@@ -85,7 +84,7 @@ function addSlideOut() {
 
 //Reload stickies
 function reloadStickies(reloadDelay) {
-	if (pageUrl == 'https://forums.dropbox.com/topic.php' && reloadDelay > 0 && $('#topic_labels:contains("[sticky]")').length > 0)
+	if (pageUrl == 'topic.php' && reloadDelay > 0 && $('#topic_labels:contains("[sticky]")').length > 0)
 		setTimeout(function() {
 			if (!$('#topic').val() && !$('#post_content').val())
 				document.location.reload();
@@ -96,7 +95,7 @@ function reloadStickies(reloadDelay) {
 
 //Reload the front page
 function reloadFront(reloadDelay) {
-	if (reloadDelay > 0 && pageUrl == 'https://forums.dropbox.com')
+	if (reloadDelay > 0 && pageUrl == 'forums.dropbox.com')
 		setTimeout(function() {
 			document.location.reload();
 		}, reloadDelay * 1000);
@@ -104,7 +103,7 @@ function reloadFront(reloadDelay) {
 
 //Add icons to users
 function addIcon(addTo) {
-	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+	if (pageUrl == 'topic.php') {
 		if ( typeof addTo == 'string')
 			$('.threadauthor small a:contains("' + addTo + '")').parent().parent().find('strong').prepend(iconIndex[addTo]);
 		else if ( typeof addTo == 'number')
@@ -114,7 +113,7 @@ function addIcon(addTo) {
 
 //Change role name
 function changeRole(changeFor, newRole) {
-	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+	if (pageUrl == 'topic.php') {
 		if ( typeof changeFor == 'string')
 			$('.threadauthor small a:contains("' + changeFor + '")').html(newRole);
 		else if ( typeof changeFor == 'number')
@@ -124,7 +123,7 @@ function changeRole(changeFor, newRole) {
 
 //Highlight posts
 function postHighlight(highlightFor, color) {
-	if (pageUrl == 'https://forums.dropbox.com/topic.php') {
+	if (pageUrl == 'topic.php') {
 		if ( typeof highlightFor == 'string') {
 			//Count posts
 			var rolePosts = $('.threadauthor p small a:contains("' + highlightFor + '")').length;
@@ -148,7 +147,7 @@ function postHighlight(highlightFor, color) {
 
 //Revert homepage
 function forumVersion(versionDate) {
-	if (['https://forums.dropbox.com/topic.php', 'https://forums.dropbox.com/profile.php', 'https://forums.dropbox.com', 'https://forums.dropbox.com/search.php', 'https://forums.dropbox.com/forum.php'].indexOf(pageUrl) > -1) {
+	if (['forums.dropbox.com', 'topic.php', 'profile.php', 'search.php', 'forum.php'].indexOf(pageUrl) > -1) {
 		if (versionDate == '8.8.2012' || versionDate == 'beta') {
 			//Hide logo
 			$('#header').find('a').eq(0).remove();
@@ -223,7 +222,7 @@ function forumVersion(versionDate) {
 			});
 		}
 	}
-	if (pageUrl == 'https://forums.dropbox.com') {
+	if (pageUrl == 'forums.dropbox.com') {
 		var latestTr = $('#latest').find('tr');
 		var forumList = $('#forumlist');
 		var forumListTr = $(forumList).find('tr');
@@ -312,15 +311,17 @@ function forumVersion(versionDate) {
 
 //Get URL of current page
 function getPageUrl() {
-	var url = window.location.href;
+	var url = window.location.href.split('/')[2];
 	if (url.indexOf('?') > -1)
-		url = url.substring(0, url.indexOf('?'));
+		l = url.split('?')[0];
 	if (url[url.length - 1] == '/')
 		url = url.substring(0, url.length - 1);
+	else
+		url = url.split('/')[1];
 	return url;
 }
 
-function getPreference(userPreference){
+function getPreference(userPreference) {
 	//Temporarily deprecated for further testing FIXME permanent preferences
 	if (GM_getValue(userPreference, undefined) == undefined) {
 		var newValue = prompt('Default value for ' + userPreference + '?');
@@ -341,12 +342,12 @@ function reportError(error, description) {
 		$('#issue_body').val('Name: ' + error.name + '\nMessage: ' + error.message);
 		$('#issue-form').submit();
 	}
-	
+
 	//Clean up
 	$('#error-report-processing').remove();
 }
 
 //Append footer
 function addFooter() {
-	$('#footer').append('<div style="text-align: right; font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
+	$('#footer').append('<div style="text-align: center; font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
 }
