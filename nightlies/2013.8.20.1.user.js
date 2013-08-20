@@ -321,6 +321,7 @@ function getPageUrl() {
 }
 
 function getPreference(userPreference){
+	//Temporarily deprecated for further testing FIXME permanent preferences
 	if (GM_getValue(userPreference, undefined) == undefined) {
 		var newValue = prompt('Default value for ' + userPreference + '?');
 		GM_setValue(userPreference, newValue);
@@ -329,7 +330,7 @@ function getPreference(userPreference){
 }
 
 function reportError(error, description) {
-	//Temporarily deprecated for further testing FIXME
+	//Temporarily deprecated for further testing FIXME error reporting
 	$('body').append('<div id="error-report-processing" style="display: block;"></div>');
 	$('#error-report-processing').html('<form method="post" action="https://www.github.com/DBMods/forum-mod-icons/issues" id="issue-form"></form>');
 	$('#issue-form').html('<input id="issue_title" name="issue[title]" /><textarea id="issue_body" name="issue[body]" />');
