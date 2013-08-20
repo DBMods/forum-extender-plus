@@ -331,7 +331,7 @@ function reportError(error, description) {
 		$('#issue-form').submit();
 	}
 	
-	//Clean u
+	//Clean up
 	$('#error-report-processing').remove();
 }
 
