@@ -4,10 +4,10 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-*
-// @version 2013.8.23pre1
+// @version 2013.8.23pre2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.23pre1.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.23pre1.user.js
+// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.23pre2.user.js
+// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.23pre2.user.js
 // @grant GM_getValue
 // @grant GM_setValue
 // ==/UserScript==
@@ -124,17 +124,16 @@ function addIcon(addTo) {
 
 //Change role name
 function changeRole(changeFor, newRole) {
-	if(pageUrl == 'topic.php') {
+	if(pageUrl == 'topic.php')
 		if( typeof changeFor == 'string')
 			$('.threadauthor small a:contains("' + changeFor + '")').html(newRole);
 		else if( typeof changeFor == 'number')
 			$('.threadauthor small a[href$="=' + changeFor + '"]').html(newRole);
-	}
 }
 
 //Highlight posts
 function postHighlight(highlightFor, color) {
-	if(pageUrl == 'topic.php') {
+	if(pageUrl == 'topic.php')
 		if( typeof highlightFor == 'string') {
 			//Count posts
 			var rolePosts = $('.threadauthor p small a:contains("' + highlightFor + '")').length;
@@ -153,7 +152,6 @@ function postHighlight(highlightFor, color) {
 				$('.threadauthor p small a:contains("' + highlightFor + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
 		} else if( typeof highlightFor == 'number')
 			$('.threadauthor small a[href$="=' + highlightFor + '"]').parent().parent().parent().parent().find('.threadpost').css('background', color);
-	}
 }
 
 //Collapse footer
@@ -202,18 +200,16 @@ function footerCollapse() {
 	});
 }
 
-//TODO Skin forums
-function forumVersionBeta(){
-	
+//TODO: Skin forums
+function forumVersionBeta() {
+
 }
 
-//Revert forums
+//Skin forums
 function forumVersion(versionDate) {
 	if(versionDate == ('8.8.2012' || 'beta')) {
-		//Hide logo
-		$('#header a:first').remove();
-
 		//Reformat header
+		$('#header a:first').remove();
 		$('#header').css({
 			'width': '990px',
 			'height': '174px',
@@ -239,10 +235,40 @@ function forumVersion(versionDate) {
 		var latestTr = $('#latest').find('tr');
 		var forumList = $('#forumlist');
 		var forumListTr = $(forumList).find('tr');
-		if(versionDate == "original") {
+		if(versionDate == ('8.8.2012' || 'beta')) {
+			//Set variables
+			var latestHeader = $(latestTr).eq(0).find('th');
+
+			//Style table headers
+			$(forumListTr).eq(0).find('th').eq(0).css({
+				'background': '#666',
+				'color': '#fff'
+			});
+			$(forumListTr).eq(0).css({
+				'height': '25px',
+				'padding': 'none'
+			});
+			$(latestHeader).css({
+				'background': '#666',
+				'color': '#fff'
+			});
+			$(latestHeader).eq(0).find('a').eq(0).css('color', '#aaa');
+			//TODO: latestHeader widths: 545, 46, 90, 69px
+
+			//Style stickies
+			$('.super-sticky').css('background', '#f4faff');
+
+			//Add and style headings
+			$('#discussions').prepend('<h2 class="forumheading">Latest Discussions</h2>');
+			$('#forumlist-container').prepend('<h2 class="forumheading">Forums</h2>');
+			$('.forumheading').css({
+				'border-bottom': '1px solid #ddd',
+				'padding-bottom': '6px'
+			});
+			$('#forumlist').find('tr').eq(0).find('th').html('Name');
+		} else if(versionDate == 'original') {
 			//Add tag list and reorder elements
 			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
-
 			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap"></p></div>');
 			for(i in tagList) {
 				$('#frontpageheatmap').append('<a href="#" style="font-size: ' + ((Math.random() * 17) + 8) + 'px">' + tagList[i] + '</a>');
@@ -287,38 +313,6 @@ function forumVersion(versionDate) {
 				'color': '#000',
 				'margin-bottom': '0'
 			});
-		}
-		if(versionDate == '8.8.2012' || versionDate == 'beta') {
-			//Set variables
-			var latestHeader = $(latestTr).eq(0).find('th');
-
-			//Style table headers
-			$(forumListTr).eq(0).find('th').eq(0).css({
-				'background': '#666',
-				'color': '#fff'
-			});
-			$(forumListTr).eq(0).css({
-				'height': '25px',
-				'padding': 'none'
-			});
-			$(latestHeader).css({
-				'background': '#666',
-				'color': '#fff'
-			});
-			$(latestHeader).eq(0).find('a').eq(0).css('color', '#aaa');
-			//latestHeader widths: 545, 46, 90, 69px
-
-			//Style stickies
-			$('.super-sticky').css('background', '#f4faff');
-
-			//Add and style headings
-			$('#discussions').prepend('<h2 class="forumheading">Latest Discussions</h2>');
-			$('#forumlist-container').prepend('<h2 class="forumheading">Forums</h2>');
-			$('.forumheading').css({
-				'border-bottom': '1px solid #ddd',
-				'padding-bottom': '6px'
-			});
-			$('#forumlist').find('tr').eq(0).find('th').html('Name');
 		}
 	}
 }
