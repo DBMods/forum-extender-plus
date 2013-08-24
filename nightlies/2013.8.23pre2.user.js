@@ -64,7 +64,6 @@ function addOptions() {
 	$('body').append('<div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000000;border:1px solid #cecece;z-index:1;opacity:0.7;"></div>');
 
 	//Add option trigger
-	//This will be moved elsewhere on the page shortly
 	$('body').append('<div id="modIcon-option-trigger">Open Options</div>');
 	$('#modIcon-option-trigger').css({
 		'position': 'fixed',
