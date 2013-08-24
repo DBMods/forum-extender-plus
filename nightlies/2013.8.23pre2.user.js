@@ -23,7 +23,7 @@ var iconIndex = {
 	'Dropboxer': '<img align="absmiddle" src="https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif"> ',
 	'default': ''
 };
-var forumTheme = GM_getValue('theme');
+var forumTheme = GM_getValue('theme'), temp;
 
 //Add footer
 $('#footer').append('<div style="text-align: center; font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
@@ -276,15 +276,14 @@ function forumVersion(versionDate) {
 					$('#frontpageheatmap').append(' ');
 			}
 			$('#forumlist').attr('id', 'forumlist-temp');
-			var topicDesc = [$('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[1], $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[0] + $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[1]];
-			var topicPosts = [$('#forumlist-temp').find('tr').eq(1).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(2).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(3).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(4).find('td').html().split('<br>')[2].split(' topics')[0], $('#forumlist-temp').find('tr').eq(5).find('td').html().split('<br>')[2].split(' topics')[0]];
-
-			$('#forumlist-temp').remove();
+			sel = ['#forumlist-temp tr:eq('];
 			$('#discussions').prepend('<h2>Forums</h2><table id="forumlist"></table><h2>Latest Discussions</h2>');
 			$('#forumlist').html('<tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr>');
-			for(i in topicPosts) {
-				$('#forumlist').append('<tr class="bb-precedes-sibling bb-root"><td>' + topicDesc[i] + '</td><td class="num">' + topicPosts[i] + '</td><td class="num">' + topicPosts[i] + '+</td></tr>');
+			for( i = 1; i < 6; i++) {
+				temp = $(sel + i + ') td').html().split('<br>')[2].split(' topics')[0];
+				$('#forumlist').append('<tr class="bb-precedes-sibling bb-root"><td>' + $(sel + i + ') td').html().split('<br>')[0] + $(sel + i + ') td').html().split('<br>')[1] + '</td><td class="num">' + temp + '</td><td class="num">' + temp + '+</td></tr>');
 			}
+			$('#forumlist-temp').remove();
 
 			//Style elements
 			$('#discussions').css({
