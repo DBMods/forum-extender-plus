@@ -23,7 +23,9 @@ var iconIndex = {
 	'Dropboxer': '<img align="absmiddle" src="https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif"> ',
 	'default': ''
 };
-var forumTheme = GM_getValue('theme'), temp;
+var temp;
+var theme = GM_getValue('theme');
+var collapseFooter = GM_getValue('footer-collapse');
 
 //Add footer
 $('#footer').append('<div style="text-align: center; font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
@@ -41,29 +43,39 @@ postHighlight(2122867, '#b5ff90');
 postHighlight(434127, '#b5ff90');
 
 //Reskin the forums
-if(forumTheme)
-	forumVersion(forumTheme);
+if(theme)
+	forumVersion(theme);
 
 //Collapse footer
-if(GM_getValue('footer-collapse') == 'yes')
+if(collapseFooter == 'yes')
 	footerCollapse();
 
 //Reload pages
-reloadFront(GM_getValue('front-reload'), 0);
-reloadStickies(GM_getValue('sticky-reload'), 0);
+reloadFront(GM_getValue('front-reload', 0));
+reloadStickies(GM_getValue('sticky-reload', 0));
 
 //Add options
 addOptions();
 
 //Add script options
 function addOptions() {
-	$("head").append('<style type="text/css" charset="utf-8">#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup div:left{float:left;padding-right:10px;width:50%}#modIcon-option-popup{display:none;position:fixed;height:200px;width:600px;background:#FFFFFF;border:2px solid #cecece;z-index:2;padding:12px;font-size:13px;}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}#modIcon-option-close:hover{cursor:pointer;}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}</style>');
-	$('body').append('<div id="modIcon-option-popup"><a id="modIcon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select id="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><option value="beta">Beta</option></optgroup></select><br/><input type="checkbox" id="footer-collapse" value="yes">Auto-collapse footer</input></div><div class="right">Reload front page every <select id="front-reload"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select id="sticky-reload"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modIcon-option-save" style="clear:both;float:right;"></div>');
+	$("head").append('<style type="text/css" charset="utf-8">#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup div:left{float:left;padding-right:10px;width:50%}#modIcon-option-popup{display:none;position:fixed;height:200px;width:600px;background:#FFFFFF;border:2px solid #cecece;z-index:2;padding:12px;font-size:13px;}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}#modIcon-option-trigger:hover, #modIcon-option-close:hover{cursor:pointer;}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}</style>');
+	$('body').append('<div id="modIcon-option-popup"><a id="modIcon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><option value="beta">Beta</option></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="yes">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modIcon-option-save" style="clear:both;float:right;"></div>');
 	$('body').append('<div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000000;border:1px solid #cecece;z-index:1;opacity:0.7;"></div>');
 
 	//Add option trigger
 	//This will be moved elsewhere on the page shortly
 	$('body').append('<div id="modIcon-option-trigger">Open Options</div>');
+	$('#modIcon-option-trigger').css({
+		'position': 'fixed',
+		'bottom': 0,
+		'border-top': '6px solid #80bfff',
+		'border-right': '6px solid #80bfff',
+		'border-top-right-radius': '35px',
+		'height': '75px',
+		'width': '75px',
+		'background': '#fff'
+	});
 
 	$('#modIcon-option-trigger').click(function() {
 		var windowWidth = document.documentElement.clientWidth;
@@ -77,6 +89,19 @@ function addOptions() {
 			'left': windowWidth / 2 - popupWidth / 2
 		});
 
+		var reloadFront = GM_getValue('front-reload');
+		var reloadSticky = GM_getValue('sticky-reload');
+
+		//Load current settings
+		if(theme)
+			$('#modIcon-option-popup [name="theme"] option[value="' + theme + '"]').attr('selected', 'selected');
+		if(collapseFooter)
+			$('#modIcon-option-popup [name="collapseFooter"]').attr('checked', true);
+		if(reloadSticky)
+			$('#modIcon-option-popup [name="reloadSticky"] option[value="' + reloadSticky + '"]').attr('selected', 'selected');
+		if(reloadFront)
+			$('#modIcon-option-popup [name="reloadFront"] option[value="' + reloadFront + '"]').attr('selected', 'selected');
+
 		$('#modIcon-screen-overlay').show();
 		$('#modIcon-option-popup').show();
 	});
@@ -85,10 +110,10 @@ function addOptions() {
 		$('#modIcon-option-popup').hide();
 	});
 	$('#modIcon-option-save').click(function() {
-		GM_setValue('theme', $('#theme :selected').val());
-		GM_setValue('footer-collapse', $('#footer-collapse').val());
-		GM_setValue('front-reload', $('#front-reload :selected').val());
-		GM_setValue('sticky-reload', $('#sticky-reload :selected').val());
+		GM_setValue('theme', $('[name="theme"] :selected').val());
+		GM_setValue('footer-collapse', $('[name="collapseFooter"]').val());
+		GM_setValue('front-reload', $('[name="reloadFront"] :selected').val());
+		GM_setValue('sticky-reload', $('[name="reloadSticky"] :selected').val());
 		alert('Your settings have been saved.\n\nThe new settings won\'t take effect until the page is reloaded.');
 	});
 }
@@ -200,14 +225,9 @@ function footerCollapse() {
 	});
 }
 
-//TODO: Skin forums
-function forumVersionBeta() {
-
-}
-
 //Skin forums
 function forumVersion(versionDate) {
-	if(versionDate == ('8.8.2012' || 'beta')) {
+	if(versionDate == '8.8.2012' || versionDate == 'beta') {
 		//Reformat header
 		$('#header a:first').remove();
 		$('#header').css({
@@ -235,7 +255,7 @@ function forumVersion(versionDate) {
 		var latestTr = $('#latest').find('tr');
 		var forumList = $('#forumlist');
 		var forumListTr = $(forumList).find('tr');
-		if(versionDate == ('8.8.2012' || 'beta')) {
+		if(versionDate == '8.8.2012' || versionDate == 'beta') {
 			//Set variables
 			var latestHeader = $(latestTr).eq(0).find('th');
 
