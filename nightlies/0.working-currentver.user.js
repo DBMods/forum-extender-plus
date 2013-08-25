@@ -156,28 +156,21 @@ function reloadPageBeta(pageType, reloadDelay) {
 
 //Add icons to users
 function addIcon(addTo) {
-	if (pageUrl == 'topic.php') {
-		var searchIndex;
-		if ( typeof addTo == 'string')
-			searchIndex = ':contains("' + addTo + '")', temp = addTo;
-		else if ( typeof addTo == 'number')
-			searchIndex = '[href$="=' + addTo + '"]', temp = 'default';
-		else
-			return;
-		$('.threadauthor small a' + searchIndex).parent().parent('strong').prepend(iconIndex[temp]);
+	if(pageUrl == 'topic.php') {
+		if( typeof addTo == 'string')
+			$('.threadauthor small a:contains("' + addTo + '")').parent().parent().find('strong').prepend(iconIndex[addTo]);
+		else if( typeof addTo == 'number')
+			$('.threadauthor small a[href$="=' + addTo + '"]').parent().parent().find('strong').prepend(iconIndex['default']);
 	}
 }
 
 //Change role name
 function changeRole(changeFor, newRole) {
-	if (pageUrl == 'topic.php')
-		if ( typeof changeFor == 'string')
-			temp = ':contains("' + changeFor + '")';
-		else if ( typeof changeFor == 'number')
-			temp = '[href$="=' + changeFor + '"]';
-		else
-			return;
-	$('.threadauthor small a' + temp).html(newRole);
+	if(pageUrl == 'topic.php')
+		if( typeof changeFor == 'string')
+			$('.threadauthor small a:contains("' + changeFor + '")').html(newRole);
+		else if( typeof changeFor == 'number')
+			$('.threadauthor small a[href$="=' + changeFor + '"]').html(newRole);
 }
 
 //Highlight posts
