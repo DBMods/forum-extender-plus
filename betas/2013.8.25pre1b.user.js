@@ -4,10 +4,10 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 1.2.0
+// @version 2013.8.25pre1b
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/beta_included.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/beta_included.user.js
+// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/betas/2013.8.25pre1b.user.js
+// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/betas/2013.8.25pre1b.user.js
 // @grant none
 // ==/UserScript==
 
