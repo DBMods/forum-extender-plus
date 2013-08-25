@@ -4,10 +4,10 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-*
-// @version 2013.8.24pre2
+// @version 2013.8.25pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.24pre2.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.24pre2.user.js
+// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.25pre1a.user.js
+// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.8.22pre1a.user.js
 // @grant GM_getValue
 // @grant GM_setValue
 // ==/UserScript==
