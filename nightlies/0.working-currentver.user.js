@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb*
-// @version 2013.8.25pre2a
+// @version 2013.8.25pre3a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/current-version-working.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/current-version-working.user.js
@@ -40,6 +40,7 @@ postHighlight(816535, '#b5ff90');
 postHighlight(2122867, '#b5ff90');
 postHighlight(434127, '#b5ff90');
 postHighlight(85409, '#b5ff90');
+postHighlight(1253356, '#b5ff90');
 
 //Reskin the forums
 if (theme)
@@ -53,8 +54,8 @@ if (collapseFooter == 'yes')
 	footerCollapse();
 
 //Reload pages
-reloadFront(GM_getValue('front-reload', 0));
-reloadSticky(GM_getValue('sticky-reload', 0));
+reloadPage('front', GM_getValue('front-reload', 0));
+reloadPage('sticky', GM_getValue('sticky-reload', 0));
 
 //Add options
 addOptions();
@@ -63,7 +64,7 @@ addOptions();
 function addOptions() {
 	//Add prerequsites
 	$("head").append('<style type="text/css" charset="utf-8">#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup div:left{float:left;padding-right:10px;width:50%}#modIcon-option-popup{display:none;position:fixed;height:200px;width:600px;background:#FFFFFF;border:2px solid #cecece;z-index:2;padding:12px;font-size:13px;}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}#modIcon-option-trigger:hover, #modIcon-option-close:hover{cursor:pointer;}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}</style>');
-	$('body').append('<div id="modIcon-option-popup"><a id="modIcon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><option value="beta">Beta</option></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="yes">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modIcon-option-save" style="clear:both;float:right;"></div>');
+	$('body').append('<div id="modIcon-option-popup"><a id="modIcon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="yes">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modIcon-option-save" style="clear:both;float:right;"></div>');
 	$('body').append('<div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:1;opacity:0.7;"></div>');
 	$('body').append('<img id="modIcon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px" />');
 
@@ -115,61 +116,40 @@ function highlightThread(posts, color) {
 		});
 }
 
-//Reload stickies
-function reloadSticky(reloadDelay) {
-	if (pageUrl == 'topic.php' && reloadDelay > 0 && $('#topic_labels:contains("[sticky]")').length > 0)
-		setTimeout(function() {
-			if (!$('#topic').val() && !$('#post_content').val() && $('#modIcon-option-popup').css('display') == 'none')
-				document.location.reload();
-			else
-				reloadSticky(reloadDelay);
-		}, reloadDelay * 1000);
-}
-
-//Reload the front page
-function reloadFront(reloadDelay) {
-	if (reloadDelay > 0 && pageUrl == 'forums.dropbox.com')
-		setTimeout(function() {
-			if ($('#modIcon-option-popup').css('display') == 'none')
-				document.location.reload();
-			else
-				reloadFront(reloadDelay);
-		}, reloadDelay * 1000);
-}
-
-//TODO: Reload pages
-function reloadPageBeta(pageType, reloadDelay) {
+//Reload pages
+function reloadPage(pageType, reloadDelay) {
 	var reloadIndex = {
 		'sticky' : pageUrl == ('topic.php' && $('#topic_labels:contains("[sticky]")').length > 0),
 		'sticky2' : (!$('#topic').val() && !$('#post_content').val()),
 		'front' : pageUrl == 'forums.dropbox.com',
 		'front2' : true
 	};
-	if (reloadIndex[pageType] && reloadDelay > 0)
+	if (reloadIndex[pageType] && reloadDelay > 0) {
 		setTimeout(function() {
-			if (reloadIndex[pageType + '2'] && $('#modIcon-option-popup').css('display') == 'none')
+			if (reloadIndex[pageType + '2'])
 				document.location.reload();
 			else
 				reloadPageBeta(pageType, reloadDelay);
 		}, reloadDelay * 1000);
+	}
 }
 
 //Add icons to users
 function addIcon(addTo) {
-	if(pageUrl == 'topic.php') {
-		if( typeof addTo == 'string')
+	if (pageUrl == 'topic.php') {
+		if ( typeof addTo == 'string')
 			$('.threadauthor small a:contains("' + addTo + '")').parent().parent().find('strong').prepend(iconIndex[addTo]);
-		else if( typeof addTo == 'number')
+		else if ( typeof addTo == 'number')
 			$('.threadauthor small a[href$="=' + addTo + '"]').parent().parent().find('strong').prepend(iconIndex['default']);
 	}
 }
 
 //Change role name
 function changeRole(changeFor, newRole) {
-	if(pageUrl == 'topic.php')
-		if( typeof changeFor == 'string')
+	if (pageUrl == 'topic.php')
+		if ( typeof changeFor == 'string')
 			$('.threadauthor small a:contains("' + changeFor + '")').html(newRole);
-		else if( typeof changeFor == 'number')
+		else if ( typeof changeFor == 'number')
 			$('.threadauthor small a[href$="=' + changeFor + '"]').html(newRole);
 }
 
@@ -240,7 +220,7 @@ function footerCollapse() {
 
 //Skin forums
 function forumVersion(versionDate) {
-	if (['8.8.2012', 'beta'].indexOf(versionDate) > -1) {
+	if (versionDate == '8.8.2012') {
 		//Reformat header
 		$('#header a:first').remove();
 		$('#header').css({
@@ -266,7 +246,7 @@ function forumVersion(versionDate) {
 	}
 	if (pageUrl == 'forums.dropbox.com') {
 		var latestTr = $('#latest').find('tr'), forumList = $('#forumlist'), forumListTr = $(forumList).find('tr');
-		if (['8.8.2012', 'beta'].indexOf(versionDate) > -1) {
+		if (versionDate == '8.8.2012') {
 			//Set variables
 			var latestHeader = $(latestTr).eq(0).find('th');
 
