@@ -1,0 +1,13 @@
++ Added
+- Removed
+* Fixed
+# Changed
+
+
+Dropbox Forum Mod Icons Beta Changelog
+
+-----2013.8.25pre2b-----
++ Added settings panel
+# Allowed user to change settings without editing script
+# Moved collapsible footer outside of theme
++ Added new thread highlighting
