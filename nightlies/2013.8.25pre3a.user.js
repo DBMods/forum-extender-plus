@@ -130,7 +130,7 @@ function reloadPage(pageType, reloadDelay) {
 				document.location.reload();
 			else
 				reloadPageBeta(pageType, reloadDelay);
-		}, reloadDelay * 1000);
+\		}, reloadDelay * 1000);
 	}
 }
 
