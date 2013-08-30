@@ -1,0 +1,12 @@
++ Added
+- Removed
+* Fixed
+# Changed
+
+
+Dropbox Forum Mod Icons Nightly Changelog
+
+-----2013.8.26pre1a-----
+- Removed beta theme
+# Rewrote page reloading theme
+* Downgraded sticky reload to old function
