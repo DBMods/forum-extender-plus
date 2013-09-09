@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb*
-// @version 2013.8.29pre1a
+// @version 2013.9.9pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
@@ -263,7 +263,7 @@ function forumVersion(versionDate) {
 		$('#main, #header').css('width', '866px');
 		$('#header a:first img').attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
 	}
-	if(['forums.dropbox.com', '8.8.2012'].indexOf(pageUrl) > -1) {
+	if(['forums.dropbox.com', 'forum.php'].indexOf(pageUrl) > -1) {
 		if(versionDate == '8.8.2012') {
 			$('#latest th').css({
 				'background': '#666',
@@ -272,18 +272,7 @@ function forumVersion(versionDate) {
 			$('#latest th:eq(0) a').css('color', '#aaa');
 			//TODO: latestHeader widths: 545, 46, 90, 69px
 			$('.sticky, .super-sticky').css('background', '#f4faff');
-		} else if(versionDate == 'original') {
-			$('#discussions').css('margin-left', '0');
-			$('#forumlist-container').remove();
-			$('#latest').css('width', '866px');
-			$('#latest tr:not(:first), .bb-root').css('background', '#f7f7f7');
-			$('#latest, .alt').css('background', '#fff');
-			$('#latest').css('border-top', '1px dotted #ccc');
-			$('.sticky, .super-sticky').css('background', '#deeefc');
-		}
-	} else if(pageUrl == 'forums.dropbox.com') {
-		var forumList = $('#forumlist');
-		if(versionDate == '8.8.2012') {
+			
 			//Style table headers
 			$('#forumlist th').css({
 				'background': '#666',
@@ -303,6 +292,16 @@ function forumVersion(versionDate) {
 				'padding-bottom': '6px'
 			});
 		} else if(versionDate == 'original') {
+			$('#discussions').css('margin-left', '0');
+			$('#forumlist-container').remove();
+			$('#latest').css('width', '866px');
+			$('#latest tr:not(:first), .bb-root').css('background', '#f7f7f7');
+			$('#latest, .alt').css('background', '#fff');
+			$('#latest').css('border-top', '1px dotted #ccc');
+			$('.sticky, .super-sticky').css('background', '#deeefc');
+		}
+	} else if(pageUrl == 'forums.dropbox.com') {
+		if(versionDate == 'original') {
 			//Add tag list and reorder elements
 			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
 			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap"></p></div>');
