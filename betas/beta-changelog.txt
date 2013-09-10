@@ -11,3 +11,8 @@ Dropbox Forum Mod Icons Beta Changelog
 # Allowed user to change settings without editing script
 # Moved collapsible footer outside of theme
 + Added new thread highlighting
+
+-----2013.9.9pre1b-----
+- Broke thread highlighting
+- Removed beta theme
+# Rewrote page reloading function
