@@ -7,7 +7,7 @@
 // @version 2013.9.9pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.9.9pre1a.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.9.9.user.js
+// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/2013.9.9pre1a.user.js
 // @grant GM_getValue
 // @grant GM_setValue
 // ==/UserScript==
