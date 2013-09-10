@@ -6,6 +6,12 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----1.3.0-----
++ Added settings panel
+# Allowed user to change settings without editing script
+# Moved collapsible footer outside of theme
+# Rewrote page reloading function
+
 -----1.2.0-----
 # Rewrote postHighlight() function
 - Removed unnecessary importInformation() function
