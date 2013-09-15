@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb*
-// @version 2013.9.9pre1a
+// @version 2013.9.15pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
@@ -24,9 +24,13 @@ var iconIndex = {
 	'default': ''
 };
 var theme = GM_getValue('theme'), collapseFooter = GM_getValue('footer-collapse');
+var settingsVisible = false;
 
 //Add footer
 $('#footer').append('<div style="text-align: center; font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
+
+//Fix forum extender footer snippet
+$('#footer div:contains("Forum Extender Version")').css('text-align', 'center');
 
 //Modify Super User posts
 addIcon('Super User');
@@ -34,48 +38,44 @@ postHighlight('Super User', '#fff19d');
 changeRole(1618104, 'Master of Super Users');
 
 //Highlight posts by forum regulars green
-postHighlight(6845, '#b5ff90');
-postHighlight(3581696, '#b5ff90');
-postHighlight(816535, '#b5ff90');
-postHighlight(2122867, '#b5ff90');
-postHighlight(434127, '#b5ff90');
-postHighlight(85409, '#b5ff90');
-postHighlight(1253356, '#b5ff90');
+postHighlight(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, '#b5ff90');
 
 //Reskin the forums
 if(theme)
 	forumVersion(theme);
 
-//Flag new threads in green
-highlightThread(1, '#b4ff90');
+//Flag threads
+highlightThread('#b4ff90', 1);
+highlightThread('#fff19d', 2);
+highlightThread('#ffd4d4', 3);
+//ffc584 f79408 f78008
 
 //Collapse footer
 if(collapseFooter == 'yes')
 	footerCollapse();
 
 //Reload pages
-reloadPage('front', GM_getValue('front-reload', 0));
-reloadPage('forum', GM_getValue('forum-reload', 0));
-reloadStickies(GM_getValue('sticky-reload', 0));
+reloadPage('front');
+reloadPage('forum');
+reloadPage('sticky');
 
-//Add options
 addOptions();
 
-//Add script options
+//Add options
 function addOptions() {
 	//Add prerequsites
-	$("head").append('<style type="text/css" charset="utf-8">#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup div:left{float:left;padding-right:10px;width:50%}#modIcon-option-popup{display:none;position:fixed;height:200px;width:600px;background:#FFFFFF;border:2px solid #cecece;z-index:2;padding:12px;font-size:13px;}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}#modIcon-option-trigger:hover, #modIcon-option-close:hover{cursor:pointer;}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}</style>');
+	$("head").append('<style type="text/css" charset="utf-8">#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.left{float:left;width: 50px}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup{display:none;position:fixed;width:600px;height:200px;background:#fff;border:2px solid #cecece;z-index:2;padding:12px;font-size:13px}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modIcon-option-trigger:hover,#modIcon-option-close:hover{cursor:pointer}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
+	$('body').append('<div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:1;opacity:0.7;"></div><img id="modIcon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px" />');
 	$('body').append('<div id="modIcon-option-popup"><a id="modIcon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="yes">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every <select name="reloadForums"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modIcon-option-save" style="clear:both;float:right;"></div>');
-	$('body').append('<div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:1;opacity:0.7;"></div>');
-	$('body').append('<img id="modIcon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px" />');
 
 	$('#modIcon-option-trigger').click(function() {
-		var popupHeight = $('#modIcon-option-popup').height(), popupWidth = $('#modIcon-option-popup').width();
+		settingsVisible = true;
+		var optionHeight = $('#modIcon-option-popup').height(), optionWidth = $('#modIcon-option-popup').width();
 
 		$('#modIcon-option-popup').css({
 			'position': 'fixed',
-			'top': document.documentElement.clientHeight / 2 - popupHeight / 2,
-			'left': document.documentElement.clientWidth / 2 - popupWidth / 2
+			'top': (document.documentElement.clientHeight - optionHeight) / 2,
+			'left': (document.documentElement.clientWidth - optionWidth) / 2
 		});
 
 		//Load current settings
@@ -99,6 +99,9 @@ function addOptions() {
 		$('#modIcon-screen-overlay').hide();
 		$('#modIcon-option-popup').hide();
 	});
+	$('#modIcon-option-close').click(function() {
+		settingsVisible = false;
+	});
 	$('#modIcon-option-save').click(function() {
 		GM_setValue('theme', $('[name="theme"] :selected').val());
 		GM_setValue('footer-collapse', $('[name="collapseFooter"]').val());
@@ -106,31 +109,24 @@ function addOptions() {
 		GM_setValue('forum-reload', $('[name="reloadForums"] :selected').val());
 		GM_setValue('sticky-reload', $('[name="reloadSticky"] :selected').val());
 		alert('Your settings have been saved.\n\nThe new settings won\'t take effect until the page is reloaded.');
+		settingsVisible = false;
 	});
 }
 
 //Highlight forum threads based on post count
-function highlightThread(posts, color) {
-	if(['forums.dropbox.com', 'forum.php'].indexOf(pageUrl) > -1)
-		$('#latest tr td:nth-child(2)').each(function() {
-			if(parseInt(this.innerHTML, 10) <= posts)
-				this.parentNode.style.backgroundColor = color;
-		});
-}
 
-//Reload stickies
-function reloadStickies(reloadDelay) {
-	if(pageUrl == 'topic.php' && reloadDelay > 0 && $('#topic_labels:contains("[sticky]")').length > 0)
-		setTimeout(function() {
-			if(!$('#topic').val() && !$('#post_content').val())
-				document.location.reload();
-			else
-				reloadStickies(reloadDelay);
-		}, reloadDelay * 1000);
+function highlightThread() {
+	var args = arguments;
+	$('#latest tr:not(.sticky, .super-sticky) td:nth-child(2)').each(function() {
+		if(args.length == 2 && parseInt($(this).html(), 10) == args[1])
+			$(this).parent().css('background', args[0]);
+		else if(parseInt($(this).html(), 10) >= args[1] && parseInt($(this).html(), 10) <= args[2])
+			$(this).parent().css('background', args[0]);
+	});
 }
 
 //Reload pages
-function reloadPage(pageType, reloadDelay) {
+function reloadPage(pageType) {
 	var reloadIndex = {
 		'sticky': pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length > 0,
 		'sticky2': !$('#topic').val() && !$('#post_content').val(),
@@ -139,12 +135,13 @@ function reloadPage(pageType, reloadDelay) {
 		'forum': pageUrl == 'forum.php',
 		'forum2': true
 	};
+	var reloadDelay = GM_getValue(pageType + '-reload', 0);
 	if(reloadIndex[pageType] && reloadDelay > 0) {
 		setTimeout(function() {
-			if(reloadIndex[pageType + '2'])
+			if(!settingsVisible && reloadIndex[pageType + '2'])
 				document.location.reload();
 			else
-				reloadPageBeta(pageType, reloadDelay);
+				reloadPage(pageType);
 		}, reloadDelay * 1000);
 	}
 }
@@ -169,68 +166,75 @@ function changeRole(changeFor, newRole) {
 }
 
 //Highlight posts
-function postHighlight(highlightFor, color) {
+function postHighlight() {
+	var args = arguments;
+	var color = args[args.length - 1];
+	var rolePosts, status, message;
+	var totalPosts = $('.threadauthor').length;
+	args[args.length - 1] = undefined;
 	if(pageUrl == 'topic.php')
-		if( typeof highlightFor == 'string') {
-			//Count posts
-			var rolePosts = $('.threadauthor p small a:contains("' + highlightFor + '")').length;
-			var totalPosts = $('.threadauthor').length;
+		for(i in args) {
+			if( typeof args[i] == 'string') {
+				//Count posts
+				rolePosts = $('.threadauthor p small a:contains("' + args[i] + '")').length;
 
-			//Set highlighting status
-			var status = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? "disabled" : "enabled";
+				//Set highlighting status
+				status = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? "disabled" : "enabled";
 
-			//Display message above and below message thread
-			var message = '<li style="text-align: center;">Highlighting ' + status + ' for all ' + highlightFor + 's</li>';
-			$('#thread').prepend(message);
-			$('#thread').append(message);
+				//Display message above and below message thread
+				message = '<li style="text-align: center;">Highlighting ' + status + ' for all ' + args[i] + 's</li>';
+				$('#thread').prepend(message);
+				$('#thread').append(message);
 
-			//Highlight posts if enabled
-			if(status == 'enabled')
-				$('.threadauthor p small a:contains("' + highlightFor + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
-		} else if( typeof highlightFor == 'number')
-			$('.threadauthor small a[href$="=' + highlightFor + '"]').parent().parent().parent().parent().find('.threadpost').css('background', color);
+				//Highlight posts if enabled
+				if(status == 'enabled')
+					$('.threadauthor p small a:contains("' + args[i] + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
+			} else if( typeof args[i] == 'number')
+				$('.threadauthor small a[href$="=' + args[i] + '"]').parent().parent().parent().parent().find('.threadpost').css('background', color);
+		}
 }
 
 //Collapse footer
 function footerCollapse() {
-	//Style footer
-	$('#footer').css({
-		'border-top': '1px solid #bbb',
-		'border-left': '1px solid #bbb',
-		'border-right': '1px solid #bbb',
-		'border-radius': '25px 25px 0 0'
-	});
+	if(pageUrl != 'edit.php') {
+		//Style footer
+		$('#footer').css({
+			'border': '1px solid #bbb',
+			'border-bottom': 'none',
+			'border-radius': '25px 25px 0 0'
+		});
 
-	//Bring external content into footer, and wrap footer contents
-	$('#footer').append($('span:last'));
-	$('#footer').wrapInner('<div id="footercontent" />');
+		//Bring external content into footer, and wrap footer contents
+		$('#footer').append($('span:last'));
+		$('#footer').wrapInner('<div id="footercontent" />');
 
-	//Add and style toggle animations
-	$('#footer').prepend('<div id="footertoggle"><div id="footertogglearrow"></div></div>');
-	$('#footertoggle').css({
-		'height': '25px',
-		'width': '25px',
-		'margin': '0 auto'
-	});
-	$('#footertogglearrow').css({
-		'height': '0',
-		'width': '0',
-		'border-left': '5px solid transparent',
-		'border-right': '5px solid transparent',
-		'border-bottom': '10px solid #bbb',
-		'margin': '12px auto 0'
-	});
-	$('#footercontent').toggle();
-	var footerHidden = true;
-	$('#footertoggle').click(function() {
-		$('#footercontent').slideToggle('slow', function() {
-			footerHidden = footerHidden ? false : true;
-			$('#footertogglearrow').css({
-				'border-top': ( footerHidden ? 'none' : '10px solid #bbb'),
-				'border-bottom': ( footerHidden ? '10px solid #bbb' : 'none')
+		//Add and style toggle animations
+		$('#footer').prepend('<div id="footertoggle"><div id="footertogglearrow"></div></div>');
+		$('#footertoggle').css({
+			'height': '25px',
+			'width': '100%',
+			'margin': '0 auto'
+		});
+		$('#footertogglearrow').css({
+			'height': '0',
+			'width': '0',
+			'border-left': '5px solid transparent',
+			'border-right': '5px solid transparent',
+			'border-bottom': '10px solid #bbb',
+			'margin': '12px auto 0'
+		});
+		$('#footercontent').toggle();
+		var footerHidden = true;
+		$('#footertoggle').click(function() {
+			$('#footercontent').slideToggle('slow', function() {
+				footerHidden = footerHidden ? false : true;
+				$('#footertogglearrow').css({
+					'border-top': ( footerHidden ? 'none' : '10px solid #bbb'),
+					'border-bottom': ( footerHidden ? '10px solid #bbb' : 'none')
+				});
 			});
 		});
-	});
+	}
 }
 
 //Skin forums
@@ -256,7 +260,7 @@ function forumVersion(versionDate) {
 		$('.search').css({
 			'float': 'right',
 			'clear': 'none',
-			'margin': '5px 5px 0 0',
+			'margin': '5px',
 			'position': 'static'
 		});
 	} else if(versionDate == 'original') {
@@ -265,16 +269,12 @@ function forumVersion(versionDate) {
 	}
 	if(['forums.dropbox.com', 'forum.php'].indexOf(pageUrl) > -1) {
 		if(versionDate == '8.8.2012') {
-			$('#latest th').css({
-				'background': '#666',
-				'color': '#fff'
-			});
 			$('#latest th:eq(0) a').css('color', '#aaa');
 			//TODO: latestHeader widths: 545, 46, 90, 69px
 			$('.sticky, .super-sticky').css('background', '#f4faff');
-			
+
 			//Style table headers
-			$('#forumlist th').css({
+			$('#forumlist th, #latest th').css({
 				'background': '#666',
 				'color': '#fff'
 			});
@@ -344,23 +344,26 @@ function forumVersion(versionDate) {
 }
 
 //Debug layout
-function debugLayout(item) {
-	$('body *').css({
-		'border-style': 'solid',
-		'border-width': '5px'
-	});
-	$(item + ' > *').css('border-color', 'red');
-	$(item + ' > * > *').css('border-color', 'orange');
-	$(item + ' > * > * > *').css('border-color', 'yellow');
-	$(item + ' > * > * > * > *').css('border-color', 'green');
-	$(item + ' > * > * > * > * > *').css('border-color', 'blue');
-	$(item + ' > * > * > * > * > * > *').css('border-color', 'purple');
-	$(item + ' > * > * > * > * > * > * > *').css('border-color', 'red');
-	$(item + ' > * > * > * > * > * > * > * > *').css('border-color', 'orange');
-	$(item + ' > * > * > * > * > * > * > * > * > *').css('border-color', 'yellow');
-	$(item + ' > * > * > * > * > * > * > * > * > * > *').css('border-color', 'green');
-	$(item + ' > * > * > * > * > * > * > * > * > * > * > *').css('border-color', 'blue');
-	$(item + ' > * > * > * > * > * > * > * > * > * > * > * > *').css('border-color', 'purple');
+function debugLayout(item, status) {
+	if(status == 'enable') {
+		$('body *').css({
+			'border-style': 'solid',
+			'border-width': '5px'
+		});
+		$(item + ' > *').css('border-color', 'red');
+		$(item + ' > * > *').css('border-color', 'orange');
+		$(item + ' > * > * > *').css('border-color', 'yellow');
+		$(item + ' > * > * > * > *').css('border-color', 'green');
+		$(item + ' > * > * > * > * > *').css('border-color', 'blue');
+		$(item + ' > * > * > * > * > * > *').css('border-color', 'purple');
+		$(item + ' > * > * > * > * > * > * > *').css('border-color', 'red');
+		$(item + ' > * > * > * > * > * > * > * > *').css('border-color', 'orange');
+		$(item + ' > * > * > * > * > * > * > * > * > *').css('border-color', 'yellow');
+		$(item + ' > * > * > * > * > * > * > * > * > * > *').css('border-color', 'green');
+		$(item + ' > * > * > * > * > * > * > * > * > * > * > *').css('border-color', 'blue');
+		$(item + ' > * > * > * > * > * > * > * > * > * > * > * > *').css('border-color', 'purple');
+	} else if(status == 'disable')
+		$('body *').css('border', 'none');
 }
 
 //Get URL of current page
