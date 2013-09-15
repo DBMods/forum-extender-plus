@@ -6,6 +6,16 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.9.15pre1a-----
+# Rewrote postHighlight function
+
+-----2013.9.14pre1a-----
+# Rewrote highlightThread function
++ Added highlighting for 1, 2, and 3 post-count threads
+
+-----2013.9.9pre1a-----
+# Tweaked a few things
+
 -----2013.8.25pre1a-----
 - Removed beta theme
 # Rewrote page reloading function
