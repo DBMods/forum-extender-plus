@@ -6,6 +6,14 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.9.28pre3a-----
++ Added post drafting
++ Added navigation bar
++ Added Super User activity monitor to navigation bar
+
+-----2013.9.16pre1a-----
+- Removed need for manual internalVersion change
+
 -----2013.9.15pre1a-----
 # Rewrote postHighlight function
 
