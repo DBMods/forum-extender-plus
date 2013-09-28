@@ -3,17 +3,16 @@
 // @namespace DropboxMods
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
-// @exclude https://forums.dropbox.com/bb*
-// @version 2013.9.15pre1a
+// @exclude https://forums.dropbox.com/bb-admin/*
+// @version 2013.9.28pre3a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
 // @grant GM_getValue
 // @grant GM_setValue
+// @grant GM_xmlhttpRequest
+// @grant GM_deleteValue
 // ==/UserScript==
-
-//Set internal version
-var internalVersion = 'Nightly Build';
 
 //Set global variables
 var pageUrl = getPageUrl();
@@ -21,51 +20,101 @@ var iconIndex = {
 	'Super User': '<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" height="16px" width="40px" /> ',
 	'Pro User': '<img align="top" src="https://forums.dropbox.com/bb-templates/dropbox/images/star.gif" /> ',
 	'Dropboxer': '<img align="absmiddle" src="https://forums.dropbox.com/bb-templates/dropbox/images/dropbox-icon.gif" /> ',
-	'default': ''
+	'empty': ''
 };
-var theme = GM_getValue('theme'), collapseFooter = GM_getValue('footer-collapse');
+//*/
 var settingsVisible = false;
 
 //Add footer
-$('#footer').append('<div style="text-align: center; font-size: 11px; clear:both;">Dropbox Forum Mod Icons Version ' + internalVersion + '</div>');
-
-//Fix forum extender footer snippet
-$('#footer div:contains("Forum Extender Version")').css('text-align', 'center');
+$('#footer').append('<div style="text-align: center; font-size: 11px; clear:both;">Dropbox Forum Mod Icons ' + versionSlug(GM_info.script.version) + '</div>');
 
 //Modify Super User posts
 addIcon('Super User');
-postHighlight('Super User', '#fff19d');
+highlightPost('Super User', '#fff19d');
 changeRole(1618104, 'Master of Super Users');
 
 //Highlight posts by forum regulars green
-postHighlight(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, '#b5ff90');
+highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, '#b5ff90');
 
 //Reskin the forums
-if(theme)
-	forumVersion(theme);
+forumVersion(GM_getValue('theme'));
 
 //Flag threads
 highlightThread('#b4ff90', 1);
 highlightThread('#fff19d', 2);
 highlightThread('#ffd4d4', 3);
-//ffc584 f79408 f78008
 
 //Collapse footer
-if(collapseFooter == 'yes')
-	footerCollapse();
+footerCollapse();
+
+//Add nsvigstion bar
+addOptions();
+navBar();
 
 //Reload pages
 reloadPage('front');
 reloadPage('forum');
 reloadPage('sticky');
 
-addOptions();
+//Allow for post drafting
+draftPost();
+
+//Manage post drafts
+function draftPost() {
+	var thread = window.location.href.split('id=')[1].split('&')[0].split('#')[0];
+	$('#post-form-subscription-container').append(' - <a id="modpostdraft">Draft Post</a> - <a id="modpostrestoredraft">Restore Draft</a>');
+	$('#modpostdraft').click(function() {
+		GM_setValue('draft-' + thread + '-title', $('#topic').val());
+		GM_setValue('draft-' + thread + '-post', $('#post_content').val());
+	});
+	$('#modpostrestoredraft').click(function() {
+		$('#topic').val(GM_getValue('draft-' + thread + '-title', ''));
+		$('#post_content').val(GM_getValue('draft-' + thread + '-post', ''));
+		GM_deleteValue('draft-' + thread + '-title');
+		GM_deleteValue('draft-' + thread + '-post');
+	});
+}
+
+//Add nav bar
+function navBar() {
+	$('body').prepend('<div id="modicon-nav-slideout-container"></div>');
+	$('body').append('<div id="modicon-nav"><span id="modactivitytrigger">Activity</span></div>');
+	$('head').append('<style type="text/css">#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 125px;background:#fff;z-index:10}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}</style>');
+	$('body').css('padding-bottom', '31px');
+
+	//Add list content
+	var resp;
+	var profile = {
+		list: [1618104, 11096, 175532, 561902, 30385, 67305, 857279, 643099, 182504, 1510497, 32911, 222573, 1588860],
+		load: function(i) {
+			GM_xmlhttpRequest({
+				method: 'GET',
+				url: 'https://forums.dropbox.com/profile.php?id=' + profile.list[i],
+				onload: function(response) {
+					resp = response.responseText;
+					$('#modactivity li:eq(' + i + ')').html('<a href="https://forums.dropbox.com/profile.php?id=' + profile.list[i] + '">' + resp.split('<title>')[1].split(' &laquo;')[0] + '</a> - ' + ((resp.split('<h4>Recent Replies</h4>')[1].indexOf('<p>No more replies.</p>') > -1) ? 'never active' : 'last active ' + resp.split('<h4>Recent Replies</h4>')[1].split('<li>')[1].split('">')[2].split('</a>')[0]));
+				}
+			});
+		}
+	};
+
+	//Add list framework
+	$('#modicon-nav-slideout-container').append('<ul id="modactivity" />');
+	$('#modactivity').toggle();
+	$('#modactivitytrigger').click(function() {
+		$('#modactivity').slideToggle();
+	});
+	for(i in profile.list) {
+		$('#modactivity').append('<li>Loading . . .</li>');
+		profile.load(i);
+	}
+}
 
 //Add options
 function addOptions() {
 	//Add prerequsites
 	$("head").append('<style type="text/css" charset="utf-8">#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.left{float:left;width: 50px}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup{display:none;position:fixed;width:600px;height:200px;background:#fff;border:2px solid #cecece;z-index:2;padding:12px;font-size:13px}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modIcon-option-trigger:hover,#modIcon-option-close:hover{cursor:pointer}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
-	$('body').append('<div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:1;opacity:0.7;"></div><img id="modIcon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px" />');
+	$('body').append('<div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:1;opacity:0.7;"></div><img id="modIcon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" />');
 	$('body').append('<div id="modIcon-option-popup"><a id="modIcon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="yes">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every <select name="reloadForums"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modIcon-option-save" style="clear:both;float:right;"></div>');
 
 	$('#modIcon-option-trigger').click(function() {
@@ -98,8 +147,6 @@ function addOptions() {
 	$('#modIcon-option-close, #modIcon-option-save').click(function() {
 		$('#modIcon-screen-overlay').hide();
 		$('#modIcon-option-popup').hide();
-	});
-	$('#modIcon-option-close').click(function() {
 		settingsVisible = false;
 	});
 	$('#modIcon-option-save').click(function() {
@@ -109,18 +156,14 @@ function addOptions() {
 		GM_setValue('forum-reload', $('[name="reloadForums"] :selected').val());
 		GM_setValue('sticky-reload', $('[name="reloadSticky"] :selected').val());
 		alert('Your settings have been saved.\n\nThe new settings won\'t take effect until the page is reloaded.');
-		settingsVisible = false;
 	});
 }
 
 //Highlight forum threads based on post count
-
 function highlightThread() {
 	var args = arguments;
 	$('#latest tr:not(.sticky, .super-sticky) td:nth-child(2)').each(function() {
-		if(args.length == 2 && parseInt($(this).html(), 10) == args[1])
-			$(this).parent().css('background', args[0]);
-		else if(parseInt($(this).html(), 10) >= args[1] && parseInt($(this).html(), 10) <= args[2])
+		if((args.length == 2 && parseInt($(this).html(), 10) == args[1]) || (parseInt($(this).html(), 10) >= args[1] && parseInt($(this).html(), 10) <= args[2]))
 			$(this).parent().css('background', args[0]);
 	});
 }
@@ -152,7 +195,7 @@ function addIcon(addTo) {
 		if( typeof addTo == 'string')
 			$('.threadauthor small a:contains("' + addTo + '")').parent().parent().find('strong').prepend(iconIndex[addTo]);
 		else if( typeof addTo == 'number')
-			$('.threadauthor small a[href$="=' + addTo + '"]').parent().parent().find('strong').prepend(iconIndex['default']);
+			$('.threadauthor small a[href$="=' + addTo + '"]').parent().parent().find('strong').prepend(iconIndex.empty);
 	}
 }
 
@@ -166,14 +209,13 @@ function changeRole(changeFor, newRole) {
 }
 
 //Highlight posts
-function postHighlight() {
+function highlightPost() {
 	var args = arguments;
 	var color = args[args.length - 1];
-	var rolePosts, status, message;
-	var totalPosts = $('.threadauthor').length;
+	var rolePosts, status, message, totalPosts = $('.threadauthor').length;
 	args[args.length - 1] = undefined;
 	if(pageUrl == 'topic.php')
-		for(i in args) {
+		for(var i in args) {
 			if( typeof args[i] == 'string') {
 				//Count posts
 				rolePosts = $('.threadauthor p small a:contains("' + args[i] + '")').length;
@@ -196,7 +238,7 @@ function postHighlight() {
 
 //Collapse footer
 function footerCollapse() {
-	if(pageUrl != 'edit.php') {
+	if(pageUrl != 'edit.php' && GM_getValue('footer-collapse') == 'yes') {
 		//Style footer
 		$('#footer').css({
 			'border': '1px solid #bbb',
@@ -305,7 +347,7 @@ function forumVersion(versionDate) {
 			//Add tag list and reorder elements
 			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
 			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap"></p></div>');
-			for(i in tagList) {
+			for(var i in tagList) {
 				$('#frontpageheatmap').append('<a href="#" style="font-size: ' + ((Math.random() * 17) + 8) + 'px">' + tagList[i] + '</a>');
 			}
 			$('#frontpageheatmap a:not(:last)').append(' ');
@@ -343,31 +385,44 @@ function forumVersion(versionDate) {
 	}
 }
 
-//Debug layout
-function debugLayout(item, status) {
+/*
+ * Helper functions
+ */
+
+function debugLayout(status) {
 	if(status == 'enable') {
 		$('body *').css({
 			'border-style': 'solid',
 			'border-width': '5px'
 		});
-		$(item + ' > *').css('border-color', 'red');
-		$(item + ' > * > *').css('border-color', 'orange');
-		$(item + ' > * > * > *').css('border-color', 'yellow');
-		$(item + ' > * > * > * > *').css('border-color', 'green');
-		$(item + ' > * > * > * > * > *').css('border-color', 'blue');
-		$(item + ' > * > * > * > * > * > *').css('border-color', 'purple');
-		$(item + ' > * > * > * > * > * > * > *').css('border-color', 'red');
-		$(item + ' > * > * > * > * > * > * > * > *').css('border-color', 'orange');
-		$(item + ' > * > * > * > * > * > * > * > * > *').css('border-color', 'yellow');
-		$(item + ' > * > * > * > * > * > * > * > * > * > *').css('border-color', 'green');
-		$(item + ' > * > * > * > * > * > * > * > * > * > * > *').css('border-color', 'blue');
-		$(item + ' > * > * > * > * > * > * > * > * > * > * > * > *').css('border-color', 'purple');
+		$('body').css('border-color', 'red');
+		$('body *').css('border-color', 'orange');
+		$('body * *').css('border-color', 'yellow');
+		$('body * * *').css('border-color', 'green');
+		$('body * * * *').css('border-color', 'blue');
+		$('body * * * * *').css('border-color', 'purple');
+		$('body * * * * * *').css('border-color', 'red');
+		$('body * * * * * * *').css('border-color', 'orange');
+		$('body * * * * * * * *').css('border-color', 'yellow');
+		$('body * * * * * * * * *').css('border-color', 'green');
+		$('body * * * * * * * * * *').css('border-color', 'blue');
+		$('body * * * * * * * * * * *').css('border-color', 'purple');
 	} else if(status == 'disable')
 		$('body *').css('border', 'none');
 }
 
-//Get URL of current page
 function getPageUrl() {
 	var url = window.location.href.split('?')[0];
 	return url.split('/')[url.split('/').length - ((url[url.length - 1] == '/') ? 2 : 1)];
 }
+
+function versionSlug(ver) {
+	if(ver.indexOf('pre') > -1)
+		return (ver[ver.length - 1] == 'a' ? 'Nightly' : 'Beta') + ' Build ' + ver;
+	else
+		return 'v' + ver;
+}
+
+/*
+ * Methods
+ */
