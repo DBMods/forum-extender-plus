@@ -6,6 +6,9 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.9.29pre1a-----
+* Fixed bug pertaining to settings menu
+
 -----2013.9.28pre3a-----
 + Added post drafting
 + Added navigation bar
