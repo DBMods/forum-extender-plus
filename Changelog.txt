@@ -6,6 +6,16 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----1.3.1-----
++ Added post drafting
++ Added navigation bar
++ Added Super User activity monitor to navigation bar
+- Removed need for manual internalVersion change
+# Rewrote postHighlight function
+# Rewrote highlightThread function
++ Added highlighting for 1, 2, and 3 post-count threads
++ Added new thread highlighting
+
 -----1.3.0-----
 + Added settings panel
 # Allowed user to change settings without editing script
