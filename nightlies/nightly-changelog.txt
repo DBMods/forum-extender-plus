@@ -5,21 +5,3 @@
 
 
 Dropbox Forum Mod Icons Nightly Changelog
-
------2013.9.29pre1a-----
-* Fixed bug pertaining to settings menu
-
------2013.9.28pre3a-----
-+ Added post drafting
-+ Added navigation bar
-+ Added Super User activity monitor to navigation bar
-
------2013.9.16pre1a-----
-- Removed need for manual internalVersion change
-
------2013.9.15pre1a-----
-# Rewrote postHighlight function
-
------2013.9.14pre1a-----
-# Rewrote highlightThread function
-+ Added highlighting for 1, 2, and 3 post-count threads
