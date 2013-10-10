@@ -98,7 +98,7 @@ function draftPost() {
 function navBar() {
     $('body').prepend('<div id="modicon-nav-slideout-container" />');
     $('body').append('<div id="modicon-nav" />');
-    $('head').append('<style type="text/css">#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 125px;background:#fff;z-index:10}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}</style>');
+    $('head').append('<style type="text/css">#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 125px;background:#fff;z-index:10}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container #modslideoutinner > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}</style>');
     $('body').css('padding-bottom', '31px');
 
     //Add list content
@@ -119,7 +119,7 @@ function navBar() {
 
     //Add list framework
 	$('#modicon-nav').append('<span id="modactivitytrigger">Activity</span>');
-    $('#modicon-nav-slideout-container').append('<ul id="modactivity" />');
+    $('#mod').append('<ul id="modactivity" />');
     $('#modactivity').toggle();
     $('#modactivitytrigger').click(function() {
         $('#modactivity').slideToggle();
@@ -132,7 +132,7 @@ function navBar() {
 	//Set up alert messages
 	if(alertSummary){
 		$('#modicon-nav').append('<span id="modalerttrigger"><strong>Alert!</strong> ' + alertSummary.summary + '</span>');
-		$('#modicon-nav-slideout-container').append('<div id="modalert" class="center">' + alertSummary.fullDesc + '</div>');
+		$('#modslideoutinner').append('<div id="modalert" class="center">' + alertSummary.fullDesc + '</div>');
 		
 		/*
 		if(alertSummary.index > GM_getValue('lastDismissedAlert', 0)){
