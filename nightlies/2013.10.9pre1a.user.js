@@ -6,8 +6,6 @@
 // @exclude https://forums.dropbox.com/bb-admin/*
 // @version 2013.10.9pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
 // @grant GM_getValue
 // @grant GM_setValue
 // @grant GM_xmlhttpRequest
