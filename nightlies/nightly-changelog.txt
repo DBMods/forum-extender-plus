@@ -6,6 +6,9 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.10.11pre1a-----
+* Fixed bbPress theme errors - debugging
+
 -----2013.10.9pre1a-----
 + Added alert messages
 * Fixed sticky reloading, so it skips if you are responding
