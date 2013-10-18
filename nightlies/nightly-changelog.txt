@@ -6,6 +6,14 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.10.18pre1a-----
++ Added sticky updating (see for yourselves - https://forums.dropbox.com/topic.php?id=106500)
+
+-----2013.10.13pre1a-----
+# Made thread highlighting a lighter
++ Added post streaks
+# Temporarily deprecated post streaks for further debugging
+
 -----2013.10.11pre1a-----
 * Fixed bbPress theme errors - debugging
 
