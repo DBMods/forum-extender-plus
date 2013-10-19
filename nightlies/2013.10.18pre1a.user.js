@@ -87,28 +87,20 @@ manageSticky();
 
 //Detect and manage unstickied threads
 function manageSticky(){
-	if(pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 0){
-		var threadType = null;
-		if($('#topic-info .topictitle:contains(") - ")').length > 0 && $('#topic-info .topictitle:contains(" Build - ")').length > 0){
-			threadType = $('#topic-info .topictitle:contains(") - ")').html().split(') - ')[1].split(' Build - ')[0];
-		}
-		if(threadType != null){
-			if(confirm('This thread is no longer sticky. Would you like to attempt to find the latest ' + threadType.toLowerCase() + ' build thread?')){
-				GM_xmlhttpRequest({
-					method: 'GET',
-					url: 'https://forums.dropbox.com',
-					onload: function(response) {
-						var resp = response.responseText;
-						var stickies = resp.split('<table id="latest">')[1].split('<td> ')[0];
-						stickies = stickies.split(threadType)[0];
-						stickies = stickies.split('<big><a href="');
-						stickies = stickies[stickies.length - 1].split('">')[0];
-						if(stickies != '')
-							window.location.href = stickies;
-					}
-				});
-			}
-		}
+	if(pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 0 && $('#topic-info .topictitle:contains(") - ")').length > 0 && $('#topic-info .topictitle:contains(" Build - ")').length > 0){
+		var threadType = $('#topic-info .topictitle:contains(") - ")').html().split(') - ')[1].split(' Build - ')[0];
+		if(confirm('This thread is no longer sticky. Would you like to attempt to find the latest ' + threadType.toLowerCase() + ' build thread?'))
+			GM_xmlhttpRequest({
+				method: 'GET',
+				url: 'https://forums.dropbox.com',
+				onload: function(response) {
+					var resp = response.responseText;
+					var stickies = resp.split('<table id="latest">')[1].split('<td> ')[0].split(threadType)[0].split('<big><a href="');
+					stickies = stickies[stickies.length - 1].split('">')[0];
+					if(stickies != '')
+						window.location.href = stickies;
+				}
+			});
 	}
 }
 
