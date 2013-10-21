@@ -6,6 +6,9 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.10.21pre1a-----
+- Removed title field from post form
+
 -----2013.10.18pre1a-----
 + Added sticky updating (see for yourselves - https://forums.dropbox.com/topic.php?id=106500)
 
