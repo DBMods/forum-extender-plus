@@ -6,6 +6,9 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.10.22pre1a-----
+* Fixed post drafting
+
 -----2013.10.21pre1a-----
 - Removed title field from post form
 
