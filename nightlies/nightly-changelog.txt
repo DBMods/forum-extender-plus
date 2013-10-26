@@ -6,6 +6,13 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.10.25pre1a-----
+# Merged addOptions() function into nav bar
+# merged post drafting into nav bar
+# Stripped down code
++ Added notification overlays, similar to those in the Dropbox web interface
++ Added super-secret easter egg
+
 -----2013.10.22pre1a-----
 * Fixed post drafting
 
@@ -21,7 +28,7 @@ Dropbox Forum Mod Icons Nightly Changelog
 # Temporarily deprecated post streaks for further debugging
 
 -----2013.10.11pre1a-----
-* Fixed bbPress theme errors - debugging
+* Fixed bbPress theme errors
 
 -----2013.10.9pre1a-----
 + Added alert messages
