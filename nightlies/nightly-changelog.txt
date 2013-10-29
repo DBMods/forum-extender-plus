@@ -6,6 +6,10 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
+-----2013.10.28pre1a-----
+
++ Added snippets
+
 -----2013.10.25pre1a-----
 # Merged addOptions() function into nav bar
 # merged post drafting into nav bar
