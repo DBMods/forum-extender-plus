@@ -6,8 +6,13 @@
 
 Dropbox Forum Mod Icons Nightly Changelog
 
------2013.10.28pre1a-----
+-----2013.10.30pre1a-----
+* Fixed typo in snippets
+# Made edit signature dynamic
+# Moved UI fix into forumVersion function
+* Fixed unpredictable layout with other themes
 
+-----2013.10.28pre1a-----
 + Added snippets
 
 -----2013.10.25pre1a-----
