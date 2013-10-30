@@ -4,10 +4,10 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.10.28pre1a
+// @version 2013.10.30pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightlies/working-currentver.user.js
+// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
+// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
 // @grant GM_getValue
 // @grant GM_setValue
 // @grant GM_xmlhttpRequest
@@ -41,7 +41,7 @@ highlightPost('Super User', color.gold);
 changeRole(1618104, 'Master of Super Users');
 
 //Highlight posts by forum regulars green
-highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, color.green);
+highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, 96972, color.green);
 
 //Reskin the forums
 forumVersion(GM_getValue('theme'));
@@ -52,7 +52,7 @@ highlightThread(color.lightGold, 2);
 highlightThread(color.lightRed, 3);
 
 //Collapse footer
-if (pageUrl != 'edit.php' && GM_getValue('footer-collapse') == 'yes') {
+if (pageUrl != 'edit.php' && GM_getValue('footer-collapse')) {
 	//Style footer
 	$('#footer').css({
 		'border': '1px solid #bbb',
@@ -90,14 +90,6 @@ navBar();
 reloadPage('front');
 reloadPage('forum');
 reloadPage('sticky');
-
-//Fix UI for new semi-broken theme 10-8-2013
-$('#header').css('margin-top', '0');
-$('#header .home, #header .breadcrumb').hide();
-$('.freshbutton-blue, #postformsub').css('background', '#2180ce');
-$('#header').append($('.search').clone());
-$('#main .search').remove();
-$('#forumlist-container').css('top', '0');
 
 //Remove unnecessary stuff
 if (pageUrl == 'topic.php')
@@ -222,9 +214,9 @@ function navBar() {
 			ticketLink: '<option value="Submit a support ticket at https://www.dropbox.com/support">Submit a ticket</option>',
 			ticketSummary: '<option value="Tickets typically take 1-3 business days to get a reply, priority given to Pro and Business users.\n\nYou can track the status of your tickets over at <a href=\'http://dropbox.zendesk.com\'>Zendesk</a>.">Ticket summary</option>',
 			modEditGroup: '</optgroup><optgroup label="Mod edits">',
-			removeEmail: '<option value="Edit: Email removed for security issues ~">Email removed</option>',
+			dupeThread: '<option value="Duplicate post: ">Duplicate post</option>',
+			removeEmail: '<option value="Edit: Email removed for security issues ~' + $('#header .login a:first').html().split(' ')[0] + '">Email removed</option>',
 			moveThread: '<option value="I moved this to ' + ['everything else', 'bugs &amp; troubleshooting', 'feature requests', 'mobile apps', 'API development'][$('#forum-id').val() - 1] + ' for you.">Move thread</option>',
-			dupeThread: '<option value="Duplicate post: ">Email removed</option>',
 			miscGroup: '</optgroup><optgroup label="Miscellaneous">',
 			welcome: '<option value="Also, I see you\'re new here, so why don\'t we give you a proper welcome.\n\nDropbox is a wonderful service, and we hope you get to use it to its full potential. If you have an issue, you can always check the <a href=\'https://www.dropbox.com/help\'>Help Center</a>, but if you don\'t get an answer there, or it\'s a more complicated issue, these forums are a great place to visit.\n\nHere on the forums, there are a lot of people just like you, who ask the occasional question. There\'s also a small handful of regulars here, including Super Users like myself. We try to answer as many questions as we can, and most of us are here on an almost-daily basis. I think I can speak for all of us a regulars when I say that we love to see newcomers to the service. The forums are a great place to both ask and answer questions, and if you have another question in the future, don\'t hesitate to ask.\n\nWelcome to Dropbox. We hope you like it.">Welcome</option>',
 			miscGroupClose: '</optgroup>'
@@ -234,7 +226,7 @@ function navBar() {
 			$('#snippets').append(snippets[i]);
 		}
 		$('#snippets').change(function() {
-			$('#post_content').val($('#post_content').val() + $('#snippets').val());
+			$('#post_content').append($('#snippets').val());
 		});
 	}
 
@@ -339,6 +331,29 @@ function highlightPost() {
 
 //Skin forums
 function forumVersion(versionDate) {
+	//Fix UI for new semi-broken theme 10-8-2013
+	$('#header').css('margin-top', '0');
+	$('#header .home, #header .breadcrumb').hide();
+	$('.freshbutton-blue, #postformsub').css('background', '#2180ce');
+	$('#header').append($('.search').clone());
+	$('#main .search').remove();
+	$('#forumlist-container').css('top', '0');
+	$('.login').css({
+		'float': 'left',
+		'clear': 'none',
+		'margin-top': '5px',
+		'position': 'static',
+		'font-size': '12px',
+		'font-weight': 'normal'
+	});
+	$('.search').css({
+		'float': 'right',
+		'clear': 'none',
+		'margin': '5px',
+		'position': 'static'
+	});
+	$('#main').css('clear', 'both');
+
 	var latestTr = $('#latest tr');
 	if (versionDate == '8.8.2012') {
 		//Reformat header
