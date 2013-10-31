@@ -6,6 +6,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.10.31pre1a-----
+- Minified some code
+
 -----2013.10.30pre1a-----
 * Fixed typo in snippets
 # Made edit signature dynamic
