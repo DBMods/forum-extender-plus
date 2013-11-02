@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.11.2pre1a
+// @version 2013.11.2pre2a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
@@ -41,7 +41,7 @@ $('body').prepend('<span id="modicon-message" style="display:none;border-width:1
 
 //Modify Super User posts
 highlightPost('Super User', color.gold);
-if (pageUrl == 'topic.php') {
+if(pageUrl == 'topic.php') {
 	$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').prepend('<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" height="16px" width="40px" /> ');
 	$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
 }
@@ -58,20 +58,13 @@ highlightThread(color.lightGold, 2);
 highlightThread(color.lightRed, 3);
 
 //Collapse footer
-if (pageUrl != 'edit.php' && GM_getValue('footer-collapse')) {
+if(pageUrl != 'edit.php' && GM_getValue('collapseFooter')) {
 	//Style footer
 	$('#footer').css({
 		'border': '1px solid #bbb',
 		'border-bottom': 'none',
 		'border-radius': '25px 25px 0 0'
-	});
-
-	//Bring external content into footer, and wrap footer contents
-	$('#footer').append($('span:last'));
-	$('#footer').wrapInner('<div id="footercontent" />');
-
-	//Add and style toggle animations
-	$('#footer').prepend('<div id="footertoggle"><div id="footerarrowup" /><div id="footerarrowdown" style="display:none" /></div>');
+	}).append($('span:last')).wrapInner('<div id="footercontent" />').prepend('<div id="footertoggle"><div id="footerarrowup" /><div id="footerarrowdown" style="display:none" /></div>');
 	$('#footertoggle').css('height', '25px');
 	$('#footerarrowup, #footerarrowdown').css({
 		'height': '0',
@@ -93,18 +86,18 @@ if (pageUrl != 'edit.php' && GM_getValue('footer-collapse')) {
 navBar();
 
 //Reload pages
-reloadPage('front');
-reloadPage('forum');
-reloadPage('sticky');
+reloadPage('Front');
+reloadPage('Forum');
+reloadPage('Sticky');
 
 //Remove unnecessary stuff
-if (pageUrl == 'topic.php')
+if(pageUrl == 'topic.php')
 	$('#post-form-title-container').remove();
 
 //Detect and manage unstickied threads
-if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 0 && $('#topic-info .topictitle:contains(") - ")').length > 0 && $('#topic-info .topictitle:contains(" Build - ")').length > 0) {
+if(pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 0 && $('#topic-info .topictitle:contains(") - ")').length > 0 && $('#topic-info .topictitle:contains(" Build - ")').length > 0) {
 	var threadType = $('#topic-info .topictitle:contains(") - ")').html().split(') - ')[1].split(' Build - ')[0];
-	if (confirm('This thread is no longer sticky. Would you like to attempt to find the latest ' + threadType.toLowerCase() + ' build thread?'))
+	if(confirm('This thread is no longer sticky. Would you like to attempt to find the latest ' + threadType.toLowerCase() + ' build thread?'))
 		GM_xmlhttpRequest({
 			method: 'GET',
 			url: 'https://forums.dropbox.com',
@@ -112,64 +105,61 @@ if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 
 				var resp = response.responseText;
 				var stickies = resp.split('<table id="latest">')[1].split('<td> ')[0].split(threadType)[0].split('<big><a href="');
 				stickies = stickies[stickies.length - 1].split('">')[0];
-				if (stickies != '')
+				if(stickies != '')
 					window.location.href = stickies;
 			}
 		});
 }
 
-if ([0, 1, 11].indexOf(date.month) > -1)
+if([0, 1, 11].indexOf(date.month) > -1 && GM_getValue('disableFallingAnimations', false) == false)
 	snowfall();
 
 //Add nav bar
 function navBar() {
 	//Add prerequsites
-	$("head").append('<style type="text/css">#modicon-nav > span{margin-left:20px}#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:1000000}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.left{float:left;width: 50px}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup{display:none;position:fixed;width:600px;height:200px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modIcon-option-trigger:hover,#modIcon-option-close:hover{cursor:pointer}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
-	$('body').append('<div id="modicon-nav"><img id="modIcon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7;" />');
-	$('body').append('<div id="modIcon-option-popup" style="position:fixed"><a id="modIcon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="yes">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every <select name="reloadForums"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modIcon-option-save" style="clear:both;float:right;"></div>');
+	$("head").append('<style type="text/css">#modicon-nav > span{margin-left:20px}#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:1000000}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}#modicon-option-popup .clear{clear:both}#modicon-option-popup div.left{float:left;width: 50px}#modicon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modicon-option-popup{display:none;position:fixed;width:600px;height:200px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#modicon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modicon-option-trigger:hover,#modicon-option-close:hover{cursor:pointer}#modicon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
+	$('body').append('<div id="modicon-nav"><img id="modicon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="modicon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7;" />');
+	$('body').append('<div id="modicon-option-popup" style="position:fixed"><a id="modicon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="y">Auto-collapse footer</input><br><input type="checkbox" name="disableFallingAnimations" value="y">Disable falling animations (like snow) for slower computers</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every <select name="reloadForum"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modicon-option-save" style="clear:both;float:right;"></div>');
 	$('body').prepend('<div id="modicon-nav-slideout-container" />');
 	$('body').css('padding-bottom', '31px');
 
 	//Handle options
-	$('#modIcon-option-trigger').click(function() {
+	var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront'];
+	var optionCheck = ['disableFallingAnimations', 'collapseFooter'];
+	$('#modicon-option-trigger').click(function() {
 		settingsVisible = true;
-		var optionHeight = $('#modIcon-option-popup').height();
-		var optionWidth = $('#modIcon-option-popup').width();
-
-		$('#modIcon-option-popup').css({
+		var optionHeight = $('#modicon-option-popup').height(), optionWidth = $('#modicon-option-popup').width();
+		
+		$('#modicon-option-popup').css({
 			'top': (document.documentElement.clientHeight - optionHeight) / 2,
 			'left': (document.documentElement.clientWidth - optionWidth) / 2
 		});
 
 		//Load current settings
-		var settingDropdown = {
-			'theme': GM_getValue('theme'),
-			'reloadSticky': GM_getValue('sticky-reload'),
-			'reloadForums': GM_getValue('forum-reload'),
-			'reloadFront': GM_getValue('front-reload')
-		};
-		for (var name in settingDropdown) {
-			if (settingDropdown[name])
-				$('#modIcon-option-popup [name="' + name + '"] option[value="' + settingDropdown[name] + '"]').attr('selected', 'selected');
+		for(i in optionDropdown) {
+			if(GM_getValue(optionDropdown[i]))
+				$('#modicon-option-popup [name="' + optionDropdown[i] + '"] option[value="' + GM_getValue(optionDropdown[i]) + '"]').attr('selected', 'selected');
 		}
-		if (GM_getValue('footer-collapse'))
-			$('#modIcon-option-popup [name="collapseFooter"]').attr('checked', true);
+		for(i in optionCheck){
+		    if(GM_getValue(optionCheck[i]))
+		    $('#modicon-option-popup [name="' + optionCheck[i] + '"]').attr('checked', true);
+		}
 
-		$('#modIcon-screen-overlay, #modIcon-option-popup').show();
+		$('#modicon-screen-overlay, #modicon-option-popup').show();
 	});
-	$('#modIcon-option-close, #modIcon-option-save').click(function() {
-		$('#modIcon-screen-overlay, #modIcon-option-popup').hide();
+	$('#modicon-option-close, #modicon-option-save').click(function() {
+		$('#modicon-screen-overlay, #modicon-option-popup').hide();
 	});
-	$('#modIcon-option-save').click(function() {
-		GM_setValue('theme', $('[name="theme"] :selected').val());
-		GM_setValue('footer-collapse', $('[name="collapseFooter"]').val());
-		GM_setValue('front-reload', $('[name="reloadFront"] :selected').val());
-		GM_setValue('forum-reload', $('[name="reloadForums"] :selected').val());
-		GM_setValue('sticky-reload', $('[name="reloadSticky"] :selected').val());
+	$('#modicon-option-save').click(function() {
+	    for(i in optionDropdown){
+	        GM_setValue(optionDropdown[i], $('#modicon-option-popup [name="' + optionDropdown[i] + '"]').val());
+	    }
+	    for(i in optionCheck){
+	        GM_setValue(optionCheck[i], $('#modicon-option-popup [name="' + optionCheck[i] + '"]').val() == 'y');
+	    }
 		settingsVisible = false;
 		hoverMessage('Your settings have been saved.\n\nThe new settings won\'t take effect until the page is reloaded.');
 	});
-
 	//Add list content
 	var resp;
 	var profile = {
@@ -193,13 +183,13 @@ function navBar() {
 	$('#modactivitytrigger').click(function() {
 		$('#modactivity').slideToggle();
 	});
-	for (i in profile.list) {
+	for(i in profile.list) {
 		$('#modactivity').append('<li>Loading . . .</li>');
 		profile.load(i);
 	}
 
 	//Set up alert messages
-	if (alertSummary) {
+	if(alertSummary) {
 		$('#modicon-nav').append('<span id="modalerttrigger"><strong>Alert!</strong> ' + alertSummary.summary + '</span>');
 		$('#modicon-nav-slideout-container').append('<div id="modalert" class="center">' + alertSummary.fullDesc + '</div>');
 		$('#modalert').toggle();
@@ -209,7 +199,7 @@ function navBar() {
 	}
 
 	//Add post templates
-	if (pageUrl == 'topic.php' || pageUrl == 'edit.php') {
+	if(pageUrl == 'topic.php' || pageUrl == 'edit.php') {
 		var snippets = {
 			blank: '<option value="">Select a snippet</option>',
 			explainGroup: '<optgroup label="Explanations">',
@@ -230,20 +220,20 @@ function navBar() {
 			miscGroupClose: '</optgroup>'
 		};
 		$('#modicon-nav').append('<span><select id="snippets" /></span>');
-		for (i in snippets) {
+		for(i in snippets) {
 			$('#snippets').append(snippets[i]);
 		}
 		$('#snippets').change(function() {
-			$('#post_content').val($('#post_content').val() + $('#snippets').val());
+			$('#post_content').val($('#post_content').val() + $(this).val());
 		});
 	}
 
 	//Add post drafting
-	if (pageUrl == 'topic.php') {
+	if(pageUrl == 'topic.php') {
 		var thread = window.location.href.split('id=')[1].split('&')[0].split('#')[0];
 		$('#modicon-nav').append('<span id="modpostdraft">Draft Post</span><span id="modpostrestoredraft">Restore Draft</span>');
 		$('#modpostdraft').click(function() {
-			if ($('#post_content').val()) {
+			if($('#post_content').val()) {
 				GM_setValue('draft-' + thread, $('#post_content').val());
 				hoverMessage('Draft saved');
 			} else
@@ -251,7 +241,7 @@ function navBar() {
 		});
 		$('#modpostrestoredraft').click(function() {
 			var draft = GM_getValue('draft-' + thread);
-			if (draft) {
+			if(draft) {
 				$('#post_content').val(draft);
 				GM_deleteValue('draft-' + thread);
 				hoverMessage('Draft successfully restored');
@@ -265,7 +255,7 @@ function navBar() {
 function highlightThread() {
 	var args = arguments;
 	$('#latest tr:not(.sticky, .super-sticky) td:nth-child(2)').each(function() {
-		if ((args.length == 2 && parseInt($(this).html(), 10) == args[1]) || (parseInt($(this).html(), 10) >= args[1] && parseInt($(this).html(), 10) <= args[2]))
+		if((args.length == 2 && parseInt($(this).html(), 10) == args[1]) || (parseInt($(this).html(), 10) >= args[1] && parseInt($(this).html(), 10) <= args[2]))
 			$(this).parent().css('background', args[0]);
 	});
 }
@@ -273,14 +263,14 @@ function highlightThread() {
 //Reload pages
 function reloadPage(pageType) {
 	var reloadIndex = {
-		'sticky': pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length > 0,
-		'front': pageUrl == 'forums.dropbox.com',
-		'forum': pageUrl == 'forum.php'
+		'Sticky': pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length > 0,
+		'Front': pageUrl == 'forums.dropbox.com',
+		'Forum': pageUrl == 'forum.php'
 	};
-	var reloadDelay = GM_getValue(pageType + '-reload', 0);
-	if (reloadIndex[pageType] && reloadDelay > 0) {
+	var reloadDelay = GM_getValue('reload' + pageType, 0);
+	if(reloadIndex[pageType] && reloadDelay > 0) {
 		setTimeout(function() {
-			if (!settingsVisible && (pageUrl == 'topic.php') ? !$('#post_content').val() : true)
+			if(!settingsVisible && (pageUrl == 'topic.php') ? !$('#post_content').val() : true)
 				document.location.reload();
 			else
 				reloadPage(pageType);
@@ -294,10 +284,10 @@ function highlightPost() {
 	var color = args[args.length - 1];
 
 	args[args.length - 1] = undefined;
-	if (pageUrl == 'topic.php')
+	if(pageUrl == 'topic.php')
 		var rolePosts, status, message, totalPosts = $('.threadauthor').length;
-	for (var i in args) {
-		if ( typeof args[i] == 'string') {
+	for(var i in args) {
+		if( typeof args[i] == 'string') {
 			//Count posts
 			rolePosts = $('.threadauthor p small a:contains("' + args[i] + '")').length;
 
@@ -310,9 +300,9 @@ function highlightPost() {
 			$('#thread').append(message);
 
 			//Highlight posts if enabled
-			if (status == 'enabled')
+			if(status == 'enabled')
 				$('.threadauthor p small a:contains("' + args[i] + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
-		} else if ( typeof args[i] == 'number')
+		} else if( typeof args[i] == 'number')
 			$('.threadauthor small a[href$="=' + args[i] + '"]').parent().parent().parent().parent().find('.threadpost').css('background', color);
 	}
 }
@@ -343,7 +333,7 @@ function forumVersion(versionDate) {
 	$('#main').css('clear', 'both');
 
 	var latestTr = $('#latest tr');
-	if (versionDate == '8.8.2012') {
+	if(versionDate == '8.8.2012') {
 		//Reformat header
 		$('#header a:first').remove();
 		$('#header').css({
@@ -366,12 +356,12 @@ function forumVersion(versionDate) {
 			'margin': '5px',
 			'position': 'static'
 		});
-	} else if (versionDate == 'original') {
+	} else if(versionDate == 'original') {
 		$('#main, #header').css('width', '866px');
 		$('#header a:first img').attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
 	}
-	if (['forums.dropbox.com', 'forum.php'].indexOf(pageUrl) > -1) {
-		if (versionDate == '8.8.2012') {
+	if(['forums.dropbox.com', 'forum.php'].indexOf(pageUrl) > -1) {
+		if(versionDate == '8.8.2012') {
 			$('#latest th:eq(0) a').css('color', '#aaa');
 			//TODO: latestHeader widths: 545, 46, 90, 69px
 			$('.sticky, .super-sticky').css('background', '#f4faff');
@@ -394,28 +384,29 @@ function forumVersion(versionDate) {
 				'border-bottom': '1px solid #ddd',
 				'padding-bottom': '6px'
 			});
-		} else if (versionDate == 'original') {
+		} else if(versionDate == 'original') {
 			$('#discussions').css('margin-left', '0');
 			$('#forumlist-container').remove();
-			$('#latest').css('width', '866px');
 			$('#latest tr:not(:first), .bb-root').css('background', '#f7f7f7');
 			$('#latest, .alt').css('background', '#fff');
-			$('#latest').css('border-top', '1px dotted #ccc');
+			$('#latest').css({
+				'width': '866px',
+				'border-top': '1px dotted #ccc'
+			});
 			$('.sticky, .super-sticky').css('background', '#deeefc');
 		}
-	} else if (pageUrl == 'forums.dropbox.com') {
-		if (versionDate == 'original') {
+	} else if(pageUrl == 'forums.dropbox.com') {
+		if(versionDate == 'original') {
 			//Add tag list and reorder elements
 			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
 			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap" /></div>');
-			for (var i in tagList) {
+			for(var i in tagList) {
 				$('#frontpageheatmap').append('<a href="#" style="font-size: ' + ((Math.random() * 17) + 8) + 'px">' + tagList[i] + '</a>');
 			}
 			$('#frontpageheatmap a:not(:last)').append(' ');
-			$('#forumlist').attr('id', 'forumlist-temp');
+			$('#forumlist').attr('id', 'forumlist-temp').html('<tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr>');
 			$('#discussions').prepend('<h2>Forums</h2><table id="forumlist" /><h2>Latest Discussions</h2>');
-			$('#forumlist').html('<tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr>');
-			for ( i = 1; i < 6; i++) {
+			for( i = 1; i < 6; i++) {
 				select = $('#forumlist-temp tr:eq(' + i + ') td').html().split('<br>');
 				$('#forumlist').append('<tr class="bb-precedes-sibling bb-root"><td>' + select[0] + select[1] + '</td><td class="num">' + select[2].split(' topics')[0] + '</td><td class="num">' + select[2].split(' topics')[0] + '+</td></tr>');
 			}
@@ -488,6 +479,7 @@ function snowfall() {
 		return Math.round(min + Math.random() * (max - min));
 	};
 
+
 	$('body').data("snowfall", this);
 
 	//Snowflake object
@@ -501,7 +493,7 @@ function snowfall() {
 		this.step = 0;
 		this.stepSize = random(1, 10) / 100;
 
-		if (options.collection)
+		if(options.collection)
 			this.target = canvasCollection[random(0, canvasCollection.length - 1)];
 
 		$('body').append('<div id="flake-' + this.id + '" class="snowfall-flakes" />')
@@ -518,7 +510,7 @@ function snowfall() {
 		this.update = function() {
 			this.y += this.speed;
 
-			if (this.y > (elHeight) - (this.size + 6))
+			if(this.y > (elHeight) - (this.size + 6))
 				this.reset();
 
 			this.element.style.top = this.y + 'px';
@@ -529,18 +521,18 @@ function snowfall() {
 			this.x += Math.cos(this.step);
 
 			//Pileup check
-			if (options.collection && this.x > this.target.x && this.x < this.target.width + this.target.x && this.y > this.target.y && this.y < this.target.height + this.target.y) {
+			if(options.collection && this.x > this.target.x && this.x < this.target.width + this.target.x && this.y > this.target.y && this.y < this.target.height + this.target.y) {
 				var ctx = this.target.element.getContext("2d"), curX = this.x - this.target.x, curY = this.y - this.target.y, colData = this.target.colData;
 
-				if (colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] !== undefined || curY + this.speed + this.size > this.target.height) {
-					if (curY + this.speed + this.size > this.target.height) {
-						while (curY + this.speed + this.size > this.target.height && this.speed > 0) {
+				if(colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] !== undefined || curY + this.speed + this.size > this.target.height) {
+					if(curY + this.speed + this.size > this.target.height) {
+						while(curY + this.speed + this.size > this.target.height && this.speed > 0) {
 							this.speed *= .5;
 						}
 
 						ctx.fillStyle = "#fff";
 
-						if (colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] == undefined) {
+						if(colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] == undefined) {
 							colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] = 1;
 							ctx.fillRect(curX, (curY) + this.speed + this.size, this.size, this.size);
 						} else {
@@ -553,9 +545,9 @@ function snowfall() {
 						this.speed = 1;
 						this.stepSize = 0;
 
-						if (parseInt(curX) + 1 < this.target.width && colData[parseInt(curX)+1][parseInt(curY) + 1] == undefined)
+						if(parseInt(curX) + 1 < this.target.width && colData[parseInt(curX)+1][parseInt(curY) + 1] == undefined)
 							this.x++;
-						else if (parseInt(curX) - 1 > 0 && colData[parseInt(curX)-1][parseInt(curY) + 1] == undefined)
+						else if(parseInt(curX) - 1 > 0 && colData[parseInt(curX)-1][parseInt(curY) + 1] == undefined)
 							this.x--;
 						else {
 							//Stop
@@ -568,7 +560,7 @@ function snowfall() {
 				}
 			}
 
-			if (this.x > (elWidth) - widthOffset || this.x < widthOffset)
+			if(this.x > (elWidth) - widthOffset || this.x < widthOffset)
 				this.reset();
 		}
 		//Reset snowflake upon reach of set bounds
@@ -585,15 +577,15 @@ function snowfall() {
 	var flakes = [], flakeId = 0, i = 0, elHeight = $('body').height(), elWidth = $('body').width(), widthOffset = 0, snowTimeout = 0;
 
 	//Collection Piece
-	if (options.collection !== false) {
+	if(options.collection !== false) {
 		var testElem = document.createElement('canvas');
-		if (!!(testElem.getContext && testElem.getContext('2d'))) {
+		if(!!(testElem.getContext && testElem.getContext('2d'))) {
 			var canvasCollection = [], elements = $(options.collection), collectionHeight = options.collectionHeight;
 
-			for (var i = 0; i < elements.length; i++) {
+			for(var i = 0; i < elements.length; i++) {
 				var bounds = elements[i].getBoundingClientRect(), canvas = document.createElement('canvas'), collisionData = [];
 
-				if (bounds.top - collectionHeight > 0) {
+				if(bounds.top - collectionHeight > 0) {
 					document.body.appendChild(canvas);
 					canvas.style.position = 'absolute';
 					canvas.height = collectionHeight;
@@ -601,7 +593,7 @@ function snowfall() {
 					canvas.style.left = bounds.left + 'px';
 					canvas.style.top = bounds.top - collectionHeight + 'px';
 
-					for (var w = 0; w < bounds.width; w++) {
+					for(var w = 0; w < bounds.width; w++) {
 						collisionData[w] = [];
 					}
 
@@ -629,9 +621,8 @@ function snowfall() {
 		elWidth = $('body').offsetWidth;
 		console.log(elHeight);
 	});
-
 	//Initialize flakes
-	for ( i = 0; i < options.flakeCount; i += 1) {
+	for( i = 0; i < options.flakeCount; i += 1) {
 		flakeId = flakes.length;
 		flakes.push(new Flake(random(widthOffset, elWidth - widthOffset), random(0, elHeight), random((options.minSize * 100), (options.maxSize * 100)) / 100, random(options.minSpeed, options.maxSpeed), flakeId));
 	}
@@ -647,7 +638,7 @@ function snowfall() {
 
 	//Control flow of updating snow
 	function snow() {
-		for ( i = 0; i < flakes.length; i += 1) {
+		for( i = 0; i < flakes.length; i += 1) {
 			flakes[i].update();
 		}
 		snowTimeout = setTimeout(function() {
