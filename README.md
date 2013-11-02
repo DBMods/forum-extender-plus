@@ -46,3 +46,9 @@ Many forum regulars have a set list of text snippets for the forums. A built-in 
 
 ####Post Drafting
 The script now allows for drafts of posts. If you want to save a draft, click the button, and it's done. The same thing goes for restoring a previous draft. Drafts are also thread-specific, so you can save drafts for any number of threads at a time.
+
+###Date-specific Features
+Many features are fixed, but some only trigger during a specific time.
+
+####Snow (Nightlies Only)
+Snow will appear on pages from December through February, and will gently float down the page.

@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.10.31pre1a
+// @version 2013.11.1pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
@@ -15,6 +15,10 @@
 // ==/UserScript==
 
 //Set global variables
+var day = new Date();
+var date = {
+	month: day.getMonth()
+};
 var pageUrl = getPageUrl();
 var color = {
 	green: '#b5ff90',
@@ -38,7 +42,8 @@ $('body').prepend('<span id="modicon-message" style="display:none;border-width:1
 //Modify Super User posts
 addIcon('Super User', '<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" height="16px" width="40px" />');
 highlightPost('Super User', color.gold);
-changeRole(1618104, 'Master of Super Users');
+if (pageUrl == 'topic.php')
+	$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
 
 //Highlight posts by forum regulars green
 highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, 96972, color.green);
@@ -65,61 +70,23 @@ if (pageUrl != 'edit.php' && GM_getValue('footer-collapse')) {
 	$('#footer').wrapInner('<div id="footercontent" />');
 
 	//Add and style toggle animations
-	$('#footer').prepend('<div id="footertoggle"><div id="footerarrow" /></div>');
+	$('#footer').prepend('<div id="footertoggle"><div id="footerarrowup" /><div id="footerarrowdown" style="display:none" /></div>');
 	$('#footertoggle').css('height', '25px');
-	$('#footerarrow').css({
+	$('#footerarrowup, #footerarrowdown').css({
 		'height': '0',
 		'width': '0',
 		'border-left': '5px solid transparent',
 		'border-right': '5px solid transparent',
-		'border-bottom': '10px solid #bbb',
-		'border-top': '10px solid #bbb',
-		'border-top'
 		'margin': '12px auto 0'
 	});
-	$('#footerarrow').css('border-top', 'toggle');
-	//$('#footerarrow').css('border-bottom', '10px solid #bbb');
-	//$('#footerarrowdown').css('border-top', '10px solid #bbb');
+	$('#footerarrowup').css('border-bottom', '10px solid #bbb');
+	$('#footerarrowdown').css('border-top', '10px solid #bbb');
 	$('#footercontent').toggle();
 	$('#footertoggle').click(function() {
 		$('#footercontent').slideToggle('slow', function() {
-			$('#footerarrow').animate({
-				'border-top': 'toggle',
-				'border-bottom': 'toggle'
-			});
+			$('#footerarrowup, #footerarrowdown').toggle();
 		});
 	});
-
-	//Style footer
-	/*$('#footer').css({
-	 'border': '1px solid #bbb',
-	 'border-bottom': 'none',
-	 'border-radius': '25px 25px 0 0'
-	 });
-
-	 //Bring external content into footer, and wrap footer contents
-	 $('#footer').append($('span:last'));
-	 $('#footer').wrapInner('<div id="footercontent" />');
-
-	 //Add and style toggle animations
-	 $('#footer').prepend('<div id="footertoggle"><div id="footerarrowup" /><div id="footerarrowdown" style="display:none"
-	/></div>');
-	 $('#footertoggle').css('height', '25px');
-	 $('#footerarrowup, #footerarrowdown').css({
-	 'height': '0',
-	 'width': '0',
-	 'border-left': '5px solid transparent',
-	 'border-right': '5px solid transparent',
-	 'margin': '12px auto 0'
-	 });
-	 $('#footerarrowup').css('border-bottom', '10px solid #bbb');
-	 $('#footerarrowdown').css('border-top', '10px solid #bbb');
-	 $('#footercontent').toggle();
-	 $('#footertoggle').click(function() {
-	 $('#footercontent').slideToggle('slow', function() {
-	 $('#footerarrowup, #footerarrowdown').toggle();
-	 });
-	 });*/
 }
 
 navBar();
@@ -150,10 +117,13 @@ if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 
 		});
 }
 
+if ([0, 1, 11].indexOf(date.month) > -1)
+	snowfall();
+
 //Add nav bar
 function navBar() {
 	//Add prerequsites
-	$("head").append('<style type="text/css">#modicon-nav > span{margin-left:20px}#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:10}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.left{float:left;width: 50px}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup{display:none;position:fixed;width:600px;height:200px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modIcon-option-trigger:hover,#modIcon-option-close:hover{cursor:pointer}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
+	$("head").append('<style type="text/css">#modicon-nav > span{margin-left:20px}#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:1000000}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}#modIcon-option-popup .clear{clear:both}#modIcon-option-popup div.left{float:left;width: 50px}#modIcon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modIcon-option-popup{display:none;position:fixed;width:600px;height:200px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#modIcon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modIcon-option-trigger:hover,#modIcon-option-close:hover{cursor:pointer}#modIcon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
 	$('body').append('<div id="modicon-nav"><img id="modIcon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="modIcon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7;" />');
 	$('body').append('<div id="modIcon-option-popup" style="position:fixed"><a id="modIcon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="yes">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every <select name="reloadForums"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modIcon-option-save" style="clear:both;float:right;"></div>');
 	$('body').prepend('<div id="modicon-nav-slideout-container" />');
@@ -494,6 +464,237 @@ function forumVersion(versionDate) {
 		}
 	}
 }
+
+/*
+ * Snowfall jQuery plugin
+ *
+ * ====================================================================
+ * LICENSE
+ * ====================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ====================================================================
+ *
+ * Developed by Jason Brown
+ * Email: loktar69@hotmail
+ * Info: somethinghitme.com
+ *
+ * Modified for Greasemonkey by Andy Yasger
+ */
+
+function snowfall() {
+	var options = {
+		flakeCount: 100,
+		flakeColor: '#f00',
+		minSize: 2,
+		maxSize: 6,
+		minSpeed: 1,
+		maxSpeed: 5,
+		collection: false,
+		collectionHeight: 40,
+	};
+
+	function random(min, max) {
+		return Math.round(min + Math.random() * (max - min));
+	};
+
+	$('body').data("snowfall", this);
+
+	//Snowflake object
+	function Flake(_x, _y, _size, _speed, _id) {
+		//Flake properties
+		this.id = _id;
+		this.x = _x;
+		this.y = _y;
+		this.size = _size;
+		this.speed = _speed;
+		this.step = 0;
+		this.stepSize = random(1, 10) / 100;
+
+		if (options.collection)
+			this.target = canvasCollection[random(0, canvasCollection.length - 1)];
+
+		var flakeMarkup = null;
+
+		flakeMarkup = $(document.createElement("div"));
+
+		flakeMarkup.attr({
+			'class': 'snowfall-flakes',
+			'id': 'flake-' + this.id
+		}).css({
+			'background': options.flakeColor,
+			'width': this.size,
+			'height': this.size,
+			'position': 'absolute',
+			'top': this.y,
+			'left': this.x,
+			'fontSize': 0,
+			'zIndex': 999999
+		});
+
+		$('body').append(flakeMarkup);
+		element = $('body');
+
+		this.element = document.getElementById('flake-' + this.id);
+
+		//Update snowflakes and check current snowflake against bounds
+		this.update = function() {
+			this.y += this.speed;
+
+			if (this.y > (elHeight) - (this.size + 6))
+				this.reset();
+
+			this.element.style.top = this.y + 'px';
+			this.element.style.left = this.x + 'px';
+
+			this.step += this.stepSize;
+
+			this.x += Math.cos(this.step);
+
+			//Pileup check
+			if (options.collection) {
+				if (this.x > this.target.x && this.x < this.target.width + this.target.x && this.y > this.target.y && this.y < this.target.height + this.target.y) {
+					var ctx = this.target.element.getContext("2d"), curX = this.x - this.target.x, curY = this.y - this.target.y, colData = this.target.colData;
+
+					if (colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] !== undefined || curY + this.speed + this.size > this.target.height) {
+						if (curY + this.speed + this.size > this.target.height) {
+							while (curY + this.speed + this.size > this.target.height && this.speed > 0) {
+								this.speed *= .5;
+							}
+
+							ctx.fillStyle = "#fff";
+
+							if (colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] == undefined) {
+								colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] = 1;
+								ctx.fillRect(curX, (curY) + this.speed + this.size, this.size, this.size);
+							} else {
+								colData[parseInt(curX)][parseInt(curY + this.speed)] = 1;
+								ctx.fillRect(curX, curY + this.speed, this.size, this.size);
+							}
+							this.reset();
+						} else {
+							//Flow to sides
+							this.speed = 1;
+							this.stepSize = 0;
+
+							if (parseInt(curX) + 1 < this.target.width && colData[parseInt(curX)+1][parseInt(curY) + 1] == undefined)
+								this.x++;
+							else if (parseInt(curX) - 1 > 0 && colData[parseInt(curX)-1][parseInt(curY) + 1] == undefined)
+								this.x--;
+							else {
+								//Stop
+								ctx.fillStyle = "#fff";
+								ctx.fillRect(curX, curY, this.size, this.size);
+								colData[parseInt(curX)][parseInt(curY)] = 1;
+								this.reset();
+							}
+						}
+					}
+				}
+			}
+
+			if (this.x > (elWidth) - widthOffset || this.x < widthOffset)
+				this.reset();
+		}
+		//Reset snowflake upon reach of set bounds
+		this.reset = function() {
+			this.y = 0;
+			this.x = random(widthOffset, elWidth - widthOffset);
+			this.stepSize = random(1, 10) / 100;
+			this.size = random((options.minSize * 100), (options.maxSize * 100)) / 100;
+			this.speed = random(options.minSpeed, options.maxSpeed);
+		}
+	}
+
+	//Local vars
+	var flakes = [], flakeId = 0, i = 0, elHeight = $('body').height(), elWidth = $('body').width(), widthOffset = 0, snowTimeout = 0;
+
+	//Collection Piece
+	if (options.collection !== false) {
+		var testElem = document.createElement('canvas');
+		if (!!(testElem.getContext && testElem.getContext('2d'))) {
+			var canvasCollection = [], elements = $(options.collection), collectionHeight = options.collectionHeight;
+
+			for (var i = 0; i < elements.length; i++) {
+				var bounds = elements[i].getBoundingClientRect(), canvas = document.createElement('canvas'), collisionData = [];
+
+				if (bounds.top - collectionHeight > 0) {
+					document.body.appendChild(canvas);
+					canvas.style.position = 'absolute';
+					canvas.height = collectionHeight;
+					canvas.width = bounds.width;
+					canvas.style.left = bounds.left + 'px';
+					canvas.style.top = bounds.top - collectionHeight + 'px';
+
+					for (var w = 0; w < bounds.width; w++) {
+						collisionData[w] = [];
+					}
+
+					canvasCollection.push({
+						element: canvas,
+						x: bounds.left,
+						y: bounds.top - collectionHeight,
+						width: bounds.width,
+						height: collectionHeight,
+						colData: collisionData
+					});
+				}
+			}
+		} else
+			//Canvas element not supported
+			options.collection = false;
+	}
+
+	//Prevent horizontal scroll bar
+	widthOffset = 25;
+
+	//Bind window resize event to get innerHeight again
+	$(window).bind("resize", function() {
+		elHeight = $('body').clientHeight;
+		elWidth = $('body').offsetWidth;
+		console.log(elHeight);
+	});
+
+	//Initialize flakes
+	for ( i = 0; i < options.flakeCount; i += 1) {
+		flakeId = flakes.length;
+		flakes.push(new Flake(random(widthOffset, elWidth - widthOffset), random(0, elHeight), random((options.minSize * 100), (options.maxSize * 100)) / 100, random(options.minSpeed, options.maxSpeed), flakeId));
+	}
+
+	//Add shadows and make flakes round
+	$('.snowfall-flakes').css({
+		'border-radius': options.maxSize,
+		'box-shadow': '1px 1px 1px #555'
+	});
+
+	//Control flow of updating snow
+	function snow() {
+		for ( i = 0; i < flakes.length; i += 1) {
+			flakes[i].update();
+		}
+		snowTimeout = setTimeout(function() {
+			snow();
+		}, 30);
+	}
+
+	snow();
+
+	//Clear snowflakes
+	this.clear = function() {
+		$('.snowfall-flakes').remove();
+		flakes = [];
+		clearTimeout(snowTimeout);
+	};
+};
 
 /*
  * Helper functions
