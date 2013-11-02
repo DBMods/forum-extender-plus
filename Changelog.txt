@@ -6,6 +6,12 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.11.2pre1a-----
+# Minified some code pertaining to snowfall
+
+-----2013.11.1pre2a-----
+# Changed snowflake color
+
 -----2013.11.1pre1a-----
 + Added date-specific things
 + Added winter snowfall (currently red until background changed) that appears December through February

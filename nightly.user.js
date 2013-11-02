@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.11.1pre1a
+// @version 2013.11.2pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
@@ -40,10 +40,11 @@ $('#footer').append('<div style="text-align: center; font-size: 11px; clear:both
 $('body').prepend('<span id="modicon-message" style="display:none;border-width:1px;border-radius:5px;border-style:solid;position:fixed;top:10px;left:10px;padding:5px 10px;z-index:200" />');
 
 //Modify Super User posts
-addIcon('Super User', '<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" height="16px" width="40px" />');
 highlightPost('Super User', color.gold);
-if (pageUrl == 'topic.php')
+if (pageUrl == 'topic.php') {
+	$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').prepend('<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" height="16px" width="40px" /> ');
 	$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
+}
 
 //Highlight posts by forum regulars green
 highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, 96972, color.green);
@@ -269,26 +270,6 @@ function highlightThread() {
 	});
 }
 
-//Add icons to users
-function addIcon() {
-	var args = arguments;
-	if (pageUrl == 'topic.php') {
-		if ( typeof args[0] == 'string')
-			$('.threadauthor small a:contains("' + args[0] + '")').parent().parent().find('strong').prepend(args[1] + ' ');
-		else if ( typeof args[0] == 'number')
-			$('.threadauthor small a[href$="=' + args[0] + '"]').parent().parent().find('strong').prepend(args[1] + ' ');
-	}
-}
-
-//Change role name
-function changeRole(changeFor, newRole) {
-	if (pageUrl == 'topic.php')
-		if ( typeof changeFor == 'string')
-			$('.threadauthor small a:contains("' + changeFor + '")').html(newRole);
-		else if ( typeof changeFor == 'number')
-			$('.threadauthor small a[href$="=' + changeFor + '"]').html(newRole);
-}
-
 //Reload pages
 function reloadPage(pageType) {
 	var reloadIndex = {
@@ -494,7 +475,7 @@ function forumVersion(versionDate) {
 function snowfall() {
 	var options = {
 		flakeCount: 100,
-		flakeColor: '#f00',
+		flakeColor: '#eee',
 		minSize: 2,
 		maxSize: 6,
 		minSpeed: 1,
@@ -523,26 +504,13 @@ function snowfall() {
 		if (options.collection)
 			this.target = canvasCollection[random(0, canvasCollection.length - 1)];
 
-		var flakeMarkup = null;
-
-		flakeMarkup = $(document.createElement("div"));
-
-		flakeMarkup.attr({
-			'class': 'snowfall-flakes',
-			'id': 'flake-' + this.id
-		}).css({
-			'background': options.flakeColor,
+		$('body').append('<div id="flake-' + this.id + '" class="snowfall-flakes" />')
+		$('#flake-' + this.id).css({
 			'width': this.size,
 			'height': this.size,
-			'position': 'absolute',
 			'top': this.y,
-			'left': this.x,
-			'fontSize': 0,
-			'zIndex': 999999
+			'left': this.x
 		});
-
-		$('body').append(flakeMarkup);
-		element = $('body');
 
 		this.element = document.getElementById('flake-' + this.id);
 
@@ -561,42 +529,40 @@ function snowfall() {
 			this.x += Math.cos(this.step);
 
 			//Pileup check
-			if (options.collection) {
-				if (this.x > this.target.x && this.x < this.target.width + this.target.x && this.y > this.target.y && this.y < this.target.height + this.target.y) {
-					var ctx = this.target.element.getContext("2d"), curX = this.x - this.target.x, curY = this.y - this.target.y, colData = this.target.colData;
+			if (options.collection && this.x > this.target.x && this.x < this.target.width + this.target.x && this.y > this.target.y && this.y < this.target.height + this.target.y) {
+				var ctx = this.target.element.getContext("2d"), curX = this.x - this.target.x, curY = this.y - this.target.y, colData = this.target.colData;
 
-					if (colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] !== undefined || curY + this.speed + this.size > this.target.height) {
-						if (curY + this.speed + this.size > this.target.height) {
-							while (curY + this.speed + this.size > this.target.height && this.speed > 0) {
-								this.speed *= .5;
-							}
+				if (colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] !== undefined || curY + this.speed + this.size > this.target.height) {
+					if (curY + this.speed + this.size > this.target.height) {
+						while (curY + this.speed + this.size > this.target.height && this.speed > 0) {
+							this.speed *= .5;
+						}
 
-							ctx.fillStyle = "#fff";
+						ctx.fillStyle = "#fff";
 
-							if (colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] == undefined) {
-								colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] = 1;
-								ctx.fillRect(curX, (curY) + this.speed + this.size, this.size, this.size);
-							} else {
-								colData[parseInt(curX)][parseInt(curY + this.speed)] = 1;
-								ctx.fillRect(curX, curY + this.speed, this.size, this.size);
-							}
-							this.reset();
+						if (colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] == undefined) {
+							colData[parseInt(curX)][parseInt(curY + this.speed + this.size)] = 1;
+							ctx.fillRect(curX, (curY) + this.speed + this.size, this.size, this.size);
 						} else {
-							//Flow to sides
-							this.speed = 1;
-							this.stepSize = 0;
+							colData[parseInt(curX)][parseInt(curY + this.speed)] = 1;
+							ctx.fillRect(curX, curY + this.speed, this.size, this.size);
+						}
+						this.reset();
+					} else {
+						//Flow to sides
+						this.speed = 1;
+						this.stepSize = 0;
 
-							if (parseInt(curX) + 1 < this.target.width && colData[parseInt(curX)+1][parseInt(curY) + 1] == undefined)
-								this.x++;
-							else if (parseInt(curX) - 1 > 0 && colData[parseInt(curX)-1][parseInt(curY) + 1] == undefined)
-								this.x--;
-							else {
-								//Stop
-								ctx.fillStyle = "#fff";
-								ctx.fillRect(curX, curY, this.size, this.size);
-								colData[parseInt(curX)][parseInt(curY)] = 1;
-								this.reset();
-							}
+						if (parseInt(curX) + 1 < this.target.width && colData[parseInt(curX)+1][parseInt(curY) + 1] == undefined)
+							this.x++;
+						else if (parseInt(curX) - 1 > 0 && colData[parseInt(curX)-1][parseInt(curY) + 1] == undefined)
+							this.x--;
+						else {
+							//Stop
+							ctx.fillStyle = "#fff";
+							ctx.fillRect(curX, curY, this.size, this.size);
+							colData[parseInt(curX)][parseInt(curY)] = 1;
+							this.reset();
 						}
 					}
 				}
@@ -670,10 +636,13 @@ function snowfall() {
 		flakes.push(new Flake(random(widthOffset, elWidth - widthOffset), random(0, elHeight), random((options.minSize * 100), (options.maxSize * 100)) / 100, random(options.minSpeed, options.maxSpeed), flakeId));
 	}
 
-	//Add shadows and make flakes round
 	$('.snowfall-flakes').css({
 		'border-radius': options.maxSize,
-		'box-shadow': '1px 1px 1px #555'
+		'box-shadow': '1px 1px 1px #aaa',
+		'background': options.flakeColor,
+		'position': 'absolute',
+		'fontSize': 0,
+		'zIndex': 999999
 	});
 
 	//Control flow of updating snow
