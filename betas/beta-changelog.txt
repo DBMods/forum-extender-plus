@@ -1,7 +1,0 @@
-+ Added
-- Removed
-* Fixed
-# Changed
-
-
-Dropbox Forum Mod Icons Beta Changelog
