@@ -3,6 +3,12 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.11.4pre1a-----
+* Restricted Super User-specific snippets to Super Users only
+
+-----2013.11.2pre3a-----
++ Added general links snippet group
+
 -----2013.11.2pre2a-----
 # Minified some code
 # Completely rewrote settings menu portion of navBar function

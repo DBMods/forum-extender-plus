@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.11.2pre2a
+// @version 2013.11.4pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
@@ -29,6 +29,7 @@ var color = {
 	lightRed: '#ffe9e9'
 }
 var settingsVisible = false;
+var userId = $('#header .login a:first').attr('href').split('profile.php?id=')[1];
 
 //Set up alerts
 var alertSummary;
@@ -111,13 +112,13 @@ if(pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 0
 		});
 }
 
-if([0, 1, 11].indexOf(date.month) > -1 && GM_getValue('disableFallingAnimations', false) == false)
+if([0, 1, 11].indexOf(date.month) > -1 && !GM_getValue('disableFallingAnimations'))
 	snowfall();
 
 //Add nav bar
 function navBar() {
 	//Add prerequsites
-	$("head").append('<style type="text/css">#modicon-nav > span{margin-left:20px}#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:1000000}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}#modicon-option-popup .clear{clear:both}#modicon-option-popup div.left{float:left;width: 50px}#modicon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modicon-option-popup{display:none;position:fixed;width:600px;height:200px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#modicon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modicon-option-trigger:hover,#modicon-option-close:hover{cursor:pointer}#modicon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
+	$("head").append('<style type="text/css">#modicon-nav > span{margin-left:20px}#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:10}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}#modicon-option-popup .clear{clear:both}#modicon-option-popup div.left{float:left;width: 50px}#modicon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modicon-option-popup{display:none;position:fixed;width:600px;height:200px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#modicon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modicon-option-trigger:hover,#modicon-option-close:hover{cursor:pointer}#modicon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
 	$('body').append('<div id="modicon-nav"><img id="modicon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="modicon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7;" />');
 	$('body').append('<div id="modicon-option-popup" style="position:fixed"><a id="modicon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="y">Auto-collapse footer</input><br><input type="checkbox" name="disableFallingAnimations" value="y">Disable falling animations (like snow) for slower computers</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every <select name="reloadForum"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modicon-option-save" style="clear:both;float:right;"></div>');
 	$('body').prepend('<div id="modicon-nav-slideout-container" />');
@@ -208,13 +209,15 @@ function navBar() {
 			helpArticleGroup: '</optgroup><optgroup label="Help Center Links">',
 			selectiveSync: '<option value="<a href=\'https://www.dropbox.com/help/175\'>Selective Sync</a>">Selective Sync</option>',
 			sharedLink: '<option value="<a href=\'https://www.dropbox.com/help/167\'>Shared Links</a>">Shared Links</option>',
+			linksGroup: '</optgroup><optgroup label="Links">',
+			desktopClient: '<option value="<a href=\'https://www.dropbox.com/install\'>desktop client</a>">Desktop Client</option>',
 			supportTicketGroup: '</optgroup><optgroup label="Support tickets">',
 			ticketLink: '<option value="Submit a support ticket at https://www.dropbox.com/support">Submit a ticket</option>',
 			ticketSummary: '<option value="Tickets typically take 1-3 business days to get a reply, priority given to Pro and Business users.\n\nYou can track the status of your tickets over at <a href=\'http://dropbox.zendesk.com\'>Zendesk</a>.">Ticket summary</option>',
 			modEditGroup: '</optgroup><optgroup label="Mod edits">',
 			dupeThread: '<option value="Duplicate post: ">Duplicate post</option>',
-			removeEmail: '<option value="Edit: Email removed for security issues ~' + $('#header .login a:first').html().split(' ')[0] + '">Email removed</option>',
-			moveThread: '<option value="I moved this to ' + ['everything else', 'bugs &amp; troubleshooting', 'feature requests', 'mobile apps', 'API development'][$('#forum-id').val() - 1] + ' for you.">Move thread</option>',
+			removeEmail: (profile.list.indexOf(userId) > -1 ? ('<option value="Edit: Email removed for security issues ~' + $('#header .login a:first').html().split(' ')[0] + '">Email removed</option>') : ''),
+			moveThread: (profile.list.indexOf(userId) > -1 ? ('<option value="I moved this to ' + ['everything else', 'bugs &amp; troubleshooting', 'feature requests', 'mobile apps', 'API development'][$('#forum-id').val() - 1] + ' for you.">Move thread</option>') : ''),
 			miscGroup: '</optgroup><optgroup label="Miscellaneous">',
 			welcome: '<option value="Also, I see you\'re new here, so why don\'t we give you a proper welcome.\n\nDropbox is a wonderful service, and we hope you get to use it to its full potential. If you have an issue, you can always check the <a href=\'https://www.dropbox.com/help\'>Help Center</a>, but if you don\'t get an answer there, or it\'s a more complicated issue, these forums are a great place to visit.\n\nHere on the forums, there are a lot of people just like you, who ask the occasional question. There\'s also a small handful of regulars here, including Super Users like myself. We try to answer as many questions as we can, and most of us are here on an almost-daily basis. I think I can speak for all of us a regulars when I say that we love to see newcomers to the service. The forums are a great place to both ask and answer questions, and if you have another question in the future, don\'t hesitate to ask.\n\nWelcome to Dropbox. We hope you like it.">Welcome</option>',
 			miscGroupClose: '</optgroup>'
