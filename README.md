@@ -23,6 +23,9 @@ Forum regulars besides the Super Users are often on the forums as well, and prov
 ###Post Title Hiding (Nightlies Only)
 Let's face it. The post title box just gets in the way, and only does anything if you create a new thread. It will automatically be disabled unless you're creating a new thread.
 
+###Dropbox Integration (Nightlies Only)
+You must be authenticated with Dropbox to use the preferences and post drafting, but they sync to all of your computers via the Dropbox Datastore API.
+
 ###Settings Panel
 The script includes a settings panel, where you can customize settings without having to manually edit the script.
 

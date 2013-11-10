@@ -3,6 +3,11 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.11.9pre56a-----
++ Added Dropbox Datastore API integration
+* Fixed bug where the /?new=1 page would be caught as part of the front page
+# Moved preferences and drafts to the datastore - you must be authenticated with Dropbox to change things like theme, or save drafts
+
 -----2013.11.4pre1a-----
 * Restricted Super User-specific snippets to Super Users only
 
