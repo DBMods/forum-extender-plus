@@ -3,7 +3,7 @@
 
 Dropbox Forum Mod Icons Changelog
 
------2013.11.11pre12a-----
+-----2013.11.11pre2a-----
 * Bugfix
 
 -----2013.11.11pre1a-----

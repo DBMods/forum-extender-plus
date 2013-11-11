@@ -102,8 +102,6 @@ $('.search').css({
 });
 $('#main').css('clear', 'both');
 
-$('#latest tr.closed td:first').prepend('[closed] ');
-
 //Add nav bar
 function navBar() {
 	//Add prerequsites
