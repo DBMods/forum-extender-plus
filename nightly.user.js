@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.11.9pre56a
+// @version 2013.11.11pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
@@ -78,6 +78,31 @@ if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 
 
 if ([0, 1, 11].indexOf(date.month) > -1)
 	snowfall();
+
+//Fix UI for new semi-broken theme 10-8-2013
+$('#header').css('margin-top', '0');
+$('#header .home, #header .breadcrumb').hide();
+$('.freshbutton-blue, #postformsub').css('background', '#2180ce');
+$('#header').append($('.search').clone());
+$('#main .search').remove();
+$('#forumlist-container').css('top', '0');
+$('.login').css({
+	'float': 'left',
+	'clear': 'none',
+	'margin-top': '5px',
+	'position': 'static',
+	'font-size': '12px',
+	'font-weight': 'normal'
+});
+$('.search').css({
+	'float': 'right',
+	'clear': 'none',
+	'margin': '5px',
+	'position': 'static'
+});
+$('#main').css('clear', 'both');
+
+$('#latest tr.closed').prepend('[closed] ');
 
 //Add nav bar
 function navBar() {
@@ -161,10 +186,6 @@ function navBar() {
 		});
 	}
 
-	/*
-	 * Begin Dropbox linkage
-	 */
-
 	var client = new Dropbox.Client({
 		key: 'qq5ygjct1pt4eud'
 	});
@@ -242,6 +263,7 @@ function navBar() {
 				reloadPage('Front');
 				reloadPage('Forum');
 				reloadPage('Sticky');
+
 				function reloadPage(pageType) {
 					var reloadIndex = {
 						'Sticky': pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length > 0,
@@ -303,7 +325,7 @@ function navBar() {
 					$('#modicon-screen-overlay, #modicon-option-popup').hide();
 				});
 				$('#modicon-option-save').click(function() {
-					var pref
+					var pref;
 					for (i in optionDropdown) {
 						pref = prefTable.query({
 							preference: optionDropdown[i]
@@ -332,6 +354,7 @@ function navBar() {
 					hoverMessage('Your settings have been saved.\n\nThe new settings won\'t take effect until the page is reloaded.');
 				});
 
+				//Manage drafts
 				if (pageUrl == 'topic.php') {
 					var thread = window.location.href.split('id=')[1].split('&')[0].split('#')[0];
 					$('#modicon-nav').append('<span id="modpostdraft">Draft Post</span><span id="modpostrestoredraft">Restore Draft</span>');
@@ -366,10 +389,6 @@ function navBar() {
 			});
 		}
 	});
-
-	/*
-	 * End Dropbox Linkage
-	 */
 }
 
 //Highlight forum threads based on post count
@@ -412,29 +431,6 @@ function highlightPost() {
 
 //Skin forums
 function forumVersion(versionDate) {
-	//Fix UI for new semi-broken theme 10-8-2013
-	$('#header').css('margin-top', '0');
-	$('#header .home, #header .breadcrumb').hide();
-	$('.freshbutton-blue, #postformsub').css('background', '#2180ce');
-	$('#header').append($('.search').clone());
-	$('#main .search').remove();
-	$('#forumlist-container').css('top', '0');
-	$('.login').css({
-		'float': 'left',
-		'clear': 'none',
-		'margin-top': '5px',
-		'position': 'static',
-		'font-size': '12px',
-		'font-weight': 'normal'
-	});
-	$('.search').css({
-		'float': 'right',
-		'clear': 'none',
-		'margin': '5px',
-		'position': 'static'
-	});
-	$('#main').css('clear', 'both');
-
 	var latestTr = $('#latest tr');
 	if (versionDate == '8.8.2012') {
 		//Reformat header

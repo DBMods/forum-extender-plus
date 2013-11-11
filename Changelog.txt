@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.11.11pre1a-----
++ Added closed thread notifiers
+
 -----2013.11.9pre56a-----
 + Added Dropbox Datastore API integration
 * Fixed bug where the /?new=1 page would be caught as part of the front page
