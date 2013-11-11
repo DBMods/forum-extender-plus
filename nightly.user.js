@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.11.11pre1a
+// @version 2013.11.11pre2a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
@@ -102,7 +102,7 @@ $('.search').css({
 });
 $('#main').css('clear', 'both');
 
-$('#latest tr.closed').prepend('[closed] ');
+$('#latest tr.closed td:first').prepend('[closed] ');
 
 //Add nav bar
 function navBar() {

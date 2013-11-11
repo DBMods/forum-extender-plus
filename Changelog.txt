@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.11.11pre12a-----
+* Bugfix
+
 -----2013.11.11pre1a-----
 + Added closed thread notifiers
 
