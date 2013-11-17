@@ -6,6 +6,8 @@
 // @grant none
 // ==/UserScript==
 
+//Minified from github.com/DBMods/forum-mod-icons/blob/287058a902f532e4ee20db5e34984f571de20892/dropbox_forum_mod_icons.user.js
+
 //Add footer
 document.getElementById("footer").innerHTML = document.getElementById("footer").innerHTML + "<div style='text-align: right; color: rgb(102, 102, 102); font-size: 11px; clear:both;'>Dropbox Forum Mod Icons Nostalgia</div>";
 
