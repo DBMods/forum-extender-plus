@@ -3,6 +3,13 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.0-----
++ Added snippets folder to the repo
+- removed snowfall from the code, and moved it to the snippets folder
+
+-----2013.11.13pre1a-----
++ Added more post snippets
+
 -----2013.11.11pre2a-----
 * Bugfix
 

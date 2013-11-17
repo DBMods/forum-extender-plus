@@ -20,10 +20,10 @@ Super Users offer in-depth information and solutions. Their posts are highlighte
 ###Forum Regular Highlighting
 Forum regulars besides the Super Users are often on the forums as well, and provide useful information as well. Their posts are automatically highlighted in green.
 
-###Post Title Hiding (Nightlies Only)
+###Post Title Hiding
 Let's face it. The post title box just gets in the way, and only does anything if you create a new thread. It will automatically be disabled unless you're creating a new thread.
 
-###Dropbox Integration (Nightlies Only)
+###Dropbox Integration
 You must be authenticated with Dropbox to use the preferences and post drafting, but they sync to all of your computers via the Dropbox Datastore API.
 
 ###Settings Panel
@@ -44,14 +44,8 @@ There's also an included navigation bar that organizes stuff that's added to the
 ####Super User Activity List
 The Super Users are the sole representatives of the Dropbox team. Knowing almost everything there is to know about it, they frequent the forums. This activity list adds a collapsible list of latest activity from all of the Super Users.
 
-####Post Snippets (Nightlies Only)
+####Post Snippets
 Many forum regulars have a set list of text snippets for the forums. A built-in list of snippets are enabled on threads and edit pages for easy access to these.
 
 ####Post Drafting
 The script now allows for drafts of posts. If you want to save a draft, click the button, and it's done. The same thing goes for restoring a previous draft. Drafts are also thread-specific, so you can save drafts for any number of threads at a time.
-
-###Date-specific Features
-Many features are fixed, but some only trigger during a specific time.
-
-####Snow (Nightlies Only)
-Snow will appear on pages from December through February, and will gently float down the page.
