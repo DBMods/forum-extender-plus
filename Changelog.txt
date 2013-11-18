@@ -3,6 +3,10 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.0.1-----
+- Removed unnecessary calls from the activity list
+* Added thread breadcrumb back into thread header
+
 -----2.0-----
 + Added snippets folder to the repo
 - removed snowfall from the code, and moved it to the snippets folder
