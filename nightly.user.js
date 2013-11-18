@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.11.16pre1a
+// @version 2013.11.18pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
@@ -78,7 +78,12 @@ if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 
 
 //Fix UI for new semi-broken theme 10-8-2013
 $('#header').css('margin-top', '0');
-$('#header .home, #header .breadcrumb').hide();
+if (pageUrl == 'topic.php') {
+	$('#topic-info').prepend('<br>').prepend($('#header .breadcrumb').clone());
+	$('#header .breadcrumb').hide();
+} else
+	$('#header .breadcrumb').hide();
+$('#header .home').hide();
 $('.freshbutton-blue, #postformsub').css('background', '#2180ce');
 $('#header').append($('.search').clone());
 $('#main .search').remove();
@@ -111,14 +116,14 @@ function navBar() {
 	//Add list content
 	var resp;
 	var profile = {
-		list: [1618104, 11096, 175532, 561902, 30385, 67305, 857279, 643099, 182504, 1510497, 32911, 222573, 1588860],
+		list: [1618104, 11096, 175532, 30385, 67305, 857279, 643099, 182504, 1510497, 32911, 222573],
 		load: function(i) {
 			GM_xmlhttpRequest({
 				method: 'GET',
 				url: 'https://forums.dropbox.com/profile.php?id=' + profile.list[i],
 				onload: function(response) {
 					var resp = response.responseText;
-					$('#modactivity li:eq(' + i + ')').html('<a href="https://forums.dropbox.com/profile.php?id=' + profile.list[i] + '">' + resp.split('<title>')[1].split(' &laquo;')[0] + '</a> - ' + ((resp.split('<h4>Recent Replies</h4>')[1].indexOf('<p>No more replies.</p>') > -1) ? 'never active' : 'last active ' + resp.split('<h4>Recent Replies</h4>')[1].split('<li>')[1].split('">')[2].split('</a>')[0]));
+					$('#modactivity li:eq(' + i + ')').html('<a href="https://forums.dropbox.com/profile.php?id=' + profile.list[i] + '">' + resp.split('<title>')[1].split(' &laquo;')[0] + '</a> - last active ' + resp.split('<h4>Recent Replies</h4>')[1].split('<li>')[1].split('">')[2].split('</a>')[0]);
 				}
 			});
 		}
