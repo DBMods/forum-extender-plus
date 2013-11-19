@@ -6,7 +6,7 @@ To install the script, simply download the ZIP, and install the user.js file of 
 
 ##Features
 ###Super User Icons
-Super Users, even when also Pro users, don't get icons by default. Fixed! You can now choose between tons of icons for the Super Users (chooser is for nightlies only).
+Super Users, even when also Pro users, don't get icons by default. Fixed! You can now choose between tons of icons for the Super Users.
 
 ###Thread Highlighting
 Threads on forum pages and the front page are automatically highlighted based on post count. Green for new threads, yellow for one response, and red for two.
