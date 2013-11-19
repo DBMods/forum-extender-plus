@@ -6,7 +6,7 @@ To install the script, simply download the ZIP, and install the user.js file of 
 
 ##Features
 ###Closed Thread Alerts
-Some themes hide closed notifications by default. Now, no matter the theme, closed threads will be indicated as such on the fromt page.
+Some themes hide closed notifications by default. Now, no matter the theme, closed threads will be indicated as such on the front page.
 
 ###Super User Icons
 Super Users, even when also Pro users, don't get icons by default. Fixed! You can now choose between tons of icons for the Super Users.
