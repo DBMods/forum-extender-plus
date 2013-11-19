@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.0.2
+// @version 2.0.3
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
@@ -40,9 +40,11 @@ $('body').prepend('<span id="modicon-message" style="display:none;border-width:1
 highlightPost('Super User', color.gold);
 if (pageUrl == 'topic.php') {
 	$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').prepend('<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" />');
-	// height="16px" width="40px" /> ');
 	$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
 }
+
+if(pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php')
+	$('#latest tr.closed span.label.closed').show();
 
 //Highlight posts by forum regulars green
 highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, 96972, color.green);
