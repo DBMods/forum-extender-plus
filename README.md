@@ -5,6 +5,9 @@ Adds a Nyan Cat icon to the forum Super Users complete with animation, and tweak
 To install the script, simply download the ZIP, and install the user.js file of your choice as a Greasemonkey plugin just like you would any other. Alternately, you can copy and paste the source or use the RAW link to the file.
 
 ##Features
+###Closed Thread Alerts
+Some themes hide closed notifications by default. Now, no matter the theme, closed threads will be indicated as such on the fromt page.
+
 ###Super User Icons
 Super Users, even when also Pro users, don't get icons by default. Fixed! You can now choose between tons of icons for the Super Users.
 
