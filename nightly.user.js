@@ -13,11 +13,10 @@
 // ==/UserScript==
 
 //Set global variables
-var day = new Date();
+var day = new Date(), pageUrl = getPageUrl(), settingsVisible = false;
 var date = {
 	month: day.getMonth()
 };
-var pageUrl = getPageUrl();
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -26,7 +25,6 @@ var color = {
 	red: '#ffd4d4',
 	lightRed: '#ffe9e9'
 }
-var settingsVisible = false;
 var userId = $('#header .login a:first').attr('href').split('profile.php?id=')[1];
 
 //Set up alerts

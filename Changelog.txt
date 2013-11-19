@@ -5,6 +5,7 @@ Dropbox Forum Mod Icons Changelog
 
 -----2013.11.18pre2a-----
 + Added Super User icon chooser
++ Added 17 more icons to choose from
 
 -----2.0.1-----
 - Removed unnecessary calls from the activity list
