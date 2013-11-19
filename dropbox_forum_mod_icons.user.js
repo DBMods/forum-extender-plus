@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.0.1
+// @version 2.0.2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
@@ -13,11 +13,10 @@
 // ==/UserScript==
 
 //Set global variables
-var day = new Date();
+var day = new Date(), pageUrl = getPageUrl(), settingsVisible = false;
 var date = {
 	month: day.getMonth()
 };
-var pageUrl = getPageUrl();
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -26,7 +25,6 @@ var color = {
 	red: '#ffd4d4',
 	lightRed: '#ffe9e9'
 }
-var settingsVisible = false;
 var userId = $('#header .login a:first').attr('href').split('profile.php?id=')[1];
 
 //Set up alerts
@@ -41,7 +39,8 @@ $('body').prepend('<span id="modicon-message" style="display:none;border-width:1
 //Modify Super User posts
 highlightPost('Super User', color.gold);
 if (pageUrl == 'topic.php') {
-	$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').prepend('<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" height="16px" width="40px" /> ');
+	$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').prepend('<img src="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" />');
+	// height="16px" width="40px" /> ');
 	$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
 }
 
@@ -109,7 +108,9 @@ function navBar() {
 	//Add prerequsites
 	$("head").append('<style type="text/css">#modicon-nav > span{margin-left:20px}#modicon-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:10}#modicon-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#modicon-nav-slideout-container > *{list-style-type:none;margin:30px auto;width:800px;text-align: center}#modicon-nav > span:hover{cursor:pointer}#modicon-option-popup .clear{clear:both}#modicon-option-popup div.left{float:left;width: 50px}#modicon-option-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#modicon-option-popup{display:none;position:fixed;width:600px;height:225px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#modicon-option-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#modicon-option-trigger:hover,#modicon-option-close:hover{cursor:pointer}#modicon-option-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
 	$('body').append('<div id="modicon-nav"><img id="modicon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="modicon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7;" />');
-	$('body').append('<div id="modicon-option-popup" style="position:fixed"><a id="modicon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="y">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every <select name="reloadForum"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modicon-option-save" style="clear:both;float:right;"></div>');
+	$('body').append('<div id="modicon-option-popup" style="position:fixed" />');
+	$('#modicon-option-popup').html('<a id="modicon-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="y">Auto-collapse footer</input></div><div class="right">Reload front page every <select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every <select name="reloadForum"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every <select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select></div><br/><input type="button" tabindex="4" value="Save" id="modicon-option-save" style="clear:both;float:right;">');
+	$('#modicon-option-popup .right').append('<br><select id="modiconicon" name="modIcon"><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflat.png">Dropbox Flat</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatgreen.png">Dropbox Flat Green</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatlime.png">Dropbox Flat Lime</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatgold.png">Dropbox Flat Gold</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatorange.png">Dropbox Flat Orange</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatred.png">Dropbox Flat Red</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatpink.png">Dropbox Flat Pink</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatpurple.png">Dropbox Flat Purple</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropbox.png">Dropbox</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxgreen.png">Dropbox Green</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxlime.png">Dropbox Lime</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxgold.png">Dropbox Gold</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxorange.png">Dropbox Orange</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxred.png">Dropbox Red</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxpink.png">Dropbox Pink</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxpurple.png">Dropbox Purple</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/goldstar.png">Gold Star</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select> <img id="modiconiconpreview" />');
 	$('body').prepend('<div id="modicon-nav-slideout-container" />');
 	$('body').css('padding-bottom', '31px');
 
@@ -147,7 +148,7 @@ function navBar() {
 	//Set up alert messages
 	if (alertSummary) {
 		$('#modicon-nav').append('<span id="modalerttrigger"><strong>Alert!</strong> ' + alertSummary.summary + '</span>');
-		$('#modicon-nav-slideout-container').append('<div id="modalert" class="center">' + alertSummary.fullDesc + '</div>');
+		$('#modicon-nav-slideout-container').append('<div d="modalert" class="center">' + alertSummary.fullDesc + '</div>');
 		$('#modalert').toggle();
 		$('#modalerttrigger').click(function() {
 			$('#modalert').slideToggle();
@@ -210,6 +211,7 @@ function navBar() {
 			e.preventDefault();
 			client.authenticate();
 		});
+
 		//Try to finish OAuth authorization
 		client.authenticate({
 			interactive: false
@@ -262,6 +264,14 @@ function navBar() {
 					});
 				}
 
+				if (pageUrl == 'topic.php') {
+					var modIcon = prefTable.query({
+						preference: 'modIcon'
+					});
+					if (modIcon.length > 0)
+						$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').find('img').attr('src', modIcon[0].get('value'));
+				}
+
 				reloadPage('Front');
 				reloadPage('Forum');
 				reloadPage('Sticky');
@@ -296,7 +306,7 @@ function navBar() {
 				});
 
 				//Manage preferences
-				var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront'];
+				var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront', 'modIcon'];
 				var optionCheck = ['collapseFooter'];
 				$('#modicon-option-trigger').click(function() {
 					settingsVisible = true;
@@ -314,6 +324,7 @@ function navBar() {
 							$('#modicon-option-popup [name="' + optionDropdown[i] + '"] option[value="' + pref.get('value') + '"]').attr('selected', 'selected');
 						}
 					}
+					$('#modiconiconpreview').attr('src', $('#modiconicon').val());
 					for (i in optionCheck) {
 						pref = prefTable.query({preference: optionCheck[i]})[0];
 						if (pref) {
@@ -322,6 +333,9 @@ function navBar() {
 					}
 
 					$('#modicon-screen-overlay, #modicon-option-popup').show();
+				});
+				$('#modiconicon').change(function() {
+					$('#modiconiconpreview').attr('src', $('#modiconicon').val());
 				});
 				$('#modicon-option-close, #modicon-option-save').click(function() {
 					$('#modicon-screen-overlay, #modicon-option-popup').hide();
@@ -352,8 +366,10 @@ function navBar() {
 								value: $('#modicon-option-popup [name="' + optionCheck[i] + '"]').val() == 'y'
 							});
 					}
+					if (pageUrl == 'topic.php')
+						$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').find('img').attr('src', $('#modiconicon').val());
 					settingsVisible = false;
-					hoverMessage('Your settings have been saved.\n\nThe new settings won\'t take effect until the page is reloaded.');
+					hoverMessage('Your settings have been saved.\n\nMost new settings won\'t take effect until the page is reloaded.');
 				});
 
 				//Manage drafts

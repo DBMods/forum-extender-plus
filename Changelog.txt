@@ -3,7 +3,7 @@
 
 Dropbox Forum Mod Icons Changelog
 
------2013.11.18pre2a-----
+-----2.0.2-----
 + Added Super User icon chooser
 + Added 17 more icons to choose from
 
