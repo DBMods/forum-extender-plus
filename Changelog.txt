@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.11.18pre2a-----
++ Added Super User icon chooser
+
 -----2.0.1-----
 - Removed unnecessary calls from the activity list
 * Added thread breadcrumb back into thread header
