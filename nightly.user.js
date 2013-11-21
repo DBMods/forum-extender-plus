@@ -113,7 +113,7 @@ function navBar() {
 	$('body').css('padding-bottom', '31px');
 	GM_xmlhttpRequest({
 		method: 'GET',
-		url: 'https://github.com/DBMods/forum-mod-icons/raw/master/snippets/preferences.html',
+		url: 'https://github.com/DBMods/forum-mod-icons/raw/master/snippets/prefs.html',
 		onload: function(response) {
 			$('#modicon-option-popup').html(response.responseText);
 		}
