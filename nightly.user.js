@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.11.20pre1a
+// @version 2013.11.20pre2a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/nightly.user.js
@@ -111,18 +111,19 @@ function navBar() {
 	$('body').append('<div id="modicon-nav"><img id="modicon-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="modicon-screen-overlay" style="display:none;position:fixed;height:100%;width:100%;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7;" /><div id="modicon-option-popup" style="position:fixed" />');
 	$('body').prepend('<div id="modicon-nav-slideout-container" />');
 	$('body').css('padding-bottom', '31px');
-	GM_xmlhttpRequest({
-		method: 'GET',
-		url: 'https://github.com/DBMods/forum-mod-icons/raw/master/snippets/prefs.html',
-		onload: function(response) {
-			$('#modicon-option-popup').html(response.responseText);
-		}
-	});
+
 	GM_xmlhttpRequest({
 		method: 'GET',
 		url: 'https://github.com/DBMods/forum-mod-icons/raw/master/snippets/navstyle.html',
 		onload: function(response) {
 			$('head').append(response.responseText);
+		}
+	});
+	GM_xmlhttpRequest({
+		method: 'GET',
+		url: 'https://github.com/DBMods/forum-mod-icons/raw/master/snippets/prefs.html',
+		onload: function(response) {
+			$('#modicon-option-popup').html(response.responseText);
 		}
 	});
 
