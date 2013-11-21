@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.11.20pre1a-----
+# Removed almost half of the code in favor for importing snippets
+
 -----2.0.3-----
 + Closed threads are now automatically indicated
 
