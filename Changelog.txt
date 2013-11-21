@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2013.11.21pre1a-----
+- Removed snippets to fix latency on slow connections
+
 -----2013.11.20pre1a-----
 # Removed almost half of the code in favor for importing snippets
 
