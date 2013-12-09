@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.11.21pre1a
+// @version 2013.12.9pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox-extender-plus.user.js
