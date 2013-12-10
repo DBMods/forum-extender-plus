@@ -696,7 +696,8 @@ function showListBoxPopUp(_listType) {
 		"left": windowWidth / 2 - popupWidth / 2
 	});
 
-	$('#modicon-screen-overlay, #gsDropboxExtender-listbox-popup').show();
+	//TODO add #modicon-screen-overlay to this
+	$('#gsDropboxExtender-listbox-popup').show();
 }
 
 function hideListBoxPopUp() {
@@ -871,4 +872,22 @@ function getSelectedText() {
 	} else if (document.selection) {
 		return SelectedText = document.selection.createRange().text;
 	}
+}
+
+/*
+ * Liveness check
+ * Check for a pulse
+ */
+window.onload = function() {
+	$('#modicon-nav').append('<span>Pulse:&nbsp;&nbsp;&nbsp;<span id="heartbeatpulse">#</span></span>');
+	pulse();
+}
+function pulse() {
+	setTimeout(function() {
+		$('#heartbeatpulse').hide();
+		setTimeout(function() {
+			$('#heartbeatpulse').show();
+			pulse();
+		}, 1000);
+	}, 1000);
 }
