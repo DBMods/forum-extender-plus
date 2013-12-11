@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.0.3
+// @version 2.0.4
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox_forum_mod_icons.user.js
@@ -43,7 +43,7 @@ if (pageUrl == 'topic.php') {
 	$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
 }
 
-if(pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php')
+if (pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php')
 	$('#latest tr.closed span.label.closed').show();
 
 //Highlight posts by forum regulars green
@@ -218,16 +218,20 @@ function navBar() {
 		client.authenticate({
 			interactive: false
 		}, function(error) {
-			if (error)
-				alert('Authentication error: ' + error);
+			if (error) {
+				console.log('Auth error. Retrying');
+				document.location.reload();
+			}
 		});
 		if (client.isAuthenticated()) {
 			$('#dropboxlink').hide();
 			$('#modicon-nav').append('<span id="deleteprefs">Trash Preferences</span><span id="deletedrafts">Trash Drafts</span>');
 
 			client.getDatastoreManager().openDefaultDatastore(function(error, datastore) {
-				if (error)
-					alert('Error opening default datastore: ' + error);
+				if (error) {
+					console.log('Error opening default datastore. Retrying');
+					document.location.reload();
+				}
 
 				//Get tables
 				var prefTable = datastore.getTable('prefs'), draftTable = datastore.getTable('draft');
