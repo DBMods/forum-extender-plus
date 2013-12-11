@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.12.11pre1a
+// @version 2013.12.11pre2a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox-extender-plus.user.js
@@ -583,8 +583,9 @@ var TopicPageRecordLimit = 30;
  * Forum post handlers
  */
 
-$("head").append('<style type="text/css" charset="utf-8">#gsDropboxExtender-anchor-popup{display:none;position:fixed;height:200px;width:408px;background:#fff;border:2px solid #cecece;z-index:51;padding:12px;font-size:13px;}#gsDropboxExtender-listbox-popup{display:none;position:fixed;_position:absolute;height:200px;width:408px;background:#fff;border:2px solid #cecece;z-index:51;padding:12px;font-size:13px;}#gsDropboxExtender-anchor-popup h1, #gsDropboxExtender-listbox-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}.gsDropboxExtenderPopupClose:hover{cursor: pointer;}.gsDropboxExtenderPopupClose{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}#gsDropboxExtender-listbox-unordered, #gsDropboxExtender-listbox-ordered{margin-left: 20px;}</style>');
-$('body').append('<div id="gsDropboxExtender-anchor-popup"><a id="gsDropboxExtenderAnchorClose" class="gsDropboxExtenderPopupClose">x</a><h1>Add Link</h1><br /><br /><div><div style="clear: both; height: 20px;"><label style="float: left;">Title: </label><input id="gsDropboxExtenderAnchorTextBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><div style="clear: both; height: 20px;"><label style="float: left;">Url: </label><input id="gsDropboxExtenderAnchorUrlBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><br /><input type="submit" tabindex="4" value="Add Link" class="button" name="Submit" id="gsDropboxExtenderAnchorAddLink" style="clear: both; float: right;"></div><div id="gsDropboxExtender-listbox-popup"><a id="gsDropboxExtenderListBoxClose" class="gsDropboxExtenderPopupClose">x</a><h1>Add List</h1><div><ul id="gsDropboxExtender-listbox-unordered"></ul><ol id="gsDropboxExtender-listbox-ordered"></ol><br /></div><div><div style="clear: both; height: 20px;"><label style="float: left;">Item: </label><input id="gsDropboxExtenderListBoxTextBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><br /><input type="submit" tabindex="4" value="Add Item" class="button" name="Submit" id="gsDropboxExtenderListBoxAddItem" style="clear: both; float: right;"><br /><br /><input type="submit" tabindex="4" value="Ok" class="button" name="Submit" id="gsDropboxExtenderListBoxOk" style="clear: both; float: right;"></div>');
+$('head').append('<style type="text/css" charset="utf-8">#gsDropboxExtender-anchor-popup{display:none;position:fixed;height:200px;width:408px;background:#fff;border:2px solid #cecece;z-index:51;padding:12px;font-size:13px;}#gsDropboxExtender-listbox-popup{display:none;position:fixed;height:200px;width:408px;background:#fff;border:2px solid #cecece;z-index:51;padding:12px;font-size:13px;}#gsDropboxExtender-anchor-popup h1, #gsDropboxExtender-listbox-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}.gsDropboxExtenderPopupClose:hover{cursor: pointer;}.gsDropboxExtenderPopupClose{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}#gsDropboxExtender-listbox-unordered, #gsDropboxExtender-listbox-ordered{margin-left: 20px;}</style>');
+$('body').append('<div id="gsDropboxExtender-anchor-popup"><a id="gsDropboxExtenderAnchorClose" class="gsDropboxExtenderPopupClose">x</a><h1>Add Link</h1><br /><br /><div><div style="clear: both; height: 20px;"><label style="float: left;">Title: </label><input id="gsDropboxExtenderAnchorTextBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><div style="clear: both; height: 20px;"><label style="float: left;">Url: </label><input id="gsDropboxExtenderAnchorUrlBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><br /><input type="submit" tabindex="4" value="Add Link" class="button" name="Submit" id="gsDropboxExtenderAnchorAddLink" style="clear: both; float: right;"></div>');
+$('body').append('<div id="gsDropboxExtender-listbox-popup"><a id="gsDropboxExtenderListBoxClose" class="gsDropboxExtenderPopupClose">x</a><h1>Add List</h1><div><ul id="gsDropboxExtender-listbox-unordered"></ul><ol id="gsDropboxExtender-listbox-ordered"></ol><br /></div><div><div style="clear: both; height: 20px;"><label style="float: left;">Item: </label><input id="gsDropboxExtenderListBoxTextBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><br /><input type="submit" tabindex="4" value="Add Item" class="button" name="Submit" id="gsDropboxExtenderListBoxAddItem" style="clear: both; float: right;"><br /><br /><input type="submit" tabindex="4" value="Ok" class="button" name="Submit" id="gsDropboxExtenderListBoxOk" style="clear: both; float: right;"></div>');
 
 //Append the posting form if necessary
 if ($('form#postform:first').length == 0) {
@@ -697,13 +698,12 @@ function showListBoxPopUp(_listType) {
 	console.log('popup width: ' + popupWidth);
 
 	$("#gsDropboxExtender-listbox-popup").css({
-		"position": "fixed",
+		//"position": "fixed",
 		"top": windowHeight / 2 - popupHeight / 2,
 		"left": windowWidth / 2 - popupWidth / 2
 	});
 
-	//TODO add #modicon-screen-overlay to this
-	$('#gsDropboxExtender-listbox-popup').show();
+	$('#gsDropboxExtender-listbox-popup, #modicon-screen-overlay').show();
 }
 
 function hideListBoxPopUp() {
