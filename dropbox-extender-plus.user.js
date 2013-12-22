@@ -4,7 +4,7 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.12.12pre1a
+// @version 2013.12.22pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
@@ -14,10 +14,7 @@
 // ==/UserScript==
 
 //Set global variables
-var day = new Date(), pageUrl = getPageUrl(), settingsVisible = false;
-var date = {
-	month: day.getMonth()
-};
+var pageUrl = getPageUrl(), settingsVisible = false;
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -793,12 +790,10 @@ $('div#user-threads ol li').each(function(evt) {
 
 		var PageNumber = Math.ceil(PostCount / TopicPageRecordLimit);
 
-		if (PageNumber > 1) {
+		if (PageNumber > 1)
 			$(FreshnessSpan).html("<a href='" + PostUrl + "&page=" + PageNumber + "#latest'>" + $(FreshnessSpan).text() + "</a>");
-		} else {
+		else
 			$(FreshnessSpan).html("<a href='" + PostUrl + "#latest'>" + $(FreshnessSpan).text() + "</a>");
-		}
-
 	});
 });
 
@@ -872,29 +867,23 @@ function insertSelectedQuote(TextToQuote, PostAuthorDetails) {
 	}
 }
 
-//Function for getting the selected text for quoting
+//Get selected test for quoting
 function getSelectedText() {
-	if (window.getSelection) {
+	if (window.getSelection)
 		return SelectedText = window.getSelection();
-	} else if (document.selection) {
+	else if (document.selection)
 		return SelectedText = document.selection.createRange().text;
-	}
 }
 
 /*
  * Liveness check
  * Check for a pulse
  */
-window.onload = function() {
-	$('#gsDropboxExtender-nav').append('<span>Pulse:&nbsp;&nbsp;&nbsp;<span id="heartbeatpulse">#</span></span>');
-	pulse();
-}
+$('#gsDropboxExtender-nav').append('<span>Pulse: <span id="pulse">#</span></span>');
+setInterval(pulse, 2000);
 function pulse() {
+	$('#pulse').css('visibility', 'hidden');
 	setTimeout(function() {
-		$('#heartbeatpulse').css('visibility', 'hidden');
-		setTimeout(function() {
-			$('#heartbeatpulse').css('visibility', 'visible');
-			pulse();
-		}, 1000);
+		$('#pulse').css('visibility', 'visible');
 	}, 1000);
 }
