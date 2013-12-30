@@ -1,12 +1,18 @@
-#forum-mod-icons
-Adds a Nyan Cat icon to the forum Super Users complete with animation, and tweaks many other aspects of the forums
+#Dropbox Forum Extender+
+Beefs up forum functionality, and makes it much easier to use
 
 ##How to Install
-To install the script, simply download the ZIP, and install the user.js file of your choice as a Greasemonkey plugin just like you would any other. Alternately, you can copy and paste the source or use the RAW link to the file.
+To install the script, simply download the ZIP, and install the user.js file of your choice as a Greasemonkey plugin just like you would any other. Alternatively, you can copy and paste the source or use the RAW link to the file.
 
 ##Features
+###Post Quoting
+If you need to quote someone on something, it's made easy to quote part of a post, or the whole post, and automatically get author information.
+
+###Easy post markup links
+The forums allow a bit of HTML markup. Adding this markup is now easier than ever with things like lists or links.
+
 ###Closed Thread Alerts
-Some themes hide closed notifications by default. Now, no matter the theme, closed threads will be indicated as such on the front page.
+Some bbPress themes hide closed notifications by default. Now, no matter the theme, closed threads will be indicated as such on the front page.
 
 ###Super User Icons
 Super Users, even when also Pro users, don't get icons by default. Fixed! You can now choose between tons of icons for the Super Users.
@@ -18,15 +24,15 @@ Threads on forum pages and the front page are automatically highlighted based on
 If you're following a stable or experimental build thread, the script will detect when it's no longer sticky, and automatically find the newest one for you.
 
 ###Super User Post Highlighting
-Super Users offer in-depth information and solutions. Their posts are highlighted in gold on threads. There's also built-in throttling to disable them if they exceed a certain percentage of posts (to avoid an entirely gold page).
+Super Users, knowing what they do, are able to offer in-depth information and solutions. Their posts are highlighted in gold on threads. There's also built-in throttling to disable them if they exceed a certain percentage of posts (to avoid an entirely gold page).
 
 ###Forum Regular Highlighting
-Forum regulars besides the Super Users are often on the forums as well, and provide useful information as well. Their posts are automatically highlighted in green.
+Forum regulars besides the Super Users are often on the forums as well, and provide useful information. Their posts are automatically highlighted in green.
 
 ###Post Title Hiding
-Let's face it. The post title box just gets in the way, and only does anything if you create a new thread. It will automatically be disabled unless you're creating a new thread.
+Let's face it. The post title box just gets in the way, and only does anything if you create a new thread. Now, unless you're creating a new thread, it's automatically hidden.
 
-###Dropbox Integration
+###Dropbox API Integration
 You must be authenticated with Dropbox to use the preferences and post drafting, but they sync to all of your computers via the Dropbox Datastore API.
 
 ###Settings Panel
