@@ -7,8 +7,8 @@
 // @version 2.1.0
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
-// @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/forum-extender-plus.user.js
-// @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/forum-extender-plus.user.js
+// @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
+// @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @grant GM_xmlhttpRequest
 // ==/UserScript==
 
