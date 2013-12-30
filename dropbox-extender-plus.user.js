@@ -4,9 +4,8 @@
 // @description Gives Dropbox Forum Super Users icons, and adds a bit more style and functionality to the forums
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2013.12.22pre1a
+// @version 2013.12.30pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
-// @require https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox-extender-plus.user.js
 // @updateURL https://github.com/DBMods/forum-mod-icons/raw/master/dropbox-extender-plus.user.js
@@ -568,9 +567,6 @@ function getRandomNumber() {
 
 /*
  * Begin Rchard's Forum Extender Stuff
- *
- * TODO list
- * Fix edit.php markup not working
  */
 
 var Signature = "Set your custom signature here - use \n for new lines";
@@ -588,7 +584,7 @@ $('body').append('<div id="gsDropboxExtender-anchor-popup"><a id="gsDropboxExten
 $('body').append('<div id="gsDropboxExtender-listbox-popup"><a id="gsDropboxExtenderListBoxClose" class="gsDropboxExtenderPopupClose">x</a><h1>Add List</h1><div><ul id="gsDropboxExtender-listbox-unordered"></ul><ol id="gsDropboxExtender-listbox-ordered"></ol><br /></div><div><div style="clear: both; height: 20px;"><label style="float: left;">Item: </label><input id="gsDropboxExtenderListBoxTextBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><br /><input type="submit" tabindex="4" value="Add Item" class="button" name="Submit" id="gsDropboxExtenderListBoxAddItem" style="clear: both; float: right;"><br /><br /><input type="submit" tabindex="4" value="Ok" class="button" name="Submit" id="gsDropboxExtenderListBoxOk" style="clear: both; float: right;"></div>');
 
 //Append the posting form if necessary
-if ($('form#postform:first').length == 0) {
+if (pageUrl == 'topic.php' && $('form#postform:first').length == 0) {
 	var PostFormPageUrl = $('h2.post-form a:first').attr('href');
 	var PostFormPageData = $.get(PostFormPageUrl, function(data) {
 		$('div#main').append($(data).find('form#postform:first'));
@@ -602,7 +598,6 @@ if ($('form#postform:first').length == 0) {
 	addMarkupLinks();
 
 function addMarkupLinks() {
-	//Add the quote links to the posts
 	$('.poststuff').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderQuoteSelected">quote selected</a> - <a href="javascript:void(0)" class="gsDropboxExtenderQuotePost">quote post</a>');
 	$('p.submit').append('<span style="float: left;"> - <a href="javascript:void(0)" class="gsDropboxExtenderAnchorSelected">a</a> - <a href="javascript:void(0)" class="gsDropboxExtenderBoldSelected">bold</a> - <a href="javascript:void(0)" class="gsDropboxExtenderItalicSelected">italic</a> - <a href="javascript:void(0)" class="gsDropboxExtenderCodeSelected">code</a> - <a href="javascript:void(0)" class="gsDropboxExtenderOrderedListInsert">ordered list</a> - <a href="javascript:void(0)" class="gsDropboxExtenderUnorderedListInsert">unordered list</a> - <a href="javascript:void(0)" class="gsDropboxExtenderSignatureInsert">custom signature</a></span>');
 }
@@ -744,11 +739,9 @@ $('table#latest').each(function(evt) {
 			if (PostCount / TopicPageRecordLimit > 1) {
 				var PageNumber = Math.ceil(PostCount / TopicPageRecordLimit);
 				$(PostCountCell).html("<a href='" + PostUrl + "&page=" + PageNumber + "#latest'>" + $(PostCountCell).text() + "</a>");
-			} else {
+			} else
 				$(PostCountCell).html("<a href='" + PostUrl + "#latest'>" + $(PostCountCell).text() + "</a>");
-			}
 		}
-
 	});
 });
 
