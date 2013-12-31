@@ -2,6 +2,8 @@
 
 
 Dropbox Forum Mod Icons Changelog
+-----2.1.0-----
++ Merged Richard P's Forum Extender into script
 
 -----2013.11.21pre1a-----
 - Removed snippets to fix latency on slow connections
