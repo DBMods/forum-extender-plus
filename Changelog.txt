@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.1.2-----
+* Fixed broken quoting
+
 -----2.1.1-----
 * Fixed image links in quoting
 
