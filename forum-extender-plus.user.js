@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.1.1
+// @version 2.1.2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -798,9 +798,9 @@ $('div#user-threads ol li').each(function(evt) {
 * Generic functions
 */
 
-//Get post author markup
+//Get post author markup TODO: Remove &nbsp; on Pro users
 function getPostAuthorDetails(postEventTarget) {
-	return "<strong>" + $(postEventTarget).parent().parent().parent().find(".threadauthor").eq(0).find('strong').eq(0).clone().find('img').remove().end().replace('&nbsp;', '').html() + "</strong> scribbled:<br /><br />";
+	return "<strong>" + $(postEventTarget).parent().parent().parent().find(".threadauthor").eq(0).find('strong').eq(0).clone().find('img').remove().end().html() + "</strong> scribbled:<br /><br />";
 }
 
 //Insert markup at required position
