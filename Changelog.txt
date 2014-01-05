@@ -3,6 +3,12 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.1.4-----
++ Added messaging system
+
+-----2.1.3 (beta only)-----
++ Testing messaging system
+
 -----2.1.2-----
 * Fixed broken quoting
 

@@ -8,7 +8,10 @@ To install the script, simply download the ZIP, and install the user.js file of 
 ###Post Quoting
 If you need to quote someone on something, it's made easy to quote part of a post, or the whole post, and automatically get author information.
 
-###Easy post markup links
+###Messaging System
+If you have something to say to a user, you can now message them.
+
+###Easy Post Markup Links
 The forums allow a bit of HTML markup. Adding this markup is now easier than ever with things like lists or links.
 
 ###Closed Thread Alerts

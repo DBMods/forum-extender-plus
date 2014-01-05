@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.1.2
+// @version 2.1.4
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -14,6 +14,7 @@
 
 //Set global variables
 var pageUrl = getPageUrl(), settingsVisible = false;
+var scriptPage = (pageUrl == 'forums.dropbox.com' && window.location.href.indexOf('?extender-page=') > -1) ? window.location.href.split('?extender-page=')[1] : undefined;
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -50,6 +51,10 @@ highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, 96
 highlightThread(color.green, 1);
 highlightThread(color.gold, 2);
 highlightThread(color.lightRed, 3);
+
+//Set up special pages
+if (scriptPage)
+	processSpecialPages();
 
 navBar();
 
@@ -378,6 +383,10 @@ function navBar() {
 			});
 		}
 	});
+	$('#gsDropboxExtender-nav').append('<span id="msgchk"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/check-message.php" method="post"><input type="hidden" name="returnto" value="' + window.location.href + '" /><input type="hidden" name="userid" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /></form><a href="javascript:void(0)" id="chkmsgbtn">Check Messages</a></span>');
+	$('#chkmsgbtn').click(function(){
+		$('#msgchk form').submit();
+	});
 }
 
 //Highlight forum threads based on post count
@@ -602,9 +611,17 @@ if (pageUrl == 'topic.php' && $('form#postform:first').length == 0) {
 	addMarkupLinks();
 
 function addMarkupLinks() {
-	$('.poststuff').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderQuoteSelected">quote selected</a> - <a href="javascript:void(0)" class="gsDropboxExtenderQuotePost">quote post</a>');
+	$('.poststuff').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderQuoteSelected">quote selected</a> - <a href="javascript:void(0)" class="gsDropboxExtenderQuotePost">quote post</a> - <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">message user</a>');
 	$('p.submit').append('<span style="float: left;"> - <a href="javascript:void(0)" class="gsDropboxExtenderAnchorSelected">a</a> - <a href="javascript:void(0)" class="gsDropboxExtenderBoldSelected">bold</a> - <a href="javascript:void(0)" class="gsDropboxExtenderItalicSelected">italic</a> - <a href="javascript:void(0)" class="gsDropboxExtenderCodeSelected">code</a> - <a href="javascript:void(0)" class="gsDropboxExtenderOrderedListInsert">ordered list</a> - <a href="javascript:void(0)" class="gsDropboxExtenderUnorderedListInsert">unordered list</a> - <a href="javascript:void(0)" class="gsDropboxExtenderSignatureInsert">custom signature</a></span>');
 }
+
+//Message users
+$('.gsDropboxExtenderMessageUser').click(function(evt) {
+	console.log('Message ' + $('#header .login a:first').attr('href').split('id=')[1] + ' ---> ' + getUserId(evt.target));
+	getMessageForm();
+	$('#gsDropboxExtenderMsgTo').val(getUserId(evt.target));
+	$('#gsDropboxExtenderMsgFrom').val($('#header .login a:first').attr('href').split('id=')[1]);
+});
 
 //Quote current post
 $('.gsDropboxExtenderQuotePost').click(function(evt) {
@@ -750,7 +767,7 @@ $('table#latest').each(function(evt) {
 });
 
 //Take us to last topic on page
-//Deprecated unil further debugging FIXME
+//Deprecated until further debugging FIXME
 if (0 === 1 && window.location.href.indexOf("#latest") != -1)
 	$('html,body').animate({
 		scrollTop: $('#' + $("ol#thread li:last").attr("id")).offset().top
@@ -798,9 +815,18 @@ $('div#user-threads ol li').each(function(evt) {
 * Generic functions
 */
 
+//Get message form
+function getMessageForm() {
+	$('#wrapper').append('<form id="gsDropboxExtenderMessageForm" action="http://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:500px" placeholder="Recipient"/><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" /><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:500px" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + window.location.href + '" /><button type="submit" id="gsDropboxExtenderMsgSubmit">Send</button></form>');
+}
+
 //Get post author markup TODO: Remove &nbsp; on Pro users
 function getPostAuthorDetails(postEventTarget) {
 	return "<strong>" + $(postEventTarget).parent().parent().parent().find(".threadauthor").eq(0).find('strong').eq(0).clone().find('img').remove().end().html() + "</strong> scribbled:<br /><br />";
+}
+
+function getUserId(postEventTarget) {
+	return $(postEventTarget).parent().parent().parent().find(".threadauthor").eq(0).find('a[href^="https://forums.dropbox.com/profile.php"]').eq(0).attr('href').split('id=')[1];
 }
 
 //Insert markup at required position
