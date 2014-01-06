@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.1.7-----
++ Added blockquote to the post markup
+
 -----2.1.6-----
 * Fixed naming conflict
 
