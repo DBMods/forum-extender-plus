@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.1.5
+// @version 2.1.6
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -104,6 +104,24 @@ $('.search').css({
 	'position': 'static'
 });
 $('#main').css('clear', 'both');
+
+//Periodically check for messages
+function messageCheck() {
+	GM_xmlhttpRequest({
+		method: 'GET',
+		url: 'http://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1],
+		onload: function(response) {
+			var resp = response.responseText;
+			if(resp.length == 0)
+				$('#gsDropboxExtenderMsgCounter').html('');
+			else
+				$('#gsDropboxExtenderMsgCounter').html(' (' + resp.length + ')');
+		}
+	});
+	setTimeout(function() {
+		messageCheck();
+	}, 60000);
+}
 
 //Add nav bar
 function navBar() {
@@ -383,10 +401,11 @@ function navBar() {
 			});
 		}
 	});
-	$('#gsDropboxExtender-nav').append('<span id="msgchk"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/check-message.php" method="post"><input type="hidden" name="returnto" value="' + window.location.href + '" /><input type="hidden" name="to" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /></form><a href="javascript:void(0)" id="chkmsgbtn">Check Messages</a></span>');
-	$('#chkmsgbtn').click(function(){
-		$('#msgchk form').submit();
+	$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/check-message.php" method="post"><input type="hidden" name="returnto" value="' + window.location.href + '" /><input type="hidden" name="to" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
+	$('#gsDropboxExtenderMessageLink').click(function() {
+		$('#gsDropboxExtenderMessageContainer form').submit();
 	});
+	messageCheck();
 }
 
 //Highlight forum threads based on post count
@@ -573,6 +592,10 @@ function versionSlug(ver) {
 function getRandomNumber() {
 	return 4;
 	//Chosen by fair dice roll. Guaranteed to be random.
+}
+
+function getMessageForm() {
+	$('#wrapper').append('<form id="gsDropboxExtenderMessageForm" action="http://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:500px" placeholder="Recipient"/><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" /><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:500px" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + window.location.href + '" /><button type="submit" id="gsDropboxExtenderMsgSubmit">Send</button></form>');
 }
 
 /*
@@ -814,11 +837,6 @@ $('div#user-threads ol li').each(function(evt) {
 /*
 * Generic functions
 */
-
-//Get message form
-function getMessageForm() {
-	$('#wrapper').append('<form id="gsDropboxExtenderMessageForm" action="http://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:500px" placeholder="Recipient"/><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" /><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:500px" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + window.location.href + '" /><button type="submit" id="gsDropboxExtenderMsgSubmit">Send</button></form>');
-}
 
 //Get post author markup TODO: Remove &nbsp; on Pro users
 function getPostAuthorDetails(postEventTarget) {

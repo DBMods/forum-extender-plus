@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.1.6-----
+* Fixed naming conflict
+
 -----2.1.5-----
 * Message deleting bugfix
 
