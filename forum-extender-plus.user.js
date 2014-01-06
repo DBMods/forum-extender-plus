@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.1.8
+// @version 2.1.9
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -401,7 +401,7 @@ function navBar() {
 			});
 		}
 	});
-	$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/check-message.php" method="post"><input type="hidden" name="returnto" value="' + window.location.href + '" /><input type="hidden" name="to" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span><span id="gsDropboxExtenderMessageStats><a href="http://www.techgeek01.com/dropboxextplus/msg-stats.php" target="_blank">Message Stats</a></span>');
+	$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/check-message.php" method="post"><input type="hidden" name="returnto" value="' + window.location.href + '" /><input type="hidden" name="to" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
 	$('#gsDropboxExtenderMessageLink').click(function() {
 		$('#gsDropboxExtenderMessageContainer form').submit();
 	});

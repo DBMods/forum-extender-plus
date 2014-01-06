@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.1.9-----
+- Removed buggy stats
+
 -----2.1.8-----
 # Redid message counter
 + Added message stats
