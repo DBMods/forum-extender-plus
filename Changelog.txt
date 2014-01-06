@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.1.5-----
+* Message deleting bugfix
+
 -----2.1.4-----
 + Added messaging system
 
