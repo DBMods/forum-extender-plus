@@ -3,6 +3,9 @@
 
 Dropbox Forum Mod Icons Changelog
 
+-----2.1.10-----
+# Moved message form to fancy window
+
 -----2.1.9-----
 - Removed buggy stats
 
