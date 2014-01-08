@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.0
+// @version 2.2.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -14,7 +14,6 @@
 
 //Set global variables
 var pageUrl = getPageUrl(), settingsVisible = false;
-var scriptPage = (pageUrl == 'forums.dropbox.com' && window.location.href.indexOf('?extender-page=') > -1) ? window.location.href.split('?extender-page=')[1] : undefined;
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -55,10 +54,6 @@ highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, 96
 highlightThread(color.green, 1);
 highlightThread(color.gold, 2);
 highlightThread(color.lightRed, 3);
-
-//Set up special pages
-if (scriptPage)
-	processSpecialPages();
 
 navBar();
 
@@ -124,7 +119,7 @@ function messageCheck() {
 	});
 	setTimeout(function() {
 		messageCheck();
-	}, 60000);
+	}, 20000);
 }
 
 //Add nav bar
@@ -771,25 +766,6 @@ function showListBoxPopUp(_listType) {
 
 function hideListBoxPopUp() {
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtender-listbox-popup').hide();
-}
-
-function showAnchorPopUp() {
-	var windowWidth = document.documentElement.clientWidth;
-	var windowHeight = document.documentElement.clientHeight;
-	var popupHeight = $("#gsDropboxExtender-anchor-popup").height();
-	var popupWidth = $("#gsDropboxExtender-anchor-popup").width();
-
-	$("#gsDropboxExtender-anchor-popup").css({
-		"position": "fixed",
-		"top": windowHeight / 2 - popupHeight / 2,
-		"left": windowWidth / 2 - popupWidth / 2
-	});
-
-	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtender-anchor-popup').show();
-}
-
-function hideAnchorPopUp() {
-	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtender-anchor-popup').hide();
 }
 
 /*
