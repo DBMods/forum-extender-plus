@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.1
+// @version 2.2.2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -45,7 +45,7 @@ if (pageUrl == 'topic.php') {
 }
 
 if (pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php')
-	$('#latest tr.closed span.label.closed').show();
+	$('#latest tr.closed span.label').show();
 
 //Highlight posts by forum regulars green
 highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, 96972, color.green);
@@ -125,10 +125,10 @@ function messageCheck() {
 //Add nav bar
 function navBar() {
 	//Add prerequsites
-	$('body').append('<div id="gsDropboxExtender-nav"><img id="gsDropboxExtender-option-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="gsDropboxExtender-option-popup" style="position:fixed" />');
+	$('body').append('<div id="gsDropboxExtender-nav"><img id="gsDropboxExtenderOption-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="gsDropboxExtenderOption-popup" style="position:fixed" />');
 	$('body').prepend('<div id="gsDropboxExtender-nav-slideout-container" />');
 	$('body').css('padding-bottom', '31px');
-	$('head').append('<style type="text/css">#gsDropboxExtender-nav > span{margin-left: 20px}#gsDropboxExtender-nav{position: fixed;bottom: 0;height: 30px;border-top: 1px solid #aaf;width: 100%;line-height: 30px;padding: 0 0 0 105px;background: #fff;z-index: 10}#gsDropboxExtender-nav-slideout-container{margin: 0 auto;border-bottom: 1px solid #ddd}#gsDropboxExtender-nav-slideout-container > *{list-style-type: none;margin: 30px auto;width: 800px;text-align: center}#gsDropboxExtender-nav > span:hover{cursor: pointer}#gsDropboxExtender-option-popup .clear{clear: both}#gsDropboxExtender-option-popup div.left{float: left;width: 50px}#gsDropboxExtender-option-popup div.right{float: right;padding-left: 10px;width: 50%;border-left: 1px solid #ddd}#gsDropboxExtender-option-popup{display: none;position: fixed;width: 600px;height: 225px;background: #fff;border: 2px solid #cecece;z-index: 200;padding: 12px;font-size: 13px}#gsDropboxExtender-option-popup h1{text-align: left;color: #6FA5FD;font-size: 22px;font-weight: 700;border-bottom: 1px dotted #D3D3D3;padding-bottom: 2px;margin-bottom: 20px}#gsDropboxExtender-option-trigger:hover, #gsDropboxExtender-option-close:hover{cursor: pointer}#gsDropboxExtender-option-close{font-size: 14px;line-height: 14px;right: 6px;top: 4px;position: absolute;color: #6fa5fd;font-weight: 700;display: block}</style>');
+	$('head').append('<style type="text/css">#gsDropboxExtender-nav > span{margin-left: 20px}#gsDropboxExtender-nav{position: fixed;bottom: 0;height: 30px;border-top: 1px solid #aaf;width: 100%;line-height: 30px;padding: 0 0 0 105px;background: #fff;z-index: 10}#gsDropboxExtender-nav-slideout-container{margin: 0 auto;border-bottom: 1px solid #ddd}#gsDropboxExtender-nav-slideout-container > *{list-style-type: none;margin: 30px auto;width: 800px;text-align: center}#gsDropboxExtender-nav > span:hover{cursor: pointer}#gsDropboxExtenderOption-popup .clear{clear: both}#gsDropboxExtenderOption-popup div.left{float: left;width: 50px}#gsDropboxExtenderOption-popup div.right{float: right;padding-left: 10px;width: 50%;border-left: 1px solid #ddd}#gsDropboxExtenderOption-popup{display: none;position: fixed;width: 600px;height: 225px;background: #fff;border: 2px solid #cecece;z-index: 200;padding: 12px;font-size: 13px}#gsDropboxExtenderOption-popup h1{text-align: left;color: #6FA5FD;font-size: 22px;font-weight: 700;border-bottom: 1px dotted #D3D3D3;padding-bottom: 2px;margin-bottom: 20px}#gsDropboxExtenderOption-trigger:hover, #gsDropboxExtenderOption-close:hover{cursor: pointer}#gsDropboxExtenderOption-close{font-size: 14px;line-height: 14px;right: 6px;top: 4px;position: absolute;color: #6fa5fd;font-weight: 700;display: block}</style>');
 
 	//Add list content
 	var resp;
@@ -297,16 +297,17 @@ function navBar() {
 					deleteTable(draftTable);
 					hoverMessage('Drafts trashed');
 				});
+				
 				//Manage preferences
-				$('#gsDropboxExtender-option-popup').html('<a id="gsDropboxExtender-option-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="y">Auto-collapse footer</input></div><div class="right">Reload front page every<select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every<select name="reloadForum"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every<select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br><select id="gsDropboxExtendericon" name="modIcon"><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflat.png">Dropbox Flat</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatgreen.png">Dropbox Flat Green</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatlime.png">Dropbox Flat Lime</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatgold.png">Dropbox Flat Gold</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatorange.png">Dropbox Flat Orange</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatred.png">Dropbox Flat Red</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatpink.png">Dropbox Flat Pink</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatpurple.png">Dropbox Flat Purple</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropbox.png">Dropbox</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxgreen.png">Dropbox Green</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxlime.png">Dropbox Lime</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxgold.png">Dropbox Gold</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxorange.png">Dropbox Orange</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxred.png">Dropbox Red</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxpink.png">Dropbox Pink</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxpurple.png">Dropbox Purple</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/goldstar.png">Gold Star</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select><img id="gsDropboxExtendericonpreview"/></div><br/><input type="button" tabindex="4" value="Save" id="gsDropboxExtender-option-save" style="clear:both;float:right;">');
+				$('#gsDropboxExtenderOption-popup').html('<a id="gsDropboxExtenderOption-close">x</a><h1>Mod Icons Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="y">Auto-collapse footer</input></div><div class="right">Reload front page every<select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every<select name="reloadForum"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every<select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br><select id="gsDropboxExtendericon" name="modIcon"><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflat.png">Dropbox Flat</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatgreen.png">Dropbox Flat Green</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatlime.png">Dropbox Flat Lime</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatgold.png">Dropbox Flat Gold</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatorange.png">Dropbox Flat Orange</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatred.png">Dropbox Flat Red</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatpink.png">Dropbox Flat Pink</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxflatpurple.png">Dropbox Flat Purple</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropbox.png">Dropbox</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxgreen.png">Dropbox Green</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxlime.png">Dropbox Lime</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxgold.png">Dropbox Gold</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxorange.png">Dropbox Orange</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxred.png">Dropbox Red</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxpink.png">Dropbox Pink</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/dropboxpurple.png">Dropbox Purple</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/forum-mod-icons/goldstar.png">Gold Star</option><option value="https://dropboxwiki-dropboxwiki.netdna-ssl.com/static/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select><img id="gsDropboxExtendericonpreview"/></div><br/><input type="button" tabindex="4" value="Save" id="gsDropboxExtenderOption-save" style="clear:both;float:right;">');
 
 				var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront', 'modIcon'];
 				var optionCheck = ['collapseFooter'];
-				$('#gsDropboxExtender-option-trigger').click(function() {
+				$('#gsDropboxExtenderOption-trigger').click(function() {
 					settingsVisible = true;
-					var optionHeight = $('#gsDropboxExtender-option-popup').height(), optionWidth = $('#gsDropboxExtender-option-popup').width(), pref;
+					var optionHeight = $('#gsDropboxExtenderOption-popup').height(), optionWidth = $('#gsDropboxExtenderOption-popup').width(), pref;
 
-					$('#gsDropboxExtender-option-popup').css({
+					$('#gsDropboxExtenderOption-popup').css({
 						'top': (document.documentElement.clientHeight - optionHeight) / 2,
 						'left': (document.documentElement.clientWidth - optionWidth) / 2
 					});
@@ -315,37 +316,37 @@ function navBar() {
 					for (i in optionDropdown) {
 						pref = prefTable.query({preference: optionDropdown[i]})[0];
 						if (pref) {
-							$('#gsDropboxExtender-option-popup [name="' + optionDropdown[i] + '"] option[value="' + pref.get('value') + '"]').attr('selected', 'selected');
+							$('#gsDropboxExtenderOption-popup [name="' + optionDropdown[i] + '"] option[value="' + pref.get('value') + '"]').attr('selected', 'selected');
 						}
 					}
 					$('#gsDropboxExtendericonpreview').attr('src', $('#gsDropboxExtendericon').val());
 					for (i in optionCheck) {
 						pref = prefTable.query({preference: optionCheck[i]})[0];
 						if (pref) {
-							$('#gsDropboxExtender-option-popup [name="' + optionCheck[i] + '"]').attr('checked', true);
+							$('#gsDropboxExtenderOption-popup [name="' + optionCheck[i] + '"]').attr('checked', true);
 						}
 					}
 
-					$('#gsDropboxExtender-screen-overlay, #gsDropboxExtender-option-popup').show();
+					$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-popup').show();
 				});
 				$('#gsDropboxExtendericon').change(function() {
 					$('#gsDropboxExtendericonpreview').attr('src', $('#gsDropboxExtendericon').val());
 				});
-				$('#gsDropboxExtender-option-close, #gsDropboxExtender-option-save').click(function() {
-					$('#gsDropboxExtender-screen-overlay, #gsDropboxExtender-option-popup').hide();
+				$('#gsDropboxExtenderOption-close, #gsDropboxExtenderOption-save').click(function() {
+					$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-popup').hide();
 				});
-				$('#gsDropboxExtender-option-save').click(function() {
+				$('#gsDropboxExtenderOption-save').click(function() {
 					var pref;
 					for (i in optionDropdown) {
 						pref = prefTable.query({
 							preference: optionDropdown[i]
 						});
 						if (pref.length > 0)
-							pref[0].set('value', $('#gsDropboxExtender-option-popup [name="' + optionDropdown[i] + '"]').val());
+							pref[0].set('value', $('#gsDropboxExtenderOption-popup [name="' + optionDropdown[i] + '"]').val());
 						else
 							prefTable.insert({
 								preference: optionDropdown[i],
-								value: $('#gsDropboxExtender-option-popup [name="' + optionDropdown[i] + '"]').val()
+								value: $('#gsDropboxExtenderOption-popup [name="' + optionDropdown[i] + '"]').val()
 							});
 					}
 					for (i in optionCheck) {
@@ -353,11 +354,11 @@ function navBar() {
 							preference: optionCheck[i]
 						});
 						if (pref.length > 0)
-							pref[0].set('value', $('#gsDropboxExtender-option-popup [name="' + optionCheck[i] + '"]').val() == 'y');
+							pref[0].set('value', $('#gsDropboxExtenderOption-popup [name="' + optionCheck[i] + '"]').val() == 'y');
 						else
 							prefTable.insert({
 								preference: optionCheck[i],
-								value: $('#gsDropboxExtender-option-popup [name="' + optionCheck[i] + '"]').val() == 'y'
+								value: $('#gsDropboxExtenderOption-popup [name="' + optionCheck[i] + '"]').val() == 'y'
 							});
 					}
 					if (pageUrl == 'topic.php')
@@ -778,10 +779,8 @@ $('table#latest').each(function(evt) {
 	$(this).find('tr').each(function(evt) {
 		var PostCountCell = $(this).find('td').eq(1);
 		var PostUrl = $(this).find('td').eq(0).find('a').eq(0).attr('href');
-
 		if ($(PostCountCell).html() != null) {
 			var PostCount = $(PostCountCell).text();
-
 			if (PostCount / TopicPageRecordLimit > 1) {
 				var PageNumber = Math.ceil(PostCount / TopicPageRecordLimit);
 				$(PostCountCell).html("<a href='" + PostUrl + "&page=" + PageNumber + "#latest'>" + $(PostCountCell).text() + "</a>");
@@ -851,26 +850,17 @@ function getUserId(postEventTarget) {
 
 //Insert markup at required position
 function insertAndMarkupTextAtCursorPosition(wrapper) {
-	var SelectedTextStart = $('#' + PostTextAreaName)[0].selectionStart;
-	var SelectedTextEnd = $('#' + PostTextAreaName)[0].selectionEnd;
-	var EndCursorPosition = SelectedTextStart;
-
-	var SelectedText = '';
-
+	var SelectedTextStart = $('#' + PostTextAreaName)[0].selectionStart, SelectedTextEnd = $('#' + PostTextAreaName)[0].selectionEnd, EndCursorPosition = SelectedTextStart, SelectedText = '';
 	if (SelectedTextEnd - SelectedTextStart > 0)
 		SelectedText = $('#' + PostTextAreaName).val().substring(SelectedTextStart, SelectedTextEnd);
-
 	insertTextAtCursorPosition('<' + wrapper + '>' + SelectedText + '</' + wrapper + '>');
-
 	if (SelectedText == '')
 		setCursorPositionInTextArea(PostTextAreaName, EndCursorPosition + 2 + wrapper.length);
 }
 
 //Insert text at required position
 function insertTextAtCursorPosition(TextToBeInserted) {
-	var SelectedTextStart = $('#' + PostTextAreaName)[0].selectionStart;
-	var SelectedTextEnd = $('#' + PostTextAreaName)[0].selectionEnd;
-
+	var SelectedTextStart = $('#' + PostTextAreaName)[0].selectionStart, SelectedTextEnd = $('#' + PostTextAreaName)[0].selectionEnd;
 	$('#' + PostTextAreaName).val($('#' + PostTextAreaName).val().substring(0, SelectedTextStart) + TextToBeInserted + $('#' + PostTextAreaName).val().substring(SelectedTextEnd));
 }
 

@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.2-----
+* Fixed closed thread notifications
+
 -----2.2.1-----
 - Removed unnecessary code
 # Changed message checking interval from 60 seconds to 20
