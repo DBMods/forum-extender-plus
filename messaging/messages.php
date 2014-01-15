@@ -24,11 +24,13 @@
 			require 'db-login.php';
 			if ($_POST['action'] == 'delete')
 				include 'delete-message.php';
+			else if ($_POST['action'] == 'compose')
+				include 'compose-message.php';
 			$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $_POST['to'] . "'");
 			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
 			while ($row = mysql_fetch_assoc($result)) {
 				echo '<p class="topline"><form method="post" action="messages.php"><input type="hidden" name="action" value="delete" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="to" type="hidden" value="' . $_POST['to'] . '" /><input type="hidden" name="from" value="' . $row['from'] . '" /><input type="hidden" name="msg" value="' . stripslashes($row['msg']) . '" /><button type="submit">Delete</button></form>';
-				echo '<form method="post" action="compose-message.php"><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="to" type="hidden" value="' . $row['from'] . '" /><input type="hidden" name="from" value="' . $_POST['to'] . '" /><button type="submit">Reply</button></form>';
+				echo '<form method="post" action="messages.php"><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="to" type="hidden" value="' . $row['from'] . '" /><input type="hidden" name="from" value="' . $_POST['to'] . '" /><button type="submit">Reply</button></form>';
 				echo 'From: <a href="https://forums.dropbox.com/profile.php?id=' . $row['from'] . '" target="_blank">' . $row['from'] . '</a><br>Message:<br>' . htmlspecialchars_decode(stripslashes($row['msg'])) . '</p>';
 			}
 			mysql_close($db);
