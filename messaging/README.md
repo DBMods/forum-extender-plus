@@ -1,0 +1,2 @@
+##Messaging
+Assume here that db-login.php, as required by some pages, is a file including login details for the database (which it is). This file is stored on the server, but not posted here, for obvious reasons.
