@@ -22,7 +22,6 @@
 		<div id='wrapper'>
 			<?php
 			require 'db-login.php';
-			mysql_select_db('dbextendermsg', $db);
 			if ($_POST['action'] && $_POST['action'] == 'delete') {
 				$result = mysql_query("DELETE FROM `msglist` WHERE `to` = '" . mysql_real_escape_string($_POST['to']) . "' AND `from` = '" . mysql_real_escape_string($_POST['from']) . "' AND `msg` = '" . mysql_real_escape_string(htmlspecialchars($_POST['msg'])) . "'");
 				echo '<p>Message deleted.</p>';
