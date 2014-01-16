@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.2.3
+// @version 2.2.3
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -665,7 +665,7 @@ function addMarkupLinks() {
 
 //Message users
 $('.gsDropboxExtenderMessageUser').click(function(evt) {
-	showModal('Message User', '<form id="gsDropboxExtenderMessageForm" action="http://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:500px" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + $('#header .login a:first').attr('href').split('id=')[1] + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:500px" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + window.location.href + '" /><a href="javascript:void(0)" id="gsDropboxExtenderModalAction">Send</a></form>', function() {
+	showModal('Message User', '<form id="gsDropboxExtenderMessageForm" action="http://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + $('#header .login a:first').attr('href').split('id=')[1] + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + window.location.href + '" /><br><a href="javascript:void(0)" id="gsDropboxExtenderModalAction">Send</a></form>', function() {
 		$('#gsDropboxExtenderModalContent form').submit();
 	});
 });
