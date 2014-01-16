@@ -1,2 +1,2 @@
 ##Messaging
-Assume here that db-login.php, as required by some pages, is a file including login details for the database (which it is). This file is stored on the server, but not posted here, for obvious reasons.
+When editing these files, please do not remove the require statements for db-login.php. This file is a "config" file of sorts that connects to the database. This allows the rest of the code to be posted here without revealing database information.
