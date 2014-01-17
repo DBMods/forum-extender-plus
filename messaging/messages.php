@@ -29,7 +29,7 @@
 				include 'compose-message.php';
 			else if ($action == 'send')
 				include 'send-message.php';
-            $timeOffset = $_POST['timeOffset'];
+			$timeOffset = $_POST['timeOffset'];
 			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
 			if ($_POST['for']) {
 				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $_POST['for'] . "' ORDER BY `time` DESC");
