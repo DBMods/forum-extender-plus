@@ -30,20 +30,18 @@
 			else if ($action == 'send')
 				include 'send-message.php';
 			$timeOffsetSeconds = $_POST['timeOffset']*3600;
-			if (substr($_POST['timeOffset'], -2) == ".5") {
+			if (substr($_POST['timeOffset'], -2) == ".5")
 				$timeOffsetSpecial = ":30";
-			} elseif (substr($_POST['timeOffset'], -2) == 75) {
+			else if (substr($_POST['timeOffset'], -2) == 75)
 				$timeOffsetSpecial = ":45";
-			} else {
+			else
 				$timeOffsetSpecial = ":00";
-			}
-			if ($_POST['timeOffset'] > 0) {
+			if ($_POST['timeOffset'] > 0)
 				$timeOffsetHours = "+ " . $_POST['timeOffset'];
-			} elseif ($_POST['timeOffset'] < 0) {
+			else if ($_POST['timeOffset'] < 0)
 				$timeOffsetHours = "- " . $_POST['timeOffset']*-1;
-			} elseif ($_POST['timeOffset'] == 0) {
+			else if ($_POST['timeOffset'] == 0)
 				$timeOffsetHours = "&plusmn; 0";
-			}
 			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
 			if ($_POST['for']) {
 				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $_POST['for'] . "' ORDER BY `time` DESC");
