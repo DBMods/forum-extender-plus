@@ -30,7 +30,7 @@
 			else if ($action == 'send')
 				include 'send-message.php';
 			$timeOffsetSeconds = $_POST['timeOffset']*3600;
-			if (substr($_POST['timeOffset'], -1) == 5) {
+			if (substr($_POST['timeOffset'], -2) == ".5") {
 				$timeOffsetSpecial = ":30";
 			} elseif (substr($_POST['timeOffset'], -2) == 75) {
 				$timeOffsetSpecial = ":45";
