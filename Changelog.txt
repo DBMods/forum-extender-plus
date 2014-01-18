@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.5.2-----
+# If you changed your Super User icon preferences, the Nyan Cat icon will not show before the new one loads
+
 -----2.2.5.1-----
 # Clicking on the overlay gray box while in a modal window now closes it, just like the close button
 
