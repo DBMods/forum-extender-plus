@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.5
+// @version 2.2.5.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -332,7 +332,7 @@ function navBar() {
 				$('#gsDropboxExtendericon').change(function() {
 					$('#gsDropboxExtendericonpreview').attr('src', $('#gsDropboxExtendericon').val());
 				});
-				$('#gsDropboxExtenderOption-close, #gsDropboxExtenderOption-save').click(function() {
+				$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-close, #gsDropboxExtenderOption-save').click(function() {
 					$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-popup').hide();
 					modalOpen = false;
 				});
@@ -576,7 +576,7 @@ function showModal(title, content, action) {
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModal').show();
 	modalOpen = true;
 
-	$('#gsDropboxExtenderModalClose').click(function() {
+	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModalClose').click(function() {
 		hideModal();
 	});
 	$('#gsDropboxExtenderModalAction').click(function() {
