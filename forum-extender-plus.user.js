@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.4.2
+// @version 2.2.5
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 //Set global variables
-var pageUrl = getPageUrl(), settingsVisible = false;
+var pageUrl = getPageUrl(), modalOpen = false;
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -280,7 +280,7 @@ function navBar() {
 					});
 					if (window.location.href != 'https://forums.dropbox.com/?new=1' && reloadIndex[pageType] && reloadDelay.length > 0 && reloadDelay[0].get('value') > 0) {
 						setTimeout(function() {
-							if (!settingsVisible && (pageUrl == 'topic.php') ? !$('#post_content').val() : true)
+							if (!modalOpen && (pageUrl == 'topic.php') ? !$('#post_content').val() : true)
 								document.location.reload();
 							else
 								reloadPage(pageType);
@@ -304,7 +304,7 @@ function navBar() {
 				var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront', 'modIcon'];
 				var optionCheck = ['collapseFooter'];
 				$('#gsDropboxExtenderOption-trigger').click(function() {
-					settingsVisible = true;
+					modalOpen = true;
 					var optionHeight = $('#gsDropboxExtenderOption-popup').height(), optionWidth = $('#gsDropboxExtenderOption-popup').width(), pref;
 
 					$('#gsDropboxExtenderOption-popup').css({
@@ -334,6 +334,7 @@ function navBar() {
 				});
 				$('#gsDropboxExtenderOption-close, #gsDropboxExtenderOption-save').click(function() {
 					$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-popup').hide();
+					modalOpen = false;
 				});
 				$('#gsDropboxExtenderOption-save').click(function() {
 					var pref;
@@ -363,7 +364,6 @@ function navBar() {
 					}
 					if (pageUrl == 'topic.php')
 						$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').find('img').attr('src', $('#gsDropboxExtendericon').val());
-					settingsVisible = false;
 					hoverMessage('Your settings have been saved.\n\nMost new settings won\'t take effect until the page is reloaded.');
 				});
 				//Manage drafts
@@ -574,6 +574,7 @@ function showModal(title, content, action) {
 	});
 
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModal').show();
+	modalOpen = true;
 
 	$('#gsDropboxExtenderModalClose').click(function() {
 		hideModal();
@@ -586,6 +587,7 @@ function showModal(title, content, action) {
 
 function hideModal() {
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModal').hide();
+	modalOpen = false;
 }
 
 function hoverMessage() {

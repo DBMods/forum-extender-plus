@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.5-----
+* Modal windows wouldn't prevent a page reload
+
 -----2.2.4.2-----
 # Timezone detection fixed
 
