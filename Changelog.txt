@@ -1,6 +1,12 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.4.2-----
+# Timezone detection fixed
+
+-----2.2.4.1-----
++ Time detection placeholder
+
 -----2.2.4-----
 * Future proofing
 
