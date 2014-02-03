@@ -31,6 +31,7 @@
 				include 'send-message.php';
 			$timeOffsetSeconds = $_POST['timeOffset'] * 60;
 			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
+			echo '<p><form action="messages.php" method="post"><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="context" type="hidden" value=""/><input name="to" type="hidden" value="" /><input type="hidden" name="from" value="' . $_POST['for'] . '" /><button type="submit">Compose</button></form></p>';
 			if ($_POST['for']) {
 				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $_POST['for'] . "' ORDER BY `time` DESC");
 				while ($row = mysql_fetch_assoc($result)) {
