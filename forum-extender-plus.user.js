@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.5.2
+// @version 2.2.5.3
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 //Set global variables
-var pageUrl = getPageUrl(), modalOpen = false;
+var pageUrl = getPageUrl(), modalOpen = false;console.log(modalOpen);
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -304,7 +304,7 @@ function navBar() {
 				var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront', 'modIcon'];
 				var optionCheck = ['collapseFooter'];
 				$('#gsDropboxExtenderOption-trigger').click(function() {
-					modalOpen = true;
+					modalOpen = true;console.log(modalOpen);
 					var optionHeight = $('#gsDropboxExtenderOption-popup').height(), optionWidth = $('#gsDropboxExtenderOption-popup').width(), pref;
 
 					$('#gsDropboxExtenderOption-popup').css({
@@ -334,7 +334,7 @@ function navBar() {
 				});
 				$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-close, #gsDropboxExtenderOption-save').click(function() {
 					$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-popup').hide();
-					modalOpen = false;
+					modalOpen = false;console.log(modalOpen);
 				});
 				$('#gsDropboxExtenderOption-save').click(function() {
 					var pref;
@@ -574,7 +574,7 @@ function showModal(title, content, action) {
 	});
 
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModal').show();
-	modalOpen = true;
+	modalOpen = true;console.log(modalOpen);
 
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModalClose').click(function() {
 		hideModal();
@@ -587,7 +587,7 @@ function showModal(title, content, action) {
 
 function hideModal() {
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModal').hide();
-	modalOpen = false;
+	modalOpen = false;console.log(modalOpen);
 }
 
 function hoverMessage() {
