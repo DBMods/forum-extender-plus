@@ -31,8 +31,8 @@
 				include 'send-message.php';
 			$timeOffsetSeconds = $_POST['timeOffset'] * 60;
 			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
-			echo '<p><form action="messages.php" method="post"><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="context" type="hidden" value=""/><input name="to" type="hidden" value="" /><input type="hidden" name="from" value="' . $_POST['for'] . '" /><button type="submit">Compose</button></form></p>';
 			if ($_POST['for']) {
+				echo '<p><form action="messages.php" method="post"><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="context" type="hidden" value=""/><input name="to" type="hidden" value="" /><input type="hidden" name="from" value="' . $_POST['for'] . '" /><button type="submit">Compose</button></form></p>';
 				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $_POST['for'] . "' ORDER BY `time` DESC");
 				while ($row = mysql_fetch_assoc($result)) {
 					echo '<p class="topline"><form method="post" action="messages.php"><input type="hidden" name="action" value="delete" /><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="time" type="hidden" value="' . $row['time'] . '" /><input name="for" type="hidden" value="' . $_POST['for'] . '" /><input type="hidden" name="from" value="' . $row['from'] . '" /><input type="hidden" name="msg" value="' . stripslashes($row['msg']) . '" /><button type="submit">Delete</button></form>';
