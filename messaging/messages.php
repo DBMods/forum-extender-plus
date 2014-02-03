@@ -25,15 +25,17 @@
 		<div id='wrapper'>
 			<?php
 			require 'db-login.php';
+			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
 			$action = $_POST['action'];
 			if ($action == 'delete')
 				include 'delete-message.php';
+			else if ($action == 'addressbook')
+				include 'address-book.php';
 			else if ($action == 'compose')
 				include 'compose-message.php';
 			else if ($action == 'send')
 				include 'send-message.php';
 			$timeOffsetSeconds = $_POST['timeOffset'] * 60;
-			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
 			if ($_POST['for']) {
 				echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="context" type="hidden" value=""/><input name="to" type="hidden" value="" /><input type="hidden" name="from" value="' . $_POST['for'] . '" /><button type="submit">Compose</button></form></p>';
 				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $_POST['for'] . "' ORDER BY `time` DESC");
