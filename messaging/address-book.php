@@ -7,14 +7,11 @@
 			<option value=''>Please Select a User</option>
 			<optgroup label='--Mods--'>
 				<option value='1618104'>Andy Y.</option>
-				<option value='175532'>Chris J.</option>
 				<option value='857279'>Nathan C.</option>
 				<option value='643099'>R.M.</option>
-				<option value='222573'>thightower</option>
 			</optgroup>
 			<optgroup label='--Regulars--'>
 				<option value='434127'>Rich R.</option>
-				<option value='6845'>Richard P.</option>
 			</optgroup>
 		</select>
 		<br>
