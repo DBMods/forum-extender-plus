@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.5.3
+// @version 2.2.5.4
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 //Set global variables
-var pageUrl = getPageUrl(), modalOpen = false;console.log(modalOpen);
+var pageUrl = getPageUrl(), modalOpen = false;
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -22,7 +22,8 @@ var color = {
 	red: '#ffd4d4',
 	lightRed: '#ffe9e9'
 }
-var userId = $('#header .login a:first').attr('href').split('profile.php?id=')[1];
+if ($('#header .login a').length > 1)
+	var userId = $('#header .login a:first').attr('href').split('profile.php?id=')[1];
 
 //Set up prerequisites for modal windows
 $("head").append('<style type="text/css">#gsDropboxExtenderModal{display:none;position:fixed;height:200px;width:408px;background:#FFFFFF;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px;}#gsDropboxExtenderModal h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}#gsDropboxExtenderModalClose:hover{cursor: pointer;}#gsDropboxExtenderModalClose{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}</style>');
@@ -304,7 +305,7 @@ function navBar() {
 				var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront', 'modIcon'];
 				var optionCheck = ['collapseFooter'];
 				$('#gsDropboxExtenderOption-trigger').click(function() {
-					modalOpen = true;console.log(modalOpen);
+					modalOpen = true;
 					var optionHeight = $('#gsDropboxExtenderOption-popup').height(), optionWidth = $('#gsDropboxExtenderOption-popup').width(), pref;
 
 					$('#gsDropboxExtenderOption-popup').css({
@@ -334,7 +335,7 @@ function navBar() {
 				});
 				$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-close, #gsDropboxExtenderOption-save').click(function() {
 					$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderOption-popup').hide();
-					modalOpen = false;console.log(modalOpen);
+					modalOpen = false;
 				});
 				$('#gsDropboxExtenderOption-save').click(function() {
 					var pref;
@@ -574,7 +575,7 @@ function showModal(title, content, action) {
 	});
 
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModal').show();
-	modalOpen = true;console.log(modalOpen);
+	modalOpen = true;
 
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModalClose').click(function() {
 		hideModal();
@@ -587,7 +588,7 @@ function showModal(title, content, action) {
 
 function hideModal() {
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModal').hide();
-	modalOpen = false;console.log(modalOpen);
+	modalOpen = false;
 }
 
 function hoverMessage() {
