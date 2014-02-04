@@ -14,6 +14,7 @@
 			</optgroup>
 			<optgroup label='--Regulars--'>
 				<option value='434127'>Rich R.</option>
+				<option value='6845'>Richard P.</option>
 			</optgroup>
 		</select>
 		<br>
