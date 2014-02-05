@@ -7,6 +7,8 @@
 			<option value=''>Please Select a User</option>
 			<optgroup label='--Mods--'>
 				<option value='1618104'>Andy Y.</option>
+				<option value='175532'>Chris J.</option>
+				<option value='30385'>Mark Mc</option>
 				<option value='857279'>Nathan C.</option>
 				<option value='643099'>R.M.</option>
 			</optgroup>
