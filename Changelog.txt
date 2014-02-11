@@ -1,6 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.5.7-----
+- Removed pulse completely
+# Made code faster and smaller
+
 -----2.2.5.6-----
 # 6.1% reduction in filesize, and 10.8% reduction in lines of code
 * Disabled pulse in production versions
