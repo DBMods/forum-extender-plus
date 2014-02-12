@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.5.9
+// @version 2.2.5.10
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -26,18 +26,16 @@ var color = {
 if ($('#header .login a').length > 1)
 	var userId = $('#header .login a:first').attr('href').split('profile.php?id=')[1];
 
-//Set up prerequisites for modal windows
+//Hover message and modal prerequisites
 $("head").append('<style type="text/css">#gsDropboxExtenderModal{display:none;position:fixed;height:200px;width:408px;background:#FFFFFF;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px;}#gsDropboxExtenderModal h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}#gsDropboxExtenderModalClose:hover{cursor: pointer;}#gsDropboxExtenderModalClose{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}</style>');
 $('body').append('<div id="gsDropboxExtender-screen-overlay" style="display:none;position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7;" /><div id="gsDropboxExtenderModal"><a id="gsDropboxExtenderModalClose">x</a><h1 id="gsDropboxExtenderModalTitle"></h1><br /><br /><div id="gsDropboxExtenderModalContent"></div>');
+$('body').prepend('<span id="gsDropboxExtender-message" style="display:none;border-width:1px;border-radius:5px;border-style:solid;position:fixed;top:10px;left:10px;padding:5px 10px;z-index:200" />');
 
 //Set up alerts
 var alertSummary;
 
 //Add footer
 $('#footer').append('<div style="text-align: center; font-size: 11px; clear:both;">Dropbox Forum Extender+ ' + versionSlug(GM_info.script.version) + '</div>');
-
-//Set up hover messages
-$('body').prepend('<span id="gsDropboxExtender-message" style="display:none;border-width:1px;border-radius:5px;border-style:solid;position:fixed;top:10px;left:10px;padding:5px 10px;z-index:200" />');
 
 //Modify Super User posts
 highlightPost('Super User', color.gold);
@@ -82,9 +80,8 @@ if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 
 
 //Fix UI for new semi-broken theme 10-8-2013
 $('#header').css('margin-top', '0');
-if (pageUrl == 'topic.php') {
+if (pageUrl == 'topic.php')
 	$('#topic-info').prepend('<br>').prepend($('#header .breadcrumb').clone());
-}
 $('#header .breadcrumb, #header .home').hide();
 $('.freshbutton-blue, #postformsub').css('background', '#2180ce');
 $('#header').append($('.search').clone());
@@ -109,11 +106,11 @@ $('#main').css('clear', 'both');
 //Add nav bar
 function navBar() {
 	//Add prerequsites
-	$('body').append('<div id="gsDropboxExtender-nav"><img id="gsDropboxExtenderOption-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="gsDropboxExtenderOption-popup" style="position:fixed" />');
+	$('body').append('<div id="gsDropboxExtender-nav"><img id="gsDropboxExtenderOption-trigger" src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></div><div id="gsDropboxExtenderOption-popup" style="position:fixed"><a id="gsDropboxExtenderOption-close">x</a><h1>Forum Extender+ Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="y">Auto-collapse footer</input><br><br><span id="deleteprefs">Trash Preferences</span><br><span id="deletedrafts">Trash Drafts</span></div><div class="right">Reload front page every<select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every<select name="reloadForum"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every<select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br><select id="gsDropboxExtendericon" name="modIcon"><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflat.png">Dropbox Flat</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatgreen.png">Dropbox Flat Green</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatlime.png">Dropbox Flat Lime</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatgold.png">Dropbox Flat Gold</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatorange.png">Dropbox Flat Orange</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatred.png">Dropbox Flat Red</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatpink.png">Dropbox Flat Pink</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatpurple.png">Dropbox Flat Purple</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropbox.png">Dropbox</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxgreen.png">Dropbox Green</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxlime.png">Dropbox Lime</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxgold.png">Dropbox Gold</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxorange.png">Dropbox Orange</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxred.png">Dropbox Red</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxpink.png">Dropbox Pink</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxpurple.png">Dropbox Purple</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/goldstar.png">Gold Star</option><option value="https://d13dii5qg1bety.cloudfront.net/static/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select><img id="gsDropboxExtendericonpreview"/><br/><input type="button" tabindex="4" value="Save" id="gsDropboxExtenderOption-save" style="clear:both;float:right;"></div>');
 	$('body').prepend('<div id="gsDropboxExtender-nav-slideout-container" />');
 	$('body').css('padding-bottom', '31px');
-	$('head').append('<style type="text/css">#gsDropboxExtender-nav>span{margin-left:20px}#gsDropboxExtender-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:10}#gsDropboxExtender-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#gsDropboxExtender-nav-slideout-container>*{list-style-type:none;margin:30px auto;width:800px;text-align:center}#gsDropboxExtender-nav>span:hover{cursor:pointer}#gsDropboxExtenderOption-popup .clear{clear:both}#gsDropboxExtenderOption-popup div.left{float:left;width:50px}#gsDropboxExtenderOption-popup div.right{float:right;padding-left:10px;width:50%;border-left:1px solid #ddd}#gsDropboxExtenderOption-popup{display:none;position:fixed;width:600px;height:225px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#gsDropboxExtenderOption-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#gsDropboxExtenderOption-trigger:hover,#gsDropboxExtenderOption-close:hover{cursor:pointer}#gsDropboxExtenderOption-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
-
+	$('head').append('<style type="text/css">#gsDropboxExtender-nav>span{margin-left:20px}#gsDropboxExtender-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #aaf;width:100%;line-height:30px;padding:0 0 0 105px;background:#fff;z-index:10}#gsDropboxExtender-nav-slideout-container{margin:0 auto;border-bottom:1px solid #ddd}#gsDropboxExtender-nav-slideout-container>*{list-style-type:none;margin:30px auto;width:800px;text-align:center}#gsDropboxExtender-nav>span:hover{cursor:pointer}#gsDropboxExtenderOption-popup .clear{clear:both}#gsDropboxExtenderOption-popup div.left{float:left;width:49%}#gsDropboxExtenderOption-popup div.right{float:right;padding-left:10px;width:49%;border-left:1px solid #ddd}#gsDropboxExtenderOption-popup{display:none;position:fixed;width:600px;height:225px;background:#fff;border:2px solid #cecece;z-index:200;padding:12px;font-size:13px}#gsDropboxExtenderOption-popup h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px}#gsDropboxExtenderOption-trigger:hover,#gsDropboxExtenderOption-close:hover{cursor:pointer}#gsDropboxExtenderOption-close{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block}</style>');
+	
 	//Add list content
 	var resp;
 	var profile = {
@@ -196,7 +193,6 @@ function navBar() {
 		});
 		if (client.isAuthenticated()) {
 			$('#dropboxlink').hide();
-			$('#gsDropboxExtender-nav').append('<span id="deleteprefs">Trash Preferences</span><span id="deletedrafts">Trash Drafts</span>');
 
 			client.getDatastoreManager().openDefaultDatastore(function(error, datastore) {
 				if (error) {
@@ -282,12 +278,9 @@ function navBar() {
 				});
 
 				//Manage preferences
-				$('#gsDropboxExtenderOption-popup').html('<a id="gsDropboxExtenderOption-close">x</a><h1>Forum Extender+ Options</h1><br/><br/><div class="left"><select name="theme"><optgroup label="Original Themes"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></optgroup><optgroup label="Custom Themes"><optgroup label="-- No Existing Custom Themes --"></optgroup></optgroup></select><br/><input type="checkbox" name="collapseFooter" value="y">Auto-collapse footer</input></div><div class="right">Reload front page every<select name="reloadFront"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload forum pages every<select name="reloadForum"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br/>Reload stickies every<select name="reloadSticky"><option value="0">Never</option><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option><option value="3600">1 hour</option></select><br><select id="gsDropboxExtendericon" name="modIcon"><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflat.png">Dropbox Flat</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatgreen.png">Dropbox Flat Green</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatlime.png">Dropbox Flat Lime</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatgold.png">Dropbox Flat Gold</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatorange.png">Dropbox Flat Orange</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatred.png">Dropbox Flat Red</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatpink.png">Dropbox Flat Pink</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxflatpurple.png">Dropbox Flat Purple</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropbox.png">Dropbox</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxgreen.png">Dropbox Green</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxlime.png">Dropbox Lime</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxgold.png">Dropbox Gold</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxorange.png">Dropbox Orange</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxred.png">Dropbox Red</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxpink.png">Dropbox Pink</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/dropboxpurple.png">Dropbox Purple</option><option value="https://d13dii5qg1bety.cloudfront.net/static/forum-mod-icons/goldstar.png">Gold Star</option><option value="https://d13dii5qg1bety.cloudfront.net/static/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select><img id="gsDropboxExtendericonpreview"/><br/><input type="button" tabindex="4" value="Save" id="gsDropboxExtenderOption-save" style="clear:both;float:right;">');
-
 				var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront', 'modIcon'];
 				var optionCheck = ['collapseFooter'];
 				$('#gsDropboxExtenderOption-trigger').click(function() {
-					console.log('Prefs');
 					modalOpen = true;
 					var optionHeight = $('#gsDropboxExtenderOption-popup').height(), optionWidth = $('#gsDropboxExtenderOption-popup').width(), pref;
 
@@ -390,10 +383,7 @@ function navBar() {
 			url: 'http://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1],
 			onload: function(response) {
 				var resp = response.responseText;
-				if (resp == '0')
-					$('#gsDropboxExtenderMsgCounter').html('');
-				else
-					$('#gsDropboxExtenderMsgCounter').html(' (' + resp + ')');
+				$('#gsDropboxExtenderMsgCounter').html(resp == '0' ? '' : (' (' + resp + ')'));
 			}
 		});
 	}, 20000);
@@ -455,7 +445,7 @@ function forumVersion(versionDate) {
 		$('#header a:first img').attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
 		$('#discussions').css('margin-left', '0');
 		$('#latest tr:not(:first, .nochange), .bb-root').css('background', '#f7f7f7');
-		$('#latest, .alt:not(.nochange)').css('background', '#fff');
+		$('#latest, .alt').css('background', '#fff');
 		$('#latest').css({
 			'width': '680px',
 			'border-top': '1px dotted #ccc'
@@ -503,10 +493,6 @@ function forumVersion(versionDate) {
 	}
 }
 
-/*
- * Helper functions
- */
-
 function highlightThread() {
 	var args = arguments;
 	$('#latest tr:not(.sticky, .super-sticky)').find('td:nth-child(2)').each(function() {
@@ -535,6 +521,10 @@ function highlightPost() {
 	}
 }
 
+/*
+ * Helper functions
+ */
+
 function showModal(title, content, action) {
 	$('#gsDropboxExtenderModalTitle').html(title);
 	$('#gsDropboxExtenderModalContent').html(content);
@@ -553,13 +543,8 @@ function showModal(title, content, action) {
 	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModal').show();
 	modalOpen = true;
 
-	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModalClose').click(function() {
-		hideModal();
-	});
-	$('#gsDropboxExtenderModalAction').click(function() {
-		hideModal();
-		action();
-	});
+	$('#gsDropboxExtender-screen-overlay, #gsDropboxExtenderModalClose, #gsDropboxExtenderModalAction').click(hideModal);
+	$('#gsDropboxExtenderModalAction').click(action);
 }
 
 function hideModal() {
@@ -670,9 +655,7 @@ $('.gsDropboxExtenderUnorderedListInsert').click(function() {
 $('.gsDropboxExtenderOrderedListInsert').click(function() {
 	showListBoxPopUp('o');
 });
-$('#gsDropboxExtenderListBoxClose').click(function() {
-	hideListBoxPopUp();
-});
+$('#gsDropboxExtenderListBoxClose').click(hideListBoxPopUp);
 $('#gsDropboxExtenderListBoxAddItem').click(function() {
 	if ($('#gsDropboxExtenderListBoxTextBox').val().length == 0)
 		return;
