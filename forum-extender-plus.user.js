@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.5.7
+// @version 2.2.5.8
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -454,18 +454,17 @@ function forumVersion(versionDate) {
 		$('#main, #header').css('width', '866px');
 		$('#header a:first img').attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
 		$('#discussions').css('margin-left', '0');
-		$('#forumlist-container').remove();
 		$('#latest tr:not(:first), .bb-root').css('background', '#f7f7f7');
 		$('#latest, .alt').css('background', '#fff');
 		$('#latest').css({
-			'width': '866px',
+			'width': '680px',
 			'border-top': '1px dotted #ccc'
 		});
 		$('.sticky, .super-sticky').css('background', '#deeefc');
 
 		//Add tag list and reorder elements
 		if (['forums.dropbox.com', 'forum.php'].indexOf(pageUrl) > -1) {
-			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'love', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
+			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
 			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap" /></div>');
 			for (var i = 0; i < tagList.length; i++) {
 				$('#frontpageheatmap').append('<a href="#" style="font-size: ' + ((Math.random() * 17) + 8) + 'px">' + tagList[i] + '</a>');
@@ -473,12 +472,11 @@ function forumVersion(versionDate) {
 			$('#frontpageheatmap a:not(:last)').append(' ');
 			$('#forumlist').attr('id', 'forumlist-temp');
 			$('#discussions').prepend('<h2>Forums</h2><table id="forumlist"><tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr></table><h2>Latest Discussions</h2>');
-			if ($('#forumlist-temp tr').length > 0)
-				for (var i = 1; i < 6; i++) {
-					select = $('#forumlist-temp tr:eq(' + i + ') td').html().split('<br>');
-					$('#forumlist').append('<tr class="bb-precedes-sibling bb-root"><td>' + select[0] + select[1] + '</td><td class="num">' + select[2].split(' topics')[0] + '</td><td class="num">' + select[2].split(' topics')[0] + '+</td></tr>');
-				}
-			$('#forumlist-temp').remove();
+			for (var i = 1; i < 6; i++) {
+				select = $('#forumlist-temp tr:eq(' + i + ') td').html().split('<br>');
+				$('#forumlist').append('<tr class="bb-precedes-sibling bb-root"><td>' + select[0] + select[1] + '</td><td class="num">' + select[2].split(' topics')[0] + '</td><td class="num">' + select[2].split(' topics')[0] + '+</td></tr>');
+			}
+			$('#forumlist-container').remove();
 		}
 
 		//Style elements

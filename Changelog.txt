@@ -1,6 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.5.8-----
+* Fixed a bunch of bugs pertaining to the original forum theme
+# Made code smaller
+
 -----2.2.5.7-----
 - Removed pulse completely
 # Made code faster and smaller
