@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.5.8
+// @version 2.2.5.9
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -454,8 +454,8 @@ function forumVersion(versionDate) {
 		$('#main, #header').css('width', '866px');
 		$('#header a:first img').attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
 		$('#discussions').css('margin-left', '0');
-		$('#latest tr:not(:first), .bb-root').css('background', '#f7f7f7');
-		$('#latest, .alt').css('background', '#fff');
+		$('#latest tr:not(:first, .nochange), .bb-root').css('background', '#f7f7f7');
+		$('#latest, .alt:not(.nochange)').css('background', '#fff');
 		$('#latest').css({
 			'width': '680px',
 			'border-top': '1px dotted #ccc'
@@ -512,7 +512,7 @@ function highlightThread() {
 	$('#latest tr:not(.sticky, .super-sticky)').find('td:nth-child(2)').each(function() {
 		var content = parseInt($(this).html(), 10);
 		if ((args.length == 2 && content == args[1]) || (content >= args[1] && content <= args[2]))
-			$(this).parent().css('background', args[0]);
+			$(this).parent().attr('class', 'nochange').css('background', args[0]);
 	});
 }
 
