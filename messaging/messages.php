@@ -27,6 +27,7 @@
 			require 'db-login.php';
 			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
 			$action = $_POST['action'];
+			$timeOffsetSeconds = $_POST['timeOffset'] * 60;
 			if ($action == 'delete')
 				include 'delete-message.php';
 			else if ($action == 'addressbook')
@@ -35,9 +36,10 @@
 				include 'compose-message.php';
 			else if ($action == 'send')
 				include 'send-message.php';
-			$timeOffsetSeconds = $_POST['timeOffset'] * 60;
+			else if ($action == 'showsent')
+				include 'show-sent.php';
 			if ($_POST['for']) {
-				echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input type="hidden" name="from" value="' . $_POST['for'] . '" /><button type="submit">Compose</button></form></p>';
+				echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input type="hidden" name="from" value="' . $_POST['for'] . '" /><button type="submit">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input type="hidden" name="from" value="' . $_POST['for'] . '" /><button type="submit">Show Sent Messages</button></form></p>';
 				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $_POST['for'] . "' ORDER BY `time` DESC");
 				while ($row = mysql_fetch_assoc($result)) {
 					echo '<p class="topline">';
