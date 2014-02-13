@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.5.10
+// @version 2.2.5.11
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -81,11 +81,12 @@ if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 
 //Fix UI for new semi-broken theme 10-8-2013
 $('#header').css('margin-top', '0');
 if (pageUrl == 'topic.php')
-	$('#topic-info').prepend('<br>').prepend($('#header .breadcrumb').clone());
-$('#header .breadcrumb, #header .home').hide();
+	$('#topic-info').prepend('<br>').prepend($('#header .breadcrumb').clone()).prepend('<a href="https://forums.dropbox.com">Forums</a> ');
+else if (pageUrl == 'forum.php')
+	$('#forumlist th').wrapInner('<a href="https://forums.dropbox.com" />');
 $('.freshbutton-blue, #postformsub').css('background', '#2180ce');
 $('#header').append($('.search').clone());
-$('#main .search').remove();
+$('#main .search, #header .breadcrumb, #header .home').remove();
 $('#forumlist-container').css('top', '0');
 $('.login').css({
 	'float': 'left',
@@ -427,7 +428,6 @@ function forumVersion(versionDate) {
 			'background': '#666',
 			'color': '#fff'
 		});
-		$('#forumlist th').html('Name');
 		$('#forumlist tr').eq(0).css({
 			'height': '25px',
 			'padding': 'none'
@@ -435,11 +435,13 @@ function forumVersion(versionDate) {
 
 		//Add and style headings
 		$('#discussions').prepend('<h2 class="forumheading">Latest Discussions</h2>');
-		$('#forumlist-container').prepend('<h2 class="forumheading">Forums</h2>');
+		$('#forumlist-container').prepend('<h2 class="forumheading">' + $('#forumlist th').html() + '</h2>');
 		$('.forumheading').css({
 			'border-bottom': '1px solid #ddd',
 			'padding-bottom': '6px'
 		});
+		
+		$('#forumlist th').html('Name');
 	} else if (versionDate == 'original') {
 		$('#main, #header').css('width', '866px');
 		$('#header a:first img').attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');

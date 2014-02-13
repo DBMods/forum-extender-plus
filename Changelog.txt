@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.5.11-----
++ Added forum frontpage link back to header
+
 -----2.2.5.10-----
 * Squashed another aesthetic bug
 
