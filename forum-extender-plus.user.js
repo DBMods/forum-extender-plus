@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.6.1
+// @version 2.2.6.2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 //Set global variables
-var pageUrl = getPageUrl(), modalOpen = false, fullUrl = window.location.href, userId;
+var fullUrl = window.location.href, pageUrl = getPageUrl(), modalOpen = false, userId;
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -374,7 +374,6 @@ function navBar() {
 		});
 		setTimeout(checkMessages, 20000);
 	})();
-
 	$('#gsDropboxExtenderMessageLink').click(function() {
 		$('#gsDropboxExtenderMessageContainer form').submit();
 	});
