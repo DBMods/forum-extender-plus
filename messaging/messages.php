@@ -17,7 +17,7 @@
 				padding: 30px 50px
 			}
 			form.menu {
-				display:inline-block
+				display: inline-block
 			}
 		</style>
 	</head>
