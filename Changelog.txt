@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.6.1-----
+* Small aesthetic fix
+
 -----2.2.6-----
 - Removed unnecessary alert code.
 * Fixed message counter bug
