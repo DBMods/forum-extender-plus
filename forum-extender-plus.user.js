@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.6.2
+// @version 2.2.6.3
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -34,8 +34,11 @@ $('body').prepend('<span id="gsDropboxExtender-message" style="display:none;bord
 //Add footer
 $('#footer').append('<div style="text-align: center; font-size: 11px; clear:both;">Dropbox Forum Extender+ ' + versionSlug(GM_info.script.version) + '</div>');
 
-//Modify Super User posts
+//Highlight posts
+highlightPost(1000, color.green);
 highlightPost('Super User', color.gold);
+
+//Modify Super User posts
 if (pageUrl == 'topic.php') {
 	$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').prepend('<img />');
 	$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
@@ -43,9 +46,6 @@ if (pageUrl == 'topic.php') {
 
 if (pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php')
 	$('#latest tr.closed span.label').show();
-
-//Highlight posts by forum regulars green
-highlightPost(6845, 3581696, 816535, 2122867, 434127, 85409, 1253356, 425513, 96972, color.green);
 
 //Flag threads
 highlightThread(color.green, 1);
@@ -384,7 +384,6 @@ function forumVersion(versionDate) {
 	var latestTr = $('#latest tr');
 	if (versionDate == '8.8.2012') {
 		//Reformat header
-		//$('#header a:first').remove();
 		$('#header').css({
 			'width': '990px',
 			'height': '174px',
@@ -490,23 +489,19 @@ function highlightThread() {
 	});
 }
 
-function highlightPost() {
-	var args = arguments, color = args[args.length - 1], slug = '';
-
-	args[args.length - 1] = undefined;
-	if (pageUrl == 'topic.php')
-		var rolePosts, status, message, totalPosts = $('.threadauthor').length;
-	for (var i = 0; i < args.length; i++) {
-		if ( typeof args[i] == 'string') {
-			rolePosts = $('.threadauthor p small a:contains("' + args[i] + '")').length;
-			status = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? 'dis' : 'en';
-			$('#thread').prepend(message).append('<li style="text-align: center;">' + args[i] + ' highlighting ' + status + 'abled</li>');
-
-			if (status == 'en')
-				$('.threadauthor p small a:contains("' + args[i] + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
-		} else if ( typeof args[i] == 'number')
-			$('.threadauthor small a[href$="=' + args[i] + '"]').parent().parent().parent().parent().find('.threadpost').css('background', color);
-	}
+function highlightPost(check, color) {
+	if ( typeof check == 'string') {
+		var totalPosts = $('.threadauthor').length, rolePosts = $('.threadauthor p small a:contains("' + check + '")').length;
+		var status = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? 'dis' : 'en';
+		var message = '<li style="text-align: center;">' + check + ' highlighting ' + status + 'abled</li>';
+		$('#thread').prepend(message).append(message);
+		if (status == 'en')
+			$('.threadauthor small a:contains("' + color + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
+	} else if ( typeof check == 'number')
+		for ( i = 0; i < $('.threadauthor').length; i++) {
+			if (parseInt($('.threadauthor').eq(i).html().split('Posts: ')[1], 10) >= check)
+				$('.threadauthor').eq(i).parent().find('.threadpost').css('background', color);
+		}
 }
 
 /*
