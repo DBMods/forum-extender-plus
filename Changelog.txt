@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.6.4-----
+* New highlighting bug fix
+
 -----2.2.6.3-----
 # Rewrote postHightlight function to accept a threshold of posts, and will higghlight users with that many posts or more
 - Removed unnecessary lines of code

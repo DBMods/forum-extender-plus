@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.6.3
+// @version 2.2.6.4
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -500,7 +500,7 @@ function highlightPost(check, color) {
 	} else if ( typeof check == 'number')
 		for ( i = 0; i < $('.threadauthor').length; i++) {
 			if (parseInt($('.threadauthor').eq(i).html().split('Posts: ')[1], 10) >= check)
-				$('.threadauthor').eq(i).parent().find('.threadpost').css('background', color);
+				$('.threadauthor').eq(i).find('small a:not(:contains("Super User"))').parent().parent().parent().find('strong:not(:contains("<img align=\'absmiddle\' src=\'/bb-templates/dropbox/images/dropbox-icon.gif\'>"))').parent().parent().parent().find('.threadpost').css('background', color);
 		}
 }
 
