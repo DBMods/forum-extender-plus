@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.6.4
+// @version 2.2.6.5
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -496,7 +496,7 @@ function highlightPost(check, color) {
 		var message = '<li style="text-align: center;">' + check + ' highlighting ' + status + 'abled</li>';
 		$('#thread').prepend(message).append(message);
 		if (status == 'en')
-			$('.threadauthor small a:contains("' + color + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
+			$('.threadauthor small a:contains("' + check + '")').parent().parent().parent().parent().find('.threadpost').css('background', color);
 	} else if ( typeof check == 'number')
 		for ( i = 0; i < $('.threadauthor').length; i++) {
 			if (parseInt($('.threadauthor').eq(i).html().split('Posts: ')[1], 10) >= check)
