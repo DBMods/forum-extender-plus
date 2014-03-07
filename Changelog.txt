@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.6.5-----
+* New highlighting bugfix bugfix
+
 -----2.2.6.4-----
 * New highlighting bug fix
 
