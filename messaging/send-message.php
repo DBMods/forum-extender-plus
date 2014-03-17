@@ -1,18 +1,17 @@
 <?php
 $dest = $_POST['msgto'];
-if ($dest == "Andy Y.") {
+if ($dest == "Andy Y.")
 	$dest = '1618104';
-} elseif ($dest == "Chris J.") {
+elseif ($dest == "Chris J.")
 	$dest = '175532';
-} elseif ($dest == "Mark Mc") {
+elseif ($dest == "Mark Mc")
 	$dest = '30385';
-} elseif ($dest == "Nathan C.") {
+elseif ($dest == "Nathan C.")
 	$dest = '857279';
-} elseif ($dest == "R.M.") {
+elseif ($dest == "R.M.")
 	$dest = '643099';
-} elseif ($dest == "thightower" || $dest == "T. Hightower") {
+elseif ($dest == "thightower" || $dest == "T. Hightower")
 	$dest = '222573';
-}
 if (preg_replace('/[\D]/', '', $dest) == $dest && $dest != '') {
 	$result = mysql_query('INSERT INTO msglist VALUES("' . mysql_real_escape_string($dest) . '", "' . mysql_real_escape_string($_POST['for']) . '", "' . mysql_real_escape_string($_POST['msgtext']) . '", "' . time() . '")');
 	//$dest = $_POST['msgto'];
