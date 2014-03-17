@@ -1,6 +1,6 @@
 <?php
 //$dest = $_POST['msgto'];
-if (msgto_error !== 1) {
+if ($msgto_error !== 1) {
 	$result = mysql_query('INSERT INTO msglist VALUES("' . mysql_real_escape_string($msgto) . '", "' . mysql_real_escape_string($_POST['for']) . '", "' . mysql_real_escape_string($_POST['msgtext']) . '", "' . time() . '")');
 	echo '<p>Message sent.</p>';
 } else
