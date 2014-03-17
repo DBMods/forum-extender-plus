@@ -30,13 +30,13 @@
 			$timeOffsetSeconds = $_POST['timeOffset'] * 60;
 			if ($action == 'delete')
 				include 'delete-message.php';
-			else if ($action == 'addressbook')
+			elseif ($action == 'addressbook')
 				include 'address-book.php';
-			else if ($action == 'compose')
+			elseif ($action == 'compose')
 				include 'compose-message.php';
-			else if ($action == 'send')
+			elseif ($action == 'send')
 				include 'send-message.php';
-			else if ($action == 'showsent')
+			elseif ($action == 'showsent')
 				include 'show-sent.php';
 			if ($_POST['for']) {
 				echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($_POST['for']) . '" /><button type="submit">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($_POST['for']) . '" /><button type="submit">Show Sent Messages</button></form></p>';

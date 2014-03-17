@@ -2,15 +2,15 @@
 $dest = $_POST['msgto'];
 if ($dest == "Andy Y.")
 	$dest = '1618104';
-else if ($dest == "Chris J.")
+elseif ($dest == "Chris J.")
 	$dest = '175532';
-else if ($dest == "Mark Mc")
+elseif ($dest == "Mark Mc")
 	$dest = '30385';
-else if ($dest == "Nathan C.")
+elseif ($dest == "Nathan C.")
 	$dest = '857279';
-else if ($dest == "R.M.")
+elseif ($dest == "R.M.")
 	$dest = '643099';
-else if ($dest == "thightower" || $dest == "T. Hightower")
+elseif ($dest == "thightower" || $dest == "T. Hightower")
 	$dest = '222573';
 if (is_numeric($dest) && $msgto_error !== 1) {
 	$result = mysql_query('INSERT INTO msglist VALUES("' . mysql_real_escape_string($dest) . '", "' . mysql_real_escape_string($_POST['for']) . '", "' . mysql_real_escape_string($_POST['msgtext']) . '", "' . time() . '")');
