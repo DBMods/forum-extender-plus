@@ -16,7 +16,6 @@ elseif ($msgto == "thightower" || $msgto == "T. Hightower")
 if (is_numeric($msgto)) {
 	$result = mysql_query('INSERT INTO msglist VALUES("' . mysql_real_escape_string($msgto) . '", "' . mysql_real_escape_string($_POST['msgfrom']) . '", "' . mysql_real_escape_string($_POST['msgtext']) . '", "' . time() . '")');
 	mysql_close($db);
-} else
-	$msgto_error = 1;
+}
 header('Location: ' . $_POST['returnto']);
 ?>

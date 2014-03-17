@@ -12,7 +12,7 @@ elseif ($dest == "R.M.")
 	$dest = '643099';
 elseif ($dest == "thightower" || $dest == "T. Hightower")
 	$dest = '222573';
-if (is_numeric($dest)) {
+if (is_numeric($dest) && $dest != 0) {
 	$result = mysql_query('INSERT INTO msglist VALUES("' . mysql_real_escape_string($dest) . '", "' . mysql_real_escape_string($_POST['for']) . '", "' . mysql_real_escape_string($_POST['msgtext']) . '", "' . time() . '")');
 	echo '<p>Message sent.</p>';
 } else
