@@ -1,8 +1,9 @@
+<?php $userid = $_COOKIE['forumid']; ?>
 <p class='topline'>
 	<p>If you're not in this list, and consider yourself a regular, or are a Super User, message Andy (ID 1618104) to get added to the list.</p>
 	<form method='post' action='messages.php' class='menu'>
 		<input type='hidden' name='action' value='compose'/>
-		<?php echo '<input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '"/><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '"/><input type="hidden" name="from" value="' . $_POST['from'] . '"/>'; ?>
+		<?php echo '<input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '"/><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '"/><input type="hidden" name="from" value="' . $userid . '"/>'; ?>
 		<select name='to'>
 			<option value=''>Please Select a User</option>
 			<optgroup label='--Mods--'>
