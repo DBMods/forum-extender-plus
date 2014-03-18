@@ -1,5 +1,5 @@
 <?php
-echo '<p><form action="messages.php" method="post"><input type="hidden" name="timeOffset" value="' . $timeoffset . '" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><button type="submit">Back to inbox</button></form></p>';
+echo '<p><form action="messages.php" method="post"><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><button type="submit">Back to inbox</button></form></p>';
 $result = mysql_query("SELECT * FROM `msglist` WHERE `from` = '" . $userid . "' ORDER BY `time` DESC");
 while ($row = mysql_fetch_assoc($result)) {
 	echo '<p class="topline">';
