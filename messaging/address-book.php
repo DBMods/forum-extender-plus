@@ -5,7 +5,7 @@
 <form method='post' action='messages.php' class='menu'>
 	<input type='hidden' name='action' value='compose'/>
 	<?php echo '
-	<input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '"/>
+	<input type="hidden" name="timeOffset" value="' . $timeoffset . '"/>
 	<input type="hidden" name="returnto" value="' . $_POST['returnto'] . '"/>
 	';
  ?>
