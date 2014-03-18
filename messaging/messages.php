@@ -1,3 +1,9 @@
+<?php
+if ($_POST['for']) {
+	setcookie('forumid', $_POST['for'], time() + 3600 * 24 * 30);
+	$userid = htmlspecialchars($_COOKIE['forumid']);
+}
+?>
 <html>
 	<head>
 		<title>Forum Extender+ Messages</title>
@@ -38,13 +44,13 @@
 				include 'send-message.php';
 			elseif ($action == 'showsent')
 				include 'show-sent.php';
-			if ($_POST['for']) {
-				echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($_POST['for']) . '" /><button type="submit">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($_POST['for']) . '" /><button type="submit">Show Sent Messages</button></form></p>';
-				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . htmlspecialchars($_POST['for']) . "' ORDER BY `time` DESC");
+			if ($userid) {
+				echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit">Show Sent Messages</button></form></p>';
+				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $userid . "' ORDER BY `time` DESC");
 				while ($row = mysql_fetch_assoc($result)) {
 					echo '<p class="topline">';
-					echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="delete" /><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input name="for" type="hidden" value="' . htmlspecialchars($_POST['for']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars(stripslashes($row['msg'])) . '" /><button type="submit">Delete</button></form>';
-					echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="context" type="hidden" value="' . htmlspecialchars(stripslashes($row['msg'])) . '"/><input name="to" type="hidden" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($_POST['for']) . '" /><button type="submit">Reply</button></form>';
+					echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="delete" /><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input name="for" type="hidden" value="' . $userid . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars(stripslashes($row['msg'])) . '" /><button type="submit">Delete</button></form>';
+					echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="context" type="hidden" value="' . htmlspecialchars(stripslashes($row['msg'])) . '"/><input name="to" type="hidden" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit">Reply</button></form>';
 					echo '<br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a><br>Message:<br>' . nl2br(htmlspecialchars(stripslashes($row['msg'])));
 					echo '</p>';
 				}
