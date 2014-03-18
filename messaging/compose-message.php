@@ -1,5 +1,4 @@
 <?php
-$userid = $_COOKIE['forumid'];
 echo '<p><form action="messages.php" method="post"><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><button type="submit">Cancel</button></form></p>';
 echo '<div class="topline">';
 echo '<form action="messages.php" method="post"><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input type="hidden" name="timeOffset" value="' . $_POST['timeOffset'] . '" /><input name="action" type="hidden" value="addressbook" /><br><button type="submit">View Address Book</button></form>';

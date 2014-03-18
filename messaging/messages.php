@@ -1,8 +1,6 @@
 <?php
-if ($_POST['for']) {
+if ($_POST['for'])
 	setcookie('forumid', htmlspecialchars($_POST['for']), time() + 3600 * 24 * 30);
-	$userid = $_COOKIE['forumid'];
-}
 ?>
 <html>
 	<head>
@@ -30,6 +28,7 @@ if ($_POST['for']) {
 	<body>
 		<div id='wrapper'>
 			<?php
+			$userid = $_COOKIE['forumid'];
 			require 'db-login.php';
 			echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
 			$action = $_POST['action'];

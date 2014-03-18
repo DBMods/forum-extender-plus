@@ -1,5 +1,4 @@
 <?php
-$userid = $_COOKIE['forumid'];
 $dest = $_POST['msgto'];
 if ($dest == "Andy Y.")
 	$dest = '1618104';
