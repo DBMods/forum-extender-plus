@@ -44,7 +44,7 @@ if ($_POST['for']) {
 				include 'send-message.php';
 			elseif ($action == 'showsent')
 				include 'show-sent.php';
-			if ($userid && $action != 'addressbook' && $action != 'compose') {
+			if ($userid && $action != 'addressbook' && $action != 'compose' && $action != 'showsent') {
 				echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><button type="submit">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="timeOffset" value="' . htmlspecialchars($_POST['timeOffset']) . '" /><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit">Show Sent Messages</button></form></p>';
 				$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $userid . "' ORDER BY `time` DESC");
 				while ($row = mysql_fetch_assoc($result)) {
