@@ -1,10 +1,12 @@
 <?php
-if (is_numeric($_POST['for']))
+if (is_numeric($_POST['for'])) {
 	setcookie('forumid', htmlspecialchars($_POST['for']), time() + 3600 * 24 * 30);
 	$_COOKIE['forumid']=$_POST['for'];
-if (is_numeric($_POST['timeOffset']))
+}
+if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 ^ 24 * 30);
 	$_COOKIE['timeoffset']=$_POST['timeOffset'];
+}
 ?>
 <html>
 	<head>
