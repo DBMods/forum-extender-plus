@@ -8,8 +8,8 @@ if (is_numeric($_POST['timeOffset'])) {
 	$_COOKIE['timeoffset'] = $_POST['timeOffset'];
 }
 if ($_POST['returnto']) {
-	setcookie('returnto', $_POST['returnto'], time() + 3600 * 24 * 30);
-	$_COOKIE['returnto'] = $_POST['returnto'];
+	setcookie('returnto', strip_tags($_POST['returnto']), time() + 3600 * 24 * 30);
+	$_COOKIE['returnto'] = strip_tags($_POST['returnto']);
 }
 ?>
 <html>
