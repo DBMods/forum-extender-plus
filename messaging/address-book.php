@@ -4,8 +4,6 @@
 </p>
 <form method='post' action='messages.php' class='menu'>
 	<input type='hidden' name='action' value='compose'/>
-	<?php echo '<input type="hidden" name="returnto" value="' . $_POST['returnto'] . '"/>';
- ?>
 	<select name='to'>
 		<option value=''>Please Select a User</option>
 		<optgroup label='--Mods--'>
