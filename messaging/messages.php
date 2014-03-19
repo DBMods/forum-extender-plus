@@ -1,8 +1,8 @@
 <?php
-if ($_POST['for'])
+if (is_numeric($_POST['for']))
 	setcookie('forumid', htmlspecialchars($_POST['for']), time() + 3600 * 24 * 30);
 	$_COOKIE['forumid']=$_POST['for'];
-if ($_POST['timeOffset'])
+if (is_numeric($_POST['timeOffset']))
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 ^ 24 * 30);
 	$_COOKIE['timeoffset']=$_POST['timeOffset'];
 ?>
@@ -32,8 +32,8 @@ if ($_POST['timeOffset'])
 	<body>
 		<div id='wrapper'>
 			<?php
-			$userid = $_COOKIE['forumid'];
-			$timeoffset = $_COOKIE['timeoffset'];
+			$userid = htmlspecialchars($_COOKIE['forumid']);
+			$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 			require 'db-login.php';
 			if ($userid) {
 				echo '<p><a href="' . $_POST['returnto'] . '">Back to forums</a></p>';
@@ -50,12 +50,12 @@ if ($_POST['timeOffset'])
 				elseif ($action == 'showsent')
 					include 'show-sent.php';
 				if ($action != 'addressbook' && $action != 'compose' && $action != 'showsent') {
-					echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><button type="submit">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit">Show Sent Messages</button></form></p>';
-					$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . $userid . "' ORDER BY `time` DESC");
+					echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . htmlspecialchars($_POST['returnto']) . '" /><button type="submit">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit">Show Sent Messages</button></form></p>';
+					$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . mysql_real_escape_string($userid) . "' ORDER BY `time` DESC");
 					while ($row = mysql_fetch_assoc($result)) {
 						echo '<p class="topline">';
-						echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="delete" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input name="for" type="hidden" value="' . $userid . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit">Delete</button></form>';
-						echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . $_POST['returnto'] . '" /><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><input name="to" type="hidden" value="' . htmlspecialchars($row['from']) . '" /><button type="submit">Reply</button></form>';
+						echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="delete" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input name="for" type="hidden" value="' . $userid . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit">Delete</button></form>';
+						echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="compose" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><input name="to" type="hidden" value="' . htmlspecialchars($row['from']) . '" /><button type="submit">Reply</button></form>';
 						echo '<br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a><br>Message:<br>' . (htmlspecialchars($row['msg'])); //n12br
 						echo '</p>';
 					}
