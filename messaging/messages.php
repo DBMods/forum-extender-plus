@@ -30,11 +30,24 @@ if ($_POST['returnto']) {
 			.jumbotron h2 {
 				font-size: 50px;
 			}
+			.alert-center {
+				width: 500px;
+				position: absolute;
+				left: 50%;
+				margin-left: -250px;
+			}
 			.alert {
 				max-width: 500px;
 				margin-left: auto;
 				margin-right: auto;
 				text-align: center;
+			}
+			.alert form {
+				height: 34px;
+				margin-bottom: 5px;
+			}
+			.alert button {
+				margin: -35px;
 			}
 			.btn {
 				margin-right: 10px;
@@ -113,6 +126,14 @@ if ($_POST['returnto']) {
 				?>
 			</div>
 		</div>
+		<script>
+		function hideAlert() {
+			$("#alert-fade").addClass("fade");
+		}
+		window.setTimeout(function () {
+			hideAlert();
+		}, 5000);
+		</script>
 		<div class="container">
 			<footer>
 				<hr>
