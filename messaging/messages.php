@@ -127,11 +127,10 @@ if ($_POST['returnto']) {
 			</div>
 		</div>
 		<script>
-		function hideAlert() {
-			$("#alert-fade").addClass("fade");
-		}
 		window.setTimeout(function () {
-			hideAlert();
+			function() {
+				$('#alert-fade').addClass('fade');
+			};
 		}, 5000);
 		</script>
 		<div class="container">
