@@ -116,7 +116,7 @@ if ($_POST['returnto']) {
 		<div class="container">
 			<footer>
 				<hr>
-				<p>Developed by <a href="http://techgeek01.com">Andy Y.</a> and <a href="http://nathancheek.com">Nathan C.</a></p>
+				<p>Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a></p>
 			</footer>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
