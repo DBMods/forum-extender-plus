@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.6.5
+// @version 2.2.7
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -70,7 +70,7 @@ if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 
 				var stickies = resp.split('<table id="latest">')[1].split('<td> ')[0].split(threadType)[0].split('<big><a href="');
 				stickies = stickies[stickies.length - 1].split('">')[0];
 				if (stickies != '')
-					fullUrl = stickies;
+					window.location.href = stickies;
 			}
 		});
 }
