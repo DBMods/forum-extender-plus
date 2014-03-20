@@ -20,15 +20,21 @@ if ($_POST['returnto']) {
 				background: #fff;
 				margin: 0;
 				padding-top: 70px;
-				padding-bottom: 30px;
+			}
+			footer hr {
+				margin-top: 0px;
+			}
+			#main{
+				margin-bottom: 20px;
 			}
 			.jumbotron h2 {
 				font-size: 50px;
 			}
 			.alert {
-				width: 500px;
+				max-width: 500px;
 				margin-left: auto;
 				margin-right: auto;
+				text-align: center;
 			}
 			.btn {
 				margin-right: 10px;
@@ -37,10 +43,13 @@ if ($_POST['returnto']) {
 				border-top: 1px solid #bbb
 			}
 			#wrapper {
-				width: 900px;
-				background: #fff;
-				margin: auto;
-				padding: 30px 50px
+				height: auto;
+				min-height: 100%;
+				margin: 0 auto -51px;
+				padding: 0 0 51px;
+			}
+			#footer {
+				height: 51px;
 			}
 			form.menu {
 				display: inline-block
@@ -63,8 +72,8 @@ if ($_POST['returnto']) {
 				</div>
 			</div>
 		</div>
-		<div class="container">
-			<div class="jumbotron">
+		<div id="wrapper" class="container">
+			<div class="jumbotron" id="main">
 				<?php
 				$userid = htmlspecialchars($_COOKIE['forumid']);
 				$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
@@ -101,6 +110,12 @@ if ($_POST['returnto']) {
 				mysqli_close($db);
 				?>
 			</div>
+		</div>
+		<div class="container">
+			<footer>
+				<hr>
+				<p>Developed by <a href="http://techgeek01.com">Andy Y.</a> and <a href="http://nathancheek.com">Nathan C.</a></p>
+			</footer>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
