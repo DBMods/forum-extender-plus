@@ -14,7 +14,7 @@ elseif ($dest == "thightower" || $dest == "T. Hightower")
 	$dest = '222573';
 if (is_numeric($dest) && $dest != 0) {
 	$result = mysqli_query($db, 'INSERT INTO msglist VALUES("' . mysqli_real_escape_string($db, $dest) . '", "' . mysqli_real_escape_string($db, $userid) . '", "' . mysqli_real_escape_string($db, $_POST['msgtext']) . '", "' . time() . '")');
-	echo '<p>Message sent.</p>';
+	echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><p><strong>Message sent.</strong></p></div>';
 } else
-	echo '<p>Sorry, invalid destination.<br><form class="menu" action="messages.php" method="post"><input name="action" type="hidden" value="compose" /><input name="to" type="hidden" value="' . $dest . '"/><br><input type="hidden" name="msgtext" value="' . htmlspecialchars($_POST['msgtext']) . '" /><br><button type="submit">Go Back</button></form></p>';
+	echo '<div class="alert alert-danger"><p><strong>Sorry, invalid destination.</strong><br><form action="messages.php" method="post"><input name="action" type="hidden" value="compose" /><input name="to" type="hidden" value="' . $dest . '"/><br><input type="hidden" name="msgtext" value="' . htmlspecialchars($_POST['msgtext']) . '" /><br><button type="submit" class="btn btn-primary">Go Back</button></form></p></div>';
 ?>
