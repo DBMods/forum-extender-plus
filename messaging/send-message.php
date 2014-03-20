@@ -13,7 +13,7 @@ elseif ($dest == "R.M.")
 elseif ($dest == "thightower" || $dest == "T. Hightower")
 	$dest = '222573';
 if (is_numeric($dest) && $dest != 0) {
-	$result = mysql_query('INSERT INTO msglist VALUES("' . mysql_real_escape_string($dest) . '", "' . mysql_real_escape_string($userid) . '", "' . mysql_real_escape_string($_POST['msgtext']) . '", "' . time() . '")');
+	$result = mysqli_query($db, 'INSERT INTO msglist VALUES("' . mysqli_real_escape_string($db, $dest) . '", "' . mysqli_real_escape_string($db, $userid) . '", "' . mysqli_real_escape_string($db, $_POST['msgtext']) . '", "' . time() . '")');
 	echo '<p>Message sent.</p>';
 } else
 	echo '<p>Sorry, invalid destination.<br><form class="menu" action="messages.php" method="post"><input name="action" type="hidden" value="compose" /><input name="to" type="hidden" value="' . $dest . '"/><br><input type="hidden" name="msgtext" value="' . htmlspecialchars($_POST['msgtext']) . '" /><br><button type="submit">Go Back</button></form></p>';

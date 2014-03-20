@@ -58,8 +58,8 @@ if ($_POST['returnto']) {
 					include 'show-sent.php';
 				if ($action != 'addressbook' && $action != 'compose' && $action != 'showsent') {
 					echo '<p class="topline"><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit">Show Sent Messages</button></form></p>';
-					$result = mysql_query("SELECT * FROM `msglist` WHERE `to` = '" . mysql_real_escape_string($userid) . "' ORDER BY `time` DESC");
-					while ($row = mysql_fetch_assoc($result)) {
+					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . mysqli_real_escape_string($db, $userid) . "' ORDER BY `time` DESC");
+					while ($row = mysqli_fetch_assoc($result)) {
 						echo '<p class="topline">';
 						echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="delete" /><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input name="for" type="hidden" value="' . $userid . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit">Delete</button></form>';
 						echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="compose" /><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><input name="to" type="hidden" value="' . htmlspecialchars($row['from']) . '" /><button type="submit">Reply</button></form>';
@@ -69,7 +69,7 @@ if ($_POST['returnto']) {
 				}
 			} else
 				echo '<p>You do not have sufficient permission to access this page. Please authenticate through the <a href="https://forums.dropbox.com">Dropbox Forums</a>.</p>';
-			mysql_close($db);
+			mysqli_close($db);
 			?>
 		</div>
 	</body>
