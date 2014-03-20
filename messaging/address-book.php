@@ -3,7 +3,7 @@
 	If you're not in this list, and consider yourself a regular, or are a Super User, message Andy (ID 1618104) to get added to the list.
 </p>
 <form method='post' action='messages.php' class='menu'>
-	<input type='hidden' name='action' value='compose'/>
+	<input type='hidden' name='action' value='compose' class='input-xlarge'/>
 	<select name='to'>
 		<option value=''>Please Select a User</option>
 		<optgroup label='--Mods--'>
@@ -19,7 +19,7 @@
 		</optgroup>
 	</select>
 	<br>
-	<button type='submit'>
+	<button type='submit' class='btn btn-default'>
 		Message User
 	</button>
 </form>
