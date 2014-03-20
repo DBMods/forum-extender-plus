@@ -8,7 +8,7 @@ if (is_numeric($_POST['timeOffset'])) {
 	$_COOKIE['timeoffset'] = $_POST['timeOffset'];
 }
 if ($_POST['returnto']) {
-	setcookie('returnto', strip_tags($_POST['returnto']), time() + 3600 * 24 * 30);
+	setcookie('returnto', strip_tags($_POST['returnto']));
 	$_COOKIE['returnto'] = strip_tags($_POST['returnto']);
 }
 ?>
@@ -68,7 +68,9 @@ if ($_POST['returnto']) {
 				<?php
 				$userid = htmlspecialchars($_COOKIE['forumid']);
 				$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
-				$returnto = $_COOKIE['returnto'];
+				$returnto = 'https://forums.dropbox.com';
+				if (isset($_COOKIE['returnto']))
+					$returnto = $_COOKIE['returnto'];
 				require 'db-login.php';
 				if ($userid) {
 					echo '<h4><a href="' . $returnto . '">Back to forums</a></h4>';
