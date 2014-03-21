@@ -70,6 +70,12 @@ if ($_POST['returnto']) {
 			.btn {
 				display: inline-block;
 			}
+			.btn-right {
+				float: right;
+			}
+			.btn-left {
+				float: left;
+			}
 		</style>
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
@@ -131,8 +137,8 @@ if ($_POST['returnto']) {
 		</div>
 		<script>
 		window.setTimeout(function () {
-				$('#alert-fade').addClass('fade');
-		}, 5000);
+			$('#alert-fade').addClass('fade');
+		}, 3000);
 		</script>
 		<div class="container">
 			<footer>

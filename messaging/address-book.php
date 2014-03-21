@@ -20,7 +20,7 @@
 		</optgroup>
 	</select>
 	<br>
-	<button type='submit' class='btn btn-default'>
+	<button type='submit' class='btn btn-success'>
 		Message User
 	</button>
 </form>
