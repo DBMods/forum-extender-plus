@@ -68,15 +68,7 @@ if ($_POST['returnto']) {
 				display: inline-block
 			}
 			.btn {
-				display:inline;
-			}
-			.btn-left {
-				float:left;
-				display:inline;
-			}
-			.btn-right {
-				float:right;
-				display:inline;
+				display: inline-block;
 			}
 		</style>
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
