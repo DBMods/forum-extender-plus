@@ -1,0 +1,60 @@
+body {
+	background: #fff;
+	margin: 0;
+	padding-top: 70px;
+}
+footer hr {
+	margin-top: 0px;
+}
+#main {
+	margin-bottom: 20px;
+}
+.jumbotron h2 {
+	font-size: 50px;
+}
+.alert-center {
+	width: 500px;
+	position: absolute;
+	left: 50%;
+	margin-left: -250px;
+}
+.alert {
+	max-width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+.alert form {
+	height: 34px;
+	margin-bottom: 5px;
+}
+.alert button {
+	margin: -35px;
+}
+.btn {
+	margin-right: 10px;
+}
+.topline {
+	border-top: 1px solid #bbb
+}
+#wrapper {
+	height: auto;
+	min-height: 100%;
+	margin: 0 auto -51px;
+	padding: 0 0 51px;
+}
+#footer {
+	height: 51px;
+}
+form.menu {
+	display: inline-block
+}
+.btn {
+	display: inline-block;
+}
+.btn-right {
+	float: right;
+}
+.btn-left {
+	float: left;
+}
