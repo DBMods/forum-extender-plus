@@ -131,9 +131,7 @@ if ($_POST['returnto']) {
 		</div>
 		<script>
 		window.setTimeout(function () {
-			function() {
 				$('#alert-fade').addClass('fade');
-			};
 		}, 5000);
 		</script>
 		<div class="container">
