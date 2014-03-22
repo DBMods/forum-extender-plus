@@ -57,9 +57,10 @@ if ($_POST['returnto']) {
 					elseif ($action == 'showsent')
 						include 'show-sent.php';
 					if ($action != 'addressbook' && $action != 'compose' && $action != 'showsent') {
-						echo '<h2>Inbox</h2>';
-						echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit" class="btn btn-success">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Show Sent Messages</button></form>';
 						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . mysqli_real_escape_string($db, $userid) . "' ORDER BY `time` DESC");
+						$count = mysqli_num_rows($result);
+						echo '<h2>Inbox - ' . $count . '</h2>';
+						echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit" class="btn btn-success">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Show Sent Messages</button></form>';
 						while ($row = mysqli_fetch_assoc($result)) {
 							echo '<p class="topline">';
 							echo '<br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a><br>Message:<br>' . nl2br(htmlspecialchars($row['msg']));
