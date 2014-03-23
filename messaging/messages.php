@@ -55,10 +55,8 @@ if ($_POST['returnto']) {
 						include 'delete-message.php';
 					elseif ($action == 'addressbook')
 						include 'address-book.php';
-					elseif ($action == 'compose')
+					elseif ($action == 'compose' || $action == 'send')
 						include 'compose-message.php';
-					elseif ($action == 'send')
-						include 'send-message.php';
 					elseif ($action == 'showsent')
 						include 'show-sent.php';
 					if ($showinbox) {
