@@ -40,7 +40,7 @@ if ($_POST['returnto']) {
 					global $db;
 					return mysqli_real_escape_string($db, $string);
 				}
-
+				$showinbox = true;
 				$userid = htmlspecialchars($_COOKIE['forumid']);
 				$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 				$returnto = 'https://forums.dropbox.com';
@@ -61,7 +61,7 @@ if ($_POST['returnto']) {
 						include 'send-message.php';
 					elseif ($action == 'showsent')
 						include 'show-sent.php';
-					if ($action != 'addressbook' && $action != 'compose' && $action != 'showsent') {
+					if ($showinbox == true && $action != 'addressbook' && $action != 'compose' && $action != 'showsent') {
 						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' ORDER BY `time` DESC");
 						$count = mysqli_num_rows($result);
 						echo '<h2>Inbox - ' . $count . '</h2>';
