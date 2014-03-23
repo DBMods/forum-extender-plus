@@ -18,4 +18,5 @@ if (is_numeric($dest) && $dest != 0) {
 } else {
 	$showinbox = false;
 	echo '<div class="alert-center"><div class="alert alert-danger"><p><strong>Sorry, invalid destination.</strong><form action="messages.php" method="post"><input name="action" type="hidden" value="compose" /><input name="to" type="hidden" value="' . $dest . '"/><input type="hidden" name="msgtext" value="' . htmlspecialchars($_POST['msgtext']) . '" /><button type="submit" class="btn btn-primary">Go Back</button></form></p></div></div>';
+}
 ?>

@@ -1,4 +1,5 @@
 <?php
+$showinbox = false;
 echo '<h2>Compose</h2>';
 echo '<div class="topline">';
 echo '<form action="messages.php" method="post"><input name="action" type="hidden" value="addressbook" /><br><button type="submit" class="btn btn-primary">View Address Book</button></form>';

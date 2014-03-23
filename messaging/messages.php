@@ -61,7 +61,7 @@ if ($_POST['returnto']) {
 						include 'send-message.php';
 					elseif ($action == 'showsent')
 						include 'show-sent.php';
-					if ($showinbox == true && $action != 'addressbook' && $action != 'compose' && $action != 'showsent') {
+					if ($showinbox) {
 						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' ORDER BY `time` DESC");
 						$count = mysqli_num_rows($result);
 						echo '<h2>Inbox - ' . $count . '</h2>';

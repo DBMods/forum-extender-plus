@@ -1,3 +1,6 @@
+<?php
+$showinbox = false;
+?>
 <h2>Address Book</h2>
 <p class='topline'>
 <p>
