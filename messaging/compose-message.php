@@ -11,17 +11,17 @@ if ($action == 'compose') {
 	echo '</div>';
 } elseif ($action == 'send') {
 	$dest = $_POST['msgto'];
-	if ($dest == "Andy Y.")
+	if ($dest == 'Andy Y.' || $dest == 'Andy Y')
 		$dest = '1618104';
-	elseif ($dest == "Chris J.")
+	elseif ($dest == 'Chris J.' || $dest == 'Chris J')
 		$dest = '175532';
-	elseif ($dest == "Mark Mc")
+	elseif ($dest == 'Mark Mc')
 		$dest = '30385';
-	elseif ($dest == "Nathan C.")
+	elseif ($dest == 'Nathan C.' || $dest == 'Nathan C')
 		$dest = '857279';
-	elseif ($dest == "R.M.")
+	elseif ($dest == 'R.M.' || $dest == 'RM' || $dest == 'R.M')
 		$dest = '643099';
-	elseif ($dest == "thightower" || $dest == "T. Hightower")
+	elseif ($dest == 'thightower' || $dest == 'T. Hightower' || $dest == 'T Hightower')
 		$dest = '222573';
 	if (is_numeric($dest) && $dest != 0) {
 		$showinbox = true;
