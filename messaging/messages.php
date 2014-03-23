@@ -36,6 +36,11 @@ if ($_POST['returnto']) {
 		<div id="wrapper" class="container">
 			<div class="jumbotron" id="main">
 				<?php
+				function sqlesc($string) {
+					global $db;
+					return mysqli_real_escape_string($db, $string);
+				}
+
 				$userid = htmlspecialchars($_COOKIE['forumid']);
 				$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 				$returnto = 'https://forums.dropbox.com';
@@ -57,7 +62,7 @@ if ($_POST['returnto']) {
 					elseif ($action == 'showsent')
 						include 'show-sent.php';
 					if ($action != 'addressbook' && $action != 'compose' && $action != 'showsent') {
-						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . mysqli_real_escape_string($db, $userid) . "' ORDER BY `time` DESC");
+						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' ORDER BY `time` DESC");
 						$count = mysqli_num_rows($result);
 						echo '<h2>Inbox - ' . $count . '</h2>';
 						echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit" class="btn btn-success">Compose</button></form><form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Show Sent Messages</button></form>';
@@ -76,14 +81,16 @@ if ($_POST['returnto']) {
 			</div>
 		</div>
 		<script>
-		window.setTimeout(function () {
-			$('#alert-fade').addClass('fade');
-		}, 3000);
+			window.setTimeout(function() {
+				$('#alert-fade').addClass('fade');
+			}, 3000);
 		</script>
 		<div class="container">
 			<footer>
 				<hr>
-				<p>Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a></p>
+				<p>
+					Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
+				</p>
 			</footer>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
