@@ -93,5 +93,20 @@ if ($_POST['returnto']) {
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			$('#messageform').submit(function() {
+				if (validateName())
+					return true;
+				else
+					return false;
+			});
+			function validateName() {
+				if (['Andy Y.', 'Andy Y', 'Chris J.', 'Chris J', 'Mark Mc', 'Nathan C.', 'Nathan C', 'R.M.', 'RM', 'R.M', 'thightower', 'T. Hightower', 'T Hightower'].indexOf($('#msgto').val()) == -1 && typeof parseInt($('#msgto').val()) != 'number') {
+					$('recip-fail strong').html('NO');
+					return false;
+				} else
+					$('recip-fail strong').html('Yay');
+			}
+		</script>
 	</body>
 </html>
