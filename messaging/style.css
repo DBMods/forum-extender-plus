@@ -36,6 +36,8 @@ footer hr {
 }
 .topline {
 	border-top: 1px solid #bbb;
+}
+.center {
 	text-align: center;
 }
 #wrapper {
@@ -48,7 +50,7 @@ footer hr {
 	height: 51px;
 }
 form.menu {
-	display: inline-block
+	display: inline-block;
 }
 .btn {
 	display: inline-block;
