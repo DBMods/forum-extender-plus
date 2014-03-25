@@ -70,7 +70,7 @@ if ($_POST['returnto']) {
 							echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="compose" /><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><input name="to" type="hidden" value="' . htmlspecialchars($row['from']) . '" /><button type="submit" class="btn btn-success btn-sm">Reply</button></form>';
 						}
 						if ($count == 0)
-							echo '<p class="topline"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by messaging someone.</p>';
+							echo '<p class="topline"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose".</p>';
 					}
 				} else
 					echo '<div class="alert alert-danger"><p>You do not have sufficient permission to access this page. Please authenticate through the <a href="https://forums.dropbox.com">Dropbox Forums</a>.</p></div>';

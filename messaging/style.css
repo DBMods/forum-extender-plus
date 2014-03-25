@@ -35,7 +35,8 @@ footer hr {
 	margin-right: 10px;
 }
 .topline {
-	border-top: 1px solid #bbb
+	border-top: 1px solid #bbb;
+	text-align: center;
 }
 #wrapper {
 	height: auto;
