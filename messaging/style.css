@@ -34,6 +34,13 @@ footer hr {
 .btn {
 	margin-right: 10px;
 }
+.btn-group .btn-middle {
+	border-left: 0px;
+	border-right: 0px;
+}
+.btn-group .btn {
+	margin-right: 0px;
+}
 .topline {
 	border-top: 1px solid #bbb;
 }
