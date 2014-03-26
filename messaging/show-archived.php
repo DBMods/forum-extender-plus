@@ -14,4 +14,6 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 if ($count == 0)
 	echo '<p class="topline center"><br>It doesn\'t appear that you have any archived messages.</p>';
+setcookie('fromarch', true);
+$_COOKIE['returnto'] = true;
 ?>
