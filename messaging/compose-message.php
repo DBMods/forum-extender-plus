@@ -19,8 +19,6 @@ if ($action == 'send') {
 		echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message sent.</strong></p></div></div>';
 	} else
 		$senderror = '<div class="alert-center"><div id="alert-fade" class="alert alert-danger"><p><strong>Invalid destination.</strong></p></div></div>';
-	if ($_COOKIE['fromarch'])
-		$action = 'showarch';
 }
 if ($action == 'compose' || $senderror) {
 	$showinbox = false;

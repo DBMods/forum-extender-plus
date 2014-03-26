@@ -59,13 +59,12 @@ if ($_POST['returnto']) {
 						include 'compose-message.php';
 					elseif ($action == 'showsent')
 						include 'show-sent.php';
+					elseif ($action == 'showarch')
+						include 'show-archived.php';
 					elseif ($action == 'archmessage')
 						include 'archive-message.php';
 					elseif ($action == 'unarchmessage')
 						include 'unarchive-message.php';
-					$_COOKIE['fromarch'] = false;
-					if ($action == 'showarch')
-						include 'show-archived.php';
 					if ($showinbox) {
 						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 						$count = mysqli_num_rows($result);
