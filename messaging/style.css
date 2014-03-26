@@ -3,11 +3,18 @@ body {
 	margin: 0;
 	padding-top: 70px;
 }
+.header {
+	padding-bottom: 19px;
+}
 footer hr {
 	margin-top: 0px;
 }
 #main {
 	margin-bottom: 20px;
+}
+.navbar-fixed-top {
+	background-color: #fff;
+	border-bottom: 1px solid #e5e5e5;
 }
 .jumbotron h2 {
 	font-size: 50px;
@@ -40,6 +47,33 @@ footer hr {
 }
 .btn-group .btn {
 	margin-right: 0px;
+}
+.btn-pill {
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+	box-sizing: border-box;
+}
+.inactive {
+	border-radius: 4px;
+	color: #428bca;
+	background: #fff;
+	text-decoration: solid rgb(66, 139, 202);
+}
+.active {
+	border-radius: 4px;
+	color: #fff;
+	background-color: #428bca;
+}
+.inactive:hover {
+	background: #f5f5f5;
+}
+.form-pill {
+	margin-bottom: 0px;
+}
+.form-pill button {
+	border: 0px;
+	background-color: inherit;
 }
 .topline {
 	border-top: 1px solid #bbb;

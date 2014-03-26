@@ -20,19 +20,16 @@ if ($_POST['returnto']) {
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
 	</head>
 	<body>
-		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="messages.php">Dropbox Forum Extender+ Messenger</a>
+			<div class="container navbar-fixed-top">
+				<div class="header">
+					<ul class="nav nav-pills pull-right">
+						<li<?php if ($_POST['action']=='') echo ' class="active"'?>><a href=''>Inbox</a></li>
+						<li<?php if ($_POST['action']=='showsent') echo ' class="active"'; else echo ' class="inactive"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
+						<li<?php if ($_POST['action']=='showarch') echo ' class="active"'; else echo ' class="inactive"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
+					</ul>
+					<h3 class="text-muted">Dropbox Forum Extender+ Messenger</h3>
 				</div>
 			</div>
-		</div>
 		<div id="wrapper" class="container">
 			<div class="jumbotron" id="main">
 				<?php
