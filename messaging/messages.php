@@ -36,7 +36,7 @@ require 'db-login.php';
 						<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
 					</ul>
 					<div class="site-title">
-						<h3 class="text-muted">Dropbox Forum Extender+ Messenger</h3>
+						<h3 class="text-muted"><a href=''>Dropbox Forum Extender+ Messenger</a></h3>
 					</div>
 				</div>
 			</div>

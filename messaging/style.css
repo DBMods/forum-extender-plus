@@ -21,6 +21,9 @@ footer hr {
 	float: right;
 	margin: -10px;
 }
+.site-title a:hover {
+	text-decoration: none;
+}
 .jumbotron h2 {
 	font-size: 50px;
 }
