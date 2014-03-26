@@ -27,19 +27,19 @@ require 'db-login.php';
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
 	</head>
 	<body>
-			<div class="container navbar-fixed-top">
-				<div class="header">
-					<ul class="nav nav-pills pull-left">
-						<li<?php if ($_POST['action']=='') echo ' class="active"'?>><a href=''>Inbox</a></li>
-						<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active"'?>><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
-						<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active"'?>><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
-						<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
-					</ul>
-					<div class="site-title">
-						<h3 class="text-muted"><a href=''>Dropbox Forum Extender+ Messenger</a></h3>
-					</div>
+		<div class="container navbar-fixed-top">
+			<div class="header">
+				<ul class="nav nav-pills pull-left">
+					<li class="<?php if ($_POST['action']=='') echo 'active'?>"><a href=''>Inbox</a></li>
+					<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
+					<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
+					<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
+				</ul>
+				<div class="site-title">
+					<h3 class="text-muted"><a href=''>Dropbox Forum Extender+ Messenger</a></h3>
 				</div>
 			</div>
+		</div>
 		<div id="wrapper" class="container">
 			<div class="jumbotron" id="main">
 				<?php
@@ -75,10 +75,19 @@ require 'db-login.php';
 							echo '<form method="post" action="" class="menu"><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit" class="btn btn-primary btn-sm" name="action" value="arch">Archive</button></form>';
 						}
 						if ($count == 0)
-							echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
+							echo '
+						<p class="topline center">
+							<br>
+							It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."
+						</p>';
 					}
 				} else
-					echo '<div class="alert alert-danger"><p>You do not have sufficient permission to access this page. Please authenticate through the <a href="https://forums.dropbox.com">Dropbox Forums</a>.</p></div>';
+					echo '
+						<div class="alert alert-danger">
+							<p>
+								You do not have sufficient permission to access this page. Please authenticate through the <a href="https://forums.dropbox.com">Dropbox Forums</a>.
+							</p>
+						</div>';
 				mysqli_close($db);
 				?>
 			</div>
