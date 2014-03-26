@@ -1,6 +1,6 @@
 <?php
 $showinbox = false;
-$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `from` = '" . $userid . "' AND `archived` = 1 ORDER BY `time` DESC");
+$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . $userid . "' AND `archived` = 1 ORDER BY `time` DESC");
 $count = mysqli_num_rows($result);
 echo '<h2>Archived Messages - ' . $count . '</h2>';
 echo '<p><form action="messages.php" method="post"><button type="submit" class="btn btn-primary">Back to inbox</button></form></p>';
