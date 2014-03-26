@@ -4,7 +4,8 @@ body {
 	padding-top: 70px;
 }
 .header {
-	padding-bottom: 19px;
+	padding-top: 19px;
+	padding-bottom: 59px;
 }
 footer hr {
 	margin-top: 0px;
@@ -15,6 +16,10 @@ footer hr {
 .navbar-fixed-top {
 	background-color: #fff;
 	border-bottom: 1px solid #e5e5e5;
+}
+.site-title {
+	float: right;
+	margin: -10px;
 }
 .jumbotron h2 {
 	font-size: 50px;

@@ -11,6 +11,13 @@ if ($_POST['returnto']) {
 	setcookie('returnto', strip_tags($_POST['returnto']));
 	$_COOKIE['returnto'] = strip_tags($_POST['returnto']);
 }
+$showinbox = true;
+$userid = htmlspecialchars($_COOKIE['forumid']);
+$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
+$returnto = 'https://forums.dropbox.com';
+if (isset($_COOKIE['returnto']))
+	$returnto = $_COOKIE['returnto'];
+require 'db-login.php';
 ?>
 <html>
 	<head>
@@ -22,12 +29,15 @@ if ($_POST['returnto']) {
 	<body>
 			<div class="container navbar-fixed-top">
 				<div class="header">
-					<ul class="nav nav-pills pull-right">
+					<ul class="nav nav-pills pull-left">
 						<li<?php if ($_POST['action']=='') echo ' class="active"'?>><a href=''>Inbox</a></li>
 						<li<?php if ($_POST['action']=='showsent') echo ' class="active"'; else echo ' class="inactive"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
 						<li<?php if ($_POST['action']=='showarch') echo ' class="active"'; else echo ' class="inactive"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
+						<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
 					</ul>
-					<h3 class="text-muted">Dropbox Forum Extender+ Messenger</h3>
+					<div class="site-title">
+						<h3 class="text-muted">Dropbox Forum Extender+ Messenger</h3>
+					</div>
 				</div>
 			</div>
 		<div id="wrapper" class="container">
@@ -39,23 +49,8 @@ if ($_POST['returnto']) {
 				}
 				function navform() {
 					echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit" class="btn btn-success">Compose</button></form>';
-					echo '<form action="messages.php" method="post" class="menu">';
-					echo '<div class="btn-group">';
-					echo '<button type="submit" class="btn btn-primary">Inbox</button></form>';
-					echo '<input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary btn-middle" name="action" value="showsent">Sent</button>';
-					echo '<input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary" name="action" value="showarch">Archived</button>';
-					echo '</form>';
-					echo '</div>';
 				}
-				$showinbox = true;
-				$userid = htmlspecialchars($_COOKIE['forumid']);
-				$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
-				$returnto = 'https://forums.dropbox.com';
-				if (isset($_COOKIE['returnto']))
-					$returnto = $_COOKIE['returnto'];
-				require 'db-login.php';
 				if ($userid) {
-					echo '<h4><a href="' . $returnto . '">Back to forums</a></h4>';
 					$action = $_POST['action'];
 					$timeOffsetSeconds = $timeoffset * 60;
 					if ($action == 'addressbook')
