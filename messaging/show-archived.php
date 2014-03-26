@@ -1,0 +1,14 @@
+<?php
+$showinbox = false;
+$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `from` = '" . $userid . "' AND `archived` = 1 ORDER BY `time` DESC");
+$count = mysqli_num_rows($result);
+echo '<h2>Archived Messages - ' . $count . '</h2>';
+echo '<p><form action="messages.php" method="post"><button type="submit" class="btn btn-primary">Back to inbox</button></form></p>';
+while ($row = mysqli_fetch_assoc($result)) {
+	echo '<p class="topline">';
+	echo '<br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>To: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['to']) . '" target="_blank">' . htmlspecialchars($row['to']) . '</a><br>Message:<br>' . nl2br(htmlspecialchars($row['msg']));
+	echo '</p>';
+}
+if ($count == 0)
+	echo '<p class="topline center"><br>It doesn\'t appear that you have any archived messages.</p>';
+?>
