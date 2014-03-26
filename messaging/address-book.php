@@ -8,7 +8,7 @@ $showinbox = false;
 </p>
 <form method='post' action='messages.php' class='menu'>
 	<input type='hidden' name='action' value='compose' />
-	<select name='to' class='form-control'>
+	<select name='msgto' class='form-control'>
 		<option value=''>Please Select a User</option>
 		<optgroup label='--Mods--'>
 			<option value='1618104'>Andy Y.</option>
