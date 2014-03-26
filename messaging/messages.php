@@ -31,8 +31,8 @@ require 'db-login.php';
 				<div class="header">
 					<ul class="nav nav-pills pull-left">
 						<li<?php if ($_POST['action']=='') echo ' class="active"'?>><a href=''>Inbox</a></li>
-						<li<?php if ($_POST['action']=='showsent') echo ' class="active"'; else echo ' class="inactive"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
-						<li<?php if ($_POST['action']=='showarch') echo ' class="active"'; else echo ' class="inactive"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
+						<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active"'?>><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
+						<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active"'?>><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
 						<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
 					</ul>
 					<div class="site-title">
@@ -48,7 +48,7 @@ require 'db-login.php';
 					return mysqli_real_escape_string($db, $string);
 				}
 				function navform() {
-					echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit" class="btn btn-success">Compose</button></form>';
+					echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 				}
 				if ($userid) {
 					$action = $_POST['action'];
@@ -70,9 +70,9 @@ require 'db-login.php';
 						navform();
 						while ($row = mysqli_fetch_assoc($result)) {
 							echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a><br>Message:<br>' . nl2br(htmlspecialchars($row['msg'])) . '</p>';
-							echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="delete" /><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input name="for" type="hidden" value="' . $userid . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit" class="btn btn-danger btn-sm">Delete</button></form>';
-							echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="compose" /><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '" /><button type="submit" class="btn btn-success btn-sm">Reply</button></form>';
-							echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="arch" /><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input name="for" type="hidden" value="' . $userid . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit" class="btn btn-primary btn-sm">Archive</button></form>';
+							echo '<form method="post" action="messages.php" class="menu"><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit" class="btn btn-danger btn-sm" name="action" value="delete">Delete</button></form>';
+							echo '<form method="post" action="messages.php" class="menu"><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '" /><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button></form>';
+							echo '<form method="post" action="messages.php" class="menu"><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit" class="btn btn-primary btn-sm" name="action" value="arch">Archive</button></form>';
 						}
 						if ($count == 0)
 							echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
