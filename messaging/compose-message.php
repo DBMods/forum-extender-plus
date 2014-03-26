@@ -23,7 +23,6 @@ if ($action == 'send') {
 if ($action == 'compose' || $senderror) {
 	$showinbox = false;
 	echo $senderror;
-	echo '<div id="recip-fail" class="alert alert-danger"><p><strong>Recipient must either be a number or predefined name</strong></p></div>';
 	echo '<h2>Compose</h2>';
 	echo '<div class="topline">';
 	echo '<form action="messages.php" method="post"><input name="action" type="hidden" value="addressbook" /><br><button type="submit" class="btn btn-primary">View Address Book</button></form>';

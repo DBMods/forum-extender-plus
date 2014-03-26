@@ -35,9 +35,6 @@ if ($_POST['returnto']) {
 		</div>
 		<div id="wrapper" class="container">
 			<div class="jumbotron" id="main">
-				<div class="alert alert-danger">
-					<p>Message sending is occasionally broken while we are trying to fix a new feature. Sorry for the inconvenience.</p>
-				</div>
 				<?php
 				function sqlesc($string) {
 					global $db;
@@ -96,25 +93,5 @@ if ($_POST['returnto']) {
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-		<script type="text/javascript">
-			$('#messageform').submit(function() {
-				if (validateName())
-					return true;
-				else
-					return false;
-			});
-			function validateName() {
-				console.log($('#msgto').val());
-				console.log(['Andy Y.', 'Andy Y', 'Chris J.', 'Chris J', 'Mark Mc', 'Nathan C.', 'Nathan C', 'R.M.', 'RM', 'R.M', 'thightower', 'T. Hightower', 'T Hightower'].indexOf($('#msgto').val()));
-				console.log(parseInt($('#msgto').val()));
-				console.log(parseInt($('#msgto').val()));
-				console.log(parseInt($('#msgto').val()) === NaN);
-				if (['Andy Y.', 'Andy Y', 'Chris J.', 'Chris J', 'Mark Mc', 'Nathan C.', 'Nathan C', 'R.M.', 'RM', 'R.M', 'thightower', 'T. Hightower', 'T Hightower'].indexOf($('#msgto').val()) == -1 && parseInt($('#msgto').val()) === NaN) {
-					$('#recip-fail strong').html('NO');
-					return false;
-				} else
-					$('#recip-fail strong').html('Yay');
-			}
-		</script>
 	</body>
 </html>
