@@ -40,6 +40,12 @@ if ($_POST['returnto']) {
 					global $db;
 					return mysqli_real_escape_string($db, $string);
 				}
+				function navform() {
+					echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit" class="btn btn-success">Compose</button></form>';
+					echo '<form action="messages.php" method="post" class="menu"><button type="submit" class="btn btn-primary">Back to inbox</button></form>';
+					echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Sent</button></form>';
+					echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showarch" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Archived</button></form>';
+				}
 				$showinbox = true;
 				$userid = htmlspecialchars($_COOKIE['forumid']);
 				$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
@@ -65,9 +71,7 @@ if ($_POST['returnto']) {
 						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 						$count = mysqli_num_rows($result);
 						echo '<h2>Inbox - ' . $count . '</h2>';
-						echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit" class="btn btn-success">Compose</button></form>';
-						echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Sent</button></form>';
-						echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showarch" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Archived</button></form>';
+						navform();
 						while ($row = mysqli_fetch_assoc($result)) {
 							echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a><br>Message:<br>' . nl2br(htmlspecialchars($row['msg'])) . '</p>';
 							echo '<form method="post" action="messages.php" class="menu"><input type="hidden" name="action" value="delete" /><input name="time" type="hidden" value="' . htmlspecialchars($row['time']) . '" /><input name="for" type="hidden" value="' . $userid . '" /><input type="hidden" name="from" value="' . htmlspecialchars($row['from']) . '" /><input type="hidden" name="msg" value="' . htmlspecialchars($row['msg']) . '" /><button type="submit" class="btn btn-danger btn-sm">Delete</button></form>';

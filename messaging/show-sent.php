@@ -1,7 +1,7 @@
 <?php
 $showinbox = false;
 echo '<h2>Sent Messages</h2>';
-echo '<form action="messages.php" method="post"><button type="submit" class="btn btn-primary">Back to inbox</button></form>';
+navform();
 $result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `from` = '" . $userid . "' ORDER BY `time` DESC");
 while ($row = mysqli_fetch_assoc($result)) {
 	echo '<p class="topline">';
