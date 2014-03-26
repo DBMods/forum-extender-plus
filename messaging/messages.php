@@ -31,8 +31,8 @@ require 'db-login.php';
 				<div class="header">
 					<ul class="nav nav-pills pull-left">
 						<li<?php if ($_POST['action']=='') echo ' class="active"'?>><a href=''>Inbox</a></li>
-						<li<?php if ($_POST['action']=='showsent') echo ' class="active"'; else echo ' class="inactive"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
-						<li<?php if ($_POST['action']=='showarch') echo ' class="active"'; else echo ' class="inactive"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
+						<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
+						<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active"'?>><form action='' method='post' class='form-pill'><input type='hidden' name='returnto' value='<?php echo strip_tags($_POST['returnto'])?>' /><input type='hidden' name='from' value='<?php echo $userid?>' /><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
 						<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
 					</ul>
 					<div class="site-title">
