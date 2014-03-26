@@ -42,7 +42,7 @@ if ($_POST['returnto']) {
 				}
 				function navform() {
 					echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="compose" /><button type="submit" class="btn btn-success">Compose</button></form>';
-					echo '<form action="messages.php" method="post" class="menu"><button type="submit" class="btn btn-primary">Back to inbox</button></form>';
+					echo '<form action="messages.php" method="post" class="menu"><button type="submit" class="btn btn-primary">Inbox</button></form>';
 					echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showsent" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Sent</button></form>';
 					echo '<form action="messages.php" method="post" class="menu"><input type="hidden" name="action" value="showarch" /><input type="hidden" name="returnto" value="' . strip_tags($_POST['returnto']) . '" /><input type="hidden" name="from" value="' . $userid . '" /><button type="submit" class="btn btn-primary">Archived</button></form>';
 				}
