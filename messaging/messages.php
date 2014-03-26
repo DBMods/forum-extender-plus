@@ -51,9 +51,7 @@ if ($_POST['returnto']) {
 					echo '<h4><a href="' . $returnto . '">Back to forums</a></h4>';
 					$action = $_POST['action'];
 					$timeOffsetSeconds = $timeoffset * 60;
-					if ($action == 'delete')
-						include 'delete-message.php';
-					elseif ($action == 'addressbook')
+					if ($action == 'addressbook')
 						include 'address-book.php';
 					elseif ($action == 'compose' || $action == 'send')
 						include 'compose-message.php';
@@ -61,8 +59,8 @@ if ($_POST['returnto']) {
 						include 'show-sent.php';
 					elseif ($action == 'showarch')
 						include 'show-archived.php';
-					elseif ($action == 'arch' || $action == 'unarch')
-						include 'toggle-arch.php';
+					elseif ($action == 'delete' || $action == 'arch' || $action == 'unarch')
+						include 'manipulate-entry.php';
 					if ($showinbox) {
 						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 						$count = mysqli_num_rows($result);
