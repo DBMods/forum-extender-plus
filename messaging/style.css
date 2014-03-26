@@ -54,6 +54,9 @@ footer hr {
 	padding: 10px 15px;
 	box-sizing: border-box;
 }
+.btn-pill:focus {
+	outline: 0;
+}
 .inactive {
 	border-radius: 4px;
 	color: #428bca;
