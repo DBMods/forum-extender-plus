@@ -59,7 +59,7 @@ if ($_POST['returnto']) {
 						include 'show-sent.php';
 					elseif ($action == 'showarch')
 						include 'show-archived.php';
-					elseif ($action == 'delete' || $action == 'arch' || $action == 'unarch')
+					elseif ($action == 'delete' || $action == 'archive' || $action == 'unarchive')
 						include 'manipulate-entry.php';
 					if ($showinbox) {
 						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
