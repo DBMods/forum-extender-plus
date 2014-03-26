@@ -3,9 +3,6 @@ body {
 	margin: 0;
 	padding-top: 70px;
 }
-a, button {
-	outline: 0;
-}
 .header {
 	padding-top: 19px;
 	padding-bottom: 59px;
