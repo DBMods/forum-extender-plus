@@ -15,7 +15,7 @@ if ($action == 'send') {
 	elseif ($dest == 'thightower' || $dest == 'T. Hightower' || $dest == 'T Hightower')
 		$dest = '222573';
 	if (is_numeric($dest) && $dest != 0) {
-		$result = mysqli_query($db, 'INSERT INTO msglist VALUES("' . sqlesc($dest) . '", "' . sqlesc($userid) . '", "' . sqlesc($_POST['msgtext']) . '", "' . time() . '")');
+		$result = mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($userid) . '", "' . sqlesc($_POST['msgtext']) . '", "' . time() . '")');
 		echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message sent.</strong></p></div></div>';
 	} else
 		$senderror = '<div class="alert-center"><div id="alert-fade" class="alert alert-danger"><p><strong>Invalid destination.</strong></p></div></div>';
