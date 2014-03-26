@@ -35,6 +35,9 @@ if ($_POST['returnto']) {
 		</div>
 		<div id="wrapper" class="container">
 			<div class="jumbotron" id="main">
+				<div class="alert alert-danger">
+					<p>Message sending is occasionally broken while we are trying to fix a new feature. Sorry for the inconvenience.</p>
+				</div>
 				<?php
 				function sqlesc($string) {
 					global $db;
@@ -101,11 +104,16 @@ if ($_POST['returnto']) {
 					return false;
 			});
 			function validateName() {
-				if (['Andy Y.', 'Andy Y', 'Chris J.', 'Chris J', 'Mark Mc', 'Nathan C.', 'Nathan C', 'R.M.', 'RM', 'R.M', 'thightower', 'T. Hightower', 'T Hightower'].indexOf($('#msgto').val()) == -1 && typeof parseInt($('#msgto').val()) != 'number') {
-					$('recip-fail strong').html('NO');
+				console.log($('#msgto').val());
+				console.log(['Andy Y.', 'Andy Y', 'Chris J.', 'Chris J', 'Mark Mc', 'Nathan C.', 'Nathan C', 'R.M.', 'RM', 'R.M', 'thightower', 'T. Hightower', 'T Hightower'].indexOf($('#msgto').val()));
+				console.log(parseInt($('#msgto').val()));
+				console.log(parseInt($('#msgto').val()));
+				console.log(parseInt($('#msgto').val()) === NaN);
+				if (['Andy Y.', 'Andy Y', 'Chris J.', 'Chris J', 'Mark Mc', 'Nathan C.', 'Nathan C', 'R.M.', 'RM', 'R.M', 'thightower', 'T. Hightower', 'T Hightower'].indexOf($('#msgto').val()) == -1 && parseInt($('#msgto').val()) === NaN) {
+					$('#recip-fail strong').html('NO');
 					return false;
 				} else
-					$('recip-fail strong').html('Yay');
+					$('#recip-fail strong').html('Yay');
 			}
 		</script>
 	</body>
