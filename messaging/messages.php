@@ -63,6 +63,8 @@ require 'db-login.php';
 						include 'show-archived.php';
 					elseif ($action == 'delete' || $action == 'arch' || $action == 'unarch')
 						include 'manipulate-entry.php';
+					elseif ($action == 'stats')
+						include 'stats.php';
 					if ($showinbox) {
 						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 						$count = mysqli_num_rows($result);
