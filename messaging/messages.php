@@ -33,6 +33,7 @@ require 'db-login.php';
 					<li class="<?php if ($_POST['action']=='') echo 'active'?>"><a href=''>Inbox</a></li>
 					<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
 					<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
+					<li class="<?php if ($_POST['action']!='stats') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='stats'>Stats</button></form></li>
 					<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
 				</ul>
 				<div class="site-title">
