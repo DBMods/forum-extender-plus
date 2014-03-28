@@ -18,14 +18,12 @@ $returnto = 'https://forums.dropbox.com';
 if (isset($_COOKIE['returnto']))
 	$returnto = $_COOKIE['returnto'];
 $action = $_POST['action'];
-if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats')
+if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats') {
 	$page = $action;
-elseif ($action == 'compose' || $action == 'addressbook')
-	$page = false;
-if ($page = 'showarch') {
 	setcookie('page', htmlspecialchars($page));
 	$_COOKIE['page'] = htmlspecialchars($page);
-}
+} elseif ($action == 'compose' || $action == 'addressbook')
+	$page = false;
 require 'db-login.php';
 ?>
 <html>
