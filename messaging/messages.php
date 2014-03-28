@@ -103,7 +103,7 @@ require 'db-login.php';
 					echo '<li class="';
 					if ($_POST['action'] == '')
 						echo 'active';
-					echo '"><a href="">' . $countBadge . 'Inbox</a>/li><li class="';
+					echo '"><a href="">' . $countBadge . 'Inbox</a></li><li class="';
 					if ($_POST['action'] != 'showsent')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
@@ -126,11 +126,10 @@ require 'db-login.php';
 			window.setTimeout(function() {
 				$('#alert-fade').addClass('fade');
 			}, 3000);
-			$(document).on("click", ".open-alertDelete", function(sendID) {
+			$('.open-alertDelete').click(function(sendID) {
 				sendID.preventDefault();
 				var _self = $(this);
-				var msgID = _self.data('id');
-				$("#msgid").val(msgID);
+				$('#msgid').val(_self.data('id'));
 				$(_self.attr('href')).modal('show');
 			});
 		</script>
