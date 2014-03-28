@@ -34,9 +34,11 @@ require 'db-login.php';
 					global $db;
 					return mysqli_real_escape_string($db, $string);
 				}
+
 				function navform() {
 					echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 				}
+
 				if ($userid) {
 					$action = $_POST['action'];
 					$timeOffsetSeconds = $timeoffset * 60;
@@ -52,7 +54,7 @@ require 'db-login.php';
 						include 'manipulate-entry.php';
 					elseif ($action == 'stats')
 						include 'stats.php';
-					
+
 					//Run query here so Inbox badge will show number of messages no matter what page its on
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 					$count = mysqli_num_rows($result);
@@ -68,37 +70,20 @@ require 'db-login.php';
 							echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="arch">Archive</button></form>';
 							echo '<a data-id="' . htmlspecialchars($row['id']) . '" class="open-alertDelete btn btn-danger btn-sm" href="#alertDelete">Delete</a>';
 						}
-							echo '<div class="modal fade in" id="alertDelete">';
-							echo '<div class="modal-dialog">';
-							echo '<div class="modal-content">';
-							echo '<div class="modal-header">';
-							echo '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>';
-							echo '<h3 class="modal-title">Are you sure?</h3>';
-							echo '</div>';
-							echo '<div class="modal-body">';
-							echo '<h4>If you delete this message, it is gone forever!</h4>';
-							echo '</div>';
-							echo '<div class="modal-footer">';
-							echo '<button class="btn btn-default" data-dismiss="modal">Cancel</button>';
-							echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
-							echo '</div>';
-							echo '</div>';
-							echo '</div>';
-							echo '</div>';
+						echo '<div class="modal fade in" id="alertDelete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
+						echo '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>';
+						echo '<h3 class="modal-title">Are you sure?</h3>';
+						echo '</div>';
+						echo '<div class="modal-body"><h4>If you delete this message, it is gone forever!</h4></div>';
+						echo '<div class="modal-footer">';
+						echo '<button class="btn btn-default" data-dismiss="modal">Cancel</button>';
+						echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
+						echo '</div></div></div></div>';
 						if ($count == 0)
-							echo '
-						<p class="topline center">
-							<br>
-							It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."
-						</p>';
+							echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
 					}
 				} else
-					echo '
-						<div class="alert alert-danger">
-							<p>
-								You do not have sufficient permission to access this page. Please authenticate through the <a href="https://forums.dropbox.com">Dropbox Forums</a>.
-							</p>
-						</div>';
+					echo '<div class="alert alert-danger"><p>You do not have sufficient permission to access this page. Please authenticate through the <a href="https://forums.dropbox.com">Dropbox Forums</a>.</p></div>';
 				mysqli_close($db);
 				?>
 			</div>
@@ -114,11 +99,37 @@ require 'db-login.php';
 		<div class="container navbar-fixed-top">
 			<div class="header">
 				<ul class="nav nav-pills pull-left">
-					<li class="<?php if ($_POST['action']=='') echo 'active'?>"><a href=''><span class='badge pull-right'><?php echo $countBadge ?></span>Inbox</a></li>
-					<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
-					<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
-					<li class="<?php if ($_POST['action']!='stats') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='stats'>Stats</button></form></li>
-					<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
+					<li class="<?php if ($_POST['action']=='') echo 'active'?>">
+						<a href=''><span class='badge pull-right'>
+							<?php
+							echo $countBadge;
+							?>
+						</span>Inbox</a>
+					</li>
+					<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active'?>">
+						<form action='' method='post' class='form-pill'>
+							<button type='submit' class='btn-pill' name='action' value='showsent'>
+								Sent
+							</button>
+						</form>
+					</li>
+					<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active'?>">
+						<form action='' method='post' class='form-pill'>
+							<button type='submit' class='btn-pill' name='action' value='showarch'>
+								Archive
+							</button>
+						</form>
+					</li>
+					<li class="<?php if ($_POST['action']!='stats') echo 'in'; echo 'active'?>">
+						<form action='' method='post' class='form-pill'>
+							<button type='submit' class='btn-pill' name='action' value='stats'>
+								Stats
+							</button>
+						</form>
+					</li>
+					<li>
+						<a href='<?php echo $returnto ?>'>Back to Forums</a>
+					</li>
 				</ul>
 				<div class="site-title">
 					<h3 class="text-muted"><a href=''>Dropbox Forum Extender+ Messenger</a></h3>
@@ -131,15 +142,17 @@ require 'db-login.php';
 			window.setTimeout(function() {
 				$('#alert-fade').addClass('fade');
 			}, 3000);
+
 		</script>
 		<script>
-			$(document).on("click", ".open-alertDelete", function (sendID) {
-			sendID.preventDefault();
-			var _self = $(this);
-			var msgID = _self.data('id');
-			$("#msgid").val(msgID);
-			$(_self.attr('href')).modal('show');
+			$(document).on("click", ".open-alertDelete", function(sendID) {
+				sendID.preventDefault();
+				var _self = $(this);
+				var msgID = _self.data('id');
+				$("#msgid").val(msgID);
+				$(_self.attr('href')).modal('show');
 			});
+
 		</script>
 	</body>
 </html>
