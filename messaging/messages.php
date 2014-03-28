@@ -99,37 +99,21 @@ require 'db-login.php';
 		<div class="container navbar-fixed-top">
 			<div class="header">
 				<ul class="nav nav-pills pull-left">
-					<li class="<?php if ($_POST['action']=='') echo 'active'?>">
-						<a href=''>
-							<?php
-							echo $countBadge;
-							?>
-						Inbox</a>
-					</li>
-					<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active'?>">
-						<form action='' method='post' class='form-pill'>
-							<button type='submit' class='btn-pill' name='action' value='showsent'>
-								Sent
-							</button>
-						</form>
-					</li>
-					<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active'?>">
-						<form action='' method='post' class='form-pill'>
-							<button type='submit' class='btn-pill' name='action' value='showarch'>
-								Archive
-							</button>
-						</form>
-					</li>
-					<li class="<?php if ($_POST['action']!='stats') echo 'in'; echo 'active'?>">
-						<form action='' method='post' class='form-pill'>
-							<button type='submit' class='btn-pill' name='action' value='stats'>
-								Stats
-							</button>
-						</form>
-					</li>
-					<li>
-						<a href='<?php echo $returnto ?>'>Back to Forums</a>
-					</li>
+					<?php
+					echo '<li class="';
+					if ($_POST['action'] == '')
+						echo 'active';
+					echo '"><a href="">' . $countBadge . 'Inbox</a>/li><li class="';
+					if ($_POST['action'] != 'showsent')
+						echo 'in';
+					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
+					if ($_POST['action'] != 'showarch')
+						echo 'in';
+					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showarch">Archive</button></form></li><li class="';
+					if ($_POST['action'] != 'stats')
+						echo 'in';
+					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
+					?>
 				</ul>
 				<div class="site-title">
 					<h3 class="text-muted"><a href=''>Dropbox Forum Extender+ Messenger</a></h3>
@@ -142,9 +126,6 @@ require 'db-login.php';
 			window.setTimeout(function() {
 				$('#alert-fade').addClass('fade');
 			}, 3000);
-
-		</script>
-		<script>
 			$(document).on("click", ".open-alertDelete", function(sendID) {
 				sendID.preventDefault();
 				var _self = $(this);
@@ -152,7 +133,6 @@ require 'db-login.php';
 				$("#msgid").val(msgID);
 				$(_self.attr('href')).modal('show');
 			});
-
 		</script>
 	</body>
 </html>
