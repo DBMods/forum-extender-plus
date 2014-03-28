@@ -80,7 +80,7 @@ require 'db-login.php';
 							echo '</div>';
 							echo '<div class="modal-footer">';
 							echo '<button class="btn btn-default" data-dismiss="modal">Cancel</button>';
-							echo '<form method="post" action="messages.php" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
+							echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
 							echo '</div>';
 							echo '</div>';
 							echo '</div>';
