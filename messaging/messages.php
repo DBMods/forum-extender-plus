@@ -27,20 +27,6 @@ require 'db-login.php';
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
 	</head>
 	<body>
-		<div class="container navbar-fixed-top">
-			<div class="header">
-				<ul class="nav nav-pills pull-left">
-					<li class="<?php if ($_POST['action']=='') echo 'active'?>"><a href=''>Inbox</a></li>
-					<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
-					<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
-					<li class="<?php if ($_POST['action']!='stats') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='stats'>Stats</button></form></li>
-					<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
-				</ul>
-				<div class="site-title">
-					<h3 class="text-muted"><a href=''>Dropbox Forum Extender+ Messenger</a></h3>
-				</div>
-			</div>
-		</div>
 		<div id="wrapper" class="container">
 			<div class="jumbotron" id="main">
 				<?php
@@ -66,9 +52,15 @@ require 'db-login.php';
 						include 'manipulate-entry.php';
 					elseif ($action == 'stats')
 						include 'stats.php';
+					//Run query here so Inbox badge will show number of messages no matter what page its on
+					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
+					$count = mysqli_num_rows($result);
+					if ($count > 0) {
+						$countBadge = $count;
+					} else {
+						$countBadge = "";
+					}
 					if ($showinbox) {
-						$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
-						$count = mysqli_num_rows($result);
 						echo '<h2>Inbox - ' . $count . '</h2>';
 						navform();
 						while ($row = mysqli_fetch_assoc($result)) {
@@ -119,6 +111,20 @@ require 'db-login.php';
 					Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
 				</p>
 			</footer>
+		</div>
+		<div class="container navbar-fixed-top">
+			<div class="header">
+				<ul class="nav nav-pills pull-left">
+					<li class="<?php if ($_POST['action']=='') echo 'active'?>"><a href=''><span class='badge pull-right'><?php echo $countBadge ?></span>Inbox</a></li>
+					<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showsent'>Sent</button></form></li>
+					<li class="<?php if ($_POST['action']!='showarch') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='showarch'>Archive</button></form></li>
+					<li class="<?php if ($_POST['action']!='stats') echo 'in'; echo 'active'?>"><form action='' method='post' class='form-pill'><button type='submit' class='btn-pill' name='action' value='stats'>Stats</button></form></li>
+					<li><a href='<?php echo $returnto ?>'>Back to Forums</a></li>
+				</ul>
+				<div class="site-title">
+					<h3 class="text-muted"><a href=''>Dropbox Forum Extender+ Messenger</a></h3>
+				</div>
+			</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
