@@ -17,6 +17,15 @@ $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $returnto = 'https://forums.dropbox.com';
 if (isset($_COOKIE['returnto']))
 	$returnto = $_COOKIE['returnto'];
+$action = $_POST['action'];
+if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats')
+	$page = $action;
+elseif ($action == 'compose' || $action == 'addressbook')
+	$page = false;
+if ($page = '' || $page = 'showarch') {
+	setcookie('page', htmlspecialchars($page));
+	$_COOKIE['page'] = htmlspecialchars($page);
+}
 require 'db-login.php';
 ?>
 <html>
@@ -37,9 +46,6 @@ require 'db-login.php';
 				function navform() {
 					echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 				}
-				$action = $_POST['action'];
-				if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats')
-					$page = $action;
 				if ($userid) {
 					$timeOffsetSeconds = $timeoffset * 60;
 					if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
