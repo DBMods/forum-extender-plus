@@ -108,13 +108,13 @@ require 'db-login.php';
 					if ($page == '')
 						echo 'active';
 					echo '"><a href="">' . $countBadge . 'Inbox</a></li><li class="';
-					if ($page != 'showsent')
+					if ($page != false && $page != 'showsent')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
-					if ($page != 'showarch')
+					if ($page != false && $page != 'showarch')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showarch">Archive</button></form></li><li class="';
-					if ($page != 'stats')
+					if ($page != false && $page != 'stats')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
 					?>
