@@ -22,8 +22,7 @@ if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action =
 	$page = $action;
 	setcookie('page', htmlspecialchars($page));
 	$_COOKIE['page'] = htmlspecialchars($page);
-} elseif ($action == 'compose' || $action == 'addressbook')
-	$page = false;
+}
 require 'db-login.php';
 ?>
 <html>
@@ -105,16 +104,16 @@ require 'db-login.php';
 				<ul class="nav nav-pills pull-left">
 					<?php
 					echo '<li class="';
-					if ($page == '')
+					if ($showinbox)
 						echo 'active';
 					echo '"><a href="">' . $countBadge . 'Inbox</a></li><li class="';
-					if ($page != false && $page != 'showsent')
+					if ($page != 'showsent')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
-					if ($page != false && $page != 'showarch')
+					if ($page != 'showarch')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showarch">Archive</button></form></li><li class="';
-					if ($page != false && $page != 'stats')
+					if ($page != 'stats')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
 					?>
