@@ -52,14 +52,14 @@ require 'db-login.php';
 						include 'manipulate-entry.php';
 					elseif ($action == 'stats')
 						include 'stats.php';
+					
 					//Run query here so Inbox badge will show number of messages no matter what page its on
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 					$count = mysqli_num_rows($result);
-					if ($count > 0) {
+					if ($count > 0)
 						$countBadge = $count;
-					} else {
+					else
 						$countBadge = "";
-					}
 					if ($showinbox) {
 						echo '<h2>Inbox - ' . $count . '</h2>';
 						navform();
