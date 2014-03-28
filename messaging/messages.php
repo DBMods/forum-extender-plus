@@ -42,16 +42,16 @@ require 'db-login.php';
 					$page = $action;
 				if ($userid) {
 					$timeOffsetSeconds = $timeoffset * 60;
-					if ($action == 'addressbook')
+					if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
+						include 'manipulate-entry.php';
+					elseif ($action == 'addressbook')
 						include 'address-book.php';
 					elseif ($action == 'compose' || $action == 'send')
 						include 'compose-message.php';
-					elseif ($page == 'showsent')
+					if ($page == 'showsent')
 						include 'show-sent.php';
 					elseif ($page == 'showarch')
 						include 'show-archived.php';
-					elseif ($action == 'delete' || $action == 'arch' || $action == 'unarch')
-						include 'manipulate-entry.php';
 					elseif ($page == 'stats')
 						include 'stats.php';
 
@@ -62,7 +62,7 @@ require 'db-login.php';
 						$countBadge = '<span class="badge pull-right">' . $count . '</span>';
 					else
 						$countBadge = '';
-					if ($showinbox) {
+					if ($showinbox && $page == '') {
 						echo '<h2>Inbox - ' . $count . '</h2>';
 						navform();
 						while ($row = mysqli_fetch_assoc($result)) {
