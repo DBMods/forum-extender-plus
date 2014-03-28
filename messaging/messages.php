@@ -22,7 +22,7 @@ if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action =
 	$page = $action;
 elseif ($action == 'compose' || $action == 'addressbook')
 	$page = false;
-if ($page = '' || $page = 'showarch') {
+if ($page = 'showarch') {
 	setcookie('page', htmlspecialchars($page));
 	$_COOKIE['page'] = htmlspecialchars($page);
 }
