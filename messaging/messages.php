@@ -59,9 +59,9 @@ require 'db-login.php';
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 					$count = mysqli_num_rows($result);
 					if ($count > 0)
-						$countBadge = $count;
+						$countBadge = '<span class="badge pull-right">' . $count . '</span>';
 					else
-						$countBadge = "";
+						$countBadge = '';
 					if ($showinbox) {
 						echo '<h2>Inbox - ' . $count . '</h2>';
 						navform();
@@ -100,11 +100,11 @@ require 'db-login.php';
 			<div class="header">
 				<ul class="nav nav-pills pull-left">
 					<li class="<?php if ($_POST['action']=='') echo 'active'?>">
-						<a href=''><span class='badge pull-right'>
+						<a href=''>
 							<?php
 							echo $countBadge;
 							?>
-						</span>Inbox</a>
+						Inbox</a>
 					</li>
 					<li class="<?php if ($_POST['action']!='showsent') echo 'in'; echo 'active'?>">
 						<form action='' method='post' class='form-pill'>
