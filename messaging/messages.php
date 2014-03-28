@@ -34,28 +34,28 @@ require 'db-login.php';
 					global $db;
 					return mysqli_real_escape_string($db, $string);
 				}
-
 				function navform() {
 					echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 				}
-
+				$action = $_POST['action'];
+				if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats')
+					$page = $action;
 				if ($userid) {
-					$action = $_POST['action'];
 					$timeOffsetSeconds = $timeoffset * 60;
 					if ($action == 'addressbook')
 						include 'address-book.php';
 					elseif ($action == 'compose' || $action == 'send')
 						include 'compose-message.php';
-					elseif ($action == 'showsent')
+					elseif ($page == 'showsent')
 						include 'show-sent.php';
-					elseif ($action == 'showarch')
+					elseif ($page == 'showarch')
 						include 'show-archived.php';
 					elseif ($action == 'delete' || $action == 'arch' || $action == 'unarch')
 						include 'manipulate-entry.php';
-					elseif ($action == 'stats')
+					elseif ($page == 'stats')
 						include 'stats.php';
 
-					//Run query here so Inbox badge will show number of messages no matter what page its on
+					//Run query here so Inbox badge will show number of messages no matter what page it's on
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 					$count = mysqli_num_rows($result);
 					if ($count > 0)
@@ -101,16 +101,16 @@ require 'db-login.php';
 				<ul class="nav nav-pills pull-left">
 					<?php
 					echo '<li class="';
-					if ($_POST['action'] == '')
+					if ($page == '')
 						echo 'active';
 					echo '"><a href="">' . $countBadge . 'Inbox</a></li><li class="';
-					if ($_POST['action'] != 'showsent')
+					if ($page != 'showsent')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
-					if ($_POST['action'] != 'showarch')
+					if ($page != 'showarch')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showarch">Archive</button></form></li><li class="';
-					if ($_POST['action'] != 'stats')
+					if ($page != 'stats')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
 					?>
@@ -132,6 +132,7 @@ require 'db-login.php';
 				$('#msgid').val(_self.data('id'));
 				$(_self.attr('href')).modal('show');
 			});
+
 		</script>
 	</body>
 </html>
