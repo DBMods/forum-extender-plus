@@ -1,6 +1,6 @@
 <?php
 if ($action == 'delete') {
-	$result = mysqli_query($db, "DELETE FROM `msglist` WHERE `id` = '" . sqlesc($_POST['msgid']) . "' AND `from` = '" . sqlesc($userid) . "'");
+	$result = mysqli_query($db, "DELETE FROM `msglist` WHERE `id` = '" . sqlesc($_POST['msgid']) . "' AND `to` = '" . sqlesc($userid) . "'");
 	if ($result) {
 		echo '<div class="alert-center"><div id="alert-fade" class="alert alert-warning"><p><strong>Message deleted.</strong></p></div></div>';
 	}
