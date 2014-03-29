@@ -62,7 +62,7 @@ require 'db-login.php';
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 					$count = mysqli_num_rows($result);
 					if ($count > 0)
-						$countBadge = '<span class="badge pull-right">' . $count . '</span>';
+						$countBadge = ' <span class="badge">' . $count . '</span>';
 					else
 						$countBadge = '';
 					if ($showinbox && $page == '') {
@@ -106,7 +106,7 @@ require 'db-login.php';
 					echo '<li class="';
 					if ($showinbox)
 						echo 'active';
-					echo '"><a href="">' . $countBadge . 'Inbox</a></li><li class="';
+					echo '"><a href="">Inbox' . $countBadge . '</a></li><li class="';
 					if ($page != 'showsent')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
