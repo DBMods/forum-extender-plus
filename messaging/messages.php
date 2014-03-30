@@ -20,8 +20,8 @@ if (isset($_COOKIE['returnto']))
 $action = $_POST['action'];
 if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats') {
 	$page = $action;
-	setcookie('page', htmlspecialchars($page));
-	$_COOKIE['page'] = htmlspecialchars($page);
+	setcookie('page', $page);
+	$_COOKIE['page'] = $page;
 }
 require 'db-login.php';
 ?>
