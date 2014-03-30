@@ -24,6 +24,9 @@ if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action =
 	$_COOKIE['page'] = $page;
 }
 require 'db-login.php';
+$indirectcall = true;
+if ($action == 'adminlogin')
+	include 'admin-auth.php';
 ?>
 <html>
 	<head>
