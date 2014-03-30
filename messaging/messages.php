@@ -58,13 +58,19 @@ require 'db-login.php';
 					elseif ($page == 'stats')
 						include 'stats.php';
 
-					//Run query here so Inbox badge will show number of messages no matter what page it's on
+					//Message counter navbar badges
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 					$count = mysqli_num_rows($result);
 					if ($count > 0)
-						$countBadge = ' <span class="badge">' . $count . '</span>';
+						$countBadge = ' <span class="badge pull-right">' . $count . '</span>';
 					else
 						$countBadge = '';
+					$archCount = mysqli_num_rows(mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1"));
+					if ($archCount > 0)
+						$archBadge = ' <span class="badge pull-right">' . $archCount . '</span>';
+					else
+						$archBadge = '';
+
 					if ($showinbox && $page == '') {
 						echo '<h2>Inbox - ' . $count . '</h2>';
 						navform();
@@ -112,7 +118,7 @@ require 'db-login.php';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
 					if ($page != 'showarch')
 						echo 'in';
-					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showarch">Archive</button></form></li><li class="';
+					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showarch">Archive' . $archBadge . '</button></form></li><li class="';
 					if ($page != 'stats')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
