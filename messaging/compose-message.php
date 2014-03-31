@@ -16,9 +16,6 @@ if ($action == 'send') {
 		$dest = '222573';
 	if (is_numeric($dest) && $dest != 0) {
 		mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($userid) . '", "' . sqlesc($_POST['msgtext']) . '", "' . time() . '")');
-		$newcount = mysqli_query($db, 'SELECT * FROM msglist WHERE id = (SELECT MAX(id) FROM msglist)');
-		$row = mysqli_fetch_assoc($newcount);
-		mysqli_query($db, 'INSERT INTO msgcount VALUES("' . $row['id'] . '")');
 		echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message sent.</strong></p></div></div>';
 	} else
 		$senderror = '<div class="alert-center"><div id="alert-fade" class="alert alert-danger"><p><strong>Invalid destination.</strong></p></div></div>';
