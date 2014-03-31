@@ -31,7 +31,7 @@ if ($action == 'adminlogin')
 <html>
 	<head>
 		<title>Forum Extender+ Messages</title>
-		<link rel='stylesheet' href='style.css' />
+		<link rel='stylesheet' href='css/style.css' />
 		<link rel="stylesheet" href="css/bootstrap.css" />
 		<link rel="stylesheet" href="css/bootstrap-theme.css" />
 	</head>
