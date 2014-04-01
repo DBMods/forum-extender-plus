@@ -65,12 +65,12 @@ if ($action == 'adminlogin')
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 					$count = mysqli_num_rows($result);
 					if ($count > 0)
-						$countBadge = ' <span class="badge pull-right">' . $count . '</span>';
+						$countBadge = ' <span class="badge">' . $count . '</span>';
 					else
 						$countBadge = '';
 					$archCount = mysqli_num_rows(mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1"));
 					if ($archCount > 0)
-						$archBadge = ' <span class="badge pull-right">' . $archCount . '</span>';
+						$archBadge = ' <span class="badge">' . $archCount . '</span>';
 					else
 						$archBadge = '';
 
