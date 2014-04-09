@@ -18,7 +18,7 @@ $returnto = 'https://forums.dropbox.com';
 if (isset($_COOKIE['returnto']))
 	$returnto = $_COOKIE['returnto'];
 $action = $_POST['action'];
-if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats') {
+if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats' || $action == 'report') {
 	$page = $action;
 	setcookie('page', $page);
 	$_COOKIE['page'] = $page;
@@ -54,12 +54,16 @@ if ($action == 'adminlogin')
 						include 'address-book.php';
 					elseif ($action == 'compose' || $action == 'send')
 						include 'compose-message.php';
+					elseif ($action == 'sendform')
+						include 'sendform.php';
 					if ($page == 'showsent')
 						include 'show-sent.php';
 					elseif ($page == 'showarch')
 						include 'show-archived.php';
 					elseif ($page == 'stats')
 						include 'stats.php';
+					elseif ($page == 'report')
+						include 'report.php';
 
 					//Message counter navbar badges
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
@@ -106,6 +110,7 @@ if ($action == 'adminlogin')
 				<p>
 					Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
 				</p>
+				<p><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="report">Problem?</button></form></p>
 			</footer>
 		</div>
 		<div class="container navbar-fixed-top">
@@ -144,7 +149,6 @@ if ($action == 'adminlogin')
 				$('#msgid').val(_self.data('id'));
 				$(_self.attr('href')).modal('show');
 			});
-
 		</script>
 	</body>
 </html>
