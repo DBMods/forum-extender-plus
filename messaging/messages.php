@@ -54,8 +54,8 @@ if ($action == 'adminlogin')
 						include 'address-book.php';
 					elseif ($action == 'compose' || $action == 'send')
 						include 'compose-message.php';
-					elseif ($action == 'sendform')
-						include 'sendform.php';
+					elseif ($action == 'forward' || $action == 'sendfwd')
+						include 'forward-message.php';
 					elseif ($page == 'report' || $action == 'confirmreport')
 						include 'report.php';
 					if ($page == 'showsent')
@@ -82,8 +82,11 @@ if ($action == 'adminlogin')
 						echo '<h2>Inbox - ' . $count . '</h2>';
 						navform();
 						while ($row = mysqli_fetch_assoc($result)) {
-							echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a><br>Message:<br>' . nl2br(htmlspecialchars($row['msg'])) . '</p>';
-							echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="arch">Archive</button></form>';
+							echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a>';
+							if (htmlspecialchars($row['forward']) != 0)
+								echo ' (FWD <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['forward']) . '" target="_blank">' . htmlspecialchars($row['forward']) . '</a>)';
+							echo '<br>Message:<br>' . nl2br(htmlspecialchars($row['msg'])) . '</p>';
+							echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button><button type="submit" class="btn btn-warning btn-sm" name="action" value="forward">Forward</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="arch">Archive</button></form>';
 							echo '<a data-id="' . htmlspecialchars($row['id']) . '" class="open-alertDelete btn btn-danger btn-sm" href="#alertDelete">Delete</a>';
 						}
 						echo '<div class="modal fade in" id="alertDelete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
@@ -108,7 +111,10 @@ if ($action == 'adminlogin')
 			<footer>
 				<hr>
 				<div>
-					Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a> - <form action="" method="post" class="form-link"><button type="submit" name="action" class="btn-link" value="report">Problem?</button></form>
+					Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a> -
+					<form action="" method="post" class="form-link">
+						<button type="submit" name="action" class="btn-link" value="report">Problem?</button>
+					</form>
 				</div>
 			</footer>
 		</div>
