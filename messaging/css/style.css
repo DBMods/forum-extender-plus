@@ -65,6 +65,18 @@ footer hr {
 .btn-pill:focus {
 	outline: 0;
 }
+.btn-link {
+	display:inline-block;
+	background:none;
+	border:none;
+	padding:0;
+}
+.btn-link:focus {
+	outline: 0;
+}
+.form-link {
+	display:inline-block;
+}
 .inactive {
 	border-radius: 4px;
 	color: #428bca;

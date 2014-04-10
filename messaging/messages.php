@@ -107,10 +107,9 @@ if ($action == 'adminlogin')
 		<div class="container">
 			<footer>
 				<hr>
-				<p>
-					Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
-				</p>
-				<p><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="report">Problem?</button></form></p>
+				<div>
+					Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a> - <form action="" method="post" class="form-link"><button type="submit" name="action" class="btn-link" value="report">Problem?</button></form>
+				</div>
 			</footer>
 		</div>
 		<div class="container navbar-fixed-top">
