@@ -46,6 +46,12 @@ footer hr {
 .alert button {
 	margin: -35px;
 }
+.small-center {
+	margin-left:auto;
+	margin-right:auto;
+	width: 200px;
+	text-align: center;
+}
 .btn {
 	margin-right: 10px;
 }
