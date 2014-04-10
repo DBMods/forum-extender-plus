@@ -56,14 +56,14 @@ if ($action == 'adminlogin')
 						include 'compose-message.php';
 					elseif ($action == 'sendform')
 						include 'sendform.php';
+					elseif ($page == 'report' || $action == 'confirmreport')
+						include 'report.php';
 					if ($page == 'showsent')
 						include 'show-sent.php';
 					elseif ($page == 'showarch')
 						include 'show-archived.php';
 					elseif ($page == 'stats')
 						include 'stats.php';
-					elseif ($page == 'report')
-						include 'report.php';
 
 					//Message counter navbar badges
 					$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
