@@ -49,7 +49,7 @@ footer hr {
 .small-center {
 	margin-left:auto;
 	margin-right:auto;
-	width: 350px;
+	width: 300px;
 	text-align: center;
 }
 .btn {
@@ -116,11 +116,11 @@ footer hr {
 #wrapper {
 	height: auto;
 	min-height: 100%;
-	margin: 0 auto -51px;
-	padding: 0 0 51px;
+	margin: 0 auto -55px;
+	padding: 0 0 55px;
 }
 #footer {
-	height: 51px;
+	height: 55px;
 }
 form.menu {
 	display: inline-block;
