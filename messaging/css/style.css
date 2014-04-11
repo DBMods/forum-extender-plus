@@ -53,6 +53,13 @@ footer hr {
 	width: 300px;
 	text-align: center;
 }
+.stat-panel {
+	height: 88px;
+}
+.stat-content h2 {
+	margin-top: 1.5px;
+	margin-bottom: 1.5px;
+}
 .btn {
 	margin-right: 10px;
 }
