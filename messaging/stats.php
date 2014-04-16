@@ -12,5 +12,5 @@ $msgcount = $row['Auto_increment'] - 1;
 echo '<p class="topline"><br>';
 echo '<div class="small-center"><div class="panel panel-primary"><div class="panel-heading"><h3>Messages sent</h3></div><div class="panel-body stat-panel"><div class="stat-content" id="msg-count-text"><h2>' . $msgcount . '</h2></div><input id="msg-count" style="display:none" /></div></div></div>';
 echo '</p>';
-echo '<script>var msgcount=' . $msgcount . ';var options={width: 3, timing: 500};document.getElementById("msg-count-text").style.display="none";$("#msg-count").flapper(options).val(msgcount).change();</script>';
+echo '<script>var msgcount=' . $msgcount . ';var options={width: msgcount.toString().length, timing: 500};document.getElementById("msg-count-text").style.display="none";$("#msg-count").flapper(options).val(msgcount).change();</script>';
 ?>
