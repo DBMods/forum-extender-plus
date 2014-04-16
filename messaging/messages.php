@@ -142,8 +142,12 @@ if ($action == 'adminlogin')
 				</div>
 			</div>
 		</div>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="js/bootstrap.js"></script>
+		<?php if($page != 'stats') {?>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+			<script src="js/bootstrap.js"></script>
+		<?php
+		}
+		?>
 		<script>
 			window.setTimeout(function() {
 				$('#alert-fade').addClass('fade');
@@ -155,7 +159,7 @@ if ($action == 'adminlogin')
 				$(_self.attr('href')).modal('show');
 			});
 		</script>
-		<?php if($page == 'stats') {?>
+		<?php /**if($page == 'stats') {?>
 			<link rel='stylesheet' href='https://rawgithub.com/jayKayEss/Flapper/master/css/flapper.css' />
 			<script src="https://rawgithub.com/jayKayEss/Flapper/master/src/jquery.flapper.js"></script>
 			<script src="https://rawgithub.com/heygrady/transform/master/dist/jquery.transform-0.9.3.min.js"></script>
@@ -163,6 +167,6 @@ if ($action == 'adminlogin')
 			<script>var msgcount=<?php echo $msgcount?>;var options={width: 3, timing: 500};document.getElementById('msg-count-text').style.display='none';$("#msg-count").flapper(options).val(msgcount).change();</script>
 		<?php
 		}
-		?>
+		**/?>
 	</body>
 </html>
