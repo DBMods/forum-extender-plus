@@ -159,14 +159,5 @@ if ($action == 'adminlogin')
 				$(_self.attr('href')).modal('show');
 			});
 		</script>
-		<?php /**if($page == 'stats') {?>
-			<link rel='stylesheet' href='https://rawgithub.com/jayKayEss/Flapper/master/css/flapper.css' />
-			<script src="https://rawgithub.com/jayKayEss/Flapper/master/src/jquery.flapper.js"></script>
-			<script src="https://rawgithub.com/heygrady/transform/master/dist/jquery.transform-0.9.3.min.js"></script>
-			<script src="https://jquery-numberformatter.googlecode.com/files/jquery.numberformatter-1.2.4.jsmin.js"></script>
-			<script>var msgcount=<?php echo $msgcount?>;var options={width: 3, timing: 500};document.getElementById('msg-count-text').style.display='none';$("#msg-count").flapper(options).val(msgcount).change();</script>
-		<?php
-		}
-		**/?>
 	</body>
 </html>
