@@ -3,7 +3,7 @@ $showinbox = false;
 echo '<h2>Stats</h2>';
 echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>';
 echo '<link rel="stylesheet" href="https://rawgithub.com/jayKayEss/Flapper/master/css/flapper.css" />';
-echo '<script src="https://rawgithub.com/jayKayEss/Flapper/master/src/jquery.flapper.js"></script>';
+echo '<script src="js/flapper.js"></script>';
 echo '<script src="https://rawgithub.com/heygrady/transform/master/dist/jquery.transform-0.9.3.min.js"></script>';
 echo '<script src="https://jquery-numberformatter.googlecode.com/files/jquery.numberformatter-1.2.4.jsmin.js"></script>';
 $result = mysqli_query($db, 'SHOW TABLE STATUS LIKE "msglist"');
