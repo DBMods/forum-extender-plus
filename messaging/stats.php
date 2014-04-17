@@ -1,9 +1,9 @@
 <?php
 $showinbox = false;
 echo '<h2>Stats</h2>';
-echo '<script src="js/raw/jquery.min.js"></script>';
+echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>';
 echo '<link rel="stylesheet" href="css/flapper.css" />';
-echo '<script src="js/jquery.flapper.js"></script>';
+echo '<script src="js/flapper.js"></script>';
 echo '<script src="js/raw/jquery.transform-0.9.3.min.js"></script>';
 echo '<script src="js/raw/jquery.numberformatter-1.2.4.jsmin.js"></script>';
 $result = mysqli_query($db, 'SHOW TABLE STATUS LIKE "msglist"');
