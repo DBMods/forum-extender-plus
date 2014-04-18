@@ -65,7 +65,7 @@ if($_POST['action']=="create-account" && is_numeric($_POST['userid'])){//Request
 			$create_time = time();
 			$create_ip = $_SERVER['REMOTE_ADDR'];
 			$result = mysqli_query($db, "INSERT INTO `users` (userid, username, password, ext_token, create_time, create_ip) VALUES ('" . sqlesc($userid) ."', '" . sqlesc($username) . "', '" . sqlesc($password) . "', '" . sqlesc($token) . "', '" . sqlesc($create_time) . "', '" . sqlesc($create_ip) . "')");
-			echo "<script>$.post('messages.php', {userToken: '" . $userToken . "', userid: '" . $userid . "'});messageToken = " . $token . ";</script>";
+			echo "<script>$.post('messages.php', {userToken: '" . $userToken . "', userid: '" . $userid . "'});messageToken = " . $token . ";datastoreKey = " . $datastoreKey . ";</script>";
 			echo '<script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js" />';
 			echo '<script src="js/datastore.registertoken.js" />';
 			echo "<h4 style='text-align:center'>Signing in... If nothing happens <form method='post' action=''><input name='userid' value='" . $userid . "' type='hidden' /><button class='btn btn-default' name='userToken' value='" . $token . "'>click here</button></form></h4>";

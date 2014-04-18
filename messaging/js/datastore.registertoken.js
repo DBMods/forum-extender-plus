@@ -1,5 +1,5 @@
 var client = new Dropbox.Client({
-	key: 'qq5ygjct1pt4eud'
+	key: datastoreKey
 });
 
 //Delete table
