@@ -142,3 +142,6 @@ form.menu {
 .btn-left {
 	float: left;
 }
+input .login {
+	margin-bottom: 15px;
+}

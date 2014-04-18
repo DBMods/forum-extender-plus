@@ -1,29 +1,63 @@
 <?php
-if (is_numeric($_POST['for'])) {
+//Sets authentication (only temporary)
+/**if (is_numeric($_POST['for'])) {
 	setcookie('forumid', htmlspecialchars($_POST['for']), time() + 3600 * 24 * 30);
 	$_COOKIE['forumid'] = $_POST['for'];
+}**/
+if ($_POST['userToken']) {
+	setcookie('userToken', htmlspecialchars($_POST['userToken']), time() + 3600 * 24 * 30);
+	$_COOKIE['userToken'] = htmlspecialchars($_POST['userToken']);
+	$userToken = htmlspecialchars($_POST['userToken']);
 }
+//Userid is sent along with userToken to authenticate
+if (is_numeric($_POST['userid'])) {
+	setcookie('userid', htmlspecialchars($_POST['userid']), time() + 3600 * 24 * 30);
+	$_COOKIE['userid'] = htmlspecialchars($_POST['userid']);
+	$userid=$_POST['userid'];
+}
+//Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
 	$_COOKIE['timeoffset'] = $_POST['timeOffset'];
 }
+//Sets DB Forums page to return to
 if ($_POST['returnto']) {
 	setcookie('returnto', strip_tags($_POST['returnto']));
 	$_COOKIE['returnto'] = strip_tags($_POST['returnto']);
 }
-$showinbox = true;
-$userid = htmlspecialchars($_COOKIE['forumid']);
+//Sets cookies to blank on logoff
+if ($_POST['action'] == "logoff") {
+	setcookie('userToken', "");
+	setcookie('userid', "");
+	$_COOKIE['userToken']="";
+	$_COOKIE['userid']="";
+	$userLogoff = true;
+}
+require 'db-login.php';
+$userid = htmlspecialchars($_COOKIE['userid']);
+$userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $returnto = 'https://forums.dropbox.com';
+if ($userToken) {//If userToken and userid is set or posted, check login
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
+	$row = mysqli_fetch_array($result);
+	if ($row) {
+		$userAuthenticated = true;//This is how everything knows the user is authenticated
+	}
+}
+if ($userAuthenticated) {
+$showinbox = true;
+}
 if (isset($_COOKIE['returnto']))
 	$returnto = $_COOKIE['returnto'];
 $action = $_POST['action'];
-if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats' || $action == 'report') {
-	$page = $action;
-	setcookie('page', $page);
-	$_COOKIE['page'] = $page;
+if ($userAuthenticated) {
+	if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats' || $action == 'report' || $action == 'register' || $action=='sign-in' && $userid) {
+		$page = $action;
+		setcookie('page', $page);
+		$_COOKIE['page'] = $page;
+	}
 }
-require 'db-login.php';
 $indirectcall = true;
 if ($action == 'adminlogin')
 	include 'admin-auth.php';
@@ -46,7 +80,7 @@ if ($action == 'adminlogin')
 				function navform() {
 					echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 				}
-				if ($userid) {
+				if ($userAuthenticated) {
 					$timeOffsetSeconds = $timeoffset * 60;
 					if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
 						include 'manipulate-entry.php';
@@ -101,8 +135,12 @@ if ($action == 'adminlogin')
 						if ($count == 0)
 							echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
 					}
-				} else
-					echo '<div class="alert alert-danger"><p>You do not have sufficient permission to access this page. Please authenticate through the <a href="https://forums.dropbox.com">Dropbox Forums</a>.</p></div>';
+				} else {
+					if ($userLogoff) {
+						echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged off</strong></p></div></div>";
+					}
+					include "sign-in.php";//Not logged in or bad auth
+				}
 				mysqli_close($db);
 				?>
 			</div>
@@ -135,6 +173,7 @@ if ($action == 'adminlogin')
 					if ($page != 'stats')
 						echo 'in';
 					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
+					echo '<li class="inactive"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form></li>';
 					?>
 				</ul>
 				<div class="site-title">
