@@ -1,20 +1,5 @@
 <?php
-//Sets authentication (only temporary)
-/**if (is_numeric($_POST['for'])) {
-	setcookie('forumid', htmlspecialchars($_POST['for']), time() + 3600 * 24 * 30);
-	$_COOKIE['forumid'] = $_POST['for'];
-}**/
-if ($_POST['userToken']) {
-	setcookie('userToken', htmlspecialchars($_POST['userToken']), time() + 3600 * 24 * 30);
-	$_COOKIE['userToken'] = htmlspecialchars($_POST['userToken']);
-	$userToken = htmlspecialchars($_POST['userToken']);
-}
-//Userid is sent along with userToken to authenticate
-if (is_numeric($_POST['userid'])) {
-	setcookie('userid', htmlspecialchars($_POST['userid']), time() + 3600 * 24 * 30);
-	$_COOKIE['userid'] = htmlspecialchars($_POST['userid']);
-	$userid=$_POST['userid'];
-}
+require 'db-login.php';
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
@@ -33,18 +18,40 @@ if ($_POST['action'] == "logoff") {
 	$_COOKIE['userid']="";
 	$userLogoff = true;
 }
-require 'db-login.php';
+if ($_POST['userToken'] && $_POST['userid']) {//If userToken and userid is set or posted, check login
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($_POST['userToken']) . "' AND userid = '" . sqlesc($_POST['userid']) . "') LIMIT 1");
+	$row = mysqli_fetch_array($result);
+	if ($row) {
+		$userAuthenticated = true;//This is how everything knows the user is authenticated
+	}else {
+		$badAuth = true;//This is set if authentication fails
+	}
+}
+//check login
+if ($_POST['username'] && $_POST['password']) {
+	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+	$passwordHash = mysqli_fetch_row($result)['0'];
+	if(password_verify($_POST['password'], $passwordHash)) {
+		$userAuthenticated=true;
+	}
+	if($userAuthenticated) {//authentication successful
+		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+		$userToken = mysqli_fetch_row($result)['0'];
+		setcookie('userToken', $userToken, time() + 3600 * 24 * 30);
+		$_COOKIE['userToken'] = $userToken;
+		$userToken = $userToken;
+		$result = mysqli_query($db, "SELECT userid FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+		$userid = mysqli_fetch_row($result)['0'];
+		setcookie('userid', $userid, time() + 3600 * 24 * 30);
+		$_COOKIE['userid'] = $userid;
+	}else{//authentication unsuccessful
+		$badAuth = true;
+	}
+}
 $userid = htmlspecialchars($_COOKIE['userid']);
 $userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $returnto = 'https://forums.dropbox.com';
-if ($userToken) {//If userToken and userid is set or posted, check login
-	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
-	$row = mysqli_fetch_array($result);
-	if ($row) {
-		$userAuthenticated = true;//This is how everything knows the user is authenticated
-	}
-}
 if ($userAuthenticated) {
 $showinbox = true;
 }
@@ -181,11 +188,10 @@ if ($action == 'adminlogin')
 				</div>
 			</div>
 		</div>
-		<?php if($page != 'stats') {?>
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-			<script src="js/bootstrap.js"></script>
-		<?php
+		<?php if($page != 'stats') {
+			echo "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>";
 		}
+		echo "<script src='js/bootstrap.js'></script>";
 		?>
 		<script>
 			window.setTimeout(function() {
