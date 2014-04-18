@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.7.10-----
+* Wrong form value for message account creation
+
 -----2.2.7.9-----
 # More messaging security preparation
 
