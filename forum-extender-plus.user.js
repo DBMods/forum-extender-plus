@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.7.7
+// @version 2.2.7.8
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -188,7 +188,7 @@ function navBar() {
 				}
 
 				//Get tables
-				var prefTable = datastore.getTable('prefs'), draftTable = datastore.getTable('draft');
+				var prefTable = datastore.getTable('prefs'), draftTable = datastore.getTable('draft'), configTable = datastore.getTable('config');
 
 				var theme = prefTable.query({
 					preference: 'theme'
@@ -197,6 +197,31 @@ function navBar() {
 				});
 				if (theme.length > 0)
 					forumVersion(theme[0].get('value'));
+					
+				var userToken = configTable.query({
+					name: 'userToken'
+				});
+				if (userToken.length > 0)
+					userToken = userToken[0].get('value');
+				else
+					userToken = '';
+					
+				//Check messages
+				$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/messages.php" method="post"><input type="hidden" name="userToken" value="' + userToken + '" /><input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
+				(function checkMessages() {
+					GM_xmlhttpRequest({
+						method: 'GET',
+						url: ('http://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userId),
+						onload: function(response) {
+							var resp = response.responseText;
+							$('#gsDropboxExtenderMsgCounter').html(resp == '0' ? '' : (' (' + resp + ')'));
+						}
+					});
+					setTimeout(checkMessages, 20000);
+				})();
+				$('#gsDropboxExtenderMessageLink').click(function() {
+					$('#gsDropboxExtenderMessageContainer form').submit();
+				});
 
 				//Collapse footer
 				if (pageUrl != 'edit.php' && collapseFooter.length > 0 && collapseFooter[0].get('value')) {
@@ -254,6 +279,7 @@ function navBar() {
 					}
 				}
 
+
 				$('#deleteprefs').click(function() {
 					deleteTable(prefTable);
 					hoverMessage('Preferences trashed');
@@ -262,7 +288,7 @@ function navBar() {
 					deleteTable(draftTable);
 					hoverMessage('Drafts trashed');
 				});
-				
+
 				//Manage preferences
 				var optionDropdown = ['theme', 'reloadSticky', 'reloadForum', 'reloadFront', 'modIcon'];
 				var optionCheck = ['collapseFooter'];
@@ -327,6 +353,7 @@ function navBar() {
 						$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').find('img').attr('src', $('#gsDropboxExtendericon').val());
 					hoverMessage('Your settings have been saved.\n\nMost new settings won\'t take effect until the page is reloaded.');
 				});
+				
 				//Manage drafts
 				if (pageUrl == 'topic.php') {
 					var thread = fullUrl.split('id=')[1].split('&')[0].split('#')[0];
@@ -361,21 +388,6 @@ function navBar() {
 				}
 			});
 		}
-	});
-	$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/messages.php" method="post"><input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="for" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
-	(function checkMessages() {
-		GM_xmlhttpRequest({
-			method: 'GET',
-			url: ('http://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userId),
-			onload: function(response) {
-				var resp = response.responseText;
-				$('#gsDropboxExtenderMsgCounter').html(resp == '0' ? '' : (' (' + resp + ')'));
-			}
-		});
-		setTimeout(checkMessages, 20000);
-	})();
-	$('#gsDropboxExtenderMessageLink').click(function() {
-		$('#gsDropboxExtenderMessageContainer form').submit();
 	});
 }
 

@@ -1,6 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.7.8-----
+# Messaging now only shows if the datastore API is successfully authed
+# Prepped for additional security
+
 -----2.2.7.7-----
 # Aesthetic tweaking
 
