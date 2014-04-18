@@ -18,8 +18,10 @@ if ($_POST['action'] == "logoff") {
 	$_COOKIE['userid']="";
 	$userLogoff = true;
 }
-if ($_POST['userToken'] && $_POST['userid']) {//If userToken and userid is set or posted, check login
-	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($_POST['userToken']) . "' AND userid = '" . sqlesc($_POST['userid']) . "') LIMIT 1");
+if ($_COOKIE['userToken'] && $_COOKIE['userid']) {//If userToken and userid is set, check login
+	$userToken = htmlspecialchars($_COOKIE['userToken']);
+	$userid = htmlspecialchars($_COOKIE['userid']);
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
 	$row = mysqli_fetch_array($result);
 	if ($row) {
 		$userAuthenticated = true;//This is how everything knows the user is authenticated
@@ -144,7 +146,7 @@ if ($action == 'adminlogin')
 					}
 				} else {
 					if ($userLogoff) {
-						echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged off</strong></p></div></div>";
+						echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
 					}
 					include "sign-in.php";//Not logged in or bad auth
 				}
