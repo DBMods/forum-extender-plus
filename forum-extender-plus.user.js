@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.7.8
+// @version 2.2.7.9
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -197,17 +197,20 @@ function navBar() {
 				});
 				if (theme.length > 0)
 					forumVersion(theme[0].get('value'));
-					
+
 				var userToken = configTable.query({
 					name: 'userToken'
 				});
-				if (userToken.length > 0)
+				if (userToken.length > 0) {
 					userToken = userToken[0].get('value');
-				else
+					msgFormAction = '';
+				} else {
 					userToken = '';
-					
+					msgFormAction = '<input type="hidden" name="action" value="register-return" />';
+				}
+
 				//Check messages
-				$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/messages.php" method="post"><input type="hidden" name="userToken" value="' + userToken + '" /><input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
+				$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/messages.php" method="post"><input type="hidden" name="userToken" value="' + userToken + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
 				(function checkMessages() {
 					GM_xmlhttpRequest({
 						method: 'GET',
@@ -353,7 +356,7 @@ function navBar() {
 						$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').find('img').attr('src', $('#gsDropboxExtendericon').val());
 					hoverMessage('Your settings have been saved.\n\nMost new settings won\'t take effect until the page is reloaded.');
 				});
-				
+
 				//Manage drafts
 				if (pageUrl == 'topic.php') {
 					var thread = fullUrl.split('id=')[1].split('&')[0].split('#')[0];
