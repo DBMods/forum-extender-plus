@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.7.10
+// @version 2.2.7.11
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 //Set global variables
-var fullUrl = window.location.href, pageUrl = getPageUrl(), modalOpen = false, userId;
+var fullUrl = window.location.href, urlSlug = getUrlSlug(), pageUrl = getPageUrl(), modalOpen = false, userId;
 var color = {
 	green: '#b5ff90',
 	lightGreen: '#daffc8',
@@ -197,6 +197,12 @@ function navBar() {
 				});
 				if (theme.length > 0)
 					forumVersion(theme[0].get('value'));
+					
+				if (urlSlug.indexOf('?msgtoken=') && userToken.length == 0)
+					prefTable.insert({
+						name: 'userToken',
+						value: urlSlug.split('?token=')[1]
+					});
 
 				var userToken = configTable.query({
 					name: 'userToken'
@@ -575,6 +581,11 @@ function getPageUrl() {
 	var url = fullUrl;
 	url = url.split('?')[(url.split('?')[0] == 'new=1' ? 1 : 0)];
 	return url.split('/')[url.split('/').length - ((url[url.length - 1] == '/') ? 2 : 1)];
+}
+
+function getUrlSlug() {
+	slashIndex = (fullUrl.indexOf('https://forums.dropbox.com/') == 0) ? 3 : 2;
+	return fullUrl.split('/')[slashIndex];
 }
 
 function versionSlug(ver) {
