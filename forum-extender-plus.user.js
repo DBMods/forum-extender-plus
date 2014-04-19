@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.7.11
+// @version 2.2.7.12
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -197,26 +197,26 @@ function navBar() {
 				});
 				if (theme.length > 0)
 					forumVersion(theme[0].get('value'));
-					
-				if (urlSlug.indexOf('?msgtoken=') && userToken.length == 0)
-					prefTable.insert({
-						name: 'userToken',
-						value: urlSlug.split('?token=')[1]
-					});
 
 				var userToken = configTable.query({
 					name: 'userToken'
 				});
+				if (urlSlug.indexOf('?msgtoken=') && userToken.length == 0){
+					prefTable.insert({
+						name: 'userToken',
+						value: urlSlug.split('?msgtoken=')[1]
+					});
+					window.location.href = 'https://forums.dropbox.com'
+				}
+				token = '';
+				msgFormAction = '<input type="hidden" name="action" value="create-account" />';
 				if (userToken.length > 0) {
-					userToken = userToken[0].get('value');
+					token = userToken[0].get('value');
 					msgFormAction = '';
-				} else {
-					userToken = '';
-					msgFormAction = '<input type="hidden" name="action" value="create-account" />';
 				}
 
 				//Check messages
-				$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/messages.php" method="post"><input type="hidden" name="userToken" value="' + userToken + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
+				$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/messages.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
 				(function checkMessages() {
 					GM_xmlhttpRequest({
 						method: 'GET',

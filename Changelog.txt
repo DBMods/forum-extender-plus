@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.7.12-----
+* Bad code fix
+
 -----2.2.7.11-----
 # Last-minute prep for new message security system
 
@@ -33,7 +36,7 @@ Dropbox Forum Mod Icons Changelog
 * New highlighting bug fix
 
 -----2.2.6.3-----
-# Rewrote postHightlight function to accept a threshold of posts, and will highlight users with that many posts or more
+# Rewrote postHighlight function to accept a threshold of posts, and will highlight users with that many posts or more
 - Removed unnecessary lines of code
 
 -----2.2.6.2-----
