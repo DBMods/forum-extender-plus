@@ -8,7 +8,7 @@ function sqlesc($string) {
 function navform() {
 	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 }
-function deleteConfirm(){
+function deleteConfirm() {
 	echo '<div class="modal fade in" id="alertDelete">';
 	echo '<div class="modal-dialog">';
 	echo '<div class="modal-content">';
@@ -22,12 +22,8 @@ function deleteConfirm(){
 	echo '<div class="modal-footer">';
 	echo '<button class="btn btn-default" data-dismiss="modal">Cancel</button>';
 	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
-	echo '</div>';
-	echo '</div>';
-	echo '</div>';
-	echo '</div>';
+	echo '</div></div></div></div>';
 }
-
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
@@ -80,7 +76,8 @@ if ($_POST['userToken'] && $_POST['userid']) {
 	else
 		$badAuth = true;
 }
-//check login
+
+//Check login
 if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token") {
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 	$passwordHash = mysqli_fetch_row($result);
@@ -106,22 +103,18 @@ $userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $timeOffsetSeconds = $timeoffset * 60;
 $returnto = 'https://forums.dropbox.com';
-if ($userAuthenticated)
-	$showinbox = true;
 if (isset($_COOKIE['returnto']))
 	$returnto = $_COOKIE['returnto'];
 $action = $_POST['action'];
-if ($userAuthenticated)
+$indirectcall = true;
+if ($userAuthenticated) {
+	$showinbox = true;
 	if ($action == 'report' || $action == 'register' || $action == 'sign-in' && $userid) {
 		$page = $action;
 		setcookie('page', $page);
 		$_COOKIE['page'] = $page;
 	}
-$indirectcall = true;
-if ($action == 'adminlogin')
-	include 'admin-auth.php';
 
-if ($userAuthenticated) {
 	//Gather messages in inbox
 	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1 ORDER BY `time` DESC");
