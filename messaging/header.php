@@ -84,6 +84,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 $userid = htmlspecialchars($_COOKIE['userid']);
 $userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
+$timeOffsetSeconds = $timeoffset * 60;
 $returnto = 'https://forums.dropbox.com';
 if ($userAuthenticated)
 	$showinbox = true;
@@ -101,8 +102,6 @@ if ($action == 'adminlogin')
 	include 'admin-auth.php';
 
 if ($userAuthenticated) {
-	$timeOffsetSeconds = $timeoffset * 60;
-
 	//Gather messages in inbox
 	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1 ORDER BY `time` DESC");
