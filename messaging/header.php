@@ -1,13 +1,18 @@
 <?php
 require 'db-login.php';
 
+//Shorthand for mysqli_real_escape_string
 function sqlesc($string) {
 	global $db;
 	return mysqli_real_escape_string($db, $string);
 }
+
+//Append secondary nav form to page
 function navform() {
 	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 }
+
+//Show delete confirmation modal
 function deleteConfirm() {
 	echo '<div class="modal fade in" id="alertDelete">';
 	echo '<div class="modal-dialog">';
@@ -24,6 +29,7 @@ function deleteConfirm() {
 	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
 	echo '</div></div></div></div>';
 }
+
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
@@ -98,6 +104,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 	} else//Authentication unsuccessful
 		$badAuth = true;
 }
+
 $userid = htmlspecialchars($_COOKIE['userid']);
 $userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
