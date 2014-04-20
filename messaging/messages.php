@@ -1,12 +1,5 @@
 <?php
 require 'header.php';
-function sqlesc($string) {
-	global $db;
-	return mysqli_real_escape_string($db, $string);
-}
-function navform() {
-	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
-}
 if ($userAuthenticated) {
 	$timeOffsetSeconds = $timeoffset * 60;
 	if ($action == 'delete' || $action == 'arch' || $action == 'unarch')

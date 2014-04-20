@@ -1,6 +1,14 @@
 <?php
 require 'db-login.php';
 
+function sqlesc($string) {
+	global $db;
+	return mysqli_real_escape_string($db, $string);
+}
+function navform() {
+	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
+}
+
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
