@@ -11,8 +11,6 @@ if ($userAuthenticated) {
 		include 'forward-message.php';
 	elseif ($page == 'report' || $action == 'confirmreport')
 		include 'report.php';
-	if ($page == 'showsent')
-		include 'show-sent.php';
 
 	if ($showinbox && $page == '') {
 		echo '<h2>Inbox - ' . $count . '</h2>';

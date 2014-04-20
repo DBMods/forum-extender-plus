@@ -24,7 +24,7 @@ mysqli_close($db);
 					echo '"><a href="messages.php">Inbox' . $countBadge . '</a></li><li class="';
 					if ($page != 'showsent')
 						echo 'in';
-					echo 'active"><form action="messages.php" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
+					echo 'active"><form action="show-sent.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Sent</button></form></li><li class="';
 					if ($page != 'showarch')
 						echo 'in';
 					echo 'active"><form action="show-archived.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Archive' . $archBadge . '</button></form></li><li class="';
