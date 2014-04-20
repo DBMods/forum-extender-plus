@@ -13,8 +13,6 @@ if ($userAuthenticated) {
 		include 'report.php';
 	if ($page == 'showsent')
 		include 'show-sent.php';
-	elseif ($page == 'showarch')
-		include 'show-archived.php';
 	elseif ($page == 'stats')
 		include 'stats.php';
 

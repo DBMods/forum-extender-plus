@@ -1,6 +1,7 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
+	$page = 'showarch';
 	if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
 		include 'manipulate-entry.php';
 	elseif ($action == 'addressbook')
