@@ -27,7 +27,6 @@ function registerPanel($userid){
 }
 if($_POST['action']=="create-account" && is_numeric($_POST['userid'])){//Request to create an account from extension
 	$userid=$_POST['userid'];
-	require "db-login.php";
 	$result = mysqli_query($db, "SELECT * FROM `users` WHERE `userid` = '" . sqlesc($_POST['userid']) ."'");//checks for account already existing with userid
 	$account_exist = mysqli_fetch_row($result);
 	if(!$account_exist && !$_POST['username']){//If account does not already exist and user did not fill out register form
@@ -95,7 +94,6 @@ if($_POST['action']=="create-account" && is_numeric($_POST['userid'])){//Request
 </div>
 <?php
 	}
-}elseif($_POST['action']=="register-return"){
 }else{//No request from extension to create the account
 ?>
 <div class="small-center">

@@ -1,5 +1,5 @@
 <?php
-if($action=="register" || $action=="create-account" || $action=="register-return") {//clicked register button
+if($action=="register" || $action=="create-account") {//clicked register button
 	include "register.php";
 }
 if(!$userAuthenticated && $action!="register" && $action!="create-account" && $action!="register-return"){//If authentication unsuccessful or not tried

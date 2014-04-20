@@ -29,6 +29,21 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {//If userToken and userid is s
 		$badAuth = true;//This is set if authentication fails
 	}
 }
+if ($_POST['userToken'] && $_POST['userid']) {//If userToken and userid is posted, check login
+	$userToken = htmlspecialchars($_POST['userToken']);
+	$userid = htmlspecialchars($_POST['userid']);
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
+	$row = mysqli_fetch_array($result);
+	setcookie('userToken', $userToken, time() + 3600 * 24 * 30);
+	$_COOKIE['userToken'] = $userToken;
+	setcookie('userid', $userid, time() + 3600 * 24 * 30);
+	$_COOKIE['userid'] = $userid;
+	if ($row) {
+		$userAuthenticated = true;//This is how everything knows the user is authenticated
+	}else {
+		$badAuth = true;//This is set if authentication fails
+	}
+}
 //check login
 if ($_POST['username'] && $_POST['password']) {
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
