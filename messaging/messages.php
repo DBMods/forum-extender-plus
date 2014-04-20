@@ -24,15 +24,7 @@ if ($userAuthenticated) {
 			echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button><button type="submit" class="btn btn-warning btn-sm" name="action" value="forward">Forward</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="arch">Archive</button></form>';
 			echo '<a data-id="' . htmlspecialchars($row['id']) . '" class="open-alertDelete btn btn-danger btn-sm" href="#alertDelete">Delete</a>';
 		}
-		echo '<div class="modal fade in" id="alertDelete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
-		echo '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>';
-		echo '<h3 class="modal-title">Are you sure?</h3>';
-		echo '</div>';
-		echo '<div class="modal-body"><h4>If you delete this message, it is gone forever!</h4></div>';
-		echo '<div class="modal-footer">';
-		echo '<button class="btn btn-default" data-dismiss="modal">Cancel</button>';
-		echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
-		echo '</div></div></div></div>';
+		deleteConfirm();
 		if ($count == 0)
 			echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
 	}
