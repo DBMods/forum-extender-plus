@@ -26,11 +26,6 @@ if ($userAuthenticated) {
 		if ($count == 0)
 			echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
 	}
-} else {
-	//Not logged in or bad auth
-	if ($userLogoff)
-		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
-	include "sign-in.php";
 }
 require 'footer.php';
 ?>

@@ -25,11 +25,6 @@ if ($userAuthenticated) {
 		if ($archCount == 0)
 			echo '<p class="topline center"><br>It doesn\'t appear that you have any archived messages.</p>';
 	}
-} else {
-	//Not logged in or bad auth
-	if ($userLogoff)
-		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
-	include "sign-in.php";
 }
 require 'footer.php';
 ?>

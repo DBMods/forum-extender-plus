@@ -15,11 +15,6 @@ if ($userAuthenticated) {
 	echo '<div class="small-center"><div class="panel panel-primary"><div class="panel-heading"><h3>Messages sent</h3></div><div class="panel-body stat-panel"><div class="stat-content" id="msg-count-text"><h2>' . $msgcount . '</h2></div><input id="msg-count" style="display:none" /></div></div></div>';
 	echo '</p>';
 	echo '<script>var msgcount=' . $msgcount . ';var options={width: msgcount.toString().length, timing: 500};document.getElementById("msg-count-text").style.display="none";$("#msg-count").flapper(options).val(msgcount).change();</script>';
-} else {
-	//Not logged in or bad auth
-	if ($userLogoff)
-		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
-	include "sign-in.php";
 }
 require 'footer.php';
 ?>

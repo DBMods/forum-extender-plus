@@ -18,11 +18,6 @@ if ($userAuthenticated) {
 		echo '<p>Are you sure you want to submit this report?<br><br><form action="messages.php" method="post"><input type="hidden" name="msgto" value="Andy Y" /><input type="hidden" name="msgtext" value="' . $_POST['report'] . '&#10;&#10;Comment:&#10;' . $_POST['comments'] . '" /><button name="action" value="send" class="btn btn-success">Yes, report this</button><button name="action" value="report" class="btn btn-danger">No, start over</button></form></p>';
 	}
 	echo '</p>';
-} else {
-	//Not logged in or bad auth
-	if ($userLogoff)
-		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
-	include "sign-in.php";
 }
 require 'footer.php';
 ?>

@@ -1,4 +1,10 @@
 <?php
+//Not logged in or bad auth
+if (!$userAuthenticated) {
+	if ($userLogoff)
+		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
+	include "sign-in.php";
+}
 mysqli_close($db);
 ?>
 </div>
