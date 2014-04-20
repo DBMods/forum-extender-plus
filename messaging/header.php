@@ -8,7 +8,6 @@ function sqlesc($string) {
 function navform() {
 	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 }
-
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
@@ -79,7 +78,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		$userid = $userid['0'];
 		setcookie('userid', $userid, time() + 3600 * 24 * 30);
 		$_COOKIE['userid'] = $userid;
-	} else //Authentication unsuccessful
+	} else//Authentication unsuccessful
 		$badAuth = true;
 }
 $userid = htmlspecialchars($_COOKIE['userid']);
@@ -100,6 +99,26 @@ if ($userAuthenticated)
 $indirectcall = true;
 if ($action == 'adminlogin')
 	include 'admin-auth.php';
+
+if ($userAuthenticated) {
+	$timeOffsetSeconds = $timeoffset * 60;
+
+	//Gather messages in inbox
+	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
+	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1 ORDER BY `time` DESC");
+
+	//Message counter navbar badges
+	$count = mysqli_num_rows($result);
+	if ($count > 0)
+		$countBadge = ' <span class="badge">' . $count . '</span>';
+	else
+		$countBadge = '';
+	$archCount = mysqli_num_rows($archive);
+	if ($archCount > 0)
+		$archBadge = ' <span class="badge">' . $archCount . '</span>';
+	else
+		$archBadge = '';
+}
 ?>
 <html>
 	<head>

@@ -1,7 +1,6 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
-	$timeOffsetSeconds = $timeoffset * 60;
 	if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
 		include 'manipulate-entry.php';
 	elseif ($action == 'addressbook')
@@ -18,19 +17,6 @@ if ($userAuthenticated) {
 		include 'show-archived.php';
 	elseif ($page == 'stats')
 		include 'stats.php';
-
-	//Message counter navbar badges
-	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
-	$count = mysqli_num_rows($result);
-	if ($count > 0)
-		$countBadge = ' <span class="badge">' . $count . '</span>';
-	else
-		$countBadge = '';
-	$archCount = mysqli_num_rows(mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1"));
-	if ($archCount > 0)
-		$archBadge = ' <span class="badge">' . $archCount . '</span>';
-	else
-		$archBadge = '';
 
 	if ($showinbox && $page == '') {
 		echo '<h2>Inbox - ' . $count . '</h2>';
@@ -56,10 +42,10 @@ if ($userAuthenticated) {
 			echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
 	}
 } else {
+	//Not logged in or bad auth
 	if ($userLogoff)
 		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
 	include "sign-in.php";
-	//Not logged in or bad auth
 }
 require 'footer.php';
 ?>
