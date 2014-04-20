@@ -112,7 +112,7 @@ if (isset($_COOKIE['returnto']))
 	$returnto = $_COOKIE['returnto'];
 $action = $_POST['action'];
 if ($userAuthenticated)
-	if ($action == '' || $action == 'showsent' || $action == 'report' || $action == 'register' || $action == 'sign-in' && $userid) {
+	if ($action == 'report' || $action == 'register' || $action == 'sign-in' && $userid) {
 		$page = $action;
 		setcookie('page', $page);
 		$_COOKIE['page'] = $page;

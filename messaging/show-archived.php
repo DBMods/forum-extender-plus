@@ -1,7 +1,6 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
-	$page = 'showarch';
 	if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
 		include 'manipulate-entry.php';
 	elseif ($action == 'addressbook')
@@ -12,6 +11,7 @@ if ($userAuthenticated) {
 		include 'forward-message.php';
 
 	if ($showinbox) {
+		$page = 'showarch';
 		echo '<h2>Archived Messages - ' . $archCount . '</h2>';
 		navform();
 		while ($row = mysqli_fetch_assoc($archive)) {
