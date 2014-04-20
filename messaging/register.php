@@ -68,31 +68,21 @@ if($_POST['action']=="create-account" && is_numeric($_POST['userid'])){//Request
 		}
 	}
 	if($account_exist){//account already exists login form + return token to extension
-?>
-<div class="small-center">
-	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<h3>Sign in</h3>
-		</div>
-		<div class="panel-body">
-			<form method="post" action="">
-				<fieldset>
-					<div class="form-group">
-						<input id="userid" name="userid" type="text" placeholder="User ID" class="form-control input-md" required="" />
-					</div>
-					<div class="form-group">
-						<input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required="" />
-					</div>
-					<div class="form-group">
-						<button name="action" class="btn btn-success" value="sign-in">Sign in</button>
-					</div>
-				</fieldset>
-			</form>
-			<p>Not registered? <form method="post" action=""><button name="action" class="btn btn-success" value="register-return">Sign up!</button></form></p>
-		</div>
-	</div>
-</div>
-<?php
+		signinPanel("showTokenRedir","pass-token");
+	}
+}elseif($_POST['action']=="pass-token" && $_POST['username'] && $_POST['password']){
+	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+	$passwordHash = mysqli_fetch_row($result)['0'];
+	if(password_verify($_POST['password'], $passwordHash)) {
+		$userAuthenticated=true;
+	}
+	if($userAuthenticated) {//authentication successful
+		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+		$token = mysqli_fetch_row($result)['0'];
+		echo '<h4 class="center">Successfully signed in. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
+	}else{//authentication unsuccessful
+		badAuth();
+		signinPanel("showTokenRedir","pass-token");
 	}
 }else{//No request from extension to create the account
 ?>

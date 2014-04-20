@@ -23,7 +23,7 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {//If userToken and userid is s
 	$userid = htmlspecialchars($_COOKIE['userid']);
 	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
 	$row = mysqli_fetch_array($result);
-	if ($row) {
+	if ($row && $_POST['action']!="create-account") {//If extension is trying to get a token, redirect to login
 		$userAuthenticated = true;//This is how everything knows the user is authenticated
 	}else {
 		$badAuth = true;//This is set if authentication fails
@@ -45,7 +45,7 @@ if ($_POST['userToken'] && $_POST['userid']) {//If userToken and userid is poste
 	}
 }
 //check login
-if ($_POST['username'] && $_POST['password']) {
+if ($_POST['username'] && $_POST['password'] && $_POST['action']!="pass-token") {
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 	$passwordHash = mysqli_fetch_row($result)['0'];
 	if(password_verify($_POST['password'], $passwordHash)) {
@@ -56,7 +56,6 @@ if ($_POST['username'] && $_POST['password']) {
 		$userToken = mysqli_fetch_row($result)['0'];
 		setcookie('userToken', $userToken, time() + 3600 * 24 * 30);
 		$_COOKIE['userToken'] = $userToken;
-		$userToken = $userToken;
 		$result = mysqli_query($db, "SELECT userid FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$userid = mysqli_fetch_row($result)['0'];
 		setcookie('userid', $userid, time() + 3600 * 24 * 30);
