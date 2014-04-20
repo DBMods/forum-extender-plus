@@ -30,7 +30,7 @@ mysqli_close($db);
 					echo 'active"><form action="show-archived.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Archive' . $archBadge . '</button></form></li><li class="';
 					if ($page != 'stats')
 						echo 'in';
-					echo 'active"><form action="messages.php" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
+					echo 'active"><form action="stats.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
 					echo '<li class="inactive"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form></li>';
 					?>
 				</ul>
