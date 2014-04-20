@@ -21,16 +21,16 @@ mysqli_close($db);
 					echo '<li class="';
 					if ($showinbox)
 						echo 'active';
-					echo '"><a href="">Inbox' . $countBadge . '</a></li><li class="';
+					echo '"><a href="messages.php">Inbox' . $countBadge . '</a></li><li class="';
 					if ($page != 'showsent')
 						echo 'in';
-					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
+					echo 'active"><form action="messages.php" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showsent">Sent</button></form></li><li class="';
 					if ($page != 'showarch')
 						echo 'in';
-					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="showarch">Archive' . $archBadge . '</button></form></li><li class="';
+					echo 'active"><form action="show-archived.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Archive' . $archBadge . '</button></form></li><li class="';
 					if ($page != 'stats')
 						echo 'in';
-					echo 'active"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
+					echo 'active"><form action="messages.php" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="stats">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
 					echo '<li class="inactive"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form></li>';
 					?>
 				</ul>

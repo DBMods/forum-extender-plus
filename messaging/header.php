@@ -8,6 +8,26 @@ function sqlesc($string) {
 function navform() {
 	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 }
+function deleteConfirm(){
+	echo '<div class="modal fade in" id="alertDelete">';
+	echo '<div class="modal-dialog">';
+	echo '<div class="modal-content">';
+	echo '<div class="modal-header">';
+	echo '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>';
+	echo '<h3 class="modal-title">Are you sure?</h3>';
+	echo '</div>';
+	echo '<div class="modal-body">';
+	echo '<h4>If you delete this message, it is gone forever!</h4>';
+	echo '</div>';
+	echo '<div class="modal-footer">';
+	echo '<button class="btn btn-default" data-dismiss="modal">Cancel</button>';
+	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
+	echo '</div>';
+	echo '</div>';
+	echo '</div>';
+	echo '</div>';
+}
+
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
@@ -92,7 +112,7 @@ if (isset($_COOKIE['returnto']))
 	$returnto = $_COOKIE['returnto'];
 $action = $_POST['action'];
 if ($userAuthenticated)
-	if ($action == '' || $action == 'showsent' || $action == 'showarch' || $action == 'stats' || $action == 'report' || $action == 'register' || $action == 'sign-in' && $userid) {
+	if ($action == '' || $action == 'showsent' || $action == 'stats' || $action == 'report' || $action == 'register' || $action == 'sign-in' && $userid) {
 		$page = $action;
 		setcookie('page', $page);
 		$_COOKIE['page'] = $page;
