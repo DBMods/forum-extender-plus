@@ -9,8 +9,6 @@ if ($userAuthenticated) {
 		include 'compose-message.php';
 	elseif ($action == 'forward' || $action == 'sendfwd')
 		include 'forward-message.php';
-	elseif ($page == 'report' || $action == 'confirmreport')
-		include 'report.php';
 
 	if ($showinbox) {
 		$page = 'inbox';

@@ -1,8 +1,8 @@
-<h2>Report a Problem</h2>
-<p class="topline">
-	<br>
-	<?php
-	$showinbox = false;
+<?php
+require 'header.php';
+if ($userAuthenticated) {
+	$page = 'report';
+	echo '<h2>Report a Problem</h2><p class="topline"><br>';
 	if ($action == 'report') {
 		echo 'Having a problem with the system? Report a problem to the developers!<form action="" method="post">';
 		$showtablequery = mysqli_query($db, 'SHOW TABLES;');
@@ -15,7 +15,14 @@
 	} elseif ($action == 'confirmreport') {
 		if ($_POST['comments'])
 			echo '<p>' . nl2br(htmlspecialchars($_POST['comments'])) . '</p>';
-		echo '<p>Are you sure you want to submit this report?<br><br><form action="" method="post"><input type="hidden" name="msgto" value="Andy Y" /><input type="hidden" name="msgtext" value="' . $_POST['report'] . '&#10;&#10;Comment:&#10;' . $_POST['comments'] . '" /><button name="action" value="send" class="btn btn-success">Yes, report this</button><button name="action" value="report" class="btn btn-danger">No, start over</button></form></p>';
+		echo '<p>Are you sure you want to submit this report?<br><br><form action="messages.php" method="post"><input type="hidden" name="msgto" value="Andy Y" /><input type="hidden" name="msgtext" value="' . $_POST['report'] . '&#10;&#10;Comment:&#10;' . $_POST['comments'] . '" /><button name="action" value="send" class="btn btn-success">Yes, report this</button><button name="action" value="report" class="btn btn-danger">No, start over</button></form></p>';
 	}
-	?>
-</p>
+	echo '</p>';
+} else {
+	//Not logged in or bad auth
+	if ($userLogoff)
+		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
+	include "sign-in.php";
+}
+require 'footer.php';
+?>

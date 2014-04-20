@@ -8,7 +8,7 @@ mysqli_close($db);
 		<hr>
 		<div>
 			Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a> -
-			<form action="" method="post" class="form-link">
+			<form action="report.php" method="post" class="form-link">
 				<button type="submit" name="action" class="btn-link" value="report">Problem?</button>
 			</form>
 		</div>
