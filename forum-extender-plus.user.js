@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.7.15
+// @version 2.2.7.16
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -202,7 +202,7 @@ function navBar() {
 					name: 'userToken'
 				});
 				if (urlSlug.indexOf('?msgtoken=') > -1 && userToken.length == 0) {
-					prefTable.insert({
+					configTable.insert({
 						name: 'userToken',
 						value: urlSlug.split('?msgtoken=')[1]
 					});
