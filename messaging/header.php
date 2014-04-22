@@ -121,6 +121,10 @@ if ($userAuthenticated) {
 		setcookie('page', $page);
 		$_COOKIE['page'] = $page;
 	}
+	
+	//Check now for anything that might screw up the message counts, so that it's accurate later
+	if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
+		include 'manipulate-entry.php';
 
 	//Gather messages in inbox
 	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");

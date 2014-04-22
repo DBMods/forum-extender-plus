@@ -1,9 +1,7 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
-	if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
-		include 'manipulate-entry.php';
-	elseif ($action == 'addressbook')
+	if ($action == 'addressbook')
 		include 'address-book.php';
 	elseif ($action == 'compose' || $action == 'send')
 		include 'compose-message.php';
