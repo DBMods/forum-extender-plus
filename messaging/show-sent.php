@@ -5,6 +5,9 @@ if ($userAuthenticated) {
 		include 'address-book.php';
 	elseif ($action == 'compose' || $action == 'send')
 		include 'compose-message.php';
+	
+	getMessages();
+	
 	if ($showinbox) {echo '<h2>Sent Messages</h2>';
 		$page = 'showsent';
 		navform();
