@@ -1,6 +1,3 @@
-<?php
-$showinbox = false;
-?>
 <h2>Address Book</h2>
 <p class='topline'>
 <p>
@@ -9,18 +6,14 @@ $showinbox = false;
 <form method='post' action='messages.php' class='menu'>
 	<input type='hidden' name='action' value='compose' />
 	<select name='msgto' class='form-control'>
-		<option value=''>Please Select a User</option>
-		<optgroup label='--Mods--'>
-			<option value='Andy Y.'>Andy Y.</option>
-			<option value='Chris J.'>Chris J.</option>
-			<option value='Mark Mc'>Mark Mc</option>
-			<option value='Nathan C.'>Nathan C.</option>
-			<option value='R.M.'>R.M.</option>
-			<option value='thightower'>thightower</option>
-		</optgroup>
-		<optgroup label='--Regulars--'>
-			<option value='Rich R.'>Rich R.</option>
-		</optgroup>
+	<?php
+	$showinbox = false;
+	$result = mysqli_query($db, 'SELECT * FROM `users` ORDER BY `username` ASC');
+	while($row = mysqli_fetch_assoc($result)) {
+		$uname = $row['username'];
+		echo '<option value="' . $uname . '">' . $uname . '</option>';
+	}
+	?>
 	</select>
 	<br>
 	<button type='submit' class='btn btn-success'>
