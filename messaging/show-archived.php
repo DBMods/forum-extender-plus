@@ -1,12 +1,16 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
-	if ($action == 'addressbook')
+	if ($action == 'delete' || $action == 'unarch')
+		include 'manipulate-entry.php';
+	elseif ($action == 'addressbook')
 		include 'address-book.php';
 	elseif ($action == 'compose' || $action == 'send')
 		include 'compose-message.php';
 	elseif ($action == 'forward' || $action == 'sendfwd')
 		include 'forward-message.php';
+	
+	getMessages();
 
 	if ($showinbox) {
 		$page = 'showarch';

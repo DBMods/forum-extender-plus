@@ -6,12 +6,10 @@ function sqlesc($string) {
 	global $db;
 	return mysqli_real_escape_string($db, $string);
 }
-
 //Append secondary nav form to page
 function navform() {
 	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 }
-
 //Show delete confirmation modal
 function deleteConfirm() {
 	echo '<div class="modal fade in" id="alertDelete">';
@@ -29,7 +27,24 @@ function deleteConfirm() {
 	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
 	echo '</div></div></div></div>';
 }
+//Gather messages in inbox
+function getMessages() {
+	//Get lists
+	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
+	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1 ORDER BY `time` DESC");
 
+	//Message counter navbar badges
+	$count = mysqli_num_rows($result);
+	if ($count > 0)
+		$countBadge = ' <span class="badge">' . $count . '</span>';
+	else
+		$countBadge = '';
+	$archCount = mysqli_num_rows($archive);
+	if ($archCount > 0)
+		$archBadge = ' <span class="badge">' . $archCount . '</span>';
+	else
+		$archBadge = '';
+}
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
@@ -121,26 +136,6 @@ if ($userAuthenticated) {
 		setcookie('page', $page);
 		$_COOKIE['page'] = $page;
 	}
-	
-	//Check now for anything that might screw up the message counts, so that it's accurate later
-	if ($action == 'delete' || $action == 'arch' || $action == 'unarch')
-		include 'manipulate-entry.php';
-
-	//Gather messages in inbox
-	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
-	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1 ORDER BY `time` DESC");
-
-	//Message counter navbar badges
-	$count = mysqli_num_rows($result);
-	if ($count > 0)
-		$countBadge = ' <span class="badge">' . $count . '</span>';
-	else
-		$countBadge = '';
-	$archCount = mysqli_num_rows($archive);
-	if ($archCount > 0)
-		$archBadge = ' <span class="badge">' . $archCount . '</span>';
-	else
-		$archBadge = '';
 }
 ?>
 <html>
