@@ -12,10 +12,7 @@ function navform() {
 }
 //Show delete confirmation modal
 function deleteConfirm() {
-	echo '<div class="modal fade in" id="alertDelete">';
-	echo '<div class="modal-dialog">';
-	echo '<div class="modal-content">';
-	echo '<div class="modal-header">';
+	echo '<div class="modal fade in" id="alertDelete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
 	echo '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>';
 	echo '<h3 class="modal-title">Are you sure?</h3>';
 	echo '</div>';
