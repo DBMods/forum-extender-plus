@@ -1,14 +1,6 @@
 <?php
 require 'db-login.php';
 
-//Declare variables
-$result = '';
-$archive = '';
-$count = '';
-$countBadge = '';
-$archCount = '';
-$archBadge = '';
-
 //Shorthand for mysqli_real_escape_string
 function sqlesc($string) {
 	global $db;
@@ -45,15 +37,9 @@ function getMessages() {
 
 	//Message counter navbar badges
 	$count = mysqli_num_rows($result);
-	if ($count > 0)
-		$countBadge = ' <span class="badge">' . $count . '</span>';
-	else
-		$countBadge = '';
+	$countBadge = ($count > 0 ? (' <span class="badge">' . $count . '</span>') : '');
 	$archCount = mysqli_num_rows($archive);
-	if ($archCount > 0)
-		$archBadge = ' <span class="badge">' . $archCount . '</span>';
-	else
-		$archBadge = '';
+	$archBadge = ($archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '');
 }
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
@@ -113,8 +99,12 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 	$passwordHash = mysqli_fetch_row($result);
 	$passwordHash = $passwordHash['0'];
+	
+	//If the password is good, auth the user
 	if (password_verify($_POST['password'], $passwordHash))
 		$userAuthenticated = true;
+	
+	
 	if ($userAuthenticated) {
 		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$userToken = mysqli_fetch_row($result);
@@ -130,18 +120,18 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		$badAuth = true;
 }
 
+//Set variables
 $userid = htmlspecialchars($_COOKIE['userid']);
 $userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $timeOffsetSeconds = $timeoffset * 60;
-$returnto = 'https://forums.dropbox.com';
-if (isset($_COOKIE['returnto']))
-	$returnto = $_COOKIE['returnto'];
+$returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://forums.dropbox.com');
 $action = $_POST['action'];
 $indirectcall = true;
+
 if ($userAuthenticated) {
 	$showinbox = true;
-	if ($action == 'report' || $action == 'register' || $action == 'sign-in' && $userid) {
+	if ($action == 'register' || $action == 'sign-in' && $userid) {
 		$page = $action;
 		setcookie('page', $page);
 		$_COOKIE['page'] = $page;
