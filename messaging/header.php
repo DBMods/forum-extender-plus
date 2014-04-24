@@ -6,10 +6,20 @@ function sqlesc($string) {
 	global $db;
 	return mysqli_real_escape_string($db, $string);
 }
+
 //Append secondary nav form to page
 function navform() {
 	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
 }
+
+//Fully delete cookie
+function delCookie($cookie) {
+	if (isset($_COOKIE[$cookie])) {
+		unset($_COOKIE[$cookie]);
+		setcookie($cookie, '', time() - 3600);
+	}
+}
+
 //Show delete confirmation modal
 function deleteConfirm() {
 	echo '<div class="modal fade in" id="alertDelete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
@@ -24,10 +34,11 @@ function deleteConfirm() {
 	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button></form>';
 	echo '</div></div></div></div>';
 }
+
 //Gather messages in inbox
 function getMessages() {
 	global $db, $userid, $result, $archive, $count, $countBadge, $archCount, $archBadge;
-	
+
 	//Get lists
 	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
 	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1 ORDER BY `time` DESC");
@@ -38,6 +49,7 @@ function getMessages() {
 	$archCount = mysqli_num_rows($archive);
 	$archBadge = ($archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '');
 }
+
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
 	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
@@ -96,12 +108,11 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 	$passwordHash = mysqli_fetch_row($result);
 	$passwordHash = $passwordHash['0'];
-	
+
 	//If the password is good, auth the user
 	if (password_verify($_POST['password'], $passwordHash))
 		$userAuthenticated = true;
-	
-	
+
 	if ($userAuthenticated) {
 		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$userToken = mysqli_fetch_row($result);
