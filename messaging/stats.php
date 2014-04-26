@@ -2,7 +2,6 @@
 require 'header.php';
 if ($userAuthenticated) {
 	getMessages();	
-	$page = 'stats';
 	echo '<h2>Stats</h2>';
 	echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>';
 	echo '<link rel="stylesheet" href="css/flapper.css" />';

@@ -13,7 +13,6 @@ if ($userAuthenticated) {
 	getMessages();
 
 	if ($showinbox) {
-		$page = 'showarch';
 		echo '<h2>Archived Messages - ' . $archCount . '</h2>';
 		navform();
 		while ($row = mysqli_fetch_assoc($archive)) {

@@ -20,6 +20,16 @@ function delCookie($cookie) {
 	}
 }
 
+//Append a link to the navbar
+function linkActivity($string) {
+	global $pageName, $userAuthenticated, $showinbox;
+	
+	$class = 'in';
+	if (strpos($string, $pageName) !== false && $userAuthenticated && $showinbox)
+		$class = '';
+	echo '<li class="' . $class . 'active">' . $string . '</li>';
+}
+
 //Show delete confirmation modal
 function deleteConfirm() {
 	echo '<div class="modal fade in" id="alertDelete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
@@ -49,6 +59,9 @@ function getMessages() {
 	$archCount = mysqli_num_rows($archive);
 	$archBadge = ($archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '');
 }
+
+//Set global variables
+$pageName = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'], '/') + 1);
 
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {

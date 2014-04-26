@@ -13,7 +13,6 @@ if ($userAuthenticated) {
 	getMessages();
 
 	if ($showinbox) {
-		$page = 'inbox';
 		echo '<h2>Inbox - ' . $count . '</h2>';
 		navform();
 		while ($row = mysqli_fetch_assoc($result)) {

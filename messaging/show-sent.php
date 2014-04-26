@@ -8,8 +8,8 @@ if ($userAuthenticated) {
 	
 	getMessages();
 	
-	if ($showinbox) {echo '<h2>Sent Messages</h2>';
-		$page = 'showsent';
+	if ($showinbox) {
+		echo '<h2>Sent Messages</h2>';
 		navform();
 		$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `from` = '" . $userid . "' ORDER BY `time` DESC");
 		while ($row = mysqli_fetch_assoc($result)) {

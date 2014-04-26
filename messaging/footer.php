@@ -24,20 +24,12 @@ mysqli_close($db);
 	<div class="header">
 		<ul class="nav nav-pills pull-left">
 			<?php
-			echo '<li class="';
-			if ($page != 'inbox')
-				echo 'in';
-			echo 'active"><a href="messages.php">Inbox' . $countBadge . '</a></li><li class="';
-			if ($page != 'showsent')
-				echo 'in';
-			echo 'active"><form action="show-sent.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Sent</button></form></li><li class="';
-			if ($page != 'showarch')
-				echo 'in';
-			echo 'active"><form action="show-archived.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Archive' . $archBadge . '</button></form></li><li class="';
-			if ($page != 'stats')
-				echo 'in';
-			echo 'active"><form action="stats.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Stats</button></form></li><li><a href="' . $returnto . '">Back to Forums</a></li>';
-			echo '<li class="inactive"><form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form></li>';
+			linkActivity('<a href="messages.php">Inbox' . $countBadge . '</a>');
+			linkActivity('<form action="show-sent.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Sent</button></form>');
+			linkActivity('<form action="show-archived.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Archive' . $archBadge . '</button></form>');
+			linkActivity('<form action="stats.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Stats</button></form>');
+			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
+			linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');
 			?>
 		</ul>
 		<div class="site-title">
