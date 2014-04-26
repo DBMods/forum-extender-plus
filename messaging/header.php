@@ -64,10 +64,8 @@ if ($_POST['returnto']) {
 
 //Sets cookies to blank on logoff
 if ($_POST['action'] == "logoff") {
-	setcookie('userToken', "");
-	setcookie('userid', "");
-	$_COOKIE['userToken'] = "";
-	$_COOKIE['userid'] = "";
+	delCookie('userToken');
+	delCookie('userid');
 	$userLogoff = true;
 }
 
