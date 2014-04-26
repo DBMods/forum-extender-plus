@@ -13,8 +13,4 @@ if ($action == 'delete') {
 	$result = mysqli_query($db, "UPDATE `msglist` SET `archived` = 0 WHERE `id` = '" . sqlesc($_POST['msgid']) . "' AND `to` = '" . sqlesc($userid) . "' AND `archived` = 1");
 	echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message unarchived.</strong></p></div></div>';
 }
-if (isset($_COOKIE['page'])) {
-	$page = $_COOKIE['page'];
-	unset($_COOKIE['page']);
-}
 ?>

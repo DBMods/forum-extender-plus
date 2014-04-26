@@ -1,7 +1,6 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
-	$page = 'settings';
 	getMessages();
 	
 	echo '<h2>Settings</h2>';

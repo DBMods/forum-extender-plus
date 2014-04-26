@@ -150,11 +150,6 @@ $indirectcall = true;
 
 if ($userAuthenticated) {
 	$showinbox = true;
-	if ($action == 'register' || $action == 'sign-in' && $userid) {
-		$page = $action;
-		setcookie('page', $page);
-		$_COOKIE['page'] = $page;
-	}
 }
 ?>
 <html>
