@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.7.16
+// @version 2.2.7.17
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -218,7 +218,13 @@ function navBar() {
 					msgFormAction = '';
 				}
 
-				//Check messages
+				//Handle messages MARKER
+				$('.poststuff').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">message user</a>');
+				$('.gsDropboxExtenderMessageUser').click(function(evt) {
+					showModal('Message User', '<form id="gsDropboxExtenderMessageForm" action="http://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + $('#header .login a:first').attr('href').split('id=')[1] + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /><br><a href="javascript:void(0)" id="gsDropboxExtenderModalAction">Send</a></form>', function() {
+						$('#gsDropboxExtenderModalContent form').submit();
+					});
+				});
 				$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/messages.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + $('#header .login a[href^="https://forums.dropbox.com/profile.php"]').attr('href').split('id=')[1] + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
 				(function checkMessages() {
 					GM_xmlhttpRequest({
@@ -631,30 +637,27 @@ if (pageUrl == 'topic.php' && $('form#postform:first').length == 0) {
 	addMarkupLinks();
 
 function addMarkupLinks() {
-	$('.poststuff').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderQuoteSelected">quote selected</a> - <a href="javascript:void(0)" class="gsDropboxExtenderQuotePost">quote post</a> - <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">message user</a>');
+	$('.poststuff').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderQuoteSelected">quote selected</a> - <a href="javascript:void(0)" class="gsDropboxExtenderQuotePost">quote post</a>');
 	$('p.submit').append('<span style="float: left;"> - <a href="javascript:void(0)" class="gsDropboxExtenderAnchorSelected">a</a> - <a href="javascript:void(0)" class="gsDropboxExtenderBlockquoteSelected">blockquote</a> - <a href="javascript:void(0)" class="gsDropboxExtenderStrongSelected">bold</a> - <a href="javascript:void(0)" class="gsDropboxExtenderEmSelected">italic</a> - <a href="javascript:void(0)" class="gsDropboxExtenderCodeSelected">code</a> - <a href="javascript:void(0)" class="gsDropboxExtenderOrderedListInsert">ordered list</a> - <a href="javascript:void(0)" class="gsDropboxExtenderUnorderedListInsert">unordered list</a> - <a href="javascript:void(0)" class="gsDropboxExtenderSignatureInsert">custom signature</a></span>');
 }
 
-//Message users
-$('.gsDropboxExtenderMessageUser').click(function(evt) {
-	showModal('Message User', '<form id="gsDropboxExtenderMessageForm" action="http://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + $('#header .login a:first').attr('href').split('id=')[1] + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /><br><a href="javascript:void(0)" id="gsDropboxExtenderModalAction">Send</a></form>', function() {
-		$('#gsDropboxExtenderModalContent form').submit();
-	});
-});
 //Quote current post
 $('.gsDropboxExtenderQuotePost').click(function(evt) {
 	var SelectedText = $(evt.target).parent().parent().find(".post").eq(0).text();
 	SelectedText = SelectedText.substring(0, SelectedText.length - 1);
 	insertSelectedQuote(SelectedText, getPostAuthorDetails(evt.target));
 });
+
 //Quote selected text
 $('.gsDropboxExtenderQuoteSelected').click(function(evt) {
 	insertSelectedQuote(getSelectedText(), getPostAuthorDetails(evt.target));
 });
+
 //Markup text
 $('.gsDropboxExtenderBlockquoteSelected, .gsDropboxExtenderStrongSelected, .gsDropboxExtenderEmSelected, .gsDropboxExtenderCodeSelected').click(function() {
 	insertAndMarkupTextAtCursorPosition($(this).attr('class').split('gsDropboxExtender')[1].split('Selected')[0].toLowerCase());
 });
+
 //Insert a list
 var listType = '';
 $('.gsDropboxExtenderUnorderedListInsert').click(function() {
@@ -677,17 +680,20 @@ $('#gsDropboxExtenderListBoxOk').click(function() {
 	setCursorPositionInTextArea(PostTextAreaName, $('#' + PostTextAreaName)[0].selectionStart + content.length + 11);
 	hideListBoxPopUp();
 });
+
 //Insert an anchor
 $('.gsDropboxExtenderAnchorSelected').click(function() {
 	showModal('Add Link', '<div style="clear: both; height: 20px;"><label style="float: left;">Title: </label><input id="gsDropboxExtenderAnchorTextBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><div style="clear: both; height: 20px;"><label style="float: left;">Url: </label><input id="gsDropboxExtenderAnchorUrlBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><br /><input type="submit" tabindex="4" value="Add Link" class="button" name="Submit" id="gsDropboxExtenderModalAction" style="clear: both; float: right;">', function() {
 		insertTextAtCursorPosition('<a href="' + $('#gsDropboxExtenderAnchorUrlBox').val() + '">' + $('#gsDropboxExtenderAnchorTextBox').val() + '</a>');
 	});
 });
+
 //Add signature
 $('.gsDropboxExtenderSignatureInsert').click(function() {
 	setCursorPositionInTextArea(PostTextAreaName, $('#' + PostTextAreaName).val().length);
 	insertTextAtCursorPosition("\n\n--\n" + Signature);
 });
+
 /*
  * Popup windows
  */
