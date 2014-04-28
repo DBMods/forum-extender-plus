@@ -58,7 +58,9 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) { //Re
 			echo '<h4 class="center">Account created. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the account creation process.</h4><p class="center">In order to finish the account creation process, we must redirect you back to the forums. However, this will only happen during registration.</p>';
 		}
 	}
-	if ($account_exist) //account already exists login form + return token to extension
+
+	//If account already exists, show login form, and return token to extension
+	if ($account_exist)
 		signinPanel("showTokenRedir", "pass-token");
 } elseif ($_POST['action'] == "pass-token" && $_POST['username'] && $_POST['password']) {
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
