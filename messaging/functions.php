@@ -5,11 +5,6 @@ function sqlesc($string) {
 	return mysqli_real_escape_string($db, $string);
 }
 
-//Append secondary nav form to page
-function navform() {
-	echo '<form action="" method="post" class="menu"><button type="submit" class="btn btn-success" name="action" value="compose">Compose</button></form>';
-}
-
 //Fully delete cookie
 function delCookie($cookie) {
 	if (isset($_COOKIE[$cookie])) {

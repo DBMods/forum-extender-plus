@@ -10,7 +10,6 @@ if ($userAuthenticated) {
 
 	if ($showinbox) {
 		echo '<h2>Inbox - ' . $count . '</h2>';
-		navform();
 		while ($row = mysqli_fetch_assoc($result)) {
 			echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a>';
 			if (htmlspecialchars($row['forward']) != 0)
