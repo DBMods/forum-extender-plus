@@ -1,6 +1,6 @@
 <h2>Address Book</h2>
 <p class='topline'>
-<form method='post' action='messages.php' class='menu'>
+<form method='post' action='' class='menu'>
 	<input type='hidden' name='action' value='compose' />
 	<select name='msgto' class='form-control'>
 	<?php

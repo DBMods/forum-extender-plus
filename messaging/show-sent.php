@@ -1,9 +1,6 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
-	if ($action == 'addressbook')
-		include 'address-book.php';
-	
 	getMessages();
 	
 	if ($showinbox) {

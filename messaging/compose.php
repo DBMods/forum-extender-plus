@@ -3,11 +3,8 @@ require 'header.php';
 
 if ($action == 'send')
 	require 'send.php';
-
-if (!$senderror){
-	echo '<h2>Compose</h2>';
-	echo '<p class="topline">Click <a href="messages.php">here</a> to head back to your inbox!</p>';
-}
+elseif ($action == 'addressbook')
+	require 'address-book.php';
 
 if (!$action || $senderror) {
 	require 'header.php'

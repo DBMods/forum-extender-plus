@@ -3,8 +3,6 @@ require 'header.php';
 if ($userAuthenticated) {
 	if ($action == 'delete' || $action == 'unarch')
 		include 'manipulate-entry.php';
-	elseif ($action == 'addressbook')
-		include 'address-book.php';
 	elseif ($action == 'forward' || $action == 'sendfwd')
 		include 'forward-message.php';
 	
