@@ -1,24 +1,6 @@
 <?php
-$senderror = '';
-if ($action == 'send') {
-	$dest = $_POST['msgto'];
-	if ($dest == 'Chris J.' || $dest == 'Chris J')
-		$dest = '175532';
-	elseif ($dest == 'Mark Mc')
-		$dest = '30385';
-	elseif ($dest == 'thightower' || $dest == 'T. Hightower' || $dest == 'T Hightower')
-		$dest = '222573';
-	if (!is_numeric($dest)) {
-		$result = mysqli_query($db, 'SELECT * FROM `users` WHERE `username` = "' . $dest . '"');
-		$row = mysqli_fetch_assoc($result);
-		$dest = $row['userid'];
-	}
-	if (is_numeric($dest) && $dest != 0) {
-		mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($userid) . '", "' . sqlesc($_POST['msgtext']) . '", "' . time() . '")');
-		echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message sent.</strong></p></div></div>';
-	} else
-		$senderror = '<div class="alert-center"><div id="alert-fade" class="alert alert-danger"><p><strong>Invalid destination.</strong></p></div></div>';
-}
+if ($action == 'send')
+	require 'send.php';
 if ($action == 'compose' || $senderror) {
 	$showinbox = false;
 	$msgplaceholder = 'This is where you would write your message. You know, sort of like this. I mean, you probably wouldn\'t actually write this up to send to someone, but if you were, that would be a proper use for the message system. I mean, you don\'t have to write a novel or anything, but you don\'t have to not write a novel. Heck, feel free to pour your heart and soul out into your message. Actually, wait, don\'t. That might be kinda weird. So anyway, like I said, it doesn\'t have to be a novel, but it can be. Novels are fun! Also, the devs of this script are pretty cool to talk to, so if you want to drop by to say hi, try sending a message to either Andy Y. or Nathan C. So you can pretty much message about anything you want here. You could even talk about rainbows and unicorns! If you want to talk to the admins, this isn\' their topic of choice, though, but, I guess if you really wanted to, you could, and they might (reluctantly, of course) reply with some other nonsense. You might even get your novel about the evil Dropbox Clan that\s out to try and steal all of the precious space treasures (okay, probably not, but someone might get a good laugh out of it)! So what are you waiting for? Type away!';
