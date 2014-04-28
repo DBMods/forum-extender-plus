@@ -1,6 +1,8 @@
 <?php
 require 'header.php';
 
+getMessages();
+
 if ($action == 'send')
 	require 'send.php';
 elseif ($action == 'addressbook')
