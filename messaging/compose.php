@@ -1,12 +1,12 @@
 <?php
 require 'header.php';
 
-getMessages();
-
 if ($action == 'send')
 	require 'send.php';
 elseif ($action == 'addressbook')
 	require 'address-book.php';
+
+getMessages();
 
 if (!$action || $senderror) {
 	$showinbox = false;
