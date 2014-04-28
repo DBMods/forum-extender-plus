@@ -1,7 +1,4 @@
 <?php
-require 'db-login.php';
-require 'functions.php';
-
 $senderror = '';
 $dest = $_POST['msgto'];
 if ($dest == 'Chris J.' || $dest == 'Chris J')
