@@ -26,9 +26,9 @@ mysqli_close($db);
 			<?php
 			linkActivity('<a href="messages.php">Inbox' . $countBadge . '</a>');
 			linkActivity('<a href="compose.php">Compose</a>');
-			linkActivity('<form action="sent.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Sent</button></form>');
-			linkActivity('<form action="archive.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Archive' . $archBadge . '</button></form>');
-			linkActivity('<form action="stats.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Stats</button></form>');
+			linkActivity('<a href="sent.php">Sent</a>');
+			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');
+			linkActivity('<a href="stats.php">Stats</a>');
 			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
 			linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');
 			?>
