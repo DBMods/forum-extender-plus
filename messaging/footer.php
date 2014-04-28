@@ -25,6 +25,7 @@ mysqli_close($db);
 		<ul class="nav nav-pills pull-left">
 			<?php
 			linkActivity('<a href="messages.php">Inbox' . $countBadge . '</a>');
+			linkActivity('<a href="compose.php">Compose</a>');
 			linkActivity('<form action="show-sent.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Sent</button></form>');
 			linkActivity('<form action="show-archived.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Archive' . $archBadge . '</button></form>');
 			linkActivity('<form action="stats.php" method="post" class="form-pill"><button type="submit" class="btn-pill">Stats</button></form>');

@@ -5,8 +5,6 @@ if ($userAuthenticated) {
 		include 'manipulate-entry.php';
 	elseif ($action == 'addressbook')
 		include 'address-book.php';
-	elseif ($action == 'compose' || $action == 'send')
-		include 'compose-message.php';
 	elseif ($action == 'forward' || $action == 'sendfwd')
 		include 'forward-message.php';
 	

@@ -3,8 +3,6 @@ require 'header.php';
 if ($userAuthenticated) {
 	if ($action == 'addressbook')
 		include 'address-book.php';
-	elseif ($action == 'compose' || $action == 'send')
-		include 'compose-message.php';
 	
 	getMessages();
 	
