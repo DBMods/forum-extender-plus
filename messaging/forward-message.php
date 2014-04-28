@@ -2,16 +2,10 @@
 $senderror = '';
 if ($action == 'sendfwd') {
 	$dest = $_POST['fwdto'];
-	if ($dest == 'Andy Y.' || $dest == 'Andy Y')
-		$dest = '1618104';
-	elseif ($dest == 'Chris J.' || $dest == 'Chris J')
+	if ($dest == 'Chris J.' || $dest == 'Chris J')
 		$dest = '175532';
 	elseif ($dest == 'Mark Mc')
 		$dest = '30385';
-	elseif ($dest == 'Nathan C.' || $dest == 'Nathan C')
-		$dest = '857279';
-	elseif ($dest == 'R.M.' || $dest == 'RM' || $dest == 'R.M')
-		$dest = '643099';
 	elseif ($dest == 'thightower' || $dest == 'T. Hightower' || $dest == 'T Hightower')
 		$dest = '222573';
 	if (is_numeric($dest) && $dest != 0) {
