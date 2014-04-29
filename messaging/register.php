@@ -15,27 +15,38 @@ function registerPanel($userid) {
 	echo '</div>';
 	echo '</div>';
 }
-if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) { //Request to create an account from extension
+
+//Request to create account from extension
+if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 	$userid = $_POST['userid'];
 	$result = mysqli_query($db, "SELECT * FROM `users` WHERE `userid` = '" . sqlesc($_POST['userid']) . "'");
-	//checks for account already existing with userid
+	
+	//Checks for account already existing with userid
 	$account_exist = mysqli_fetch_row($result);
-	if (!$account_exist && !$_POST['username']) //If account does not already exist and user did not fill out register form
+
+	if (!$account_exist && !$_POST['username'])
+		//If account does not already exist and user did not fill out register form
 		registerPanel($userid);
-	elseif (!$account_exist && $_POST['username']) { //If account does not already exist and user did fill out register form
+	elseif (!$account_exist && $_POST['username']) {
+		//If account does not already exist and user did fill out register form
 		$result = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+
 		//Check if username is already in use
 		$row = mysqli_fetch_array($result);
-		if ($row) { //Username is already in use
+
+		if ($row) {
+			//Username is already in use
 			$usernameUsed = true;
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Username already in use!</strong></p></div></div>";
 			registerPanel($userid);
-		} else { //Username is not already in use
+		} else {
+			//Username is not already in use
 			$chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 			for ($i = 0; $i < 10; $i++) {
 				$random .= $chars[rand(0, strlen($chars) - 1)];
 			}
-			//check if token already exists and if so gen another one
+
+			//Check if token already exists and if so gen another one
 			$exists = true;
 			while ($exists == true) {
 				$query = "SELECT * FROM `users` WHERE `ext_token` = '$random'";
@@ -68,16 +79,19 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) { //Re
 	$passwordHash = $passwordHash['0'];
 	if (password_verify($_POST['password'], $passwordHash))
 		$userAuthenticated = true;
-	if ($userAuthenticated) { //authentication successful
+	if ($userAuthenticated) {
+		//Authentication successful
 		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$token = mysqli_fetch_row($result);
 		$token = $token['0'];
 		echo '<h4 class="center">Successfully signed in. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
-	} else { //authentication unsuccessful
+	} else {
+		//Authentication unsuccessful
 		badAuth();
 		signinPanel("showTokenRedir", "pass-token");
 	}
-} else { //No request from extension to create the account
+} else {
+	//No request from extension to create the account
 	echo '<div class="small-center">';
 	echo '<div class="panel panel-primary">';
 	echo '<div class="panel-heading"><h3>Sign up</h3></div>';

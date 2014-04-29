@@ -2,7 +2,7 @@
 require 'header.php';
 if ($userAuthenticated) {
 	echo '<h2>Report a Problem</h2>';
-	echo '<p class="topline"><br>';
+	echo '<p class="topline">';
 	if ($action == 'report') {
 		echo 'Having a problem with the system? Report a problem to the developers!<form action="" method="post">';
 		$showtablequery = mysqli_query($db, 'SHOW TABLES;');

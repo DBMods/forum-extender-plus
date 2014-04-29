@@ -29,11 +29,7 @@ function delCookie($cookie) {
 //Append a link to the navbar
 function linkActivity($string) {
 	global $pageName, $userAuthenticated, $showinbox;
-
-	$class = 'in';
-	if (strpos($string, $pageName) !== false && $userAuthenticated && $showinbox)
-		$class = '';
-	echo '<li class="' . $class . 'active">' . $string . '</li>';
+	echo '<li class="' . ((strpos($string, $pageName) !== false && $userAuthenticated && $showinbox) ? '' : 'in') . 'active">' . $string . '</li>';
 }
 
 //Show delete confirmation modal
@@ -61,8 +57,8 @@ function getMessages() {
 
 	//Message counter navbar badges
 	$count = mysqli_num_rows($result);
-	$countBadge = ($count > 0 ? (' <span class="badge">' . $count . '</span>') : '');
+	$countBadge = $count > 0 ? (' <span class="badge">' . $count . '</span>') : '';
 	$archCount = mysqli_num_rows($archive);
-	$archBadge = ($archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '');
+	$archBadge = $archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '';
 }
 ?>

@@ -1,12 +1,6 @@
 <?php
 $senderror = '';
 $dest = $_POST['msgto'];
-if ($dest == 'Chris J.' || $dest == 'Chris J')
-	$dest = '175532';
-elseif ($dest == 'Mark Mc')
-	$dest = '30385';
-elseif ($dest == 'thightower' || $dest == 'T. Hightower' || $dest == 'T Hightower')
-	$dest = '222573';
 if (!is_numeric($dest)) {
 	$result = mysqli_query($db, 'SELECT * FROM `users` WHERE `username` = "' . $dest . '"');
 	$row = mysqli_fetch_assoc($result);

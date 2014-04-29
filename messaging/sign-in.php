@@ -9,10 +9,7 @@ function signinPanel($showOption, $addAction) {
 	echo '<div class="form-group"><input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required="" /></div>';
 	echo '<div class="form-group"><input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required="" /></div>';
 	echo '<div class="form-group">';
-	if ($addAction)
-		echo "<button name=\"action\" value=\"" . $addAction . "\" class=\"btn btn-success\">Sign in</button>";
-	else
-		echo "<button class=\"btn btn-success\">Sign in</button>";
+	echo $addAction ? ("<button name=\"action\" value=\"" . $addAction . "\" class=\"btn btn-success\">Sign in</button>") : ("<button class=\"btn btn-success\">Sign in</button>");
 	echo '</div>';
 	echo '</fieldset>';
 	echo '</form>';

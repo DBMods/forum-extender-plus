@@ -30,7 +30,8 @@ mysqli_close($db);
 			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');
 			linkActivity('<a href="stats.php">Stats</a>');
 			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
-			if($userAuthenticated){linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');}
+			if($userAuthenticated)
+				linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');
 			?>
 		</ul>
 		<div class="site-title">
