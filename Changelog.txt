@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.7.18-----
+* Fixed typo in message snippet
+
 -----2.2.7.17-----
 # Prepped for a new security rewrite of process-message.php
 
