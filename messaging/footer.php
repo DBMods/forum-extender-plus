@@ -24,7 +24,7 @@ mysqli_close($db);
 	<div class="header">
 		<ul class="nav nav-pills pull-left">
 			<?php
-			linkActivity('<a href="/">Inbox' . $countBadge . '</a>');
+			linkActivity('<a href="./">Inbox' . $countBadge . '</a>');
 			linkActivity('<a href="compose.php">Compose</a>');
 			linkActivity('<a href="sent.php">Sent</a>');
 			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');

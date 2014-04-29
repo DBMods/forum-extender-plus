@@ -15,7 +15,7 @@ if ($userAuthenticated) {
 	} elseif ($action == 'confirmreport') {
 		if ($_POST['comments'])
 			echo '<p>' . nl2br(htmlspecialchars($_POST['comments'])) . '</p>';
-		echo '<p>Are you sure you want to submit this report?<br><br><form action="index.php" method="post"><input type="hidden" name="msgto" value="Andy Y" /><input type="hidden" name="msgtext" value="' . $_POST['report'] . '&#10;&#10;Comment:&#10;' . $_POST['comments'] . '" /><button name="action" value="send" class="btn btn-success">Yes, report this</button><button name="action" value="report" class="btn btn-danger">No, start over</button></form></p>';
+		echo '<p>Are you sure you want to submit this report?<br><br><form action="./" method="post"><input type="hidden" name="msgto" value="Andy Y" /><input type="hidden" name="msgtext" value="' . $_POST['report'] . '&#10;&#10;Comment:&#10;' . $_POST['comments'] . '" /><button name="action" value="send" class="btn btn-success">Yes, report this</button><button name="action" value="report" class="btn btn-danger">No, start over</button></form></p>';
 	}
 	echo '</p>';
 }
