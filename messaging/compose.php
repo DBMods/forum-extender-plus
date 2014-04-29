@@ -10,7 +10,7 @@ getMessages();
 
 if ($action == 'send' && !$senderror) {
 	echo '<h2>Compose</h2>';
-	echo '<p class="topline">Your message has been sent. My masters have not quite figured out how to automatically direct you back to your inbox, though. Click <a href="messages.php">here</a> to do so.</p>';
+	echo '<p class="topline">Your message has been sent. My masters have not quite figured out how to automatically direct you back to your inbox, though. Click <a href="/">here</a> to do so.</p>';
 }
 
 if ($action != 'addressbook' && ($action != 'send' || $senderror)) {
