@@ -24,13 +24,13 @@ mysqli_close($db);
 	<div class="header">
 		<ul class="nav nav-pills pull-left">
 			<?php
-			linkActivity('<a href="messages.php">Inbox' . $countBadge . '</a>');
+			linkActivity('<a href="./">Inbox' . $countBadge . '</a>');
 			linkActivity('<a href="compose.php">Compose</a>');
 			linkActivity('<a href="sent.php">Sent</a>');
 			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');
 			linkActivity('<a href="stats.php">Stats</a>');
 			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
-			linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');
+			if($userAuthenticated){linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');}
 			?>
 		</ul>
 		<div class="site-title">
@@ -52,7 +52,7 @@ if ($pageName != 'stats.php')
 		var _self = $(this);
 		$('#msgid').val(_self.data('id'));
 		$(_self.attr('href')).modal('show');
-	}); 
+	});
 </script>
 </body>
 </html>

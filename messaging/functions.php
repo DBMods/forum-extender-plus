@@ -12,9 +12,9 @@ function iCanHazCookie($name, $val, $exp = 0) {
 }
 
 //Append message options
-function msgOptions($row) {
+function msgOptions($row, $option = 'arch') {
 	echo '<form method="post" action="compose.php" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button></form>';
-	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-warning btn-sm" name="action" value="forward">Forward</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="arch">Archive</button></form>';
+	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-warning btn-sm" name="action" value="forward">Forward</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="' . $option . '">' . ucfirst($option) . 'ive</button></form>';
 	echo '<a data-id="' . htmlspecialchars($row['id']) . '" class="open-alertDelete btn btn-danger btn-sm" href="#alertDelete">Delete</a>';
 }
 
@@ -29,7 +29,7 @@ function delCookie($cookie) {
 //Append a link to the navbar
 function linkActivity($string) {
 	global $pageName, $userAuthenticated, $showinbox;
-	
+
 	$class = 'in';
 	if (strpos($string, $pageName) !== false && $userAuthenticated && $showinbox)
 		$class = '';
