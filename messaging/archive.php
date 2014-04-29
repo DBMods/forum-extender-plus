@@ -5,7 +5,7 @@ if ($userAuthenticated) {
 		include 'manipulate-entry.php';
 	elseif ($action == 'forward' || $action == 'sendfwd')
 		include 'forward-message.php';
-	
+
 	getMessages();
 
 	if ($showinbox) {
@@ -14,7 +14,7 @@ if ($userAuthenticated) {
 			echo '<p class="topline">';
 			echo '<br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a><br>Message:<br>' . nl2br(htmlspecialchars($row['msg']));
 			echo '</p>';
-			msgOptions($row);
+			msgOptions($row, "unarch");
 		}
 		deleteConfirm();
 		if ($archCount == 0)
