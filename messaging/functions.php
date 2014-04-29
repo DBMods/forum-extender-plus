@@ -5,6 +5,12 @@ function sqlesc($string) {
 	return mysqli_real_escape_string($db, $string);
 }
 
+//Create and set a cookie
+function iCanHazCookie($name, $val, $exp = 0) {
+	setcookie($name, $val, $exp);
+	$_COOKIE[$name] = $val;
+}
+
 //Append message options
 function msgOptions($row) {
 	echo '<form method="post" action="compose.php" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button></form>';

@@ -1,23 +1,17 @@
-<?php
+                     <?php
 require 'db-login.php';
-
-//Include functions
 require 'functions.php';
 
 //Set global variables
 $pageName = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'], '/') + 1);
 
 //Sets local time display
-if (is_numeric($_POST['timeOffset'])) {
-	setcookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
-	$_COOKIE['timeoffset'] = $_POST['timeOffset'];
-}
+if (is_numeric($_POST['timeOffset']))
+	iCanHazCookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
 
 //Sets DB Forums page to return to
-if ($_POST['returnto']) {
-	setcookie('returnto', strip_tags($_POST['returnto']));
-	$_COOKIE['returnto'] = strip_tags($_POST['returnto']);
-}
+if ($_POST['returnto'])
+	iCanHazCookie('returnto', strip_tags($_POST['returnto']));
 
 //Sets cookies to blank on logoff
 if ($_POST['action'] == "logoff") {
@@ -46,10 +40,8 @@ if ($_POST['userToken'] && $_POST['userid']) {
 	$userid = htmlspecialchars($_POST['userid']);
 	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
 	$row = mysqli_fetch_array($result);
-	setcookie('userToken', $userToken, time() + 3600 * 24 * 30);
-	$_COOKIE['userToken'] = $userToken;
-	setcookie('userid', $userid, time() + 3600 * 24 * 30);
-	$_COOKIE['userid'] = $userid;
+	iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
+	iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
 
 	//This is how everything knows the user is authenticated
 	if ($row)
@@ -69,16 +61,12 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		$userAuthenticated = true;
 
 	if ($userAuthenticated) {
-		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
-		$userToken = mysqli_fetch_row($result);
-		$userToken = $userToken['0'];
-		setcookie('userToken', $userToken, time() + 3600 * 24 * 30);
-		$_COOKIE['userToken'] = $userToken;
-		$result = mysqli_query($db, "SELECT userid FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
-		$userid = mysqli_fetch_row($result);
-		$userid = $userid['0'];
-		setcookie('userid', $userid, time() + 3600 * 24 * 30);
-		$_COOKIE['userid'] = $userid;
+		$result = mysqli_query($db, "SELECT userid, ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+		$row = mysqli_fetch_assoc($result);
+		$userToken = $row['userid'];
+		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
+		$userid = $row['ext_token'];
+		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
 	} else
 		$badAuth = true;
 }
@@ -94,9 +82,8 @@ $action = $_POST['action'];
 //Not used yet, but may be in future
 $indirectcall = true;
 
-if ($userAuthenticated) {
+if ($userAuthenticated)
 	$showinbox = true;
-}
 ?>
 <html>
 	<head>

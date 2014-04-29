@@ -41,8 +41,8 @@ mysqli_close($db);
 <?php
 if ($pageName != 'stats.php')
 	echo "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>";
-echo "<script src='js/bootstrap.js'></script>";
 ?>
+<script src='js/bootstrap.js'></script>
 <script>
 	window.setTimeout(function() {
 		$('#alert-fade').addClass('fade');
