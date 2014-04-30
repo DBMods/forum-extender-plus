@@ -1,10 +1,9 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
-	if ($action == 'send'){
+	if ($action == 'send')
 		include 'compose.php';
-	}
-	if ($action == 'delete' || $action == 'arch')
+	elseif ($action == 'delete' || $action == 'arch')
 		include 'manipulate-entry.php';
 	elseif ($action == 'forward' || $action == 'sendfwd')
 		include 'forward-message.php';
