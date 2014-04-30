@@ -13,7 +13,7 @@ if (is_numeric($_POST['timeOffset']))
 if ($_POST['returnto'])
 	iCanHazCookie('returnto', strip_tags($_POST['returnto']));
 
-//Sets cookies to blank on logoff
+//Delete cookies on logoff
 if ($_POST['action'] == "logoff") {
 	delCookie('userToken');
 	delCookie('userid');
