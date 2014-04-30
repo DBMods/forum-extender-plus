@@ -1,4 +1,4 @@
-                     <?php
+<?php
 require 'db-login.php';
 require 'functions.php';
 
@@ -59,8 +59,9 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 	$passwordHash = $passwordHash['0'];
 
 	//If the password is good, auth the user
-	if (password_verify($_POST['password'], $passwordHash))
+	if (password_verify($_POST['password'], $passwordHash)){
 		$userAuthenticated = true;
+  }
 
 	if ($userAuthenticated) {
 		$result = mysqli_query($db, "SELECT userid, ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
@@ -69,8 +70,9 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
 		$userid = $row['userid'];
 		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
-	} else
+	} else {
 		$badAuth = true;
+  }
 }
 
 //Set variables
@@ -84,8 +86,9 @@ $action = $_POST['action'];
 //Not used yet, but may be in future
 $indirectcall = true;
 
-if ($userAuthenticated)
+if ($userAuthenticated) {
 	$showinbox = true;
+}
 ?>
 <html>
 	<head>

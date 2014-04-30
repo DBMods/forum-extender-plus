@@ -1,18 +1,16 @@
 <?php
-require 'header.php';
+if ($action != 'send') {
+	require 'header.php';
+}
 
 if ($userAuthenticated) {
-	if ($action == 'send')
+	if ($action == 'send') {
 		require 'send.php';
-	elseif ($action == 'addressbook')
+	} elseif ($action == 'addressbook') {
 		require 'address-book.php';
+	}
 
 	getMessages();
-
-	if ($action == 'send' && !$senderror) {
-		echo '<h2>Compose</h2>';
-		echo '<p class="topline">Your message has been sent. My masters have not quite figured out how to automatically direct you back to your inbox, though. Click <a href="./">here</a> to do so.</p>';
-	}
 
 	if ($action != 'addressbook' && ($action != 'send' || $senderror)) {
 		$showinbox = false;
@@ -23,10 +21,12 @@ if ($userAuthenticated) {
 		echo '<br><form action="" method="post"><button type="submit" class="btn btn-primary" name="action" value="addressbook">View Address Book</button></form>';
 			if ($_POST['context'])
 			echo '<p>' . nl2br(htmlspecialchars($_POST['context'])) . '</p>';
-		echo '<form id="messageform" action="" method="post"><input id="msgto" name="msgto" type="textbox" style="width:100%" class="form-control" placeholder="Recipient*" value="' . htmlspecialchars($_POST['msgto']) . '" required=""/><br><textarea name="msgtext" placeholder="' . $msgplaceholder . '" rows="9" style="width:100%" class="form-control" required="">' . htmlspecialchars($_POST['msgtext']) . '</textarea><br><div style="height:30px;margin-top:-20px;"><button type="submit" class="btn btn-success btn-left" name="action" value="send">Send</button></form>';
-		echo '<form action="" method="post"><button type="submit" class="btn btn-danger btn-right" style="margin-right:0px">Cancel</button></form></div></div>';
+		echo '<form id="messageform" action="./" method="post"><input id="msgto" name="msgto" type="textbox" style="width:100%" class="form-control" placeholder="Recipient*" value="' . htmlspecialchars($_POST['msgto']) . '" required=""/><br><textarea name="msgtext" placeholder="' . $msgplaceholder . '" rows="9" style="width:100%" class="form-control" required="">' . htmlspecialchars($_POST['msgtext']) . '</textarea><br><div style="height:30px;margin-top:-20px;"><button type="submit" class="btn btn-success btn-left" name="action" value="send">Send</button></form>';
+		echo '<form action="./" method="post"><button type="submit" class="btn btn-danger btn-right" style="margin-right:0px">Cancel</button></form></div></div>';
 	}
 }
 
-require 'footer.php';
+if ($action != 'send') {
+	require 'footer.php';
+}
 ?>
