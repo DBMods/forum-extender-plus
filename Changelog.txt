@@ -170,3 +170,177 @@ Dropbox Forum Mod Icons Changelog
 
 -----2.1.2-----
 * Fixed broken quoting
+
+-----2.1.1-----
+* Fixed image links in quoting
+
+-----2.1.0-----
++ Merged Richard P's Forum Extender into script
+
+-----2013.11.21pre1a-----
+- Removed snippets to fix latency on slow connections
+
+-----2013.11.20pre1a-----
+# Removed almost half of the code in favor for importing snippets
+
+-----2.0.3-----
++ Closed threads are now automatically indicated
+
+-----2.0.2-----
++ Added Super User icon chooser
++ Added 17 more icons to choose from
+
+-----2.0.1-----
+- Removed unnecessary calls from the activity list
+* Added thread breadcrumb back into thread header
+
+-----2.0-----
++ Added snippets folder to the repo
+- removed snowfall from the code, and moved it to the snippets folder
+
+-----2013.11.13pre1a-----
++ Added more post snippets
+
+-----2013.11.11pre2a-----
+* Bugfix
+
+-----2013.11.11pre1a-----
++ Added closed thread notifiers
+
+-----2013.11.9pre56a-----
++ Added Dropbox Datastore API integration
+* Fixed bug where the /?new=1 page would be caught as part of the front page
+# Moved preferences and drafts to the datastore - you must be authenticated with Dropbox to change things like theme, or save drafts
+
+-----2013.11.4pre1a-----
+* Restricted Super User-specific snippets to Super Users only
+
+-----2013.11.2pre3a-----
++ Added general links snippet group
+
+-----2013.11.2pre2a-----
+# Minified some code
+# Completely rewrote settings menu portion of navBar function
+
+-----2013.11.2pre1a-----
+# Minified some code pertaining to snowfall
+
+-----2013.11.1pre2a-----
+# Changed snowflake color
+
+-----2013.11.1pre1a-----
++ Added date-specific things
++ Added winter snowfall (currently red until background changed) that appears December through February
+
+-----2013.10.31pre1a-----
+- Minified some code
+
+-----2013.10.30pre1a-----
+* Fixed typo in snippets
+# Made edit signature dynamic
+# Moved UI fix into forumVersion function
+* Fixed unpredictable layout with other themes
+- Officially removed post streaks
+
+-----2013.10.28pre1a-----
++ Added snippets
+
+-----2013.10.25pre1a-----
+# Merged addOptions() function into nav bar
+# merged post drafting into nav bar
+# Stripped down code
++ Added notification overlays, similar to those in the Dropbox web interface
++ Added super-secret easter egg
+
+-----2013.10.22pre1a-----
+* Fixed post drafting
+
+-----2013.10.21pre1a-----
+- Removed title field from post form
+
+-----2013.10.18pre1a-----
++ Added sticky updating (see for yourselves - https://forums.dropbox.com/topic.php?id=106500)
+
+-----2013.10.13pre1a-----
+# Made thread highlighting a lighter
++ Added post streaks
+# Temporarily deprecated post streaks for further debugging
+
+-----2013.10.11pre1a-----
+* Fixed bbPress theme errors
+
+-----2013.10.9pre1a-----
++ Added alert messages
+* Fixed sticky reloading, so it skips if you are responding
++ Started fixing bbPress theme errors
+
+-----1.3.1-----
++ Added post drafting
++ Added navigation bar
++ Added Super User activity monitor to navigation bar
+- Removed need for manual internalVersion change
+# Rewrote postHighlight function
+# Rewrote highlightThread function
++ Added highlighting for 1, 2, and 3 post-count threads
++ Added new thread highlighting
+
+-----1.3.0-----
++ Added settings panel
+# Allowed user to change settings without editing script
+# Moved collapsible footer outside of theme
+# Rewrote page reloading function
+
+-----1.2.0-----
+# Rewrote postHighlight() function
+- Removed unnecessary importInformation() function
+# Simplified footer
+- Removed getIcon() function
+# Rewrote addIcon() function
+# Rewrote changeRoleName() function
+- Eliminated need for a list of elements
+- Eliminated need for getElementById calls
+
+-----1.1.0-----
+* Fixed original theme refresh behavior
+# Changed original theme's tag selection
++ Dynamic tag font sizing in original theme
+- Removed unnecessary code
++ Added slide-out panel for page footer to save space
++ Added modified 8.8.2012 theme for testing purposes - will have an official name later
+
+-----1.0.1-----
+* Restored regulars' highlighting
+- Removed inDev function
++ Added beta version, which includes all stable versions as well
+
+-----1.0-----
++ Implemented jQuery
+# Replaced versioning scheme
+- Almost completely removed the addSlideOut indev function, in preparation for a complete rewrite
+
+-----2013.9.2-----
+# Made 8.8.2012 theme much more immersive, including topic and profile pages
++ Added option to highlight posts based on user ID
++ Forum regulars' posts are now highlighted green
+
+-----2013.9.1-----
+* Corrected behavior of reloadStickies() function
+# Denoted the user-customizable part of the code with comments
+# Made comments more human-readable
++ Added an inDev() function to hold functions being developed
+# Moved addSlideOut() to the indev portion of the code
+
+-----2013.9-----
++ Front page automatic refreshing (2 minutes default)
++ Sticky automatic refreshing (2 minutes default)
++ Page detection in order to restrict script parts to certain pages
++ Greasemonkey versioning and update and download URLs
++ Added an option to revert to the original theme as well as the revamp
+- Highlight status on pages other than topic threads
+* Highlight status indication behavior on topics
+* Super User icons are now hosted via a secure connection to avoid mixed SSL signals
+* The header image is now hosted via a secure connection to avoid mixed SSL signals
+# Commented out experimental features
+# Labeled experimentals, and listed functions to allow for executing by uncommenting lines
+# Cleaned up code
+# Improvements to 8.8.2012 theme
