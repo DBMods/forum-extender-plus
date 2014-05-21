@@ -1,6 +1,19 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.8-----
++ Added 20 and 45 minute options to automatic page reloading
++ Added snippet manager, with ability to add, edit, rename, and delete snippets
++ Added custom signature
+- Removed Super User activity feed to save bandwidth
+- Removed need for value on checkboxes
+# Complete rewrite of the showModal() function in order to support more
+# Changed alert box for sticky updating to showModal() window
+# Moved preferences to separate page
+# Moved snippet selector and post drafting from nav bar to post form
+# Preferences code hardening
+# Minified core
+
 -----2.2.7.20-----
 * Bad link causing form posting from script to fail
 
