@@ -30,7 +30,7 @@ $('.forumext-mod-topic-toggle').click(function(evt){
 		url: 'https://forums.dropbox.com/topic.php?id=' + topicId,
 		onload: function(response) {
 			var resp = response.responseText;
-			$(thisStuff).html('[<a class="threadToggleLink" style="color:#000" href="https://forums.dropbox.com/bb-admin/topic-toggle.php?id=' + topicId + '&_wpnonce=' + resp.split('<div class="admin">')[1].split('<a href="https://forums.dropbox.com/bb-admin/topic-toggle.php')[1].split('">')[0].split('_wpnonce=')[1] + link + '">Toggle</a>]');
+			$(thisStuff).html('[<a class="threadToggleLink" style="color:#000" href="https://forums.dropbox.com/bb-admin/topic-toggle.php?id=' + topicId + '&_wpnonce=' + resp.split('<div class="admin">')[1].split('<a href="https://forums.dropbox.com/bb-admin/topic-toggle.php')[1].split('">')[0].split('_wpnonce=')[1] + '">Toggle</a>]');
 			setTimeout(function() {
 				$(thisStuff).find('.threadToggleLink')[0].click();
 			}, 1);
