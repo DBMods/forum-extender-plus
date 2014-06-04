@@ -13,8 +13,9 @@
 /*
  * Handle thread openning and closing from front page
  *
- * Must use link instead of wondow.location, since the forum page that closes threads will redirect back to the
- * thread page instead of the front page or forum page. Nothing I can do about that.
+ * We have to make and click a link here, instead of window.location, since the forum page that closes threads
+ * will redirect back to the thread page instead of the front page or forum page. I don't know why, but there's
+ * nothing I can do about that.
  */
 
 $('head').append('<style>.threadToggleLink:hover{cursor:pointer}</style>');
@@ -29,8 +30,7 @@ $('.forumext-mod-topic-toggle').click(function(evt){
 		url: 'https://forums.dropbox.com/topic.php?id=' + topicId,
 		onload: function(response) {
 			var resp = response.responseText;
-			var link = 'https://forums.dropbox.com/bb-admin/topic-toggle.php?id=' + topicId + '&_wpnonce=' + resp.split('<div class="admin">')[1].split('<a href="https://forums.dropbox.com/bb-admin/topic-toggle.php')[1].split('">')[0].split('_wpnonce=')[1];
-			$(thisStuff).html('[<a class="threadToggleLink" style="color:#000" href="' + link + '">Toggle</a>]');
+			$(thisStuff).html('[<a class="threadToggleLink" style="color:#000" href="https://forums.dropbox.com/bb-admin/topic-toggle.php?id=' + topicId + '&_wpnonce=' + resp.split('<div class="admin">')[1].split('<a href="https://forums.dropbox.com/bb-admin/topic-toggle.php')[1].split('">')[0].split('_wpnonce=')[1] + link + '">Toggle</a>]');
 			setTimeout(function() {
 				$(thisStuff).find('.threadToggleLink')[0].click();
 			}, 1);
