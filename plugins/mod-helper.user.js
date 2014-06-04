@@ -10,7 +10,13 @@
 // @grant GM_xmlhttpRequest
 // ==/UserScript==
 
-//Handle thread openning and closing from front page
+/*
+ * Handle thread openning and closing from front page
+ *
+ * Must use link instead of wondow.location, since the forum page that closes threads will redirect back to the
+ * thread page instead of the front page or forum page. Nothing I can do about that.
+ */
+
 $('head').append('<style>.threadToggleLink:hover{cursor:pointer}</style>');
 $('#latest tr').find('td:first').each(function(index){
 	$(this).prepend('<span class="forumext-mod-topic-toggle">[<span class="threadToggleLink">Toggle</span>]</span> - <menu type="context" id="forumext-mod-post-menu"><menuitem label="Open/Close Thread" onclick="window.location.href = link;"></menuitem></menu>');
