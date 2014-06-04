@@ -38,4 +38,4 @@ $('.forumext-mod-topic-toggle').click(function(evt){
 	});
 });
 if (window.location.href.contains('message='))
-	window.location.href = window.location.href.replace('?message=opened', '').replace('?message=closed', '').replace('&message=opened', '').replace('&message=closed', '');
+	window.location.href = window.location.href.replace(/(&|\?)message=(open|clos)ed/g, '');
