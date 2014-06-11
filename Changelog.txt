@@ -1,6 +1,15 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.8.1-----
++ Modals now support dynamically changing window content, with two action buttons
+* Preferences will not open in a new tab from the front page of the forums
+* Closed sticky threads now no longer show the [sticky] label
+* If you're not yet linked to Dropbox, but you cannot do so from the page you are on, you will now be notified
+* Navbar no longer silently appended and removed from manually created pages
+# Rewrote setCursorPositionInTextArea() to jQuery $.fn.setCursorPosition()
+# Minified code
+
 -----2.2.8-----
 + Added 20 and 45 minute options to automatic page reloading
 + Added snippet manager, with ability to add, edit, rename, and delete snippets
