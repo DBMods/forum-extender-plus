@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.8.1
+// @version 2.2.8.2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -44,14 +44,11 @@ highlightThread(color.green, 1);
 highlightThread(color.gold, 2);
 highlightThread(color.lightRed, 3);
 
-//Modify Super User posts
-if (pageUrl == 'topic.php') {
-	$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').prepend('<img />');
-	$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
-}
+//Modify posts
+$('.threadauthor small a:contains("Super User")').parent().parent().find('strong').prepend('<img />');
+$('.threadauthor small a[href$="=1618104"]').html('Master of Super Users');
 
-if (pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php')
-	$('#latest tr.closed span.label.closed').show();
+$('#latest tr.closed span.label.closed').show();
 
 //Remove unnecessary stuff
 if (pageUrl == 'topic.php')
@@ -75,17 +72,16 @@ if (pageUrl == 'topic.php' && $('#topic_labels:contains("[sticky]")').length == 
 	});
 }
 
+navBar();
+
 //Fix UI for new semi-broken theme 10-8-2013
 $('#header').css('margin-top', '0');
-if (pageUrl == 'topic.php')
-	$('#topic-info').prepend('<br>').prepend($('#header .breadcrumb').clone()).prepend('<a href="https://forums.dropbox.com">Forums</a> ');
-else if (pageUrl == 'forum.php')
-	$('#forumlist th').wrapInner('<a href="https://forums.dropbox.com" />');
-$('.freshbutton-blue, #postformsub').css('background', '#2180ce');
+$('#topic-info').prepend('<br>').prepend($('#header .breadcrumb').clone()).prepend('<a href="https://forums.dropbox.com">Forums</a> ');
+$('#forumlist th').wrapInner('<a href="https://forums.dropbox.com" />');
 $('#header').append($('.search').clone());
 $('#main .search, #header .breadcrumb, #header .home').remove();
 $('#forumlist-container').css('top', '0');
-$('.login').css({
+$('.login, #sign-in-link').css({
 	'float': 'left',
 	'clear': 'none',
 	'margin-top': '5px',
@@ -95,82 +91,36 @@ $('.login').css({
 });
 $('.search').css({
 	'float': 'right',
-	'clear': 'none',
+	'clear': 'right',
 	'margin': '5px',
 	'position': 'static'
 });
 $('#main').css('clear', 'both');
-/* CSS Broken
 $('.freshbutton-blue, #topic-search-form-submit').css({
-	'color': 'white;',
-	'border-top': '1px #2270AB solid;',
-	'border-right': '1px #18639A solid;',
-	'border-bottom': '1px #0F568B solid;',
-	'border-left': '1px #18639A solid;',
-	'background': '#2180CE;',
-	'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#33a0e8", endColorstr="#2180ce");',
-	'text-shadow': '#355782 0 1px 2px;',
-	'-webkit-text-shadow': '#355782 0 1px 2px;',
-	'-moz-text-shadow': '#355782 0 1px 2px;',
-	'-moz-box-shadow': '0 1px 1px rgba(0,0,0,0.3),inset 0px 1px 0px #83c5f1;',
-	'-webkit-box-shadow': '0 1px 1px rgba(0, 0, 0, 0.3),inset 0px 1px 0px #83C5F1;',
-	'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.3),inset 0px 1px 0px #83C5F1;'
+	'text-shadow': '#355782 0 1px 2px',
+	'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.3),inset 0px 1px 0px #83C5F1',
+	'padding': '5px 16px',
+	'background-color': '#2180ce',
+	'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+	'background-image': '-webkit-gradient(linear, left top, left bottom, from(#33a0e8), to(#2180ce))',
+	'background-image': '-moz-linear-gradient(top, #33a0e8, #2180ce)'
 });
-$('.freshbutton-blue, #topic-search-form-submit').css({
-	'-webkit-border-radius': '3px;',
-	'-moz-border-radius': '3px;',
-	'-ms-border-radius': '3px;',
-	'-o-border-radius': '3px;',
-	'border-radius': '3px;',
-	'text-align': 'center;',
-	'padding': '5px 16px;',
-	'font-size': '13px;',
-	'font-weight': '600;',
-	'cursor': 'pointer;',
-	'overflow': 'visible;'
+$('.freshbutton-blue, #topic-search-form-submit').mouseover(function() {
+	$(this).css({
+		'background-color': '#2389dc',
+		'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+		'background-image': '-webkit-gradient(linear, left top, left bottom, from(#3baaf4), to(#2389dc))',
+		'background-image': '-moz-linear-gradient(top, #3baaf4, #2389dc)'
+	});
 });
-$('body.future .freshbutton-blue, body.future #topic-search-form-submit').css({
-	'-webkit-border-radius': '4px;',
-	'-moz-border-radius': '4px;',
-	'-ms-border-radius': '4px;',
-	'-o-border-radius': '4px;',
-	'-webkit-box-shadow': 'rgb(221, 221, 221) 0px 1px 0px 0px, rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset;',
-	'-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0);',
-	'-webkit-user-select': 'none;',
-	'background-color': 'rgba(0, 0, 0, 0);',
-	'background-image': '-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(55, 163, 235)), to(rgb(33, 129, 207)));',
-	'border-bottom-color': 'rgb(13, 91, 151);',
-	'border-bottom-left-radius': '3px;',
-	'border-bottom-right-radius': '3px;',
-	'border-left-color': 'rgb(28, 116, 179);',
-	'border-right-color': 'rgb(28, 116, 179);',
-	'border-top-color': 'rgb(44, 142, 209);',
-	'border-top-left-radius': '3px;',
-	'border-top-right-radius': '3px;',
-	'box-shadow': 'rgb(221, 221, 221) 0px 1px 0px 0px, rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset;',
-	'font-family': "'Open Sans', 'lucida grande', 'Segoe UI', arial, verdana, 'lucida sans unicode', tahoma, sans-serif;'",
-	'text-shadow': 'rgba(0, 0, 0, 0.2) 0px 1px 0px;',
-	'vertical-align': 'middle;',
-	'zoom': '1;',
-	'border-radius': '4px;',
-	'text-align': 'center;',
-	'padding': '10px 10px;',
-	'padding-bottom': '5px;',
-	'padding-top': '5px;',
-	'margin-bottom': '1px;',
-	'font-size': '13px;',
-	'font-weight': '600;'
+$('.freshbutton-blue, #topic-search-form-submit').mouseout(function() {
+	$(this).css({
+		'background-color': '#2180ce',
+		'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+		'background-image': '-webkit-gradient(linear, left top, left bottom, from(#33a0e8), to(#2180ce))',
+		'background-image': '-moz-linear-gradient(top, #33a0e8, #2180ce)'
+	});
 });
-$('body.future .freshbutton-blue, body.future #topic-search-form-submit').css({
-	'border': '1px solid #1c74b3;',
-	'border-top-color': '#2c8ed1;',
-	'border-bottom-color': '#0d5b97;',
-	'background': '#2389dc;',
-	'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc");',
-	'background': '-webkit-gradient(linear, left top, left bottom, from(#3baaf4), to(#2389dc));',
-	'background': '-moz-linear-gradient(top, #3baaf4, #2389dc);'
-});
-*/
 
 /*
  * External pages
@@ -203,8 +153,8 @@ function makePage(slug, title, content) {
 	}
 }
 
-if(appendNavbar) {
-	//Add prerequsites
+//Insert nav bar if told to
+function navBar() {
 	$('body').append('<div id="gsDropboxExtender-nav"><a href="http://forums.dropbox.com/preferences"' + (pageUrl != 'forums.dropbox.com' ? ' target="blank"' : '') + '><img src="https://2.gravatar.com/avatar/4a62e81113e89800386a9d9aab160aee?s=420" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></a><span><a href="https://forums.dropbox.com">Take me home!</a></span><span><a href="https://forums.dropbox.com/topic.php?id=109057">Official thread</a></span></div>');
 	$('body').css('padding-bottom', '31px');
 	$('head').append('<style>#gsDropboxExtender-nav>span{margin-left:20px;}#gsDropboxExtender-nav{position:fixed;bottom:0;height:30px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px;}</style>')
@@ -293,14 +243,19 @@ if(appendNavbar) {
 				}
 
 				//Detect if message system is returning a token, log it, and then reload the page
-				if (pageUrl.indexOf('?msgtoken=') > -1 && userToken.length == 0) {
-					configTable.insert({
-						name: 'userToken',
-						value: pageUrl.split('?msgtoken=')[1]
-					});
+				if (fullUrl.indexOf('?msgtoken=') > -1 || fullUrl.indexOf('&msgtoken=') > -1) {
+					var tokenval = (fullUrl.indexOf('?msgtoken=') > -1 ? fullUrl.split('?msgtoken=')[1] : fullUrl.split('&msgtoken=')[1]).split('&')[0];
+					var redirUrl = fullUrl.indexOf('?msgtoken=') > -1 ? fullUrl.split('?msgtoken=')[0] : fullUrl.split('&msgtoken=')[0];
+					if (userToken.length == 0)
+						configTable.insert({
+							name: 'userToken',
+							value: tokenval
+						});
+					else
+						userToken[0].set('value',tokenval);
 					datastore.syncStatusChanged.addListener(function() {
 						if (!datastore.getSyncStatus().uploading)
-							window.location.href = 'https://forums.dropbox.com';
+							window.location.href = redirUrl;
 					});
 				}
 				var token = userToken[0].get('value') || '';
@@ -316,17 +271,24 @@ if(appendNavbar) {
 
 				$('#gsDropboxExtender-nav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userId + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
 				
-				(function checkMessages() {
-					GM_xmlhttpRequest({
-						method: 'GET',
-						url: ('http://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userId),
-						onload: function(response) {
-							var resp = response.responseText;
-							$('#gsDropboxExtenderMsgCounter').html(resp == '0' ? '' : (' (' + resp + ')'));
-						}
-					});
-					setTimeout(checkMessages, 20000);
-				})();
+				if (token != '') {
+					(function checkMessages() {
+						GM_xmlhttpRequest({
+							method: 'GET',
+							url: ('http://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userId + '&token=' + token),
+							onload: function(response) {
+								var resp = response.responseText;
+								if (resp != 'Incorrect token')
+									$('#gsDropboxExtenderMsgCounter').html(resp == '0' ? '' : (' (' + resp + ')'));
+								else
+									showModal('ok', 'Bad token', 'Your token is incorrect. For security reasons, viewing of this message quota is disabled. Click OK to log back in to the message system and get the new token. <form action="http://www.techgeek01.com/dropboxextplus/gettoken.php" method="post" style="display:none"><input type="hidden" name="returnto" value="' + fullUrl + '" /></form>', function() {
+										$('#newtokenform').submit();
+									});
+							}
+						});
+						setTimeout(checkMessages, 20000);
+					})();
+				}
 
 				$('#gsDropboxExtenderMessageLink').click(function() {
 					$('#gsDropboxExtenderMessageContainer form').submit();
@@ -669,6 +631,9 @@ function showModal(modalType, title, content, action, actionTwo) {
 		},
 		'confirmsend': {
 			'Action': 'Send'
+		},
+		'ok': {
+			'Action': 'OK'
 		}
 	};
 	$('#gsDropboxExtenderModalTitle').html(title);
