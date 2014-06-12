@@ -33,6 +33,7 @@ footer hr {
 	position: absolute;
 	left: 50%;
 	margin-left: -250px;
+	z-index: 1;
 }
 .alert {
 	max-width: 500px;
@@ -144,4 +145,7 @@ form.menu {
 }
 input .login {
 	margin-bottom: 15px;
+}
+.settings-form {
+	width: 600px;
 }

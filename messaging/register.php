@@ -20,7 +20,7 @@ function registerPanel($userid) {
 if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 	$userid = $_POST['userid'];
 	$result = mysqli_query($db, "SELECT * FROM `users` WHERE `userid` = '" . sqlesc($_POST['userid']) . "'");
-	
+
 	//Checks for account already existing with userid
 	$account_exist = mysqli_fetch_row($result);
 

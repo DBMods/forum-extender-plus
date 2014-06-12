@@ -61,4 +61,11 @@ function getMessages() {
 	$archCount = mysqli_num_rows($archive);
 	$archBadge = $archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '';
 }
+function getUsername() {
+	global $db, $userid;
+	$result = mysqli_query($db, "SELECT username FROM `users` WHERE `userid` = '" . sqlesc($userid) . "' LIMIT 1");
+	$row = mysqli_fetch_array($result);
+	$username = $row[0];
+	return $username;
+}
 ?>
