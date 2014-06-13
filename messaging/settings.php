@@ -143,7 +143,7 @@ if ($userAuthenticated) {
 				}
 				$token = $random;
 				$modpasswordhash = password_hash($modpassword, PASSWORD_BCRYPT);
-				$result = mysqli_query($db, "UPDATE users set password='" . sqlesc($modpasswordhash) . '", ext_token="' . sqlesc($token) . "' WHERE userid='" . sqlesc($userid) . "' LIMIT 1");
+				$result = mysqli_query($db, "UPDATE users set password='" . sqlesc($modpasswordhash) . "', ext_token='" . sqlesc($token) . "' WHERE userid='" . sqlesc($userid) . "' LIMIT 1");
 			}
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Settings saved</strong></p></div></div>";
 			$username = $modusername;
