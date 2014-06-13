@@ -28,12 +28,12 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 	$row = mysqli_fetch_array($result);
 
 	//If extension is trying to get a token, redirect to login - This is how everything knows the user is authenticated
-	if ($row && $_POST['action'] != "create-account"){
+	if ($row && $_POST['action'] != "create-account") {
 		$userAuthenticated = true;
-	}else{
+	} else {
 		$badCookie = true;
 		$badAuth = true;
-  }
+	}
 }
 
 //If userToken and userid is posted, check login
@@ -44,13 +44,13 @@ if ($_POST['userToken'] && $_POST['userid']) {
 	$row = mysqli_fetch_array($result);
 
 	//This is how everything knows the user is authenticated
-	if ($row){
+	if ($row) {
 		$userAuthenticated = true;
-    iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
-    iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
-	}else{
+		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
+		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
+	} else {
 		$badAuth = true;
-  }
+	}
 }
 
 //Check login
@@ -60,9 +60,9 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 	$passwordHash = $passwordHash['0'];
 
 	//If the password is good, auth the user
-	if (password_verify($_POST['password'], $passwordHash)){
+	if (password_verify($_POST['password'], $passwordHash)) {
 		$userAuthenticated = true;
-  }
+	}
 
 	if ($userAuthenticated) {
 		$result = mysqli_query($db, "SELECT userid, ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
@@ -73,7 +73,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
 	} else {
 		$badAuth = true;
-  }
+	}
 }
 
 //Set variables
