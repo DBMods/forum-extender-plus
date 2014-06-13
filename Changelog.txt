@@ -5,7 +5,7 @@ Dropbox Forum Mod Icons Changelog
 * Bad token form fix
 
 -----2.2.8.3-----
-+ Added support forr changing tokens
++ Added support for changing tokens
 * When getting a new token, you now don't have to be redirected to the homepage, and can go to the page you were on
 
 -----2.2.8.2-----
