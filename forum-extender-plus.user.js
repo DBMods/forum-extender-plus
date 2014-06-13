@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.2.8.3
+// @version 2.2.8.4
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -281,7 +281,7 @@ function navBar() {
 								if (resp != 'Incorrect token')
 									$('#gsDropboxExtenderMsgCounter').html(resp == '0' ? '' : (' (' + resp + ')'));
 								else
-									showModal('ok', 'Bad token', 'Your token is incorrect. For security reasons, viewing of this message quota is disabled. Click OK to log back in to the message system and get the new token. <form action="http://www.techgeek01.com/dropboxextplus/index.php" method="post" style="display:none"><input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userId + '" /><input type="hidden" name="action" value="create-account" /></form>', function() {
+									showModal('ok', 'Bad token', 'Your token is incorrect. For security reasons, viewing of this message quota is disabled. Click OK to log back in to the message system and get the new token. <form id="newtokenform" action="http://www.techgeek01.com/dropboxextplus/index.php" method="post" style="display:none"><input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userId + '" /><input type="hidden" name="action" value="create-account" /></form>', function() {
 										$('#newtokenform').submit();
 									});
 							}
