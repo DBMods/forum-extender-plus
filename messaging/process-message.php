@@ -3,9 +3,9 @@ require 'db-login.php';
 require 'functions.php';
 
 $dest = $_POST['msgto'];
-if ($_POST['userToken'] && $_POST['userid']) {
+if ($_POST['userToken'] && $_POST['msgfrom']) {
 	$userToken = htmlspecialchars($_POST['userToken']);
-	$userid = htmlspecialchars($_POST['userid']);
+	$userid = htmlspecialchars($_POST['msgfrom']);
 	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
 	$row = mysqli_fetch_array($result);
 
@@ -19,7 +19,7 @@ if ($_POST['userToken'] && $_POST['userid']) {
 	}
 }
 if ($userAuthenticated && is_numeric($dest) && $dest != 0) {
-	mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($_POST['msgfrom']) . '", "' . sqlesc($_POST['msgtext']) . '", "' . time() . '")');
+	mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($userid) . '", "' . sqlesc($_POST['msgtext']) . '", "' . time() . '")');
 	mysqli_close($db);
 }
 header('Location: ' . $_POST['returnto']);
