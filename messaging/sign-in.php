@@ -26,7 +26,7 @@ function badAuth() {
 }
 if ($action == "register" || $action == "create-account" || $action == "pass-token")//clicked register button
 	include "register.php";
-if (!$userAuthenticated && $action != "register" && $action != "create-account" && $action != "pass-token" && $action != "normalSigninDisable") {//If authentication unsuccessful or not tried
+if (!$userAuthenticated && $action != "register" && $action != "create-account" && $action != "pass-token") {//If authentication unsuccessful or not tried
 	if ($badAuth)
 		badAuth();
 	signinPanel("showRegister");
