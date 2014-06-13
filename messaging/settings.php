@@ -3,7 +3,14 @@ require 'header.php';
 //Gets username of authenticated user
 $username = getUsername();
 function settingsView($viewOption) {
-	global $username;
+	global $username, $modusername;
+	if ($viewOption=="changeFailPassword") {
+		//If username is fine but there is a password issue
+		//Don't need htmlspecialchars() here because this gets called after $modusername is checked
+		$fillusername = $modusername;
+	}else {
+		$fillusername = $username;
+	}
 	?>
 		<div class="settings-form">
 			<form method="post" action="" class="form-horizontal">
@@ -14,7 +21,7 @@ function settingsView($viewOption) {
 					<div class="form-group">
 						<label class="col-md-4 control-label">Username</label>
 						<div class="col-md-4">
-							<input id="modusername" name="modusername" type="text" value="<?php echo $username ?>" class="form-control input-md">
+							<input id="modusername" name="modusername" type="text" value="<?php echo $fillusername ?>" class="form-control input-md">
 						</div>
 					</div>
 					<br>
@@ -31,6 +38,12 @@ function settingsView($viewOption) {
 						<label class="col-md-4 control-label">New password</label>
 						<div class="col-md-4">
 							<input id="modpassword" name="modpassword" type="password" class="form-control input-md">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Verify password</label>
+						<div class="col-md-4">
+							<input id="modverifypassword" name="modverifypassword" type="password" class="form-control input-md">
 						</div>
 					</div>
 					<br>
@@ -54,6 +67,7 @@ function writeSettingsHeader() {
 $modusername = $_POST['modusername'];
 $curpassword = $_POST['curpassword'];
 $modpassword = $_POST['modpassword'];
+$modverifypassword = $_POST['modverifypassword'];
 if ($userAuthenticated) {
 	//If user is logged in
 	//getMessages() gets the navbar badge numbers
@@ -64,7 +78,7 @@ if ($userAuthenticated) {
 		$result = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($modusername) . "'");
 		$usernameResult = mysqli_fetch_array($result);
 
-		if (!empty($curpassword) && !empty($modpassword)){
+		if (!empty($curpassword) && !empty($modpassword) && !empty($modverifypassword)){
 			//If password requested to be changed
 			$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($username) . "'");
 			$passwordHash = mysqli_fetch_row($result);
@@ -85,14 +99,19 @@ if ($userAuthenticated) {
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Username already in use!</strong></p></div></div>";
 			writeSettingsHeader();
 			settingsView('changeFailUser');
-		}elseif (preg_match('[\W]', $modusername) && !is_numeric($modusername)) {
+		}elseif (preg_match('[\W]', $modusername) || is_numeric($modusername) || empty($modusername) || strlen($modusername) > 15) {
 			//If requested username has bad characters
-			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Please don't use special characters in your username</strong></p></div></div>";
+			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Please choose a different username without special characters</strong></p></div></div>";
 			writeSettingsHeader();
 			settingsView('changeFailUser');
 		}elseif ($passwordFail) {
 			//If current password is incorrect
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Wrong password</strong></p></div></div>";
+			writeSettingsHeader();
+			settingsView('changeFailPassword');
+		}elseif ($modpassword != $modverifypassword) {
+			//If new passwords don't match
+			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Passwords not the same</strong></p></div></div>";
 			writeSettingsHeader();
 			settingsView('changeFailPassword');
 		}elseif ( ( $modusername==$username && isset($passwordMod) ) || ( $modusername != $username && !isset($passwordMod) ) || ( $modusername != $username && isset($passwordMod) ) ) {
@@ -124,7 +143,7 @@ if ($userAuthenticated) {
 				}
 				$token = $random;
 				$modpasswordhash = password_hash($modpassword, PASSWORD_BCRYPT);
-				$result = mysqli_query($db, "UPDATE users set password='" . sqlesc($modpasswordhash) . "', ext_token='" . sqlesc($token) . "' WHERE userid='" . sqlesc($userid) . "' LIMIT 1");
+				$result = mysqli_query($db, "UPDATE users set password='" . sqlesc($modpasswordhash) . '", ext_token="' . sqlesc($token) . "' WHERE userid='" . sqlesc($userid) . "' LIMIT 1");
 			}
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Settings saved</strong></p></div></div>";
 			$username = $modusername;

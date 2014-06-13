@@ -39,8 +39,12 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 			$usernameUsed = true;
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Username already in use!</strong></p></div></div>";
 			registerPanel($userid);
+		} elseif (pregmatch('[\W]', $_POST['username']) || is_numeric($_POST['username']) || empty($_POST['username']) || strlen($_POST['username']) > 15) {
+			//Username doesn't pass restrictions
+			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Please choose a different username without special characters</strong></p></div></div>";
+			registerPanel($userid);
 		} else {
-			//Username is not already in use
+			//Username is not already in use and passes restrictions
 			$chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 			for ($i = 0; $i < 10; $i++) {
 				$random .= $chars[rand(0, strlen($chars) - 1)];
@@ -52,7 +56,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 				$query = "SELECT * FROM `users` WHERE `ext_token` = '$random'";
 				$result = mysqli_query($sqlconnect, $query);
 				$row = mysqli_fetch_array($result);
-				if ($row !== NULL) {
+				if ($row !== NULL) {//Is !== an error?
 					$random = "";
 					for ($i = 0; $i < 10; $i++) {
 						$random .= $chars[rand(0, strlen($chars) - 1)];
