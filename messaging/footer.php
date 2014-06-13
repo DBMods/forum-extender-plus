@@ -28,8 +28,8 @@ mysqli_close($db);
 			linkActivity('<a href="compose.php">Compose</a>');
 			linkActivity('<a href="sent.php">Sent</a>');
 			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');
-			linkActivity('<a href="stats.php">Stats</a>');
 			linkActivity('<a href="settings.php">Settings</a>');
+			linkActivity('<a href="stats.php">Stats</a>');
 			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
 			if($userAuthenticated)
 				linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');
