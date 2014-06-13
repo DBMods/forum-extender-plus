@@ -160,8 +160,6 @@ if ($userAuthenticated) {
 		settingsView("view");
 	}
 
-}else {
-	include sign-in.php;
 }
 require 'footer.php';
 ?>
