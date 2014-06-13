@@ -31,6 +31,7 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 	if ($row && $_POST['action'] != "create-account"){
 		$userAuthenticated = true;
 	}else{
+		$badCookie = true;
 		$badAuth = true;
   }
 }

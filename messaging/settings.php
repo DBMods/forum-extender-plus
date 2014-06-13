@@ -15,9 +15,7 @@ function settingsView($viewOption) {
 		<div class="settings-form">
 			<form method="post" action="" class="form-horizontal">
 				<fieldset>
-					<div class="center">
-						<h4>Change username</h4>
-					</div>
+					<h4 class="center">Change username</h4>
 					<div class="form-group">
 						<label class="col-md-4 control-label">Username</label>
 						<div class="col-md-4">
@@ -25,9 +23,7 @@ function settingsView($viewOption) {
 						</div>
 					</div>
 					<br>
-					<div class="center">
-						<h4>Change password</h4>
-					</div>
+					<h4 class="center">Change password*</h4>
 					<div class="form-group">
 						<label class="col-md-4 control-label">Current password</label>
 						<div class="col-md-4">
@@ -46,6 +42,7 @@ function settingsView($viewOption) {
 							<input id="modverifypassword" name="modverifypassword" type="password" class="form-control input-md">
 						</div>
 					</div>
+					<h5 class="center">*You must sign in after changing your password</h5>
 					<br>
 					<div class="form-group">
 						<div class="col-md-4">
