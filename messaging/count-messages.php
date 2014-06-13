@@ -1,5 +1,6 @@
 <?php
 require 'db-login.php';
+require 'functions.php';
 
 $result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . $_GET['to'] . "' AND `archived` = 0");
 $msgcount = mysqli_num_rows($result);

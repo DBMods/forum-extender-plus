@@ -77,6 +77,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 	//If account already exists, show login form, and return token to extension
 	if ($account_exist)
 		signinPanel("showTokenRedir", "pass-token");
+	//If login for pass-token is sent
 } elseif ($_POST['action'] == "pass-token" && $_POST['username'] && $_POST['password']) {
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 	$passwordHash = mysqli_fetch_row($result);
@@ -88,7 +89,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$token = mysqli_fetch_row($result);
 		$token = $token['0'];
-		echo '<h4 class="center">Successfully signed in. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
+		echo '<h4 class="center">Successfully signed in. Click <a href="' . $returnto . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
 	} else {
 		//Authentication unsuccessful
 		badAuth();
