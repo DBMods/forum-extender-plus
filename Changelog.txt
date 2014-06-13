@@ -1,6 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.8.3-----
++ Added support forr changing tokens
+* When getting a new token, you now don't have to be redirected to the homepage, and can go to the page you were on
+
 -----2.2.8.2-----
 - Removed unnecessary page restrictions
 * Borked theme fix now has fully-styled buttons
