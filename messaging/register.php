@@ -89,7 +89,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$token = mysqli_fetch_row($result);
 		$token = $token['0'];
-		echo '<h4 class="center">Successfully signed in. Click <a href="' . $returnto . '?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
+		echo '<h4 class="center">Successfully signed in. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
 	} else {
 		//Authentication unsuccessful
 		badAuth();
