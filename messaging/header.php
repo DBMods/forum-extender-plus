@@ -28,7 +28,7 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 	$row = mysqli_fetch_array($result);
 
 	//If extension is trying to get a token, redirect to login - This is how everything knows the user is authenticated
-	if ($row && $_POST['action'] != "create-account") {
+	if ($row && $_POST['action'] != "create-account" && $_POST['action'] != "pass-token") {
 		$userAuthenticated = true;
 	} else {
 		$badCookie = true;
