@@ -167,3 +167,7 @@ input .login {
 .settings-form {
 	width: 600px;
 }
+.admin-input {
+	width: 100px;
+	margin-right: 10px;
+}
