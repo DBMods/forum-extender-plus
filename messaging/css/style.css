@@ -53,6 +53,12 @@ footer hr {
 	border-color: rgba(178,219,161,0.8);
 	color: rgba(60,118,61,0.8);
 }
+.alert-center .alert-info {
+	background-color: rgba(217,237,247,0.8);
+	background-image: linear-gradient(to bottom,rgba(217,237,247,0.8) 0%,rgba(185,222,240,0.8) 100%);
+	border-color: rgba(188,232,241,0.8);
+	color: rgba(49,112,143,0.8);
+}
 .alert {
 	max-width: 500px;
 	margin-left: auto;
