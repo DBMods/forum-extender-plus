@@ -1,6 +1,16 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.2.9-----
+* Footer collapsing is automatically disabled if the resulting page length would make the page shorter than the viewport
+* Fixed long-standing bug where markup and quoting didn't work on multipage threads if the page you were on wasn't the last
+* Hover overlay messages now all look the same
+* Fixed a bug where the page would reload even if you had written a post or had a modal open
+# Post quoting now links to original post
+# If you have a bad token, it is now displayed in the nav bar, rather than a modal
+# Post form goodies now take up less space, and show side by side, instead of everything on a new line
+# Code stability and hardening
+
 -----2.2.8.4-----
 * Bad token form fix
 
