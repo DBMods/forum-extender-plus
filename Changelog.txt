@@ -1,6 +1,24 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0-----
++ Newer forum regulars now have lighter green post highlights
++ You can now add quoted code
++ Posts you've interacted with that day now show in bold on the front page and form pages
++ Snippets in the list are now sorted alphabetically
++ The snippet manager now has a button that empties the form, and releases any loaded snippets, so they are unchanged until you load the snippet again
+* Major performance increases
+* Whole post quoting uses the appropriate spacing when quoting multiple paragraps
+* Sticky management now only alerts you if you were actively watching the thread when it was sticky
+* List modals now have dynamic height, changing based on items you enter, and a bug where numbers an bullets hang off of the window has been fixed
+* Original theme now includes the new Mailbox beta forum, and has been futureproofed from further changes
+* Deleting a snippet from the snippet manager after loading it now empties the form fields
+* Creating a snippet with a name that already exists will now update the existing snippet, instead of creating a duplicate
+# Forum regular post highlighting now is affected by the same threshold as for Super Users
+# Front page thread highlighting colors are now less harsh
+# Super User and forum regular highlights are slightly less harsh
+# Code stability and hardening
+
 -----2.2.9-----
 * Footer collapsing is automatically disabled if the resulting page length would make the page shorter than the viewport
 * Fixed long-standing bug where markup and quoting didn't work on multipage threads if the page you were on wasn't the last
