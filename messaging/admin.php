@@ -1,6 +1,7 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
+	getMessages();
   if ($userid=='857279' || $userid=='1618104') {
     if ($_POST['dashmodapply']) {
       //If password is being changed
