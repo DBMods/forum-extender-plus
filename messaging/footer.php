@@ -20,6 +20,7 @@ mysqli_close($db);
 		</div>
 	</footer>
 </div>
+<noscript><div class="js-error">Please enable JavaScript for full site functionality</div></noscript>
 <div class="container navbar-fixed-top">
 	<div class="header">
 		<ul class="nav nav-pills pull-left">

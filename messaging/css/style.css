@@ -177,3 +177,13 @@ input .login {
 	width: 100px;
 	margin-right: 10px;
 }
+.js-error {
+	position: fixed;
+	top: 1px;
+	left: 0;
+	right: 0;
+	margin: auto;
+	text-align: center;
+	z-index: 2000;
+	color: FireBrick;
+}
