@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.3.0
+// @version 2.3.0.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -21,9 +21,9 @@
 //Set global variables
 var fullUrl = window.location.href, pageUrl = getPageUrl(), urlVars = getUrlVars(), modalOpen = false, userId = '';
 var color = {
-	green: '#c7ffab',
+	green: '#beff9e',//'#b5ff90',
 	lightGreen: '#daffc7',
-	gold: '#fff4b1',
+	gold: '#fff19d',
 	lightGold: '#fff8ce',
 	lightRed: '#ffe9e9'
 };
@@ -64,7 +64,7 @@ function highlightPost(check, color, label) {
 	label = label || check;
 	if ($(postList).length) {
 		$(postList).addClass('checkedHighlight');
-		var totalPosts = $threadAuthor.length, rolePosts = postList.length, status = ((totalPosts > 5 && rolePosts / totalPosts > 0.2) || (totalPosts == 5 && rolePosts > 2) || (totalPosts < 5 && rolePosts > 1)) ? 'dis' : 'en', message = '<li style="text-align: center;">' + label + ' highlighting ' + status + 'abled</li>';
+		var totalPosts = $threadAuthor.length, rolePosts = postList.length, status = ((totalPosts > 2 && rolePosts / totalPosts > 0.6) || (totalPosts == 2 && rolePosts == 2)) ? 'dis' : 'en', message = '<li style="text-align: center;">' + label + ' highlighting ' + status + 'abled</li>';
 		$('#thread').prepend(message).append(message);
 		if (status == 'en') {
 			$(postList).parent().parent().parent().parent().find('.threadpost').css('background', color);

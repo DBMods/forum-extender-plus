@@ -1,6 +1,11 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.1-----
+# color.green darkened almost back to 2.2.9 (slightly lighter to minimize harshness)
+# color.gold reverted back to 2.2.9
+# Post highlighting threshold loosened from 20% to 60%
+
 -----2.3.0-----
 + Newer forum regulars now have lighter green post highlights
 + You can now add quoted code
