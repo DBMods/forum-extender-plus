@@ -4,9 +4,9 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.3.0.1
+// @version 2.3.0.2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
-// @require https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js
+// @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @resource customStyle http://techgeek01.com/dropboxextplus/css/style.css
@@ -21,7 +21,7 @@
 //Set global variables
 var fullUrl = window.location.href, pageUrl = getPageUrl(), urlVars = getUrlVars(), modalOpen = false, userId = '';
 var color = {
-	green: '#beff9e',//'#b5ff90',
+	green: '#beff9e',
 	lightGreen: '#daffc7',
 	gold: '#fff19d',
 	lightGold: '#fff8ce',
@@ -36,8 +36,8 @@ if ($('#header .login').length) {
 var temp, i, l;
 
 //Set up nav bar, hover messages, and modal
-$('body').append('<div id="gsDropboxExtenderScreenOverlay" style="display:none;position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7;" /><div id="gsDropboxExtenderModal"><a class="gsDropboxExtenderModalClose">x</a><h1 id="gsDropboxExtenderModalTitle"></h1><br /><br /><div id="gsDropboxExtenderModalContent" /><div id="gsDropboxExtenderModalActionButtons" style="text-align:right" /></div><div id="gsDropboxExtenderNav"><a href="http://forums.dropbox.com/preferences"' + (pageUrl != 'forums.dropbox.com' ? ' target="blank"' : '') + '><img src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/resources/images/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></a><span><a href="https://forums.dropbox.com">Take me home!</a></span><span><a href="https://forums.dropbox.com/topic.php?id=109057">Official thread</a></span></div>').css('padding-bottom', '31px');
-$('head').append('<style>#gsDropboxExtenderModal{display:none;position:fixed;height:200px;width:408px;background:#fff;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px;}#gsDropboxExtenderModal h1{text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px;}.gsDropboxExtenderModalClose:hover{cursor:pointer;}.gsDropboxExtenderModalClose{font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block;}.alert-center{width: 500px;position: absolute;left: 50%;margin-left: -250px;z-index: 1;}.alert-warning{background-color: rgba(252,248,227,0.8);background-image: linear-gradient(to bottom,rgba(252,248,227,0.8) 0%,rgba(248,239,192,0.8) 100%);border-color: #f5e79e;color: rgba(138,109,59,0.8);background-image: -webkit-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-repeat: repeat-x;}.alert-danger{background-color: rgba(242,222,222,0.8);background-image: linear-gradient(to bottom,rgba(242,222,222,0.8) 0%,rgba(231,195,195,0.8) 100%);border-color: #dca7a7;color: rgba(169,68,66,0.8);background-image: -webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-repeat: repeat-x;}.alert-success{background-color: rgba(223,240,216,0.8);background-image: linear-gradient(to bottom,rgba(223,240,216,0.8) 0%,rgba(200,229,188,0.8) 100%);border-color: #b2dba1;color: rgba(60,118,61,0.8);background-image: -webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-repeat: repeat-x;}.alert-info{background-color: rgba(217,237,247,0.8);background-image: linear-gradient(to bottom,rgba(217,237,247,0.8) 0%,rgba(185,222,240,0.8) 100%);border-color: #9acfea;color: rgba(49,112,143,0.8);background-image: -webkit-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-repeat: repeat-x;}.alert{max-width: 500px;margin-left: auto;margin-right: auto;text-align: center;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;text-shadow: 0 1px 0 rgba(255,255,255,.2);-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05)}.alert > p{margin-bottom: 0}#gsDropboxExtenderNav>span{margin-left:20px;}#gsDropboxExtenderNav{position:fixed;bottom:0;height:30px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px;}</style>');
+$('body').append('<div id="gsDropboxExtenderScreenOverlay" style="display:none;position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7" /><div id="gsDropboxExtenderModal" style="display:none;position:fixed;background:#fff;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px"><a class="gsDropboxExtenderModalClose" style="font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block">x</a><h1 id="gsDropboxExtenderModalTitle" style="text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px"></h1><br /><br /><div id="gsDropboxExtenderModalContent" /><div id="gsDropboxExtenderModalActionButtons" style="text-align:right" /></div><div id="gsDropboxExtenderNav"><a href="http://forums.dropbox.com/preferences"' + (pageUrl != 'forums.dropbox.com' ? ' target="blank"' : '') + '><img src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/resources/images/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></a><span><a href="https://forums.dropbox.com">Take me home!</a></span><span><a href="https://forums.dropbox.com/topic.php?id=109057">Official thread</a></span></div>').css('padding-bottom', '31px');
+$('head').append('<style>.gsDropboxExtenderModalClose:hover{cursor:pointer}.alert-center{width:500px;position:absolute;left:50%;margin-left:-250px;z-index:1}.alert-warning{background-color:rgba(252,248,227,0.8);background-image:linear-gradient(to bottom,rgba(252,248,227,0.8) 0%,rgba(248,239,192,0.8) 100%);border-color:#f5e79e;color:rgba(138,109,59,0.8);background-image:-webkit-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-repeat:repeat-x}.alert-danger{background-color:rgba(242,222,222,0.8);background-image:linear-gradient(to bottom,rgba(242,222,222,0.8) 0%,rgba(231,195,195,0.8) 100%);border-color:#dca7a7;color:rgba(169,68,66,0.8);background-image:-webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-repeat:repeat-x}.alert-success{background-color:rgba(223,240,216,0.8);background-image:linear-gradient(to bottom,rgba(223,240,216,0.8) 0%,rgba(200,229,188,0.8) 100%);border-color:#b2dba1;color:rgba(60,118,61,0.8);background-image:-webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-repeat:repeat-x}.alert-info{background-color:rgba(217,237,247,0.8);background-image:linear-gradient(to bottom,rgba(217,237,247,0.8) 0%,rgba(185,222,240,0.8) 100%);border-color:#9acfea;color:rgba(49,112,143,0.8);background-image:-webkit-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-repeat:repeat-x}.alert{max-width:500px;margin-left:auto;margin-right:auto;text-align:center;padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;text-shadow:0 1px 0 rgba(255,255,255,.2);-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05)}.alert > p{margin-bottom:0}#gsDropboxExtenderNav>span{margin-left:20px}#gsDropboxExtenderNav{position:fixed;bottom:0;height:30px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px}</style>');
 
 //Element caching
 var $body = $('body'), $head = $('head');
@@ -56,18 +56,19 @@ highlightPost(100, color.lightGreen, 'New forum regular');
 
 function highlightPost(check, color, label) {
 	var selectors = {
-		'string': $userRole.filter(':contains("' + check + '")'),
-		'number': $userRole.filter(function() {
+		'string': ':contains("' + check + '")',
+		'number': function() {
 			return parseInt($(this).parent().parent().html().split('Posts: ')[1], 10) >= check;
-		})
-	}, postList = $(selectors[typeof check]).filter(':not(.checkedHighlight)');
+		}
+	}, $postList = $($userRole.filter(selectors[typeof check])).filter(':not(.checkedHighlight)'), rolePosts = $postList.length;
 	label = label || check;
-	if ($(postList).length) {
-		$(postList).addClass('checkedHighlight');
-		var totalPosts = $threadAuthor.length, rolePosts = postList.length, status = ((totalPosts > 2 && rolePosts / totalPosts > 0.6) || (totalPosts == 2 && rolePosts == 2)) ? 'dis' : 'en', message = '<li style="text-align: center;">' + label + ' highlighting ' + status + 'abled</li>';
+	if (rolePosts) {
+		$postList.addClass('checkedHighlight');
+		//Enable highlighting if post count doesn't exceed the 60% threshold
+		var totalPosts = $threadAuthor.length, highlightingEnabled = !(totalPosts > 1 && rolePosts / totalPosts > 0.6), message = '<li style="text-align: center;">' + label + ' highlighting ' + (highlightingEnabled ? 'en' : 'dis') + 'abled</li>';
 		$('#thread').prepend(message).append(message);
-		if (status == 'en') {
-			$(postList).parent().parent().parent().parent().find('.threadpost').css('background', color);
+		if (highlightingEnabled) {
+			$postList.parent().parent().parent().parent().find('.threadpost').css('background', color);
 		}
 	}
 }
@@ -80,7 +81,7 @@ function highlightThread() {
 	var args = arguments, $threadList = $latest.find('tr:not(.sticky, .super-sticky) td:nth-child(2)'), content;
 	for (i = 0, l = $threadList.length; i < l; i++) {
 		content = parseInt($threadList.eq(i).html(), 10);
-		if ((args.length == 2 && content == args[0]) || (content >= args[0] && content <= args[1])) {
+		if (content >= args[0] && content <= args[args.length - 2]) {
 			$threadList.eq(i).parent().addClass('nochange').css('background', args[args.length - 1]);
 		}
 	}
@@ -116,9 +117,7 @@ $userRole.filter(':contains("Super User")').parent().parent().find('strong').pre
 $userRole.filter('[href$="=1618104"]').html('Master of Super Users');
 
 $latest.find('tr.closed span.label.closed').show();
-
-//Remove unnecessary stuff
-if (pageUrl == 'topic.php') {
+if (urlVars.new != '1') {
 	$('#post-form-title-container').remove();
 }
 
@@ -127,7 +126,7 @@ if ($('#topic-info .topictitle:contains(") - "):contains(" Build - ")').length) 
 	var stickyList = GM_getValue('stickies', '').split(',');
 	if ($('#topic_labels .sticky').length) {
 		if (stickyList.indexOf(urlVars.id) == -1) {
-			//If this thread is currently sticky, and I have not accessed it before, watch it
+			//If this thread is currently sticky, and is not monitored, start monitoring it
 			stickyList.push(urlVars.id);
 			GM_setValue('stickies', stickyList.toString());
 		}
@@ -162,7 +161,29 @@ if (pageUrl == 'topic.php' && !$postForm.length) {
 		$('#main').append($(data).find('#postform'));
 		$('#post-form-title-container').remove();
 		$('h2.post-form').html('Reply');
-		$('.freshbutton-blue, #postformsub').css('background', '#2180ce');
+		$('#postformsub').css({
+			'text-shadow': '#355782 0 1px 2px',
+			'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.3),inset 0px 1px 0px #83C5F1',
+			'padding': '5px 16px',
+			'background-color': '#2180ce',
+			'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+			'background-image': '-webkit-gradient(linear, left top, left bottom, from(#33a0e8), to(#2180ce))',
+			'background-image': '-moz-linear-gradient(top, #33a0e8, #2180ce)'
+		}).on('mouseover', function() {
+			$(this).css({
+				'background-color': '#2389dc',
+				'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+				'background-image': '-webkit-gradient(linear, left top, left bottom, from(#3baaf4), to(#2389dc))',
+				'background-image': '-moz-linear-gradient(top, #3baaf4, #2389dc)'
+			});
+		}).on('mouseout', function() {
+			$(this).css({
+				'background-color': '#2180ce',
+				'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+				'background-image': '-webkit-gradient(linear, left top, left bottom, from(#33a0e8), to(#2180ce))',
+				'background-image': '-moz-linear-gradient(top, #33a0e8, #2180ce)'
+			});
+		});
 		addMarkupLinks();
 	}, 'html');
 } else {
@@ -199,7 +220,7 @@ function addMarkupLinks() {
 			$postField.setCursorPosition($postField[0].selectionStart + content.length + 11);
 		}, function() {
 			if ($('#gsDropboxExtenderListBoxTextBox').val()) {
-				$('#gsDropboxExtenderListbox').append("<li>" + $('#gsDropboxExtenderListBoxTextBox').val() + "</li>");
+				$('#gsDropboxExtenderListbox').append('<li>' + $('#gsDropboxExtenderListBoxTextBox').val() + '</li>');
 				$('#gsDropboxExtenderListBoxTextBox').val('');
 				var heightModifier = $('#gsDropboxExtenderListbox li:last').height();
 				$modal.css({
@@ -212,7 +233,7 @@ function addMarkupLinks() {
 
 	//Insert a link
 	$('.gsDropboxExtenderLinkInsert').on('click', function() {
-		showModal(['Add'], 'Add Link', '<div style="clear: both; height: 20px;"><label style="float: left;">Title: </label><input id="gsDropboxExtenderAnchorTextBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div><div style="clear: both; height: 20px;"><label style="float: left;">Url: </label><input id="gsDropboxExtenderAnchorUrlBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" /></div>', function() {
+		showModal(['Add'], 'Add Link', '<div style="clear:both;height:20px"><label style="float: left;">Title: </label><input id="gsDropboxExtenderAnchorTextBox" class="textinput" type="text" maxlength="500" size="100" style="height:16px;float:right;width:300px" /></div><div style="clear: both; height: 20px;"><label style="float:left;">Url: </label><input id="gsDropboxExtenderAnchorUrlBox" class="textinput" type="text" maxlength="500" size="100" style="height:16px;float:right;width:300px" /></div>', function() {
 			insertTextAtCursorPosition('<a href="' + $('#gsDropboxExtenderAnchorUrlBox').val() + '">' + $('#gsDropboxExtenderAnchorTextBox').val() + '</a>');
 		});
 	});
@@ -390,7 +411,7 @@ if (client.isAuthenticated()) {
 			var modIconList = ['Dropbox Flat', 'Dropbox Flat Green', 'Dropbox Flat Lime', 'Dropbox Flat Gold', 'Dropbox Flat Orange', 'Dropbox Flat Red', 'Dropbox Flat Pink', 'Dropbox Flat Purple', 'Dropbox', 'Dropbox Green', 'Dropbox Lime', 'Dropbox Gold', 'Dropbox Orange', 'Dropbox Red', 'Dropbox Pink', 'Dropbox Purple', 'Gold Star'];
 			temp = '';
 			for (i = 0, l = modIconList.length; i < l; i++) {
-				temp += '<option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/' + modIconList[i].toLowerCase().replace(' ', '') + '.png">' + modIconList[i] + '</option>';
+				temp += '<option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/' + modIconList[i].toLowerCase().replace(' ', '').replace(' ', '') + '.png">' + modIconList[i] + '</option>';
 			}
 			$('#modIcon').append(temp);
 
@@ -399,7 +420,7 @@ if (client.isAuthenticated()) {
 			for (i = 0, l = $elemList.length; i < l; i++) {
 				$elem = $elemList.eq(i);
 				pref = prefTable.query({preferences: $elem.attr('name')})[0];
-				if(pref) {
+				if (pref) {
 					if ($elem.is('select')) {
 						$elem.find('option[value="' + pref[0].get('value') + '"]').attr('selected', 'selected');
 					} else if ($elem.is('texarea')) {
@@ -470,7 +491,7 @@ if (client.isAuthenticated()) {
 			});
 
 			$('#savesnippet').on('click', function() {
-				if($('#friendlyname').val() !== '' && $('#snippetfull').val() !== '') {
+				if ($('#friendlyname').val() !== '' && $('#snippetfull').val() !== '') {
 					var targetName = $('#oldname').val() === '' ? $('#friendlyname').val() : $('#oldname').val();
 					var snip = snippetTable.query({name: targetName});
 					if (snip.length) {
@@ -558,7 +579,7 @@ if (client.isAuthenticated()) {
 						if (resp != 'Incorrect token') {
 							$('#gsDropboxExtenderMsgCounter').html(resp == '0' ? '' : (' (' + resp + ')'));
 						} else {
-							if($('#gsDropboxExtenderMessageContainer form input[value="create-account"]').length === 0) {
+							if ($('#gsDropboxExtenderMessageContainer form input[value="create-account"]').length === 0) {
 								$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="action" value="create-account" />');
 							}
 							$('#gsDropboxExtenderMsgCounter').html(' (Bad token. Click to fix)');
@@ -641,8 +662,7 @@ $('.search').css({
 	'position': 'static'
 });
 $('#main').css('clear', 'both');
-var $blueButtons = $('.freshbutton-blue, #topic-search-form-submit');
-$blueButtons.css({
+$('.freshbutton-blue, #topic-search-form-submit').css({
 	'text-shadow': '#355782 0 1px 2px',
 	'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.3),inset 0px 1px 0px #83C5F1',
 	'padding': '5px 16px',
@@ -650,16 +670,14 @@ $blueButtons.css({
 	'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
 	'background-image': '-webkit-gradient(linear, left top, left bottom, from(#33a0e8), to(#2180ce))',
 	'background-image': '-moz-linear-gradient(top, #33a0e8, #2180ce)'
-});
-$blueButtons.on('mouseover', function() {
+}).on('mouseover', function() {
 	$(this).css({
 		'background-color': '#2389dc',
 		'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
 		'background-image': '-webkit-gradient(linear, left top, left bottom, from(#3baaf4), to(#2389dc))',
 		'background-image': '-moz-linear-gradient(top, #3baaf4, #2389dc)'
 	});
-});
-$blueButtons.on('mouseout', function() {
+}).on('mouseout', function() {
 	$(this).css({
 		'background-color': '#2180ce',
 		'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
@@ -828,11 +846,11 @@ function insertSelectedQuote(quote, postAuthorDetails) {
 		postAuthorDetails = postAuthorDetails || '';
 
 		var SelectionStart = $postField[0].selectionStart;
-		var NewlineNeeded = (SelectionStart) && ($postField.val().charAt(SelectionStart - 1) != "\n");
-		var AppendedText = (NewlineNeeded ? "\n" : '') + "<blockquote>" + postAuthorDetails + quote + "</blockquote>\n";
+		var newlineNeeded = SelectionStart && $postField.val().charAt(SelectionStart - 1) != '\n';
+		var appendedText = (newlineNeeded ? '\n' : '') + '<blockquote>' + postAuthorDetails + quote + '</blockquote>\n';
 
-		insertTextAtCursorPosition(AppendedText);
-		$postField.setCursorPosition(SelectionStart + AppendedText.length);
+		insertTextAtCursorPosition(appendedText);
+		$postField.setCursorPosition(SelectionStart + appendedText.length);
 	}
 }
 
