@@ -4,7 +4,7 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.3.0.2
+// @version 2.3.0.5
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -110,6 +110,40 @@ if (pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php') {
 	for (i = 0, l = todayThreads.length; i < l; i++) {
 		$threadPageList.filter('[href$="?id=' + todayThreads[i] + '"]').parent().parent().css('font-weight', 'bold');
 	}
+}
+
+//Emphasize new replies to threads you've interacted with
+//TODO
+if (pageUrl == 'topic.php') {
+	$postForm.on('submit', function() {
+		var d = new Date(), today = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0).getTime();
+		if (GM_getValue('date', 0) < today) {
+			//If we're starting a new day, flush all old threads, and start over
+			GM_setValue('date', today);
+			GM_setValue('todayThreads', urlVars.id);
+			GM_setValue('postNumbers', [parseInt($('#topic_posts').html().split('(')[1].split(' ')[0], 10) + 1]);
+		} else if (GM_getValue('date') == today) {
+			//Otherwise, add the current thread ID to the list
+			var todayThreads = GM_getValue('todayThreads', '').split(',');
+			if (todayThreads.indexOf(urlVars.id) == -1) {
+				//Add thread ID to list
+				todayThreads.push(urlVars.id);
+				GM_setValue('todayThreads', todayThreads.toString());
+			}
+			//Add post count for tracking purposes
+			var postNumbers = GM_getValue('postNumbers', [0]);
+			postNumbers[todayThreads.indexOf(urlVars.id)] = parseInt($('#topic_posts').html().split('(')[1].split(' ')[0], 10) + 1;
+				
+		}
+	});
+}
+if (pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php') {
+	var todayThreads = GM_getValue('todayThreads', '').split(','), $threadPageList = $latest.find('tr:not(.sticky, .super-sticky) td:nth-child(1) a');
+	for (i = 0, l = todayThreads.length; i < l; i++) {
+		$threadPageList.filter('[href$="?id=' + todayThreads[i] + '"]').parent().parent().css('font-weight', 'bold');
+	}
+
+	//Later, only bold if post count different - prevents emphasis until change in thread
 }
 
 //Modify posts
@@ -246,7 +280,7 @@ makePage('snippets', 'Snippets', 'Please wait while we load the snippet manager.
 function makePage(slug, title, content) {
 	if (pageUrl == slug) {
 		$head.append('<link rel="shortcut icon" href="//www.dropbox.com/static/images/favicon.ico" /><style>' + GM_getResourceText('customStyle') + GM_getResourceText('bootstrap') + GM_getResourceText('bootstrap-theme') + '</style>').find('title').html('Forum Extender+ ' + title);
-		$body.html('<div id="wrapper" class="container"><div class="jumbotron" id="main"><h2>' + title + '</h2><p class="topline">' + content + '</p></div></div><div class="container"><footer><hr><div>Developed by <a href="http://techgeek01.com" target="_blank">Andy Y.</a> and <a href="http://nathancheek.com" target="_blank">Nathan C.</a></div></footer></div><div class="container navbar-fixed-top"><div class="header"><ul class="nav nav-pills pull-left"><li class="inactive"><a href="https://forums.dropbox.com">Back to Forums</a></li></ul><div class="site-title"><h3 class="text-muted">Dropbox Forum Extender+</h3></div></div></div><script src="http://techgeek01.com/dropboxextplus/js/bootstrap.js"></script>');
+		$body.html('<div id="wrapper" class="container"><div class="jumbotron" id="main"><h2>' + title + '</h2><p class="topline">' + content + '</p></div></div><div class="container"><footer><hr><div>Developed by <a href="http://techgeek01.com" target="_blank">Andy Y.</a> and <a href="http://nathancheek.com" target="_blank">Nathan C.</a></div></footer></div><div class="container navbar-fixed-top"><div class="header"><ul class="nav nav-pills pull-left"><li class="inactive"><a href="https://forums.dropbox.com">Back to Forums</a></li></ul><div class="site-title"><h3 class="text-muted">Dropbox Forum Extender+</h3></div></div></div><script src="https://techgeek01.com/dropboxextplus/js/bootstrap.js"></script>');
 	}
 }
 
@@ -418,8 +452,7 @@ if (client.isAuthenticated()) {
 			//Load current settings
 			var pref, $elemList = $('#main select, #main textarea, #main input[type="checkbox"]'), $elem;
 			for (i = 0, l = $elemList.length; i < l; i++) {
-				$elem = $elemList.eq(i);
-				pref = prefTable.query({preferences: $elem.attr('name')})[0];
+				$elem = $elemList.eq(i), pref = prefTable.query({preferences: $elem.attr('name')})[0];
 				if (pref) {
 					if ($elem.is('select')) {
 						$elem.find('option[value="' + pref[0].get('value') + '"]').attr('selected', 'selected');
@@ -562,18 +595,18 @@ if (client.isAuthenticated()) {
 		//Handle messages
 		$('.poststuff').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">message user</a>');
 		$('.gsDropboxExtenderMessageUser').on('click', function(evt) {
-			showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="http://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
+			showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="https://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
 				$('#gsDropboxExtenderModalContent form').submit();
 			});
 		});
 
-		$('#gsDropboxExtenderNav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="http://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userId + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
+		$('#gsDropboxExtenderNav').append('<span id="gsDropboxExtenderMessageContainer"><form style="display:none" action="https://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userId + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form><a href="javascript:void(0)" id="gsDropboxExtenderMessageLink">Messages</a><span id="gsDropboxExtenderMsgCounter" /></span>');
 
 		if (token) {
 			(function checkMessages() {
 				GM_xmlhttpRequest({
 					method: 'GET',
-					url: ('http://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userId + '&token=' + token),
+					url: ('https://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userId + '&token=' + token),
 					onload: function(response) {
 						var resp = response.responseText;
 						if (resp != 'Incorrect token') {
