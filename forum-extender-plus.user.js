@@ -4,14 +4,14 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @exclude https://forums.dropbox.com/bb-admin/*
-// @version 2.3.0.2
+// @version 2.3.0.3
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
-// @resource customStyle http://techgeek01.com/dropboxextplus/css/style.css
-// @resource bootstrap http://techgeek01.com/dropboxextplus/css/bootstrap.css
-// @resource bootstrap-theme http://techgeek01.com/dropboxextplus/css/bootstrap-theme.css
+// @resource customStyle https://techgeek01.com/dropboxextplus/css/style.css
+// @resource bootstrap https://techgeek01.com/dropboxextplus/css/bootstrap.css
+// @resource bootstrap-theme https://techgeek01.com/dropboxextplus/css/bootstrap-theme.css
 // @grant GM_xmlhttpRequest
 // @grant GM_getResourceText
 // @grant GM_setValue
