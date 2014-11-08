@@ -1,6 +1,15 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.6-----
+* Signed out users now will not see the messaging stuff
+
+-----2.3.0.5-----
+# Code rewrite for 2.3.0.4
+
+-----2.3.0.4-----
+* SSL for messaging
+
 -----2.3.0.2-----
 * When on a multipage thread where the post form is imported into the page, buttons are now styled correctly.
 * Super User icon names with more than one space now load properly
