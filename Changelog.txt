@@ -1,6 +1,15 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.7pre1a-----
+* Fixed post markup
+* Fixed nav bar
+* Fixed preferences
+* Fixed API linking
+- Removed "Take me home" link
+- Removed theme fixing
+- Disabled theming
+
 -----2.3.0.6-----
 * Signed out users now will not see the messaging stuff
 
