@@ -1,14 +1,24 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.7pre2a-----
++ Added code to tweak thread list layout slightly
+- Removed more excess old theme bork fix code
+- Removed Super User icons
+- Removed footer collapsing
+- Removed code for post highlighting until post count is added back in
+* Fixed thread highlighting
+* Restored preferences link
+# Changed post form extras appending
+
 -----2.3.0.7pre1a-----
+- Removed "Take me home" link
+- Removed theme fixing
+- Disabled theming
 * Fixed post markup
 * Fixed nav bar
 * Fixed preferences
 * Fixed API linking
-- Removed "Take me home" link
-- Removed theme fixing
-- Disabled theming
 
 -----2.3.0.6-----
 * Signed out users now will not see the messaging stuff
