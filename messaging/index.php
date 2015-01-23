@@ -13,9 +13,9 @@ if ($userAuthenticated) {
 	if ($showinbox) {
 		echo '<h2>Inbox - ' . $count . '</h2>';
 		while ($row = mysqli_fetch_assoc($result)) {
-			echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['from']) . '" target="_blank">' . htmlspecialchars($row['from']) . '</a>';
+			echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: ' . idToName(htmlspecialchars($row['from']));
 			if (htmlspecialchars($row['forward']) != 0)
-				echo ' (FWD <a href="https://forums.dropbox.com/profile.php?id=' . htmlspecialchars($row['forward']) . '" target="_blank">' . htmlspecialchars($row['forward']) . '</a>)';
+				echo ' (FWD ' . idToName(htmlspecialchars($row['forward'])) . ')';
 			echo '<br>Message:<br>' . nl2br(htmlspecialchars($row['msg'])) . '</p>';
 			msgOptions($row);
 		}

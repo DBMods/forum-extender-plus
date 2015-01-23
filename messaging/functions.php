@@ -11,13 +11,6 @@ function iCanHazCookie($name, $val, $exp = 0) {
 	$_COOKIE[$name] = $val;
 }
 
-//Append message options
-function msgOptions($row, $option = 'arch') {
-	echo '<form method="post" action="compose.php" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button></form>';
-	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-warning btn-sm" name="action" value="forward">Forward</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="' . $option . '">' . ucfirst($option) . 'ive</button></form>';
-	echo '<a data-id="' . htmlspecialchars($row['id']) . '" class="open-alertDelete btn btn-danger btn-sm" href="#alertDelete">Delete</a>';
-}
-
 //Fully delete cookie
 function delCookie($cookie) {
 	if (isset($_COOKIE[$cookie])) {
@@ -61,11 +54,25 @@ function getMessages() {
 	$archCount = mysqli_num_rows($archive);
 	$archBadge = $archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '';
 }
+
+//Turn UID into username
+function idToName($usernum) {
+	global $db;
+	$result = mysqli_query($db, "SELECT username FROM `users` WHERE `userid` = '" . sqlesc($usernum) . "' LIMIT 1");
+	$row = mysqli_fetch_array($result);
+	return $row[0];
+}
+
 function getUsername() {
 	global $db, $userid;
-	$result = mysqli_query($db, "SELECT username FROM `users` WHERE `userid` = '" . sqlesc($userid) . "' LIMIT 1");
-	$row = mysqli_fetch_array($result);
-	$username = $row[0];
-	return $username;
+	return idToName($userid);
 }
+
+//Append message options
+function msgOptions($row, $option = 'arch') {
+	echo '<form method="post" action="compose.php" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . idToName(htmlspecialchars($row['from'])) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button></form>';
+	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . idToName(htmlspecialchars($row['from'])) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-warning btn-sm" name="action" value="forward">Forward</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="' . $option . '">' . ucfirst($option) . 'ive</button></form>';
+	echo '<a data-id="' . htmlspecialchars($row['id']) . '" class="open-alertDelete btn btn-danger btn-sm" href="#alertDelete">Delete</a>';
+}
+
 ?>
