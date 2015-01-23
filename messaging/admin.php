@@ -2,7 +2,7 @@
 require 'header.php';
 if ($userAuthenticated) {
 	getMessages();
-  if ($userid=='857279' || $userid=='434617605') {
+  if ($userid=='433256745' || $userid=='434617605') {
     if ($_POST['dashmodapply']) {
       //If password is being changed
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
