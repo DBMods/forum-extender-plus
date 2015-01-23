@@ -4,7 +4,8 @@
 // @description Beefs up the forums and adds way more functionality
 // @include https://forums.dropbox.com/*
 // @include https://www.dropboxforum.com/*
-// @version 2.3.0.7pre2a
+// @exclude https://www.dropboxforum.com/hc/admin/*
+// @version 2.3.0.7pre3a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -19,20 +20,19 @@
 // ==/UserScript==
 
 /*
- * List of needed changes
+ * ** List of needed changes **
  *
- * Entire script needs to be rewritten for new page structure
- * Messaging auto login and registration needs to be fixed
- * Messaging system needs to be reworked for the new forum
- * HTML markup will need to be changed into markdown
  * $userRole fix
- * Post drafting needs to be readded
- * Post snippets need to be readded
- * Pages need to be fixed
+ * Reemphasize new replies to your threads
+ * ** Sticky managing needs to be fixed
+ * Thread reloading should be fixed now
+ * ** Form values aren't preloaded in preferences menu
+ * ** Markdown in quoting not working
+ * ** Post quoting not working, only selected text quoting is
  */
 
 //Set global variables
-var fullUrl = window.location.href, strippedUrl = fullUrl.split('?')[0], pageUrl = strippedUrl.split('https://www.dropboxforum.com/')[1], urlVars = getUrlVars(), modalOpen = false, userId = '';
+var fullUrl = window.location.href, strippedUrl = fullUrl.split('?')[0], pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/')[1], urlVars = getUrlVars(), modalOpen = false, userId = '';
 var color = {
 	green: '#beff9e',
 	lightGreen: '#daffc7',
@@ -40,6 +40,8 @@ var color = {
 	lightGold: '#fff8ce',
 	lightRed: '#ffe9e9'
 };
+
+$('head').append('<style>.textinput{padding:0px!important}</style>');
 
 //Element caching
 var $body = $('body'), $head = $('head');
@@ -49,38 +51,67 @@ var $latest = $('.question-list'), $latestQuestions = $latest.find('> li');
 var $forumList = $('.community-nav .pinned-categories'), $forumListRows = $forumList.find('div'), $forumListContainer = $('.community-nav');
 var $modal = $('#gsDropboxExtenderModal'), $screenOverlay = $('#gsDropboxExtenderScreenOverlay');
 
-//Page parameters and list
+//Set up page parameters and list
 var page = {
-	front: 'https://www.dropboxforum.com/hc/communities/public/questions',
-	newPost: 'https://www.dropboxforum.com/hc/communities/public/questions/new',
-	unanswered: 'https://www.dropboxforum.com/hc/communities/public/questions/unanswered',
+	front: new Url('https://www.dropboxforum.com/hc/communities/public/questions'),
+	newPost: new Url('https://www.dropboxforum.com/hc/communities/public/questions/new'),
+	unanswered: new Url('https://www.dropboxforum.com/hc/communities/public/questions/unanswered'),
 	topic: {
-		list: 'https://www.dropboxforum.com/hc/communities/public/topics',
-		apiDev: 'https://www.dropboxforum.com/hc/communities/public/topics/200209245-API-Development',
-		bugs: 'https://www.dropboxforum.com/hc/communities/public/topics/200203389-Bugs-Troubleshooting',
-		carousel: 'https://www.dropboxforum.com/hc/communities/public/topics/200211225-Carousel',
-		desktopClient: 'https://www.dropboxforum.com/hc/communities/public/topics/200210355-Desktop-Client-Beta',
-		everythingElse: 'https://www.dropboxforum.com/hc/communities/public/topics/200209235-Everything-Else',
-		gettingStarted: 'https://www.dropboxforum.com/hc/communities/public/topics/200204189-Getting-Started',
-		mailbox: 'https://www.dropboxforum.com/hc/communities/public/topics/200211215-Mailbox'
+		list: new Url('https://www.dropboxforum.com/hc/communities/public/topics'),
+		apiDev: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200209245-API-Development'),
+		bugs: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200203389-Bugs-Troubleshooting'),
+		carousel: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200211225-Carousel'),
+		desktopClient: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200210355-Desktop-Client-Beta'),
+		everythingElse: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200209235-Everything-Else'),
+		gettingStarted: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200204189-Getting-Started'),
+		mailbox: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200211215-Mailbox')
 	},
-	isPost: $postForm.length > 0
+	isPost: $postForm.length > 0,
+	isTopic: pageUrl.indexOf('communities/public/topics') == 0,
+	check: function(check) {
+		if (typeof check == 'string' && check.indexOf('://') > -1) {
+			//Check if a URL is listed
+			for (i in page) {
+				if (page.hasOwnProperty(i)) {
+					if (typeof page[i] != 'object') { //If the value is not an object, simply check
+						if (page[i] == check) {
+							return true;
+						}
+					} else { //If the value is an object, iterate through the inner loop as well
+						for (var prop in page[i]) {
+							if (page[i].hasOwnProperty(prop)) {
+								if (page[i][prop] == check) {
+									return true;
+								}
+							}
+						}
+					}
+					if (page[i] == check) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	}
 };
 
-if ($('user').length) {
-	//Nothing
+//Append necessary elements
+$('body').append('<div id="gsDropboxExtenderScreenOverlay" style="display:none;position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7" /><div id="gsDropboxExtenderModal" style="display:none;position:fixed;background:#fff;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px"><a class="gsDropboxExtenderModalClose" style="font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block">x</a><h1 id="gsDropboxExtenderModalTitle" style="text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px"></h1><br /><br /><div id="gsDropboxExtenderModalContent" /><div id="gsDropboxExtenderModalActionButtons" style="text-align:right" /></div><div id="gsDropboxExtenderNav"><a href="http://www.dropboxforum.com/hc/preferences"' + (!page.front.active ? ' target="blank"' : '') + '><img src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/resources/images/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /></a><span><a href="https://www.dropboxforum.com/hc/communities/public/questions/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span></div>').css('padding-bottom', '33px');
+$('head').append('<style>.gsDropboxExtenderModalClose:hover{cursor:pointer}.alert-center{width:500px;position:absolute;left:50%;margin-left:-250px;z-index:1}.alert-warning{background-color:rgba(252,248,227,0.8);background-image:linear-gradient(to bottom,rgba(252,248,227,0.8) 0%,rgba(248,239,192,0.8) 100%);border-color:#f5e79e;color:rgba(138,109,59,0.8);background-image:-webkit-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-repeat:repeat-x}.alert-danger{background-color:rgba(242,222,222,0.8);background-image:linear-gradient(to bottom,rgba(242,222,222,0.8) 0%,rgba(231,195,195,0.8) 100%);border-color:#dca7a7;color:rgba(169,68,66,0.8);background-image:-webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-repeat:repeat-x}.alert-success{background-color:rgba(223,240,216,0.8);background-image:linear-gradient(to bottom,rgba(223,240,216,0.8) 0%,rgba(200,229,188,0.8) 100%);border-color:#b2dba1;color:rgba(60,118,61,0.8);background-image:-webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-repeat:repeat-x}.alert-info{background-color:rgba(217,237,247,0.8);background-image:linear-gradient(to bottom,rgba(217,237,247,0.8) 0%,rgba(185,222,240,0.8) 100%);border-color:#9acfea;color:rgba(49,112,143,0.8);background-image:-webkit-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-repeat:repeat-x}.alert{max-width:500px;margin-left:auto;margin-right:auto;text-align:center;padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;text-shadow:0 1px 0 rgba(255,255,255,.2);-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05)}.alert > p{margin-bottom:0}#gsDropboxExtenderNav>span{margin-left:20px}#gsDropboxExtenderNav{position:fixed;bottom:0;height:32px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px}</style>');
+$('#new_answer .answer-form-controls').prepend('<span id="gsDropboxExtenderPostExtras" style="float:left" />');
+
+if ($('#user-avatar').length) {
+	userId = $('#user-avatar').attr('src').split('/hc/user_avatars/')[1];
 }
 
 //Define empty variables
 var temp, i, l;
 
-//Set up prerequisites
-$('body').append('<div id="gsDropboxExtenderScreenOverlay" style="display:none;position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7" /><div id="gsDropboxExtenderModal" style="display:none;position:fixed;background:#fff;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px"><a class="gsDropboxExtenderModalClose" style="font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block">x</a><h1 id="gsDropboxExtenderModalTitle" style="text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px"></h1><br /><br /><div id="gsDropboxExtenderModalContent" /><div id="gsDropboxExtenderModalActionButtons" style="text-align:right" /></div><div id="gsDropboxExtenderNav"><a href="http://www.dropboxforum.com/preferences"' + (pageUrl != 'forums.dropbox.com' ? ' target="blank"' : '') + '><img src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/resources/images/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-35px;z-index:11" /></a><span><a href="https://forums.dropbox.com/topic.php?id=109057">Official thread</a></span></div>').css('padding-bottom', '31px');
-$('head').append('<style>.gsDropboxExtenderModalClose:hover{cursor:pointer}.alert-center{width:500px;position:absolute;left:50%;margin-left:-250px;z-index:1}.alert-warning{background-color:rgba(252,248,227,0.8);background-image:linear-gradient(to bottom,rgba(252,248,227,0.8) 0%,rgba(248,239,192,0.8) 100%);border-color:#f5e79e;color:rgba(138,109,59,0.8);background-image:-webkit-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-repeat:repeat-x}.alert-danger{background-color:rgba(242,222,222,0.8);background-image:linear-gradient(to bottom,rgba(242,222,222,0.8) 0%,rgba(231,195,195,0.8) 100%);border-color:#dca7a7;color:rgba(169,68,66,0.8);background-image:-webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-repeat:repeat-x}.alert-success{background-color:rgba(223,240,216,0.8);background-image:linear-gradient(to bottom,rgba(223,240,216,0.8) 0%,rgba(200,229,188,0.8) 100%);border-color:#b2dba1;color:rgba(60,118,61,0.8);background-image:-webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-repeat:repeat-x}.alert-info{background-color:rgba(217,237,247,0.8);background-image:linear-gradient(to bottom,rgba(217,237,247,0.8) 0%,rgba(185,222,240,0.8) 100%);border-color:#9acfea;color:rgba(49,112,143,0.8);background-image:-webkit-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-repeat:repeat-x}.alert{max-width:500px;margin-left:auto;margin-right:auto;text-align:center;padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;text-shadow:0 1px 0 rgba(255,255,255,.2);-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05)}.alert > p{margin-bottom:0}#gsDropboxExtenderNav>span{margin-left:20px}#gsDropboxExtenderNav{position:fixed;bottom:0;height:30px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px}</style>');
-$('#new_answer .answer-form-controls').prepend('<span id="gsDropboxExtenderPostExtras" />');
+//Add version number header.header div.header-inner
+$('main').prepend('<div style="text-align: center; font-size: 11px;">Dropbox Forum Extender+ v' + GM_info.script.version + '</div>').css('margin-top', '14px');
+$('main nav.community-nav').css('padding-top', '14px');
 
-//Add version number
-$('header.header div.header-inner').append('<div style="text-align: center; font-size: 11px;">Dropbox Forum Extender+ v' + GM_info.script.version + '</div>');
 
 highlightPost('Super User', color.gold);
 //highlightPost(500, color.green, 'Forum regular');
@@ -121,7 +152,7 @@ function highlightThread() {
 }
 
 //Emphasize new replies to threads you've interacted with
-if (pageUrl == 'topic.php') {
+if (page.isPost) {
 	$postForm.on('submit', function() {
 		var d = new Date(), today = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0).getTime();
 		if (GM_getValue('date', 0) < today) {
@@ -144,7 +175,7 @@ if (pageUrl == 'topic.php') {
 		}
 	});
 }
-if (pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php') {
+if (page.front.active || page.isTopic) {
 	var todayThreads = GM_getValue('todayThreads', '').split(','), $threadPageList = $latest.find('tr:not(.sticky, .super-sticky) td:nth-child(1) a');
 	for (i = 0, l = todayThreads.length; i < l; i++) {
 		$threadPageList.filter('[href$="?id=' + todayThreads[i] + '"]').parent().parent().css('font-weight', 'bold');
@@ -154,7 +185,7 @@ if (pageUrl == 'forums.dropbox.com' || pageUrl == 'forum.php') {
 }
 
 //Modify posts
-$userRole.filter('[href$="=1618104"]').html('Master of Super Users');
+//$userRole.filter('[href$="=1618104"]').html('Master of Super Users');
 
 //Detect and manage unstickied threads
 if ($('#topic-info .topictitle:contains(") - "):contains(" Build - ")').length) {
@@ -174,7 +205,7 @@ if ($('#topic-info .topictitle:contains(") - "):contains(" Build - ")').length) 
 		showModal(['Yes', 'No'], 'Find newer sticky?', 'This thread is no longer sticky. Would you like to attempt to find the latest ' + threadType.toLowerCase() + ' build thread? Regardless of your preference, you will not be reminded for this thread again.', function() {
 			GM_xmlhttpRequest({
 				method: 'GET',
-				url: 'https://forums.dropbox.com',
+				url: page.front,
 				onload: function(response) {
 					var newSticky = $(response.responseText).find('td:contains("' + threadType + '") big a');
 					if (newSticky.length) {
@@ -203,13 +234,9 @@ if (page.isPost && !$postForm.length) {
 	addMarkupLinks();
 }*/
 
-addMarkupLinks();
-
-function addMarkupLinks() {
-	if (page.isPost) {
-		$('.answer-meta, .question .question-meta').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderQuoteSelected">Quote Selected</a> - <a href="javascript:void(0)" class="gsDropboxExtenderQuotePost">Quote Post</a>');
-		$('#gsDropboxExtenderPostExtras').append('<span style="float: left;"><a href="javascript:void(0)" class="gsDropboxExtenderLinkInsert">a</a> - <a href="javascript:void(0)" class="gsDropboxExtenderBlockquoteSelected">blockquote</a> - <a href="javascript:void(0)" class="gsDropboxExtenderStrongSelected">bold</a> - <a href="javascript:void(0)" class="gsDropboxExtenderEmSelected">italic</a> - <a href="javascript:void(0)" class="gsDropboxExtenderCodeSelected">code</a> (<a href="javascript:void(0)" class="gsDropboxExtenderQuoteCodeSelected">quoted</a>) - <a href="javascript:void(0)" class="gsDropboxExtenderListInsert">ordered list</a> - <a href="javascript:void(0)" class="gsDropboxExtenderListInsert">unordered list</a><span id="siglink" style="display:none"> - <a href="javascript:void(0)" class="gsDropboxExtenderSignatureInsert">custom signature</a></span></span>');
-	}
+if (page.isPost) {
+	$('.answer-meta, .question .question-meta').append(' - <a href="javascript:void(0)" class="gsDropboxExtenderQuoteSelected">Quote Selected</a> - <a href="javascript:void(0)" class="gsDropboxExtenderQuotePost">Quote Post</a>');
+	$('#gsDropboxExtenderPostExtras').append('<span><a href="javascript:void(0)" class="gsDropboxExtenderLinkInsert">a</a> - <a href="javascript:void(0)" class="gsDropboxExtenderBlockquoteSelected">blockquote</a> - <a href="javascript:void(0)" class="gsDropboxExtenderStrongSelected">bold</a> - <a href="javascript:void(0)" class="gsDropboxExtenderEmSelected">italic</a> - <a href="javascript:void(0)" class="gsDropboxExtenderCodeSelected">code</a> (<a href="javascript:void(0)" class="gsDropboxExtenderQuoteCodeSelected">quoted</a>) - <a href="javascript:void(0)" class="gsDropboxExtenderListInsert">ordered list</a> - <a href="javascript:void(0)" class="gsDropboxExtenderListInsert">unordered list</a><span id="siglink" style="display:none"> - <a href="javascript:void(0)" class="gsDropboxExtenderSignatureInsert">custom signature</a></span></span>');
 
 	//Quoting
 	$('.gsDropboxExtenderQuotePost').on('click', function(evt) {
@@ -231,18 +258,21 @@ function addMarkupLinks() {
 	//Insert a list
 	$('.gsDropboxExtenderListInsert').on('click', function() {
 		var listType = $(this).html().split(' ')[0];
-		showModal(['Add', 'OK'], 'Add List', '<' + listType[0] + 'l id="gsDropboxExtenderListbox" style="padding-left:16px"></' + listType[0] + 'l><br /></div><div><div style="clear:both;height:20px;"><label style="float:left;">Item: </label><input id="gsDropboxExtenderListBoxTextBox" class="textinput" type="text" maxlength="500" size="100" style="height: 16px; float: right; width: 300px;" />', function() {
-			var content = $('#gsDropboxExtenderListbox').html();
-			insertTextAtCursorPosition('<' + listType[0] + 'l>\n' + content + '\n</' + listType[0] + 'l>');
-			$postField.setCursorPosition($postField[0].selectionStart + content.length + 11);
+		showModal(['Add', 'OK'], 'Add List', '<' + listType[0] + 'l id="gsDropboxExtenderListBox" style="padding-left:16px"></' + listType[0] + 'l><br /></div><div><div style="clear:both;height:20px;"><label style="float:left;">Item: </label><input id="gsDropboxExtenderListBoxTextBox" class="textinput" type="text" maxlength="500" size="100" style="height:22px;float:right;width:300px" />', function() {
+			var content = (listType[0] == 'u' ? '*' : '1.') + ' ' + $('#gsDropboxExtenderListBox li').eq(0).html();
+			for (i = 1, l = $('#gsDropboxExtenderListBox li').length; i < l; i++) {
+				content += '\n' + (listType[0] == 'u' ? '*' : ((i + 1) + '.')) + ' ' + $('#gsDropboxExtenderListBox li').eq(i).html();
+			}
+			insertTextAtCursorPosition(content);
+			$postField.setCursorPosition($postField[0].selectionStart + content.length);
 		}, function() {
 			if ($('#gsDropboxExtenderListBoxTextBox').val()) {
-				$('#gsDropboxExtenderListbox').append('<li>' + $('#gsDropboxExtenderListBoxTextBox').val() + '</li>');
+				$('#gsDropboxExtenderListBox').append('<li>' + $('#gsDropboxExtenderListBoxTextBox').val() + '</li>');
 				$('#gsDropboxExtenderListBoxTextBox').val('');
-				var heightModifier = $('#gsDropboxExtenderListbox li:last').height();
+				var heightModifier = $('#gsDropboxExtenderListBox li:last').height();
 				$modal.css({
 					'top': (parseInt($modal.css('top'), 10) - (heightModifier / 2)),
-					'height': $modal.height() + heightModifier
+					'height': $modal.css('height') + heightModifier
 				});
 			}
 		});
@@ -250,8 +280,9 @@ function addMarkupLinks() {
 
 	//Insert a link
 	$('.gsDropboxExtenderLinkInsert').on('click', function() {
-		showModal(['Add'], 'Add Link', '<div style="clear:both;height:20px"><label style="float: left;">Title: </label><input id="gsDropboxExtenderAnchorTextBox" class="textinput" type="text" maxlength="500" size="100" style="height:16px;float:right;width:300px" /></div><div style="clear: both; height: 20px;"><label style="float:left;">Url: </label><input id="gsDropboxExtenderAnchorUrlBox" class="textinput" type="text" maxlength="500" size="100" style="height:16px;float:right;width:300px" /></div>', function() {
-			insertTextAtCursorPosition('<a href="' + $('#gsDropboxExtenderAnchorUrlBox').val() + '">' + $('#gsDropboxExtenderAnchorTextBox').val() + '</a>');
+		//TODO: Text boxes used to be 16px - Padding needs to be fixed
+		showModal(['Add'], 'Add Link', '<div style="clear:both;height:20px"><label style="float: left;">Title: </label><input id="gsDropboxExtenderAnchorTextBox" class="textinput" type="text" maxlength="500" size="100" style="height:22px;float:right;width:300px" /></div><div style="clear: both; height: 20px;"><label style="float:left;">Url: </label><input id="gsDropboxExtenderAnchorUrlBox" class="textinput" type="text" maxlength="500" size="100" style="height:22px;float:right;width:300px" /></div>', function() {
+			insertTextAtCursorPosition('[' + $('#gsDropboxExtenderAnchorTextBox').val() + '](' + $('#gsDropboxExtenderAnchorUrlBox').val() + ')');
 		});
 	});
 }
@@ -261,14 +292,16 @@ makePage('preferences', 'Preferences', 'Please wait while we load your preferenc
 makePage('snippets', 'Snippets', 'Please wait while we load the snippet manager. This should only take a few seconds.');
 
 function makePage(slug, title, content) {
-	if (strippedUrl == 'https://www.dropboxforum.com/' + slug) {
-		$head.append('<link rel="shortcut icon" href="//www.dropbox.com/static/images/favicon.ico" /><style>' + GM_getResourceText('customStyle') + GM_getResourceText('bootstrap') + GM_getResourceText('bootstrap-theme') + '</style>').find('title').html('Forum Extender+ ' + title);
-		$body.html('<div id="wrapper" class="container"><div class="jumbotron" id="main"><h2>' + title + '</h2><p class="topline">' + content + '</p></div></div><div class="container"><footer><hr><div>Developed by <a href="http://techgeek01.com" target="_blank">Andy Y.</a> and <a href="http://nathancheek.com" target="_blank">Nathan C.</a></div></footer></div><div class="container navbar-fixed-top"><div class="header"><ul class="nav nav-pills pull-left"><li class="inactive"><a href="https://forums.dropbox.com">Back to Forums</a></li></ul><div class="site-title"><h3 class="text-muted">Dropbox Forum Extender+</h3></div></div></div><script src="https://techgeek01.com/dropboxextplus/js/bootstrap.js"></script>');
+	if (pageUrl == slug) {
+		$head.append('<style>' + GM_getResourceText('customStyle') + GM_getResourceText('bootstrap') + GM_getResourceText('bootstrap-theme') + '</style>').find('title').html('Forum Extender+ ' + title);
+		$body.html('<div id="wrapper" class="container"><div class="jumbotron" id="main"><h2>' + title + '</h2><p class="topline">' + content + '</p></div></div><div class="container"><footer><hr><div>Developed by the DBMods team</div></footer></div><div class="container navbar-fixed-top"><div class="header"><ul class="nav nav-pills pull-left"><li class="inactive"><a href="' + page.front.value + '">Back to Forums</a></li></ul><div class="site-title"><h3 class="text-muted">Dropbox Forum Extender+</h3></div></div></div><script src="https://techgeek01.com/dropboxextplus/js/bootstrap.js"></script>');
+		$('.header').css('background', 'none');
 	}
+	this.active = pageUrl == slug;
 }
 
 /*
- * Work with the Dropbox datastore API
+ * Work with Dropbox datastore API
  */
 
 var client = new Dropbox.Client({key: 'qq5ygjct1pt4eud'});
@@ -344,9 +377,9 @@ if (client.isAuthenticated()) {
 
 		function reloadPage(pageType) {
 			var reloadIndex = {
-				'Sticky': pageUrl == 'topic.php' && $('#topic_labels .sticky').length,
-				'Front': pageUrl == 'forums.dropbox.com',
-				'Forum': pageUrl == 'forum.php'
+				'Sticky': page.isPost && $('#topic_labels .sticky').length,
+				'Front': page.front.active,
+				'Forum': page.isTopic
 			};
 			var reloadDelay = prefTable.query({preference: 'reload' + pageType});
 			if (reloadIndex[pageType] && reloadDelay.length && reloadDelay[0].get('value')) {
@@ -360,9 +393,10 @@ if (client.isAuthenticated()) {
 			}
 		}
 
-		//Add post snippets
-		if (pageUrl == 'topic.php' || pageUrl == 'edit.php') {
-			$('#gsDropboxExtenderPostExtras').append('<p style="float:left;margin-right:20px"><select id="snippets"><option name="default" value="">' + (snippetList.length ? 'Select a snippet' : 'You don\'t have any snippets') + '</option><optgroup label="--Snippets--" /></select></p>');
+		if (page.isPost) {
+			//Add post snippets
+			$('h3.answer-list-heading').css('margin-top', '5px');
+			$('#gsDropboxExtenderPostExtras').append('<br><span id="gsDropboxExtenderPostExtras-inner" style="float:left"><select id="snippets"><option name="default" value="">' + (snippetList.length ? 'Select a snippet' : 'You don\'t have any snippets') + '</option><optgroup label="--Snippets--" /></select></span>');
 
 			temp = [];
 			for (i = 0, l = snippetList.length; i < l; i++) {
@@ -379,12 +413,10 @@ if (client.isAuthenticated()) {
 					$(this).val('');
 				}
 			});
-		}
 
-		//Manage drafts
-		if (pageUrl == 'topic.php') {
-			var thread = urlVars.id;
-			$('#gsDropboxExtenderPostExtras').append('<br><a href="javascript:void(0)" id="modpostdraft">Draft Post</a> - <a href="javascript:void(0)" id="modpostrestoredraft">Restore Draft</a>');
+			//Manage drafts
+			var thread = strippedUrl;
+			$('#gsDropboxExtenderPostExtras-inner').append(' - <a href="javascript:void(0)" id="modpostdraft">Draft Post</a> - <a href="javascript:void(0)" id="modpostrestoredraft">Restore Draft</a>');
 			$('#modpostdraft').on('click', function() {
 				var draft = draftTable.query({pageid: thread});
 				if ($postField.val()) {
@@ -415,16 +447,13 @@ if (client.isAuthenticated()) {
 			});
 		}
 
-		//$postFormCleardiv.append($('#post-form-allowed-container'));
-		//$('#post-form-allowed-container').css('float', 'left');
-
 		//Pages
 		if (pageUrl == 'preferences') {
 			var reloadTimeList, reloadTimes = [0, 30, 60, 120, 300, 600, 900, 1200, 1800, 2700, 3600];
 			for (i = 0, l = reloadTimes.length; i < l; i++) {
 				reloadTimeList += '<option value="' + reloadTimes[i] + '">' + (reloadTimes[i] ? (reloadTimes[i] < 60 ? (reloadTimes[i] + ' seconds') : ((reloadTimes[i] / 60) + ' minute' + (reloadTimes[i] > 60 ? 's' : ''))) : 'Never') + '</option>';
 			}
-			$('#main .topline').html('<a href="https://forums.dropbox.com/snippets">Manage your snippets here!</a><br><br><textarea name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br><select name="theme"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></select><br><input type="checkbox" id="collapseFooter" name="collapseFooter" /> <label for="collapseFooter" style="font-weight:normal">Automatically collapse footer</label><br><br>Reload front page every <select name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select name="reloadSticky">' + reloadTimeList + '</select><br><br><select id="modIcon" name="modIcon"><option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select>&nbsp;<img id="modIconPreview"/><br><br><button class="btn btn-success" id="save">Save</button><button class="btn btn-warning btn-right" id="deleteprefs">Trash Preferences</button><button class="btn btn-warning btn-right" id="deletedrafts">Trash Drafts</button>');
+			$('#main .topline').html('<a href="https://www.dropboxforum.com/hc/snippets">Manage your snippets here!</a><br><br><textarea name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br><select name="theme"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></select><br><input type="checkbox" id="collapseFooter" name="collapseFooter" /> <label for="collapseFooter" style="font-weight:normal">Automatically collapse footer</label><br><br>Reload front page every <select name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select name="reloadSticky">' + reloadTimeList + '</select><br><br><select id="modIcon" name="modIcon"><option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select>&nbsp;<img id="modIconPreview"/><br><br><button class="btn btn-success" id="save">Save</button><button class="btn btn-warning btn-right" id="deleteprefs">Trash Preferences</button><button class="btn btn-warning btn-right" id="deletedrafts">Trash Drafts</button>');
 
 			var modIconList = ['Dropbox Flat', 'Dropbox Flat Green', 'Dropbox Flat Lime', 'Dropbox Flat Gold', 'Dropbox Flat Orange', 'Dropbox Flat Red', 'Dropbox Flat Pink', 'Dropbox Flat Purple', 'Dropbox', 'Dropbox Green', 'Dropbox Lime', 'Dropbox Gold', 'Dropbox Orange', 'Dropbox Red', 'Dropbox Pink', 'Dropbox Purple', 'Gold Star'];
 			temp = '';
@@ -642,12 +671,12 @@ if (client.isAuthenticated()) {
 			});
 		}*/
 
-		//Super User icons
+		//Super User icons TODO: Rewrite this for new forums
 		//var modIcon = prefTable.query({preference: 'modIcon'});
 		//$userRole.filter(':contains("Super User")').parent().parent().find('strong').find('img').attr('src', modIcon.length ? modIcon[0].get('value') : 'https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif');
 	});
 } else {
-	$('#gsDropboxExtenderNav').append('<span id="dropboxlink">' + ((pageUrl(fullUrl)) ? 'Link to Dropbox' : 'You\'re not linked to Dropbox yet, but you can do so from the <a href="https://forums.dropbox.com">front page</a>') + '</span>');
+	$('#gsDropboxExtenderNav').append('<span id="dropboxlink">' + ((page.check(fullUrl)) ? 'Link to Dropbox' : 'You\'re not linked to Dropbox yet, but you can do so from the <a href="' + page.front + '">front page</a>') + '</span>');
 
 	//Start authentication process
 	$('#dropboxlink').on('click', function(e) {
@@ -659,6 +688,17 @@ if (client.isAuthenticated()) {
 /*
  * Graphics handling
  */
+
+//Float top header down page
+$body.css('padding-top', '115px');
+$('header.header').css({
+	'position': 'fixed',
+	'top': '0',
+	'z-index': '9999'
+});
+
+//Fix header logo height - sticks over header
+$('header.header .logo a').css('height', '115px');
 
 //Front page and topic page question list styles
 //For some reason, appending a style to the head element doesn't work here, so we have to style things as they load
@@ -742,7 +782,7 @@ function forumVersion(versionDate) {
 		$('.sticky, .super-sticky').css('background', '#deeefc');
 
 		//Add tag list and reorder elements
-		if (['forums.dropbox.com', 'forum.php'].indexOf(pageUrl) > -1) {
+		if (page.front || page.isTopic) {
 			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
 			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap" /></div>');
 			temp = '';
@@ -786,39 +826,17 @@ function forumVersion(versionDate) {
 }
 
 /*
- * Helper functions
+ * Methods and prototyping
  */
 
-//Check page URLs
-function pageUrl(check) {
-	if (check.indexOf('://') > -1 && typeof page[check] != 'boolean') {
-		//Check if a URL is listed
-		for (i in page) {
-			if (page.hasOwnProperty(i)) {
-				if (typeof page[i] != 'object') { //If the value is not an object, simply check
-					if (page[i] == check) {
-						return true;
-					}
-				} else { //If the value is an object, iterate through the inner loop as well
-					for (var prop in page[i]) {
-						if (page[i].hasOwnProperty(prop)) {
-							if (page[i][prop] == check) {
-								return true;
-							}
-						}
-					}
-				}
-				if (page[i] == check) {
-					return true;
-				}
-			}
-		}
-		return false;
-	} else {
-		//Check if we're on a given page
-		return strippedUrl == page[check];
-	}
+function Url(value) {
+    this.value = value;
+    this.active = strippedUrl == this.value;
 }
+
+/*
+ * Helper functions
+ */
 
 //Get post author markup
 function getPostAuthorDetails(postEventTarget) {
@@ -833,13 +851,19 @@ function getUserId(postEventTarget) {
 //Insert markup at required position
 function insertAndMarkupTextAtCursorPosition() {
 	var args = arguments;
+	var markdownMap = {
+		'blockquote': ['> ', ''],
+		'code': ['`', '`'],
+		'em': ['*', '*'],
+		'strong': ['**', '**']
+	};
 	var SelectedTextStart = $postField[0].selectionStart, SelectedTextEnd = $postField[0].selectionEnd, EndCursorPosition = SelectedTextStart, SelectedText = '';
 	if (SelectedTextEnd - SelectedTextStart) {
 		SelectedText = $postField.val().substring(SelectedTextStart, SelectedTextEnd);
 	}
 	var offset = 0, i = args.length, temp = SelectedText;
 	while (i--) {
-		temp = '<' + args[i] + '>' + temp + '</' + args[i] + '>',	offset += 2 + args[i].length;
+		temp = markdownMap[args[i]][0] + temp + markdownMap[args[i]][1], offset += markdownMap[args[i]][0].length;
 	}
 	insertTextAtCursorPosition(temp);
 	if (!SelectedText) {
