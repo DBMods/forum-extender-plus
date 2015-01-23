@@ -1,0 +1,449 @@
++ Added     - Removed     * Fixed     # Changed
+Dropbox Forum Mod Icons Changelog
+
+-----2.3.0.7pre2a-----
++ Added code to tweak thread list layout slightly
+- Removed more excess old theme bork fix code
+- Removed Super User icons
+- Removed footer collapsing
+- Removed code for post highlighting until post count is added back in
+* Fixed thread highlighting
+* Restored preferences link
+# Changed post form extras appending
+
+-----2.3.0.7pre1a-----
+- Removed "Take me home" link
+- Removed theme fixing
+- Disabled theming
+* Fixed post markup
+* Fixed nav bar
+* Fixed preferences
+* Fixed API linking
+
+-----2.3.0.6-----
+* Signed out users now will not see the messaging stuff
+
+-----2.3.0.5-----
+# Code rewrite for 2.3.0.4
+
+-----2.3.0.4-----
+* SSL for messaging
+
+-----2.3.0.2-----
+* When on a multipage thread where the post form is imported into the page, buttons are now styled correctly.
+* Super User icon names with more than one space now load properly
+# Code minification
+
+-----2.3.0.1-----
+# color.green darkened almost back to 2.2.9 (slightly lighter to minimize harshness)
+# color.gold reverted back to 2.2.9
+# Post highlighting threshold loosened from 20% to 60%
+
+-----2.3.0-----
++ Newer forum regulars now have lighter green post highlights
++ You can now add quoted code
++ Posts you've interacted with that day now show in bold on the front page and form pages
++ Snippets in the list are now sorted alphabetically
++ The snippet manager now has a button that empties the form, and releases any loaded snippets, so they are unchanged until you load the snippet again
+* Major performance increases
+* Whole post quoting uses the appropriate spacing when quoting multiple paragraps
+* Sticky management now only alerts you if you were actively watching the thread when it was sticky
+* List modals now have dynamic height, changing based on items you enter, and a bug where numbers an bullets hang off of the window has been fixed
+* Original theme now includes the new Mailbox beta forum, and has been futureproofed from further changes
+* Deleting a snippet from the snippet manager after loading it now empties the form fields
+* Creating a snippet with a name that already exists will now update the existing snippet, instead of creating a duplicate
+# Forum regular post highlighting now is affected by the same threshold as for Super Users
+# Front page thread highlighting colors are now less harsh
+# Super User and forum regular highlights are slightly less harsh
+# Code stability and hardening
+
+-----2.2.9-----
+* Footer collapsing is automatically disabled if the resulting page length would make the page shorter than the viewport
+* Fixed long-standing bug where markup and quoting didn't work on multipage threads if the page you were on wasn't the last
+* Hover overlay messages now all look the same
+* Fixed a bug where the page would reload even if you had written a post or had a modal open
+# Post quoting now links to original post
+# If you have a bad token, it is now displayed in the nav bar, rather than a modal
+# Post form goodies now take up less space, and show side by side, instead of everything on a new line
+# Code stability and hardening
+
+-----2.2.8.4-----
+* Bad token form fix
+
+-----2.2.8.3-----
++ Added support for changing tokens
+* When getting a new token, you now don't have to be redirected to the homepage, and can go to the page you were on
+
+-----2.2.8.2-----
+- Removed unnecessary page restrictions
+* Borked theme fix now has fully-styled buttons
+* Layout fixes for borked theme
+* External pages weren't loading
+# Futureproofing for security update in message system
+
+-----2.2.8.1-----
++ Modals now support dynamically changing window content, with two action buttons
+* Preferences will not open in a new tab from the front page of the forums
+* Closed sticky threads now no longer show the [sticky] label
+* If you're not yet linked to Dropbox, but you cannot do so from the page you are on, you will now be notified
+* Navbar no longer silently appended and removed from manually created pages
+# Rewrote setCursorPositionInTextArea() to jQuery $.fn.setCursorPosition()
+# Forum regular post threshold dropped from 1000 to 500
+# Minified code
+
+-----2.2.8-----
++ Added 20 and 45 minute options to automatic page reloading
++ Added snippet manager, with ability to add, edit, rename, and delete snippets
++ Added custom signature
+- Removed Super User activity feed to save bandwidth
+- Removed need for value on checkboxes
+# Complete rewrite of the showModal() function in order to support more
+# Changed alert box for sticky updating to showModal() window
+# Moved preferences to separate page
+# Moved snippet selector and post drafting from nav bar to post form
+# Preferences code hardening
+# Minified core
+
+-----2.2.7.20-----
+* Bad link causing form posting from script to fail
+
+-----2.2.7.19-----
+* Fixed broken link for messaging system
+
+-----2.2.7.18-----
+* Fixed typo in message snippet
+
+-----2.2.7.17-----
+# Prepped for a new security rewrite of process-message.php
+
+-----2.2.7.16-----
+* Bugfix
+
+-----2.2.7.15-----
+* Added delay after message token call to ensure save before redirect
+
+-----2.2.7.14-----
+# Tweak
+
+-----2.2.7.13-----
+* Bad code fix #2
+
+-----2.2.7.12-----
+* Bad code fix
+
+-----2.2.7.11-----
+# Last-minute prep for new message security system
+
+-----2.2.7.10-----
+* Wrong form value for message account creation
+
+-----2.2.7.9-----
+# More messaging security preparation
+
+-----2.2.7.8-----
+# Messaging now only shows if the datastore API is successfully authed
+# Prepped for additional security
+
+-----2.2.7.7-----
+# Aesthetic tweaking
+
+-----2.2.7.3-----
+# Asset urls to Amazon S3 urls
+
+-----2.2.7.1-----
+# Updated to jQuery 1.11.0
+
+-----2.2.7-----
+* Sticky reloading fix
+
+-----2.2.6.5-----
+* New highlighting bugfix bugfix
+
+-----2.2.6.4-----
+* New highlighting bug fix
+
+-----2.2.6.3-----
+# Rewrote postHighlight function to accept a threshold of posts, and will highlight users with that many posts or more
+- Removed unnecessary lines of code
+
+-----2.2.6.2-----
+* Typo
+
+-----2.2.6.1-----
+* Small aesthetic fix
+
+-----2.2.6-----
+- Removed unnecessary alert code.
+* Fixed message counter bug
+# Message counter now runs immediately
+
+-----2.2.5.11-----
++ Added forum frontpage link back to header
+
+-----2.2.5.10-----
+* Squashed another aesthetic bug
+
+-----2.2.5.9-----
+* Thread highlighting survives a theme change
+
+-----2.2.5.8-----
+* Fixed a bunch of bugs pertaining to the original forum theme
+# Made code smaller
+
+-----2.2.5.7-----
+- Removed pulse completely
+# Made code faster and smaller
+
+-----2.2.5.6-----
+# 6.1% reduction in filesize, and 10.8% reduction in lines of code
+* Disabled pulse in production versions
+
+-----2.2.5.5-----
++ Added thread link
+
+-----2.2.5.3-----
+* Fixed script not loading when logged out
+
+-----2.2.5.2-----
+# If you changed your Super User icon preferences, the Nyan Cat icon will not show before the new one loads
+
+-----2.2.5.1-----
+# Clicking on the overlay gray box while in a modal window now closes it, just like the close button
+
+-----2.2.5-----
+* Modal windows wouldn't prevent a page reload
+
+-----2.2.4.2-----
+# Timezone detection fixed
+
+-----2.2.4.1-----
++ Time detection placeholder
+
+-----2.2.4-----
+* Future proofing
+
+-----2.2.3-----
++ Message replying
+
+-----2.2.2.3-----
+# Updated to interact with newer message code
+
+-----2.2.2.2-----
+# Updated to interact with newer message code
+
+-----2.2.2.1-----
+* Bugfix, maybe
+
+-----2.2.2-----
+* Fixed closed thread notifications
+
+-----2.2.1-----
+- Removed unnecessary code
+# Changed message checking interval from 60 seconds to 20
+
+-----2.2.0-----
++ Added fancy modal window system
+# Migrated message submission to new modal system
+# Migrated link markup to new modal system
+
+-----2.1.10-----
+# Moved message form to fancy window
+
+-----2.1.9-----
+- Removed buggy stats
+
+-----2.1.8-----
+# Redid message counter
++ Added message stats
+
+-----2.1.7-----
++ Added blockquote to the post markup
+
+-----2.1.6-----
+* Fixed naming conflict
+
+-----2.1.5-----
+* Message deleting bugfix
+
+-----2.1.4-----
++ Added messaging system
+
+-----2.1.3 (beta only)-----
++ Testing messaging system
+
+-----2.1.2-----
+* Fixed broken quoting
+
+-----2.1.1-----
+* Fixed image links in quoting
+
+-----2.1.0-----
++ Merged Richard P's Forum Extender into script
+
+-----2013.11.21pre1a-----
+- Removed snippets to fix latency on slow connections
+
+-----2013.11.20pre1a-----
+# Removed almost half of the code in favor for importing snippets
+
+-----2.0.3-----
++ Closed threads are now automatically indicated
+
+-----2.0.2-----
++ Added Super User icon chooser
++ Added 17 more icons to choose from
+
+-----2.0.1-----
+- Removed unnecessary calls from the activity list
+* Added thread breadcrumb back into thread header
+
+-----2.0-----
++ Added snippets folder to the repo
+- removed snowfall from the code, and moved it to the snippets folder
+
+-----2013.11.13pre1a-----
++ Added more post snippets
+
+-----2013.11.11pre2a-----
+* Bugfix
+
+-----2013.11.11pre1a-----
++ Added closed thread notifiers
+
+-----2013.11.9pre56a-----
++ Added Dropbox Datastore API integration
+* Fixed bug where the /?new=1 page would be caught as part of the front page
+# Moved preferences and drafts to the datastore - you must be authenticated with Dropbox to change things like theme, or save drafts
+
+-----2013.11.4pre1a-----
+* Restricted Super User-specific snippets to Super Users only
+
+-----2013.11.2pre3a-----
++ Added general links snippet group
+
+-----2013.11.2pre2a-----
+# Minified some code
+# Completely rewrote settings menu portion of navBar function
+
+-----2013.11.2pre1a-----
+# Minified some code pertaining to snowfall
+
+-----2013.11.1pre2a-----
+# Changed snowflake color
+
+-----2013.11.1pre1a-----
++ Added date-specific things
++ Added winter snowfall (currently red until background changed) that appears December through February
+
+-----2013.10.31pre1a-----
+- Minified some code
+
+-----2013.10.30pre1a-----
+* Fixed typo in snippets
+# Made edit signature dynamic
+# Moved UI fix into forumVersion function
+* Fixed unpredictable layout with other themes
+- Officially removed post streaks
+
+-----2013.10.28pre1a-----
++ Added snippets
+
+-----2013.10.25pre1a-----
+# Merged addOptions() function into nav bar
+# merged post drafting into nav bar
+# Stripped down code
++ Added notification overlays, similar to those in the Dropbox web interface
++ Added super-secret easter egg
+
+-----2013.10.22pre1a-----
+* Fixed post drafting
+
+-----2013.10.21pre1a-----
+- Removed title field from post form
+
+-----2013.10.18pre1a-----
++ Added sticky updating (see for yourselves - https://forums.dropbox.com/topic.php?id=106500)
+
+-----2013.10.13pre1a-----
+# Made thread highlighting a lighter
++ Added post streaks
+# Temporarily deprecated post streaks for further debugging
+
+-----2013.10.11pre1a-----
+* Fixed bbPress theme errors
+
+-----2013.10.9pre1a-----
++ Added alert messages
+* Fixed sticky reloading, so it skips if you are responding
++ Started fixing bbPress theme errors
+
+-----1.3.1-----
++ Added post drafting
++ Added navigation bar
++ Added Super User activity monitor to navigation bar
+- Removed need for manual internalVersion change
+# Rewrote postHighlight function
+# Rewrote highlightThread function
++ Added highlighting for 1, 2, and 3 post-count threads
++ Added new thread highlighting
+
+-----1.3.0-----
++ Added settings panel
+# Allowed user to change settings without editing script
+# Moved collapsible footer outside of theme
+# Rewrote page reloading function
+
+-----1.2.0-----
+# Rewrote postHighlight() function
+- Removed unnecessary importInformation() function
+# Simplified footer
+- Removed getIcon() function
+# Rewrote addIcon() function
+# Rewrote changeRoleName() function
+- Eliminated need for a list of elements
+- Eliminated need for getElementById calls
+
+-----1.1.0-----
+* Fixed original theme refresh behavior
+# Changed original theme's tag selection
++ Dynamic tag font sizing in original theme
+- Removed unnecessary code
++ Added slide-out panel for page footer to save space
++ Added modified 8.8.2012 theme for testing purposes - will have an official name later
+
+-----1.0.1-----
+* Restored regulars' highlighting
+- Removed inDev function
++ Added beta version, which includes all stable versions as well
+
+-----1.0-----
++ Implemented jQuery
+# Replaced versioning scheme
+- Almost completely removed the addSlideOut indev function, in preparation for a complete rewrite
+
+-----2013.9.2-----
+# Made 8.8.2012 theme much more immersive, including topic and profile pages
++ Added option to highlight posts based on user ID
++ Forum regulars' posts are now highlighted green
+
+-----2013.9.1-----
+* Corrected behavior of reloadStickies() function
+# Denoted the user-customizable part of the code with comments
+# Made comments more human-readable
++ Added an inDev() function to hold functions being developed
+# Moved addSlideOut() to the indev portion of the code
+
+-----2013.9-----
++ Front page automatic refreshing (2 minutes default)
++ Sticky automatic refreshing (2 minutes default)
++ Page detection in order to restrict script parts to certain pages
++ Greasemonkey versioning and update and download URLs
++ Added an option to revert to the original theme as well as the revamp
+- Highlight status on pages other than topic threads
+* Highlight status indication behavior on topics
+* Super User icons are now hosted via a secure connection to avoid mixed SSL signals
+* The header image is now hosted via a secure connection to avoid mixed SSL signals
+# Commented out experimental features
+# Labeled experimentals, and listed functions to allow for executing by uncommenting lines
+# Cleaned up code
+# Improvements to 8.8.2012 theme
