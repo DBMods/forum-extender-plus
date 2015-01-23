@@ -19,7 +19,7 @@ function settingsView($viewOption) {
 					<div class="form-group">
 						<label class="col-md-4 control-label">Username</label>
 						<div class="col-md-4">
-							<input id="modusername" name="modusername" type="text" value="<?php echo $fillusername ?>" class="form-control input-md">
+							<input id="modusername" name="modusername" type="text" value="<?php echo $fillusername; ?>" class="form-control input-md">
 						</div>
 					</div>
 					<br>
