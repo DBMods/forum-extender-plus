@@ -1,6 +1,13 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.7pre4a-----
+* Modals now show properly
+* Messaging no longer shows parentheses if message count is 0
+* Post quoting fixed
+* Post and selection quoting now uses proper markdown syntax
+# Unstickied header
+
 -----2.3.0.7pre3a-----
 * Migrated HTML markup to markdown
 * For mods, excluded admin pages to prevent navbar layout on admin popup iframe

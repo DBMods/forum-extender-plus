@@ -5,7 +5,8 @@
 // @include https://forums.dropbox.com/*
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
-// @version 2.3.0.7pre3a
+// @exclude https://www.dropboxforum.com/hc/user_avatars/*
+// @version 2.3.0.7pre4
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -27,8 +28,7 @@
  * ** Sticky managing needs to be fixed
  * Thread reloading should be fixed now
  * ** Form values aren't preloaded in preferences menu
- * ** Markdown in quoting not working
- * ** Post quoting not working, only selected text quoting is
+ * ** Quoting needs to have differentiation between ordered and unordered lists
  */
 
 //Set global variables
@@ -42,14 +42,6 @@ var color = {
 };
 
 $('head').append('<style>.textinput{padding:0px!important}</style>');
-
-//Element caching
-var $body = $('body'), $head = $('head');
-var $postField = $('#answer_body'), $postForm = $('#new_answer'), $postFormCleardiv = $postForm.find('div.clear');
-var $thread = $('section.answers'), $threadAuthor = $('.answer-meta'), $userRole = $threadAuthor.find('small a');
-var $latest = $('.question-list'), $latestQuestions = $latest.find('> li');
-var $forumList = $('.community-nav .pinned-categories'), $forumListRows = $forumList.find('div'), $forumListContainer = $('.community-nav');
-var $modal = $('#gsDropboxExtenderModal'), $screenOverlay = $('#gsDropboxExtenderScreenOverlay');
 
 //Set up page parameters and list
 var page = {
@@ -66,7 +58,7 @@ var page = {
 		gettingStarted: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200204189-Getting-Started'),
 		mailbox: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200211215-Mailbox')
 	},
-	isPost: $postForm.length > 0,
+	isPost: $('#new_answer').length > 0,
 	isTopic: pageUrl.indexOf('communities/public/topics') == 0,
 	check: function(check) {
 		if (typeof check == 'string' && check.indexOf('://') > -1) {
@@ -100,6 +92,14 @@ var page = {
 $('body').append('<div id="gsDropboxExtenderScreenOverlay" style="display:none;position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7" /><div id="gsDropboxExtenderModal" style="display:none;position:fixed;background:#fff;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px"><a class="gsDropboxExtenderModalClose" style="font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block">x</a><h1 id="gsDropboxExtenderModalTitle" style="text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px"></h1><br /><br /><div id="gsDropboxExtenderModalContent" /><div id="gsDropboxExtenderModalActionButtons" style="text-align:right" /></div><div id="gsDropboxExtenderNav"><a href="http://www.dropboxforum.com/hc/preferences"' + (!page.front.active ? ' target="blank"' : '') + '><img src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/resources/images/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /></a><span><a href="https://www.dropboxforum.com/hc/communities/public/questions/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span></div>').css('padding-bottom', '33px');
 $('head').append('<style>.gsDropboxExtenderModalClose:hover{cursor:pointer}.alert-center{width:500px;position:absolute;left:50%;margin-left:-250px;z-index:1}.alert-warning{background-color:rgba(252,248,227,0.8);background-image:linear-gradient(to bottom,rgba(252,248,227,0.8) 0%,rgba(248,239,192,0.8) 100%);border-color:#f5e79e;color:rgba(138,109,59,0.8);background-image:-webkit-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-repeat:repeat-x}.alert-danger{background-color:rgba(242,222,222,0.8);background-image:linear-gradient(to bottom,rgba(242,222,222,0.8) 0%,rgba(231,195,195,0.8) 100%);border-color:#dca7a7;color:rgba(169,68,66,0.8);background-image:-webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-repeat:repeat-x}.alert-success{background-color:rgba(223,240,216,0.8);background-image:linear-gradient(to bottom,rgba(223,240,216,0.8) 0%,rgba(200,229,188,0.8) 100%);border-color:#b2dba1;color:rgba(60,118,61,0.8);background-image:-webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-repeat:repeat-x}.alert-info{background-color:rgba(217,237,247,0.8);background-image:linear-gradient(to bottom,rgba(217,237,247,0.8) 0%,rgba(185,222,240,0.8) 100%);border-color:#9acfea;color:rgba(49,112,143,0.8);background-image:-webkit-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-repeat:repeat-x}.alert{max-width:500px;margin-left:auto;margin-right:auto;text-align:center;padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;text-shadow:0 1px 0 rgba(255,255,255,.2);-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05)}.alert > p{margin-bottom:0}#gsDropboxExtenderNav>span{margin-left:20px}#gsDropboxExtenderNav{position:fixed;bottom:0;height:32px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px}</style>');
 $('#new_answer .answer-form-controls').prepend('<span id="gsDropboxExtenderPostExtras" style="float:left" />');
+
+//Element caching
+var $body = $('body'), $head = $('head');
+var $postField = $('#answer_body'), $postForm = $('#new_answer'), $postFormCleardiv = $postForm.find('div.clear');
+var $thread = $('section.answers'), $threadAuthor = $('.answer-meta'), $userRole = $threadAuthor.find('small a');
+var $latest = $('.question-list'), $latestQuestions = $latest.find('> li');
+var $forumList = $('.community-nav .pinned-categories'), $forumListRows = $forumList.find('div'), $forumListContainer = $('.community-nav');
+var $modal = $('#gsDropboxExtenderModal'), $screenOverlay = $('#gsDropboxExtenderScreenOverlay');
 
 if ($('#user-avatar').length) {
 	userId = $('#user-avatar').attr('src').split('/hc/user_avatars/')[1];
@@ -240,11 +240,12 @@ if (page.isPost) {
 
 	//Quoting
 	$('.gsDropboxExtenderQuotePost').on('click', function(evt) {
-		var SelectedText = $(evt.target).parent().parent().find('.post').eq(0).text().replace('\n', '\n\n');
-		insertSelectedQuote(SelectedText.substring(0, SelectedText.length - 1), getPostAuthorDetails(evt.target));
+		//var SelectedText = $(evt.target).parent().parent().find('.question-text > *, .answer-text > *').text().replace('\n', '\n\n');
+		var selectedText = htmlToMarkdown($(evt.target).parent().parent().find('.question-text, .answer-text').html());
+		insertSelectedQuote(selectedText.substring(0, selectedText.length - 1), getPostAuthorDetails(evt.target));
 	});
 	$('.gsDropboxExtenderQuoteSelected').on('click', function(evt) {
-		insertSelectedQuote(getSelectedText(), getPostAuthorDetails(evt.target));
+		insertSelectedQuote(htmlToMarkdown(getSelectedHtml()), getPostAuthorDetails(evt.target));
 	});
 
 	//Markup text
@@ -285,6 +286,21 @@ if (page.isPost) {
 			insertTextAtCursorPosition('[' + $('#gsDropboxExtenderAnchorTextBox').val() + '](' + $('#gsDropboxExtenderAnchorUrlBox').val() + ')');
 		});
 	});
+}
+
+function htmlToMarkdown(base) {
+	var baseSelect = base.replace(/<li>/g, '* ').replace(/<p>/g, '\n\n').replace(/<h1>/g, '# ').replace(/<h2>/g, '## ').replace(/<h3>/g, '### ').replace(/<h4>/g, '#### ').replace(/<h5>/g, '##### ').replace(/<h6>/g, '###### ').replace(/<\/?strong>/g, '**').replace(/<\/?i>/g, '*').replace(/<\/h1>|<\/h2>|<\/h3>|<\/h4>|<\/h5>|<\/h6>|<\/?ul>|<\/p>|<\/li>/g, '').replace(/<a href="/g, '[').replace(/(" .{1,})*">/g, '](').replace(/<\/a>/g, ')').replace(/\n\n/g, '\n');
+
+	//Split off links into separate array
+	var textArray = baseSelect.split(/\[.+\]\(.+\)/g); //Everybody stand back, I know regular expressions!
+	var linkArray = baseSelect.match(/\[.+\]\(.+\)/g);
+
+	//Swap text and link
+	for (i = 0, l = linkArray.length; i < l; i++) {
+		linkArray[i] = '[' + linkArray[i].split('](')[1].split(')')[0] + '](' + linkArray[i].split('[')[1].split('](')[0] + ')';
+	}
+
+	return interleave(textArray, linkArray).join('');
 }
 
 //Init pages
@@ -624,7 +640,7 @@ if (client.isAuthenticated()) {
 						onload: function(response) {
 							var resp = response.responseText;
 							if (resp != 'Incorrect token') {
-								$('#gsDropboxExtenderMsgCounter').html(resp == '0' ? '' : (' (' + resp + ')'));
+								$('#gsDropboxExtenderMsgCounter').html(resp > 0 ? (' (' + resp + ')') : '');
 							} else {
 								if ($('#gsDropboxExtenderMessageContainer form input[value="create-account"]').length === 0) {
 									$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="action" value="create-account" />');
@@ -688,14 +704,6 @@ if (client.isAuthenticated()) {
 /*
  * Graphics handling
  */
-
-//Float top header down page
-$body.css('padding-top', '115px');
-$('header.header').css({
-	'position': 'fixed',
-	'top': '0',
-	'z-index': '9999'
-});
 
 //Fix header logo height - sticks over header
 $('header.header .logo a').css('height', '115px');
@@ -838,14 +846,30 @@ function Url(value) {
  * Helper functions
  */
 
+function interleave(arr1, arr2) {
+	if (arr2.length > arr1.length) {
+		arr2.length = arr1.length;
+	}
+	var combinedArr = $.map(arr1, function(v, i) {
+		return [v, arr2[i]];
+	});
+	var newArr = new Array();
+	for(var i = 0, l = combinedArr.length; i < l; i++){
+		if (combinedArr[i]){
+			newArr.push(combinedArr[i]);
+		}
+	}
+	return newArr;
+}
+
 //Get post author markup
 function getPostAuthorDetails(postEventTarget) {
-	var stuff = $(postEventTarget).parent().parent().parent().find(".threadauthor").eq(0).find('strong').eq(0).clone().find('img').remove().end();
-	return '<a href="' + fullUrl.split('#')[0] + $(postEventTarget).parent().find('a[href^="#"]').attr('href') + '"><strong>' + ($(stuff).find('a').html() || $(stuff).html()) + '</strong> scribbled:</a>\n';
+	var stuff = $(postEventTarget).parent().find('.question-author, .answer-author');
+	return '**' + ($(stuff).find('a').html() || $(stuff).html()) + '** scribbled:\n';
 }
 
 function getUserId(postEventTarget) {
-	return $(postEventTarget).parent().parent().parent().find(".threadauthor").eq(0).find('a[href^="https://forums.dropbox.com/profile.php"]').eq(0).attr('href').split('id=')[1];
+	return $(postEventTarget).parent().parent().parent().find('.question-avatar, .answer-avatar').find('img').attr('src').split('/hc/user_avatars/')[1].split('?')[0];
 }
 
 //Insert markup at required position
@@ -899,7 +923,8 @@ function insertSelectedQuote(quote, postAuthorDetails) {
 
 		var SelectionStart = $postField[0].selectionStart;
 		var newlineNeeded = SelectionStart && $postField.val().charAt(SelectionStart - 1) != '\n';
-		var appendedText = (newlineNeeded ? '\n' : '') + '<blockquote>' + postAuthorDetails + quote + '</blockquote>\n';
+		var appendedText = '> ' + postAuthorDetails + quote;
+		appendedText = (newlineNeeded ? '\n' : '') + appendedText.split('\n').join('\n> ').split('\n> \n').join('\n>\n') + '\n\n';
 
 		insertTextAtCursorPosition(appendedText);
 		$postField.setCursorPosition(SelectionStart + appendedText.length);
@@ -912,6 +937,20 @@ function getSelectedText() {
 		return window.getSelection();
 	} else if (document.selection) {
 		return document.selection.createRange().text;
+	}
+}
+function getSelectedHtml() {
+	if (window.getSelection) {
+		var selection = window.getSelection();
+		if (selection.rangeCount > 0) {
+			var range = selection.getRangeAt(0);
+			var clonedSelection = range.cloneContents();
+			var div = document.createElement('div');
+			div.appendChild(clonedSelection);
+			return div.innerHTML;
+		}
+	} else if (document.selection) {
+		return document.selection.createRange().htmlText;
 	}
 }
 
