@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.7pre4b-----
+* Quoting now works on queries with no links
+
 -----2.3.0.7pre4a-----
 * Modals now show properly
 * Messaging no longer shows parentheses if message count is 0

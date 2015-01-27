@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.7pre4a
+// @version 2.3.0.7pre4b
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -240,11 +240,11 @@ if (page.isPost) {
 
 	//Quoting
 	$('.gsDropboxExtenderQuotePost').on('click', function(evt) {
-		//var SelectedText = $(evt.target).parent().parent().find('.question-text > *, .answer-text > *').text().replace('\n', '\n\n');
 		var selectedText = htmlToMarkdown($(evt.target).parent().parent().find('.question-text, .answer-text').html());
 		insertSelectedQuote(selectedText.substring(0, selectedText.length - 1), getPostAuthorDetails(evt.target));
 	});
 	$('.gsDropboxExtenderQuoteSelected').on('click', function(evt) {
+		console.log(htmlToMarkdown(getSelectedHtml()));
 		insertSelectedQuote(htmlToMarkdown(getSelectedHtml()), getPostAuthorDetails(evt.target));
 	});
 
@@ -292,15 +292,20 @@ function htmlToMarkdown(base) {
 	var baseSelect = base.replace(/<li>/g, '* ').replace(/<p>/g, '\n\n').replace(/<h1>/g, '# ').replace(/<h2>/g, '## ').replace(/<h3>/g, '### ').replace(/<h4>/g, '#### ').replace(/<h5>/g, '##### ').replace(/<h6>/g, '###### ').replace(/<\/?strong>/g, '**').replace(/<\/?i>/g, '*').replace(/<\/h1>|<\/h2>|<\/h3>|<\/h4>|<\/h5>|<\/h6>|<\/?ul>|<\/p>|<\/li>/g, '').replace(/<a href="/g, '[').replace(/(" .{1,})*">/g, '](').replace(/<\/a>/g, ')').replace(/\n\n/g, '\n');
 
 	//Split off links into separate array
-	var textArray = baseSelect.split(/\[.+\]\(.+\)/g); //Everybody stand back, I know regular expressions!
-	var linkArray = baseSelect.match(/\[.+\]\(.+\)/g);
+	var linkArray = baseSelect.match(/\[.+\]\(.+\)/g); //Everybody stand back, I know regular expressions!
+	console.log(linkArray);
+	if (!!linkArray) {
+		var textArray = baseSelect.split(/\[.+\]\(.+\)/g);
 
-	//Swap text and link
-	for (i = 0, l = linkArray.length; i < l; i++) {
-		linkArray[i] = '[' + linkArray[i].split('](')[1].split(')')[0] + '](' + linkArray[i].split('[')[1].split('](')[0] + ')';
+		//Swap text and link
+		for (i = 0, l = linkArray.length; i < l; i++) {
+			linkArray[i] = '[' + linkArray[i].split('](')[1].split(')')[0] + '](' + linkArray[i].split('[')[1].split('](')[0] + ')';
+		}
+
+		return interleave(textArray, linkArray).join('');
+	} else {
+		return baseSelect;
 	}
-
-	return interleave(textArray, linkArray).join('');
 }
 
 //Init pages
