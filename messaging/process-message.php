@@ -19,8 +19,11 @@ if ($_POST['userToken'] && $_POST['msgfrom']) {
 	}
 }
 if ($userAuthenticated && is_numeric($dest) && $dest != 0) {
-	mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($userid) . '", "' . sqlesc($_POST['msgtext']) . '", "' . time() . '")');
-	mysqli_close($db);
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (userid = '" . sqlesc($dest) . "') LIMIT 1");
+	if (mysqli_num_rows($result) == 1) {
+		mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($userid) . '", "' . sqlesc($_POST['msgtext']) . '", "' . time() . '")');
+		mysqli_close($db);
+	}
 }
 header('Location: ' . $_POST['returnto']);
 ?>
