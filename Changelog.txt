@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.7pre5b-----
+* Theme is no longer hardcoded, and will respect preferences, though the original theme has been removed
+
 -----2.3.0.7pre5a-----
 * Quoting now works on queries with no links
 * Fixed quirks with trailing whitespace on quotes

@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.7pre5a
+// @version 2.3.0.7pre5b
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -117,9 +117,6 @@ var temp, i, l;
 //Was main.before
 $('main').append('<div style="text-align: center; font-size: 11px;">Dropbox Forum Extender+ v' + GM_info.script.version + '</div>').css('margin-top', '14px');
 $('main nav.community-nav').css('padding-top', '14px');
-
-//Skin forums
-forumVersion("8.8.2012");
 
 highlightPost('Super User', color.gold);
 //highlightPost(500, color.green, 'Forum regular');
@@ -366,10 +363,9 @@ if (client.isAuthenticated()) {
 			return 0;
 		});
 
-		/*
 		if (theme.length) {
 			forumVersion(theme[0].get('value'));
-		}*/
+		}
 
 		//Custom signature
 		var sig = prefTable.query({name: 'signature'});
