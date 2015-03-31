@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.7pre4b
+// @version 2.3.0.7pre5a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -23,12 +23,17 @@
 /*
  * ** List of needed changes **
  *
- * $userRole fix
  * Reemphasize new replies to your threads
- * ** Sticky managing needs to be fixed
- * Thread reloading should be fixed now
  * ** Form values aren't preloaded in preferences menu
  * ** Quoting needs to have differentiation between ordered and unordered lists
+ * Messaging users directly from the forums does not work
+ * Nested quoting
+ * 
+ * ** Waiting on a published forum fix **
+ *
+ * $userRole fix
+ * ** Sticky managing needs to be fixed
+ * Thread reloading should be fixed now
  */
 
 //Set global variables
@@ -108,10 +113,13 @@ if ($('#user-avatar').length) {
 //Define empty variables
 var temp, i, l;
 
-//Add version number header.header div.header-inner
-$('main').prepend('<div style="text-align: center; font-size: 11px;">Dropbox Forum Extender+ v' + GM_info.script.version + '</div>').css('margin-top', '14px');
+//Add version number
+//Was main.before
+$('main').append('<div style="text-align: center; font-size: 11px;">Dropbox Forum Extender+ v' + GM_info.script.version + '</div>').css('margin-top', '14px');
 $('main nav.community-nav').css('padding-top', '14px');
 
+//Skin forums
+forumVersion("8.8.2012");
 
 highlightPost('Super User', color.gold);
 //highlightPost(500, color.green, 'Forum regular');
@@ -240,11 +248,10 @@ if (page.isPost) {
 
 	//Quoting
 	$('.gsDropboxExtenderQuotePost').on('click', function(evt) {
-		var selectedText = htmlToMarkdown($(evt.target).parent().parent().find('.question-text, .answer-text').html());
-		insertSelectedQuote(selectedText.substring(0, selectedText.length - 1), getPostAuthorDetails(evt.target));
+		var selectedText = htmlToMarkdown($.trim($(evt.target).parent().parent().find('.question-text, .answer-text').html()));
+		insertSelectedQuote(selectedText, getPostAuthorDetails(evt.target));
 	});
 	$('.gsDropboxExtenderQuoteSelected').on('click', function(evt) {
-		console.log(htmlToMarkdown(getSelectedHtml()));
 		insertSelectedQuote(htmlToMarkdown(getSelectedHtml()), getPostAuthorDetails(evt.target));
 	});
 
@@ -286,26 +293,6 @@ if (page.isPost) {
 			insertTextAtCursorPosition('[' + $('#gsDropboxExtenderAnchorTextBox').val() + '](' + $('#gsDropboxExtenderAnchorUrlBox').val() + ')');
 		});
 	});
-}
-
-function htmlToMarkdown(base) {
-	var baseSelect = base.replace(/<li>/g, '* ').replace(/<p>/g, '\n\n').replace(/<h1>/g, '# ').replace(/<h2>/g, '## ').replace(/<h3>/g, '### ').replace(/<h4>/g, '#### ').replace(/<h5>/g, '##### ').replace(/<h6>/g, '###### ').replace(/<\/?strong>/g, '**').replace(/<\/?i>/g, '*').replace(/<\/h1>|<\/h2>|<\/h3>|<\/h4>|<\/h5>|<\/h6>|<\/?ul>|<\/p>|<\/li>/g, '').replace(/<a href="/g, '[').replace(/(" .{1,})*">/g, '](').replace(/<\/a>/g, ')').replace(/\n\n/g, '\n');
-
-	//Split off links into separate array
-	var linkArray = baseSelect.match(/\[.+\]\(.+\)/g); //Everybody stand back, I know regular expressions!
-	console.log(linkArray);
-	if (!!linkArray) {
-		var textArray = baseSelect.split(/\[.+\]\(.+\)/g);
-
-		//Swap text and link
-		for (i = 0, l = linkArray.length; i < l; i++) {
-			linkArray[i] = '[' + linkArray[i].split('](')[1].split(')')[0] + '](' + linkArray[i].split('[')[1].split('](')[0] + ')';
-		}
-
-		return interleave(textArray, linkArray).join('');
-	} else {
-		return baseSelect;
-	}
 }
 
 //Init pages
@@ -363,7 +350,7 @@ if (client.isAuthenticated()) {
 		var userToken = configTable.query({name: 'userToken'});
 
 		var snippetList = [];
-		for (var i = 0, l = snippets.length; i < l; i++) {
+		for (i = 0, l = snippets.length; i < l; i++) {
 			snippetList[i] = {
 				name: snippets[i].get('name'),
 				value: snippets[i].get('value')
@@ -588,7 +575,7 @@ if (client.isAuthenticated()) {
 							return 0;
 						});
 						temp = '<option value="">' + $('#snippetlist option').eq(0).html() + '</option>';
-						for (var i = 0, l = snippetList.length; i < l; i++) {
+						for (i = 0, l = snippetList.length; i < l; i++) {
 							temp += '<option value="' + snippetList[i].name + '">' + snippetList[i].name + '</option>';
 						}
 						$('#snippetlist').html(temp);
@@ -740,100 +727,175 @@ $latestQuestions.css('padding', '15px 20px').find('.question-title').css('margin
 function forumVersion(versionDate) {
 	if (versionDate == '8.8.2012') {
 		//Reformat header
-		$('#header').css({
+		$('main').css({
 			'width': '990px',
-			'height': '174px',
-			'padding': '0',
-			'background': 'url(https://forum-extender-plus.s3-us-west-2.amazonaws.com/forumsheader.jpg)'
+			'margin': '0 auto',
+			'background': 'url(https://forum-extender-plus.s3-us-west-2.amazonaws.com/forumsheader.jpg) no-repeat center top'
 		});
-		$('.login').css({
+
+		if (page.front.active || page.isTopic) {
+			$('main').prepend('<div id="lfloat" style="float:left"><h2>Forums</h2></div><div id="rfloat" style="float:right"><h2>Latest Discussions</h2></div>');
+			$('#lfloat h2, #rfloat h2').css({
+				'line-height': '15px',
+				'margin': '0 0 19px',
+				'font-size': '17px',
+				'font-weight': 'bold',
+				'color': '#555'
+			});
+		}
+
+		//Set up header and floats
+		$('main').prepend('<div id="header" class="clearfix" />');
+		$('#header').css('height', '94px');
+
+		//Append user login nav
+		var userNav = 'Welcome, <a href="/hc/requests?community_id=public">' + $('#user-name').html() + '</a>';
+		userNav += ' | <a href="https://support.zendesk.com/forums/22315622" target="_blank">Help</a>';
+		if ($('#user-menu a:contains("Open agent interface")').length > 0) {
+			userNav += ' | <a href="/access/return_to?return_to=https://dropboxforum.zendesk.com/agent" target="_blank">Admin</a>';
+		}
+		var $langChange = $('.dropdown.language-selector .dropdown-menu a');
+		userNav += ' | <a href="' + $langChange.attr('href') + '">' + $langChange.html() + '</a>';
+		userNav += ' | <a href="/access/logout">Log Out</a>';
+		$('#header').append('<span id="greet">' + userNav + '</span>');
+		$('#header a').css({
+			'text-decoration': 'none',
+			'color': '#1f75cc'
+		});
+		$('#greet').css({
 			'float': 'left',
 			'clear': 'none',
-			'margin-top': '5px',
-			'position': 'static',
 			'font-size': '12px',
 			'font-weight': 'normal'
 		});
-		$('.search').css({
-			'float': 'right',
-			'clear': 'none',
-			'margin': '5px',
-			'position': 'static'
-		});
-		$latest.find('th a').css('color', '#aaa');
-		//TODO: latestHeader widths: 545, 46, 90, 69px
-		$('.sticky, .super-sticky').css('background', '#f4faff');
 
-		//Style table headers
-		$forumList.add($latest).find('th').css({
-			'background': '#666',
-			'color': '#fff'
-		});
-		$forumListRows.eq(0).css({
-			'height': '25px',
-			'padding': 'none'
+		//Append logo
+		$('#header').append('<a id="logoLink" href="' + page.front.value + '"></a>');
+		$('#logoLink').html($('.logo img').clone().attr('id', 'logoIcon'));
+		$('#logoLink').css({
+			'float': 'left',
+			'position': 'relative',
+			'top': '28px',
+			'left': '-278px'
 		});
 
-		//Add and style headings
-		$('#discussions').prepend('<h2 class="forumheading">Latest Discussions</h2>');
-		$forumListContainer.prepend('<h2 class="forumheading">' + $forumList.find('th').html() + '</h2>');
-		$('.forumheading').css({
-			'border-bottom': '1px solid #ddd',
-			'padding-bottom': '6px'
+		//Append search form
+		$('#header').append('<form class="search" method="get" action="' + $('form.search').attr('action') + '" accept-charset="UTF-8" />');
+		$('header').remove();
+		$('form.search').html('<input id="q" size="14" style="height:28px;width:170px;margin-right:3px"></input><input class="bluebutton" type="button" style="height:30px;width:101px" value="Search »"></input>');
+		$('form.search').css({
+			'margin': '0',
+			'padding': '0',
+			'position': 'relative',
+			'top': '-7px'
 		});
 
-		$forumList.find('th').html('Name');
-	} else if (versionDate == 'original') {
-		$('#main, #header').css('width', '866px');
-		$('#header a:first img').attr('src', 'http://web.archive.org/web/20100305012731im_/http://wiki.dropbox.com/wiki/dropbox/img/new_logo.png');
-		$('#discussions').css('margin-left', '0');
-		$latest.find('tr:not(:first, .nochange)').add('.bb-root').css('background', '#f7f7f7');
-		$latest.css({
-			'width': '680px',
-			'border-top': '1px dotted #ccc'
-		}).add('.alt').css('background', '#fff');
-		$('.sticky, .super-sticky').css('background', '#deeefc');
+		//Style tables
+		if (page.front.active || page.isTopic) {
+			var forumList = new ThemedTable('forumlist', ['Name'], '210px');
+			forumList.add(['<a href="' + page.topic.gettingStarted.value + '">Getting Started</a>']);
+			forumList.add(['<a href="' + page.topic.bugs.value + '">Bugs & Troubleshooting</a><br /><span>Tell us what\'s wrong</span>']);
+			forumList.add(['<a href="' + page.topic.desktopClient.value + '">Desktop Client Beta</a><br /><span>All things Desktop Client Beta!</span>']);
+			forumList.add(['<a href="' + page.topic.apiDev.value + '">API Development</a><br /><span>Questions relating to our API</span>']);
+			forumList.add(['<a href="' + page.topic.everythingElse.value + '">Everything Else</a><br /><span>For stuff that doesn\'t fit elsewhere</span>']);
+			forumList.add(['<a href="' + page.topic.mailbox.value + '">Mailbox</a>']);
+			forumList.add(['<a href="' + page.topic.carousel.value + '">Carousel</a>']);
+			$('#lfloat').append(forumList.value);
+			$('.community-nav').remove();
+			$('#forumlist a').css({
+				'color': '#1f75cc',
+				'text-decoration': 'none'
+			});
+			$('#forumlist tr:not(:first)').css('line-height', '17px');
+			$('#forumlist td span').css('font-size', '11px');
 
-		//Add tag list and reorder elements
-		if (page.front || page.isTopic) {
-			var tagList = ['R.M. is king', 'Andy is the man', 'thightower is awesome', 'yay I added a tag too!', 'love', 'sponge', 'one million TB free space', 'U U D D L R L R B A START', 'Parker is cool too', 'Marcus your also cool', 'Dropbox is the best'];
-			$('#main').prepend('<div id="hottags"><h2>Hot Tags</h2><p id="frontpageheatmap" class="frontpageheatmap" /></div>');
-			temp = '';
-			for (i = 0, l = tagList.length; i < l; i++) {
-				temp += '<a href="#" style="font-size: ' + ((Math.random() * 17) + 8) + 'px">' + tagList[i] + '</a> ';
+			var topicHeader = '<span style="float:left">Topic — <a href="' + page.newPost.value + '" style="font-style:italic">Add New »</a></span><span style="float:right">Sort by:';
+			var sorts = $('.community-sub-nav ul li');
+			for (var i = 0, l = sorts.length; i < l; i++) {
+				topicHeader += ' ' + sorts.eq(i).html();
 			}
-			$('#frontpageheatmap').append(temp.substring(0, temp.length - 1));
-			var select;
-			temp = '';
-			for (i = 1; i < $forumListRows.length; i++) {
-				select = $forumListRows.eq(i).find('td').html().split('<br>');
-				temp += '<tr class="bb-precedes-sibling bb-root"><td>' + select[0] + select[1] + '</td><td class="num">' + select[2].split(' topics')[0] + '</td><td class="num">' + select[2].split(' topics')[0] + '+</td></tr>';
+			topicHeader += '</span>';
+			$('.community-sub-nav').remove();
+			var topicList = new ThemedTable('latest', [topicHeader, 'Posts', 'Last Poster', 'Freshness'], ['547px', '48px', '92px', '71px']);
+			var topics = $('.question-list li.question:not(.sticky-post)');
+			var topic, topicMeta, title, count, last, freshness;
+			for (var i = 0, l = topics.length; i < l; i++) {
+				topic = topics.eq(i);
+				topicMeta = topic.find('.question-meta');
+
+				title = topic.find('.question-title').html();
+				posts = parseInt(topicMeta.find('.question-answers').html(), 10) + 1;
+				last = topicMeta.find('.question-author').html();
+				freshness = topicMeta.find('.question-published').html().split(' ago')[0];
+
+				topicList.add([title, posts, last, freshness]);
 			}
-			$forumListContainer.remove();
-			$('#discussions').prepend('<h2>Forums</h2><table id="forumlist"><tr><th align="left">Category</th><th>Topics</th><th>Posts</th></tr>' + temp + '</table><h2>Latest Discussions</h2>');
-			$forumList.html(temp);
+			$('#rfloat').append(topicList.value);
+			$('#latest th a').css({
+				'color': '#ccc',
+				'font-weight': 'normal'
+			});
+			$('#latest a').css('text-decoration', 'none');
+			$('#latest td:nth-child(1) a, #latest td:nth-child(2), #latest td:nth-child(4)').css('color', '#1f75cc');
+			$('#latest td:not(:nth-child(1))').css('font-size', '11px');
+			$('.question-list').hide();
+			$('body').on('DOMNodeInserted', '.question-list li.sticky-post', function() {
+				var topic, topicMeta, title, count, last, freshness;
+				$topic = $(this);
+				$topicMeta = $topic.find('.question-meta');
+
+				title = '[sticky] ' + $topic.find('.question-title').html().replace('★  ', '');
+				posts = '';
+				last = '';
+				freshness = '';
+
+				topicList.sticky([title, posts, last, freshness]);
+				$('#latest').html($(topicList.value).html());
+				$('#latest td:nth-child(1) a, #latest td:nth-child(2), #latest td:nth-child(4)').css('color', '#1f75cc');
+				$('#latest tr td:not(:nth-child(1))').css('font-size', '11px');
+				$('#latest tr.sticky td:nth-child(1)').css('font-size', '14px');
+				$('#latest th a').css({
+					'color': '#ccc',
+					'font-weight': 'normal'
+				});
+				$('#latest a').css('text-decoration', 'none');
+			}).on('DOMNodeInserted', '#latest tr p', function() { //Get rid of those pesky admin user details that mess up our tables
+				$(this).remove();
+			});/*.on('DOMSubtreeModified', '#latest td:nth-child(4) time', function() {
+				if ($.contains(this, ' ago')) {
+					$(this).html($(this).html().split(' ago')[0]);
+				}
+			});*/
+		} else {
+			$('#header').css('height', '174px')
 		}
 
-		//Style elements
-		$('#discussions').css({
-			'width': '680px',
-			'margin-right': '170px',
-			'margin-left': '0'
-		});
-		$('#hottags').css({
-			'position': 'absolute',
-			'right': '0',
-			'left': 'auto'
-		});
-
-		$('frontpageheatmap').css('border-top', '1px dotted #ccc');
-		$forumList.css({
-			'background': '#fff',
-			'border-top': '1px dotted #ccc'
-		});
-		$('h2').css({
-			'color': '#000',
-			'margin-bottom': '0'
+		//Style buttons
+		$('.bluebutton').css({
+			'text-shadow': '#355782 0 1px 2px',
+			'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.3),inset 0px 1px 0px #83C5F1',
+			'padding': '5px 16px',
+			'background-color': '#2180ce',
+			'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+			'background-image': '-webkit-gradient(linear, left top, left bottom, from(#33a0e8), to(#2180ce))',
+			'background-image': '-moz-linear-gradient(top, #33a0e8, #2180ce)',
+			'font-weight': 'bold',
+			'font-size': '13px',
+			'line-height': '15px'
+		}).on('mouseover', function() {
+			$(this).css({
+				'background-color': '#2389dc',
+				'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+				'background-image': '-webkit-gradient(linear, left top, left bottom, from(#3baaf4), to(#2389dc))',
+				'background-image': '-moz-linear-gradient(top, #3baaf4, #2389dc)'
+			});
+		}).on('mouseout', function() {
+			$(this).css({
+				'background-color': '#2180ce',
+				'filter': 'progid:DXImageTransform.Microsoft.gradient(startColorstr="#3baaf4", endColorstr="#2389dc")',
+				'background-image': '-webkit-gradient(linear, left top, left bottom, from(#33a0e8), to(#2180ce))',
+				'background-image': '-moz-linear-gradient(top, #33a0e8, #2180ce)'
+			});
 		});
 	}
 }
@@ -847,9 +909,56 @@ function Url(value) {
     this.active = strippedUrl == this.value;
 }
 
+//Create a tabled themed with the 8.8.2012 theme
+function ThemedTable(id, cols, width) {
+	this.count = 0;
+	this.id = id;
+	this.width = width;
+	for (i = 0, l = cols.length; i < l; i++) {
+		cols[i] = '<th style="background:#666;color:#fff;padding:1px 9px 2px;font-size:11px;font-weight:bold;border:2px solid #f7f7f7' + (typeof this.width != 'string' ? (';width:' + this.width[i] + ';"') : '') + '">' + cols[i] + '</th>';
+	}
+	this.headers = '<tr>' + cols.join('') + '</tr>';
+	this.content = '';
+	this.add = function(vals) {
+		this.count++;
+		for (i = 0, l = vals.length; i < l; i++) {
+			vals[i] = '<td style="border:2px solid #f7f7f7;padding:3px 10px;font-size:12.5px">' + vals[i] + '</td>';
+		}
+		this.content += '<tr style="background:' + ((this.count % 2 == 0 && this.count > 0) ? '#f7f7f7' : '#fff') + '">' + vals.join('') + '</tr>';
+		this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width == 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
+	};
+	this.sticky = function(vals) {
+		for (i = 0, l = vals.length; i < l; i++) {
+			vals[i] = '<td style="border:2px solid #f7f7f7;padding:3px 10px;font-size:12.5px">' + vals[i] + '</td>';
+		}
+		this.content = '<tr class="sticky" style="background:#f4faff">' + vals.join('') + '</tr>' + this.content;
+		this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width == 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
+	};
+	this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width == 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
+}
+
 /*
  * Helper functions
  */
+
+ function htmlToMarkdown(base) {
+	var baseSelect = base.replace(/<li>/g, '* ').replace(/<p>/g, '\n\n').replace(/<h1>/g, '# ').replace(/<h2>/g, '## ').replace(/<h3>/g, '### ').replace(/<h4>/g, '#### ').replace(/<h5>/g, '##### ').replace(/<h6>/g, '###### ').replace(/<\/?strong>/g, '**').replace(/<\/?i>/g, '*').replace(/<\/h1>|<\/h2>|<\/h3>|<\/h4>|<\/h5>|<\/h6>|<\/?ul>|<\/p>|<\/li>|<ol>|<\/ol>|<ul>|<\/ul>/g, '').replace(/<a href="/g, '[').replace(/(" .{1,})*">/g, '](').replace(/<\/a>/g, ')').replace(/\n\n/g, '\n');
+
+	//Split off links into separate array
+	var linkArray = baseSelect.match(/\[.+\]\(.+\)/g); //Everybody stand back, I know regular expressions!
+	if (!!linkArray) {
+		var textArray = baseSelect.split(/\[.+\]\(.+\)/g);
+
+		//Swap text and link
+		for (i = 0, l = linkArray.length; i < l; i++) {
+			linkArray[i] = '[' + linkArray[i].split('](')[1].split(')')[0] + '](' + linkArray[i].split('[')[1].split('](')[0] + ')';
+		}
+
+		return $.trim(interleave(textArray, linkArray).join(''));
+	} else {
+		return $.trim(baseSelect);
+	}
+}
 
 function interleave(arr1, arr2) {
 	if (arr2.length > arr1.length) {
@@ -870,7 +979,7 @@ function interleave(arr1, arr2) {
 //Get post author markup
 function getPostAuthorDetails(postEventTarget) {
 	var stuff = $(postEventTarget).parent().find('.question-author, .answer-author');
-	return '**' + ($(stuff).find('a').html() || $(stuff).html()) + '** scribbled:\n';
+	return '**' + ($(stuff).find('a').html() || $(stuff).html()) + '** scribbled:';
 }
 
 function getUserId(postEventTarget) {
@@ -928,24 +1037,17 @@ function insertSelectedQuote(quote, postAuthorDetails) {
 
 		var SelectionStart = $postField[0].selectionStart;
 		var newlineNeeded = SelectionStart && $postField.val().charAt(SelectionStart - 1) != '\n';
-		var appendedText = '> ' + postAuthorDetails + quote;
-		appendedText = (newlineNeeded ? '\n' : '') + appendedText.split('\n').join('\n> ').split('\n> \n').join('\n>\n') + '\n\n';
+		var appendedText = '> ' + postAuthorDetails + '\n' + quote;
+		appendedText = (newlineNeeded ? '\n' : '') + appendedText.split('\n').join('\n> ').split(/> {2,}/g).join('> ').split('\n> \n').join('\n>\n') + '\n\n';
 
 		insertTextAtCursorPosition(appendedText);
 		$postField.setCursorPosition(SelectionStart + appendedText.length);
 	}
 }
 
-//Get selected test for quoting
-function getSelectedText() {
-	if (window.getSelection) {
-		return window.getSelection();
-	} else if (document.selection) {
-		return document.selection.createRange().text;
-	}
-}
+//Get selected HTML for quoting
 function getSelectedHtml() {
-	if (window.getSelection) {
+	if (window.getSelection) { //window.getSelection()
 		var selection = window.getSelection();
 		if (selection.rangeCount > 0) {
 			var range = selection.getRangeAt(0);
@@ -954,7 +1056,7 @@ function getSelectedHtml() {
 			div.appendChild(clonedSelection);
 			return div.innerHTML;
 		}
-	} else if (document.selection) {
+	} else if (document.selection) { //document.selection.createRange.text
 		return document.selection.createRange().htmlText;
 	}
 }

@@ -1,8 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
------2.3.0.7pre4b-----
+-----2.3.0.7pre5a-----
 * Quoting now works on queries with no links
+* Fixed quirks with trailing whitespace on quotes
+# Defaulting to theme that's not so cumbersome
 
 -----2.3.0.7pre4a-----
 * Modals now show properly
