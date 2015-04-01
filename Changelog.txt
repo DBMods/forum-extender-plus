@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.7pre5c-----
+* Fixed reload loop on front page if preference set to never
+
 -----2.3.0.7pre5b-----
 * Theme is no longer hardcoded, and will respect preferences, though the original theme has been removed
 
