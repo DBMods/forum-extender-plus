@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.9-----
+* Fixed nav bar appending to reply form
+
 -----2.3.0.8-----
 + Added multi-language support for URL backend
 * Updated URL array for new forums
