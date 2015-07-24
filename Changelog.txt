@@ -1,6 +1,12 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.8-----
++ Added multi-language support for URL backend
+* Updated URL array for new forums
+* Topic page post highlighting is rewritten for the new forums
+# Updated jQuery from 1.11.0 to 2.1.4
+
 -----2.3.0.7-----
 * Fixed preferences menu not loading saved preferences
 * Fixed theming of the login nav charm when logged out

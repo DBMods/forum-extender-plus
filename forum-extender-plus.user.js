@@ -6,14 +6,14 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.7pre5c
-// @require https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
+// @version 2.3.0.8
+// @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
-// @resource customStyle http://techgeek01.com/dropboxextplus/css/style.css
-// @resource bootstrap http://techgeek01.com/dropboxextplus/css/bootstrap.css
-// @resource bootstrap-theme http://techgeek01.com/dropboxextplus/css/bootstrap-theme.css
+// @resource customStyle https://github.com/DBMods/forum-extender-plus/raw/master/styles/style.css
+// @resource bootstrap https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap.css
+// @resource bootstrap-theme https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap-theme.css
 // @grant GM_xmlhttpRequest
 // @grant GM_getResourceText
 // @grant GM_setValue
@@ -28,7 +28,8 @@
  * ** Quoting needs to have differentiation between ordered and unordered lists
  * Messaging users directly from the forums does not work
  * Nested quoting
- * 
+ * Fix Super User links
+ *
  * ** Waiting on a published forum fix **
  *
  * $userRole fix
@@ -37,7 +38,9 @@
  */
 
 //Set global variables
-var fullUrl = window.location.href, strippedUrl = fullUrl.split('?')[0], pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/')[1], urlVars = getUrlVars(), modalOpen = false, userId = '';
+var fullUrl = window.location.href, strippedUrl = fullUrl.split('?')[0];
+var lang = fullUrl.split('https://www.dropboxforum.com/hc/')[1].split('/')[0];
+var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang)[1], urlVars = getUrlVars(), modalOpen = false, userId = '';
 var color = {
 	green: '#beff9e',
 	lightGreen: '#daffc7',
@@ -50,21 +53,29 @@ $('head').append('<style>.textinput{padding:0px!important}</style>');
 
 //Set up page parameters and list
 var page = {
-	front: new Url('https://www.dropboxforum.com/hc/communities/public/questions'),
-	newPost: new Url('https://www.dropboxforum.com/hc/communities/public/questions/new'),
-	unanswered: new Url('https://www.dropboxforum.com/hc/communities/public/questions/unanswered'),
+	front: new Url(''),
+	newPost: new Url('community/posts/new'),
+	//unanswered: new Url('https://www.dropboxforum.com/hc/communities/public/questions/unanswered'),
 	topic: {
-		list: new Url('https://www.dropboxforum.com/hc/communities/public/topics'),
-		apiDev: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200209245-API-Development'),
-		bugs: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200203389-Bugs-Troubleshooting'),
-		carousel: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200211225-Carousel'),
-		desktopClient: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200210355-Desktop-Client-Beta'),
-		everythingElse: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200209235-Everything-Else'),
-		gettingStarted: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200204189-Getting-Started'),
-		mailbox: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200211215-Mailbox')
+		//list: new Url('https://www.dropboxforum.com/hc/communities/public/topics'),
+		apiDev: new Url('community/topics/200209245-API-Development'),
+		bugs: new Url('community/topics/200203389-Bugs-Troubleshooting'),
+		carousel: new Url('community/topics/200211225-Carousel-Photos'),
+		desktopClient: new Url('community/topics/200210355-Desktop-Client-Builds'),
+		dfb: new Url('community/topics/200284219-Dropbox-for-Business'),
+		//everythingElse: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200209235-Everything-Else'),
+		feedback: new Url('community/topics/200209235-Product-Feedback'),
+		//gettingStarted: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200204189-Getting-Started'),
+		mailbox: new Url('community/topics/200211215-Mailbox'),
+		mobile: new Url('community/topics/200277665-Mobile'),
+		personal: new Url('community/topics/200204189-Your-Personal-Dropbox'),
+		deBugs: new Url('community/topics/200220199--DE-Fehler-und-Probleml%C3%B6sungen'),
+		deOther: new Url('community/topics/200229725--DE-Allgemeine-Fragen'),
+		frBugs: new Url('community/topics/200303965--FR-Probl%C3%A8mes-et-r%C3%A9solution'),
+		frOther: new Url('community/topics/200294229--FR-Autres-sujets')
 	},
-	isPost: $('#new_answer').length > 0,
-	isTopic: pageUrl.indexOf('communities/public/topics') == 0,
+	isPost: pageUrl.indexOf('/community/posts') > -1,
+	isTopic: pageUrl.indexOf('/community/topics') > -1,
 	check: function(check) {
 		if (typeof check == 'string' && check.indexOf('://') > -1) {
 			//Check if a URL is listed
@@ -102,7 +113,7 @@ $('#new_answer .answer-form-controls').prepend('<span id="gsDropboxExtenderPostE
 var $body = $('body'), $head = $('head');
 var $postField = $('#answer_body'), $postForm = $('#new_answer'), $postFormCleardiv = $postForm.find('div.clear');
 var $thread = $('section.answers'), $threadAuthor = $('.answer-meta'), $userRole = $threadAuthor.find('small a');
-var $latest = $('.question-list'), $latestQuestions = $latest.find('> li');
+var $latest = $('main'), $latestQuestions = $latest.find('div.post-overview');
 var $forumList = $('.community-nav .pinned-categories'), $forumListRows = $forumList.find('div'), $forumListContainer = $('.community-nav');
 var $modal = $('#gsDropboxExtenderModal'), $screenOverlay = $('#gsDropboxExtenderScreenOverlay');
 
@@ -118,7 +129,7 @@ var temp, i, l;
 $('main').append('<div style="text-align: center; font-size: 11px;">Dropbox Forum Extender+ v' + GM_info.script.version + '</div>').css('margin-top', '14px');
 $('main nav.community-nav').css('padding-top', '14px');
 
-highlightPost('Super User', color.gold);
+//highlightPost('Super User', color.gold);
 //highlightPost(500, color.green, 'Forum regular');
 //highlightPost(100, color.lightGreen, 'New forum regular');
 
@@ -147,11 +158,14 @@ highlightThread(2, color.lightGold);
 highlightThread(3, color.lightRed);
 
 function highlightThread() {
-	var args = arguments, $threadList = $latest.find('.question:not(.sticky-post) .question-meta .question-answers'), content;
-	for (i = 0, l = $threadList.length; i < l; i++) {
-		content = parseInt($threadList.eq(i).html(), 10);
-		if (content >= args[0] - 1 && content <= args[args.length - 2] - 1) {
-			$threadList.eq(i).parent().parent().addClass('nochange').css('background', args[args.length - 1]);
+	if (page.isTopic) {
+		var args = arguments, $threadList = $latestQuestions.find('.post-overview-count:eq(0) strong'), content;
+		//TODO filter out sticky threads
+		for (i = 0, l = $threadList.length; i < l; i++) {
+			content = parseInt($threadList.eq(i).html(), 10);
+			if (content >= args[0] - 1 && content <= args[args.length - 2] - 1) {
+				$threadList.eq(i).parent().parent().addClass('nochange').css('background', args[args.length - 1]);
+			}
 		}
 	}
 }
@@ -176,7 +190,6 @@ if (page.isPost) {
 			//Add post count for tracking purposes
 			var postNumbers = GM_getValue('postNumbers', [0]);
 			postNumbers[todayThreads.indexOf(urlVars.id)] = parseInt($('#topic_posts').html().split('(')[1].split(' ')[0], 10) + 1;
-
 		}
 	});
 }
@@ -215,7 +228,7 @@ if ($('#topic-info .topictitle:contains(") - "):contains(" Build - ")').length) 
 					var newSticky = $(response.responseText).find('td:contains("' + threadType + '") big a');
 					if (newSticky.length) {
 						window.location.href = newSticky.eq(0).attr('href');
-					
+
 }				}
 			});
 		});
@@ -335,8 +348,6 @@ if (client.isAuthenticated()) {
 			document.location.reload();
 		}
 
-		console.log('Auth');
-
 		//Get tables
 		var prefTable = datastore.getTable('prefs');
 		var draftTable = datastore.getTable('draft');
@@ -366,7 +377,7 @@ if (client.isAuthenticated()) {
 		});
 
 		if (theme.length) {
-			forumVersion(theme[0].get('value'));
+			//forumVersion(theme[0].get('value'));
 		}
 
 		//Custom signature
@@ -471,14 +482,14 @@ if (client.isAuthenticated()) {
 			//Load current settings
 			var pref, $elemList = $('#main select, #main textarea, #main input[type="checkbox"]'), $elem;
 			for (i = 0, l = $elemList.length; i < l; i++) {
-				$elem = $elemList.eq(i), pref = prefTable.query({preferences: $elem.attr('name')})[0];
+				$elem = $elemList.eq(i), pref = prefTable.query({preference: $elem.attr('name')})[0];
 				if (pref) {
 					if ($elem.is('select')) {
-						$elem.find('option[value="' + pref[0].get('value') + '"]').attr('selected', 'selected');
+						$elem.find('option[value="' + pref.get('value') + '"]').attr('selected', 'selected');
 					} else if ($elem.is('texarea')) {
-						$elem.val(pref[0].get('value'));
+						$elem.val(pref.get('value'));
 					} else if ($elem.is('input[type="checkbox"]')) {
-						$elem.prop('checked', pref[0].get('value'));
+						$elem.prop('checked', pref.get('value'));
 					}
 				}
 			}
@@ -747,14 +758,20 @@ function forumVersion(versionDate) {
 		$('#header').css('height', '94px');
 
 		//Append user login nav
-		var userNav = 'Welcome, <a href="/hc/requests?community_id=public">' + $('#user-name').html() + '</a>';
-		userNav += ' | <a href="https://support.zendesk.com/forums/22315622" target="_blank">Help</a>';
-		if ($('#user-menu a:contains("Open agent interface")').length > 0) {
-			userNav += ' | <a href="/access/return_to?return_to=https://dropboxforum.zendesk.com/agent" target="_blank">Admin</a>';
+		var $langChange = $('.dropdown.language-selector .dropdown-menu a'), userNav;
+		if (userId) {
+			userNav = 'Welcome, <a href="/hc/requests?community_id=public">' + $('#user-name').html() + '</a>';
+			userNav += ' | <a href="https://support.zendesk.com/forums/22315622" target="_blank">Help</a>';
+			if ($('#user-menu a:contains("Open agent interface")').length > 0) {
+				userNav += ' | <a href="/access/return_to?return_to=https://dropboxforum.zendesk.com/agent" target="_blank">Admin</a>';
+			}
+			userNav += ' | <a href="' + $langChange.attr('href') + '">' + $langChange.html() + '</a>';
+			userNav += ' | <a href="/access/logout">Log Out</a>';
+		} else {
+			var loginBtn = $('a.login');
+			userNav = 'Welcome. <a href="' + loginBtn.attr('href') + '">Log in</a>';
+			userNav += ' | <a href="' + $langChange.attr('href') + '">' + $langChange.html() + '</a>';
 		}
-		var $langChange = $('.dropdown.language-selector .dropdown-menu a');
-		userNav += ' | <a href="' + $langChange.attr('href') + '">' + $langChange.html() + '</a>';
-		userNav += ' | <a href="/access/logout">Log Out</a>';
 		$('#header').append('<span id="greet">' + userNav + '</span>');
 		$('#header a').css({
 			'text-decoration': 'none',
@@ -903,8 +920,14 @@ function forumVersion(versionDate) {
  */
 
 function Url(value) {
-    this.value = value;
-    this.active = strippedUrl == this.value;
+	var args = arguments;
+	if (args.length == 1) {
+		this.value = 'https://www.dropboxforum.com/hc/' + lang;
+		if (value) {
+			this.value += '/' + value;
+		}
+		this.active = strippedUrl == this.value;
+	}
 }
 
 //Create a tabled themed with the 8.8.2012 theme
@@ -995,7 +1018,7 @@ function insertAndMarkupTextAtCursorPosition() {
 	};
 	var SelectedTextStart = $postField[0].selectionStart, SelectedTextEnd = $postField[0].selectionEnd, EndCursorPosition = SelectedTextStart, SelectedText = '';
 	if (SelectedTextEnd - SelectedTextStart) {
-		SelectedText = $postField.val().substring(SelectedTextStart, SelectedTextEnd);
+		SelectedText = $postField.val().slice(SelectedTextStart, SelectedTextEnd);
 	}
 	var offset = 0, i = args.length, temp = SelectedText;
 	while (i--) {
@@ -1010,7 +1033,7 @@ function insertAndMarkupTextAtCursorPosition() {
 //Insert text at required position
 function insertTextAtCursorPosition(TextToBeInserted) {
 	var startPos = $postField[0].selectionStart;
-	$postField.val($postField.val().substring(0, startPos) + TextToBeInserted + $postField.val().substring($postField[0].selectionEnd));
+	$postField.val($postField.val().slice(0, startPos) + TextToBeInserted + $postField.val().slice($postField[0].selectionEnd));
 	$postField.setCursorPosition(startPos + TextToBeInserted.length);
 }
 
