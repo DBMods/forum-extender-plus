@@ -1,6 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.7-----
+* Fixed preferences menu not loading saved preferences
+* Fixed theming of the login nav charm when logged out
+
 -----2.3.0.7pre5c-----
 * Fixed reload loop on front page if preference set to never
 
