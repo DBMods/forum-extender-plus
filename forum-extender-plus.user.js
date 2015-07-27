@@ -6,11 +6,11 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.10pre1b
+// @version 2.3.0.10pre1c
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
-// @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
-// @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
+// @downloadURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
+// @updateURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
 // @resource customStyle https://github.com/DBMods/forum-extender-plus/raw/master/styles/style.css
 // @resource bootstrap https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap.css
 // @resource bootstrap-theme https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap-theme.css
@@ -400,7 +400,9 @@ if (client.isAuthenticated()) {
 			document.location.reload();
 		}
 
-		console.log('Opened Datastore')
+		console.log('Opened Datastore');
+
+		var userUid = client.dropboxUid();
 
 		//Get tables
 		var prefTable = datastore.getTable('prefs');
@@ -676,10 +678,12 @@ if (client.isAuthenticated()) {
 				});
 			}
 
-			var token = userToken[0].get('value') || '';
-			var msgFormAction = userToken.length ? '' : '<input type="hidden" name="action" value="create-account" />';
+			//var token = userToken[0].get('value') || '';
+			var token = '';
+			//var msgFormAction = userToken.length ? '' : '<input type="hidden" name="action" value="create-account" />';
+			var msgFormAction = '<input type="hidden" name="action" value="create-account" />';
 
-			//Handle messages
+			//Handle messages TODO This will be broken once private UIDs are assigned
 			$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">Message User</a>');
 			$('article.post .post-footer .post-follow').css('margin-right', '0.4rem');
 			$('.gsDropboxExtenderMessageUser').click(function() {
@@ -688,7 +692,7 @@ if (client.isAuthenticated()) {
 				});
 			});
 
-			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/new/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userId + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
+			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/new/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userUid + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
 			$('#gsDropboxExtenderMsgCounter').html('');
 			$('#gsDropboxExtenderMessageLink').attr('href', 'javascript:void(0)').attr('target', '');
 
