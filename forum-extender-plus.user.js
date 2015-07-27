@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.10pre1a
+// @version 2.3.0.10pre1b
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
@@ -683,12 +683,12 @@ if (client.isAuthenticated()) {
 			$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">Message User</a>');
 			$('article.post .post-footer .post-follow').css('margin-right', '0.4rem');
 			$('.gsDropboxExtenderMessageUser').click(function() {
-				showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="https://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
+				showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="https://www.techgeek01.com/dropboxextplus/new/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
 					$('#gsDropboxExtenderModalContent form').submit();
 				});
 			});
 
-			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userId + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
+			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/new/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userId + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
 			$('#gsDropboxExtenderMsgCounter').html('');
 			$('#gsDropboxExtenderMessageLink').attr('href', 'javascript:void(0)').attr('target', '');
 
@@ -696,7 +696,7 @@ if (client.isAuthenticated()) {
 				(function checkMessages() {
 					GM_xmlhttpRequest({
 						method: 'GET',
-						url: ('https://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userId + '&token=' + token),
+						url: ('https://www.techgeek01.com/dropboxextplus/new/count-messages.php?to=' + userId + '&token=' + token),
 						onload: function(response) {
 							var resp = response.responseText;
 							if (resp != 'Incorrect token') {
