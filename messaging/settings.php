@@ -3,26 +3,19 @@ require 'header.php';
 //Gets username of authenticated user
 $username = getUsername();
 function settingsView($viewOption) {
-	global $username, $modusername;
-	if ($viewOption=="changeFailPassword") {
-		//If username is fine but there is a password issue
-		//Don't need htmlspecialchars() here because this gets called after $modusername is checked
-		$fillusername = $modusername;
-	}else {
-		$fillusername = $username;
-	}
+	global $username;
 	?>
 		<div class="settings-form">
+			<h4 class="center">Username</h4>
+			<div class="form-group">
+				<label class="col-md-4 control-label">Username (cannot be changed)</label>
+				<div class="col-md-4">
+					<input type="text" value="<?php echo $username; ?>" disabled class="form-control input-md">
+				</div>
+			</div>
+			<br>
 			<form method="post" action="" class="form-horizontal">
 				<fieldset>
-					<h4 class="center">Change username</h4>
-					<div class="form-group">
-						<label class="col-md-4 control-label">Username</label>
-						<div class="col-md-4">
-							<input id="modusername" name="modusername" type="text" value="<?php echo $fillusername; ?>" class="form-control input-md">
-						</div>
-					</div>
-					<br>
 					<h4 class="center">Change password*</h4>
 					<div class="form-group">
 						<label class="col-md-4 control-label">Current password</label>
@@ -61,7 +54,6 @@ function writeSettingsHeader() {
 	echo '<h2>Settings</h2>';
 	echo '<p class="topline"></p>';
 }
-$modusername = $_POST['modusername'];
 $curpassword = $_POST['curpassword'];
 $modpassword = $_POST['modpassword'];
 $modverifypassword = $_POST['modverifypassword'];
@@ -70,11 +62,6 @@ if ($userAuthenticated) {
 	//getMessages() gets the navbar badge numbers
 	getMessages();
 	if (isset($_POST['modapply'])) {
-		//If user submitted settings form
-		//Check if username is already in use
-		$result = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($modusername) . "'");
-		$usernameResult = mysqli_fetch_array($result);
-
 		if (!empty($curpassword) && !empty($modpassword) && !empty($modverifypassword)){
 			//If password requested to be changed
 			$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($username) . "'");
@@ -91,32 +78,18 @@ if ($userAuthenticated) {
 			}
 		}
 
-		if ($usernameResult && $modusername != $username) {
-			//If requested username already exists
-			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Username already in use!</strong></p></div></div>";
-			writeSettingsHeader();
-			settingsView('changeFailUser');
-		}elseif (preg_match('[\W]', $modusername) || is_numeric($modusername) || empty($modusername) || strlen($modusername) > 15) {
-			//If requested username has bad characters
-			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Please choose a different username without special characters</strong></p></div></div>";
-			writeSettingsHeader();
-			settingsView('changeFailUser');
-		}elseif ($passwordFail) {
+		if ($passwordFail) {
 			//If current password is incorrect
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Wrong password</strong></p></div></div>";
 			writeSettingsHeader();
 			settingsView('changeFailPassword');
-		}elseif ($modpassword != $modverifypassword) {
+		} elseif ($modpassword != $modverifypassword) {
 			//If new passwords don't match
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Passwords not the same</strong></p></div></div>";
 			writeSettingsHeader();
 			settingsView('changeFailPassword');
-		}elseif ( ( $modusername==$username && isset($passwordMod) ) || ( $modusername != $username && !isset($passwordMod) ) || ( $modusername != $username && isset($passwordMod) ) ) {
+		} elseif (isset($passwordMod)) {
 			//No issues with changing settings AND something was modified
-			if (isset($modusername) && $username != $modusername) {
-				//Username is being changed
-				mysqli_query($db, "UPDATE users SET username='" . sqlesc($modusername) . "' WHERE userid='" . sqlesc($userid) . "' LIMIT 1");
-			}
 			if ($passwordMod) {
 				//If password is being changed
 				$chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
@@ -143,10 +116,9 @@ if ($userAuthenticated) {
 				$result = mysqli_query($db, "UPDATE users set password='" . sqlesc($modpasswordhash) . "', ext_token='" . sqlesc($token) . "' WHERE userid='" . sqlesc($userid) . "' LIMIT 1");
 			}
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Settings saved</strong></p></div></div>";
-			$username = $modusername;
 			writeSettingsHeader();
 			settingsView("changeSuccess");
-		}else{
+		} else {
 			//No settings changed
 			writeSettingsHeader();
 			settingsView("view");
