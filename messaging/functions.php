@@ -42,11 +42,11 @@ function deleteConfirm() {
 
 //Gather messages in inbox
 function getMessages() {
-	global $db, $userid, $result, $archive, $count, $countBadge, $archCount, $archBadge;
+	global $db, $username, $result, $archive, $count, $countBadge, $archCount, $archBadge;
 
 	//Get lists
-	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 0 ORDER BY `time` DESC");
-	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($userid) . "' AND `archived` = 1 ORDER BY `time` DESC");
+	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 0 ORDER BY `time` DESC");
+	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 ORDER BY `time` DESC");
 
 	//Message counter navbar badges
 	$count = mysqli_num_rows($result);
