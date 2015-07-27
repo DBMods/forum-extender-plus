@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.10pre1c
+// @version 2.3.0.10pre1d
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
@@ -45,7 +45,7 @@
 //Set global variables
 var fullUrl = window.location.href, strippedUrl = fullUrl.split('?')[0];
 var lang = fullUrl.split('https://www.dropboxforum.com/hc/')[1].split('/')[0];
-var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang)[1], urlVars = getUrlVars(), modalOpen = false, userId = '';
+var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang)[1] || '', urlVars = getUrlVars(), modalOpen = false, userId = '';
 var color = {
 	lightBlue: '#e7f2fc',
 	green: '#beff9e',

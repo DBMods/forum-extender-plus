@@ -1,6 +1,15 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.10pre1d-----
+* Fixed bug with urls if you're on the front page with a URL parameter that doesn't have a / before it
+
+-----2.3.0.10pre1c-----
+* Allow grabbing of Dropbox UIDs for the new messsage system
+
+-----2.3.0.10pre1b-----
+# Changed to temporary message system URLs
+
 -----2.3.0.10pre1a-----
 + Added mod topic to URL list
 + Script elements now are styled to match the forums
