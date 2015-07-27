@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.10pre1d
+// @version 2.3.0.10pre1e
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
@@ -678,10 +678,8 @@ if (client.isAuthenticated()) {
 				});
 			}
 
-			//var token = userToken[0].get('value') || '';
-			var token = '';
-			//var msgFormAction = userToken.length ? '' : '<input type="hidden" name="action" value="create-account" />';
-			var msgFormAction = '<input type="hidden" name="action" value="create-account" />';
+			var token = userToken[0].get('value') || '';
+			var msgFormAction = userToken.length ? '' : '<input type="hidden" name="action" value="create-account" />';
 
 			//Handle messages TODO This will be broken once private UIDs are assigned
 			$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">Message User</a>');

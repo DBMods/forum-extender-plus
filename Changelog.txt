@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.10pre1e-----
+* Re-added default system for message token grabbing
+
 -----2.3.0.10pre1d-----
 * Fixed bug with urls if you're on the front page with a URL parameter that doesn't have a / before it
 
