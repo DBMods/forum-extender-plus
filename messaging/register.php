@@ -58,7 +58,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 				$row = mysqli_fetch_array($result);
 				if ($row !== NULL) {//Is !== an error?
 					$random = "";
-					for ($i = 0; $i < 10; $i++) {
+					for ($i = 0; $i < 12; $i++) {
 						$random .= $chars[rand(0, strlen($chars) - 1)];
 					}
 				} else
@@ -69,7 +69,8 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 			$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 			$create_time = time();
 			$create_ip = $_SERVER['REMOTE_ADDR'];
-			$result = mysqli_query($db, "INSERT INTO `users` (userid, username, password, ext_token, create_time, create_ip) VALUES ('" . sqlesc($userid) . "', '" . sqlesc($username) . "', '" . sqlesc($password) . "', '" . sqlesc($token) . "', '" . sqlesc($create_time) . "', '" . sqlesc($create_ip) . "')");
+			$defaultUidOrigin = mySqli_fetch_assoc(mysqli_query($db, "SELECT * FROM `config` WHERE `setting` = 'default_uid_origin' LIMIT 1"));
+			$result = mysqli_query($db, "INSERT INTO `users` (userid, uid_origin, username, password, ext_token, create_time, create_ip) VALUES ('" . sqlesc($userid) . "', '" . sqlesc($username) . "', '" . $defaultUidOrigin['val'] . "', '" . sqlesc($password) . "', '" . sqlesc($token) . "', '" . sqlesc($create_time) . "', '" . sqlesc($create_ip) . "')");
 			echo '<h4 class="center">Account created. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the account creation process.</h4><p class="center">In order to finish the account creation process, we must redirect you back to the forums. However, this will only happen during registration.</p>';
 		}
 	}
