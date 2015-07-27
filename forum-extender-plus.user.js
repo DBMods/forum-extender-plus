@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.10pre1e
+// @version 2.3.0.10pre1f
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
@@ -698,7 +698,7 @@ if (client.isAuthenticated()) {
 				(function checkMessages() {
 					GM_xmlhttpRequest({
 						method: 'GET',
-						url: ('https://www.techgeek01.com/dropboxextplus/new/count-messages.php?to=' + userId + '&token=' + token),
+						url: ('https://www.techgeek01.com/dropboxextplus/new/count-messages.php?to=' + userUid + '&token=' + token),
 						onload: function(response) {
 							var resp = response.responseText;
 							if (resp != 'Incorrect token') {
