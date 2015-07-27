@@ -1,6 +1,17 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.10pre1a-----
++ Added mod topic to URL list
++ Script elements now are styled to match the forums
+* Sticky threads are now highlighted in blue
+* WYSIWYG editor is now removed in favor of plaintext, in order to properly work with quoting, snippets, and drafts
+* Snippets are fixed
+* Markdown is now converted back to HTML
+* Messaging system link is now appended to the nav bar immediately, as opposed to waiting for a datastore auth
+* User messaging from the forums is now partially fixed
+# Official thread link updated for new forums
+
 -----2.3.0.9-----
 * Fixed nav bar appending to reply form
 
