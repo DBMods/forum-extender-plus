@@ -10,8 +10,7 @@ if ($_GET['to'] && $_GET['token']) {
 	$row = mysqli_fetch_array($result);
 
 	if ($row) {
-		$username = mysqli_fetch_assoc($result);
-		$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username['username']) . "' AND `archived` = 0");
+		$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($row['username']) . "' AND `archived` = 0");
 		$msgcount = mysqli_num_rows($result);
 		echo $msgcount;
 	} else {
