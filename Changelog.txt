@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.3.0.10pre2a-----
++ Added message system update notice
+
 -----2.3.0.10pre1f-----
 # Fixed bug with message counter authentication
 
