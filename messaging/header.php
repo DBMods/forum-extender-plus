@@ -47,7 +47,7 @@ if ($_POST['userToken'] && $_POST['userid']) {
 	//This is how everything knows the user is authenticated
 	if ($row) {
 		$userAuthenticated = true;
-		$username = htmlspecialchars(0)$row['username']);
+		$username = htmlspecialchars($row['username']);
 		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
 		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
 	} else {
