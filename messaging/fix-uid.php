@@ -1,9 +1,8 @@
 <?php
+$uid = $_POST['uid'] or die('Insufficent permissions.');
+
 require 'header.php';
 
-//Pass in new UID, token, username
-
-$uid = $_POST['uid'];
 $username = $_POST['username'];
 $returnto = $_POST['returnto'];
 
@@ -16,7 +15,7 @@ echo '<p class="topline">';
 if ($row) {
 	//If we've successfully authenticated the user, update the token
 	$cfg = mysqli_fetch_array(mysqli_query($db, "SELECT * FROM `config` WHERE setting = 'default_uid_origin' LIMIT 1"));
-	mysqli_query($db, "UPDATE users SET userid='" . sqlesc($uid) . "', uid_origin='" . $cfg['val'] . "' WHERE (ext_token = '" . sqlesc($userToken) . "' AND username = '" . sqlesc($username) . "') LIMIT 1");
+	$result = mysqli_query($db, "UPDATE users SET userid='" . sqlesc($uid) . "', uid_origin='" . $cfg['val'] . "' WHERE (ext_token = '" . sqlesc($userToken) . "' AND username = '" . sqlesc($username) . "') LIMIT 1");
 
 	echo 'Success! Your user ID was updated successfully. You may now click <a href="' + $returnto + '">here</a> to return to the forums.';
 } else {
