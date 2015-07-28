@@ -2,11 +2,18 @@
 $senderror = '';
 if ($action == 'sendfwd') {
 	$dest = $_POST['fwdto'];
-	if (is_numeric($dest) && $dest != 0) {
-		mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `forward`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($userid) . '", "' . sqlesc($_POST['context']) . '", "' . sqlesc($_POST['fwdfrom']) . '", "' . time() . '")');
-		echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message sent.</strong></p></div></div>';
-	} else
+	if (!is_numeric($dest)) {
+		//If destination is not a numerical ID, check if the user exists
+		$result = mysqli_query($db, 'SELECT * FROM `users` WHERE `username` = "' . $dest . '"');
+		$row = mysqli_fetch_assoc($result);
+		if ($row) {
+			mysqli_query($db, 'INSERT INTO msglist (`to`, `from`, `msg`, `forward`, `time`) VALUES("' . sqlesc($dest) . '", "' . sqlesc($username) . '", "' . sqlesc($_POST['context']) . '", "' . sqlesc($_POST['fwdfrom']) . '", "' . time() . '")');
+			echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message sent.</strong></p></div></div>';
+		}
+	} else {
+		//Destination is a numeric ID
 		$senderror = '<div class="alert-center"><div id="alert-fade" class="alert alert-danger"><p><strong>Invalid destination.</strong></p></div></div>';
+	}
 }
 if ($action == 'forward' || $senderror) {
 	$showinbox = false;
