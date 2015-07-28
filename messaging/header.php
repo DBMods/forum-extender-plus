@@ -84,7 +84,7 @@ $userid = htmlspecialchars($_COOKIE['userid']);
 $userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $timeOffsetSeconds = $timeoffset * 60;
-$returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://forums.dropbox.com');
+$returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://www.dropboxforum.com');
 $action = $_POST['action'];
 
 //Not used yet, but may be in future
