@@ -29,6 +29,7 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 
 	//If extension is trying to get a token, redirect to login - This is how everything knows the user is authenticated
 	if ($row && $_POST['action'] != "create-account" && $_POST['action'] != "pass-token") {
+		$username = htmlspecialchars($row['username']);
 		$userAuthenticated = true;
 	} else {
 		$badCookie = true;
@@ -36,7 +37,7 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 	}
 }
 
-//If userToken and userid is posted, check login
+//If userToken and userid is posted, check login - Used for auth from userscsript
 if ($_POST['userToken'] && $_POST['userid']) {
 	$userToken = htmlspecialchars($_POST['userToken']);
 	$userid = htmlspecialchars($_POST['userid']);
@@ -46,6 +47,7 @@ if ($_POST['userToken'] && $_POST['userid']) {
 	//This is how everything knows the user is authenticated
 	if ($row) {
 		$userAuthenticated = true;
+		$username = htmlspecialchars(0)$row['username']);
 		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
 		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
 	} else {
@@ -71,6 +73,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
 		$userid = $row['userid'];
 		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
+		$username = htmlspecialchars($_POST['username']);
 	} else {
 		$badAuth = true;
 	}
