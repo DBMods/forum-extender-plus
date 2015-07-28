@@ -71,7 +71,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 			$create_ip = $_SERVER['REMOTE_ADDR'];
 			$defaultUidOrigin = mySqli_fetch_assoc(mysqli_query($db, "SELECT * FROM `config` WHERE `setting` = 'default_uid_origin' LIMIT 1"));
 			$result = mysqli_query($db, "INSERT INTO `users` (userid, uid_origin, username, password, ext_token, create_time, create_ip) VALUES ('" . sqlesc($userid) . "', '" . $defaultUidOrigin['val'] . "', '" . sqlesc($username) . "', '" . sqlesc($password) . "', '" . sqlesc($token) . "', '" . sqlesc($create_time) . "', '" . sqlesc($create_ip) . "')");
-			echo '<h4 class="center">Account created. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the account creation process.</h4><p class="center">In order to finish the account creation process, we must redirect you back to the forums. However, this will only happen during registration.</p>';
+			echo '<h4 class="center">Account created. Click <a href="' . $returnto . '?msgtoken=' . $token . '">here</a> to finish the account creation process.</h4><p class="center">In order to finish the account creation process, we must redirect you back to the forums. However, this will only happen during registration.</p>';
 		}
 	}
 
@@ -90,7 +90,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$token = mysqli_fetch_row($result);
 		$token = $token['0'];
-		echo '<h4 class="center">Successfully signed in. Click <a href="https://www.dropboxforum.com/hc/en-us?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
+		echo '<h4 class="center">Successfully signed in. Click <a href="' . $returnto . '?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
 	} else {
 		//Authentication unsuccessful
 		badAuth();
