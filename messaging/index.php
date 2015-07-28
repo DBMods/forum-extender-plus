@@ -1,12 +1,13 @@
 <?php
 require 'header.php';
 if ($userAuthenticated) {
-	if ($action == 'send')
-		include 'compose.php';
-	elseif ($action == 'delete' || $action == 'arch')
-		include 'manipulate-entry.php';
-	elseif ($action == 'forward' || $action == 'sendfwd')
-		include 'forward-message.php';
+	if ($action == 'send') {
+		require 'compose.php';
+	} elseif ($action == 'delete' || $action == 'arch') {
+		require 'manipulate-entry.php';
+	} elseif ($action == 'forward' || $action == 'sendfwd') {
+		require 'forward-message.php';
+	}
 
 	getMessages();
 
