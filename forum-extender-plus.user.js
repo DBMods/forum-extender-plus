@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.10pre2b
+// @version 2.3.0.10pre3a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
@@ -24,16 +24,13 @@
  * ** List of needed changes **
  *
  * Reemphasize new replies to your threads
- * ** Form values aren't preloaded in preferences menu
  * ** Quoting needs to have differentiation between ordered and unordered lists
  * Messaging users directly from the forums does not work
  * Nested quoting
  * Fix Super User links
- * Messaging link is not appended to the nav bar
  * Fix makePage() styling
  * Fix post drafting
  * Fix forum messaging
- *
  *
  * ** Waiting on a published forum fix **
  *
@@ -45,7 +42,7 @@
 //Set global variables
 var fullUrl = window.location.href, strippedUrl = fullUrl.split('?')[0];
 var lang = fullUrl.split('https://www.dropboxforum.com/hc/')[1].split('/')[0];
-var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang)[1] || '', urlVars = getUrlVars(), modalOpen = false, userId = '';
+var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')[1] || '', urlVars = getUrlVars(), modalOpen = false, userId = '';
 var color = {
 	lightBlue: '#e7f2fc',
 	green: '#beff9e',
@@ -81,8 +78,8 @@ var page = {
 		frBugs: new Url('community/topics/200303965--FR-Probl%C3%A8mes-et-r%C3%A9solution'),
 		frOther: new Url('community/topics/200294229--FR-Autres-sujets')
 	},
-	isPost: pageUrl.indexOf('/community/posts') > -1,
-	isTopic: pageUrl.indexOf('/community/topics') > -1,
+	isPost: pageUrl.indexOf('community/posts') > -1,
+	isTopic: pageUrl.indexOf('community/topics') > -1,
 	check: function(check) {
 		if (typeof check == 'string' && check.indexOf('://') > -1) {
 			//Check if a URL is listed
@@ -108,7 +105,7 @@ var page = {
 
 //Append necessary elements
 $('body.community-enabled').append('<div id="gsDropboxExtenderScreenOverlay" style="display:none;position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:0.7" /><div id="gsDropboxExtenderModal" style="display:none;position:fixed;background:#fff;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px"><a class="gsDropboxExtenderModalClose" style="font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block">x</a><h1 id="gsDropboxExtenderModalTitle" style="text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px"></h1><br /><br /><div id="gsDropboxExtenderModalContent" /><div id="gsDropboxExtenderModalActionButtons" style="text-align:right" /></div>');
-$('body.community-enabled').append('<div id="gsDropboxExtenderNav"><a href="http://www.dropboxforum.com/hc/' + lang + '/preferences"' + (!page.front.active ? ' target="blank"' : '') + '><img src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/resources/images/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /></a><span><a href="https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"> <span style="color:#aaa">(Connecting)</span></span></span><span style="font-weight:bold">Important Notice: The messaging system has been updated. If you have been previously registered, you need to trash your preferences before registering again.</span></div>').css('padding-bottom', '33px');
+$('body.community-enabled').append('<div id="gsDropboxExtenderNav"><a href="http://www.dropboxforum.com/hc/' + lang + '/preferences"' + (!page.front.active ? ' target="blank"' : '') + '><img src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/resources/images/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /></a><span><a href="https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"> <span style="color:#aaa">(Connecting)</span></span></span><span style="font-weight:bold">Important Notice: The messaging system has been updated. If you have previously registered, please trash your preferences and register again.</span></div>').css('padding-bottom', '33px');
 $('head').append('<style>.gsDropboxExtenderModalClose:hover{cursor:pointer}.alert-center{width:500px;position:absolute;left:50%;margin-left:-250px;z-index:1}.alert-warning{background-color:rgba(252,248,227,0.8);background-image:linear-gradient(to bottom,rgba(252,248,227,0.8) 0%,rgba(248,239,192,0.8) 100%);border-color:#f5e79e;color:rgba(138,109,59,0.8);background-image:-webkit-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-repeat:repeat-x}.alert-danger{background-color:rgba(242,222,222,0.8);background-image:linear-gradient(to bottom,rgba(242,222,222,0.8) 0%,rgba(231,195,195,0.8) 100%);border-color:#dca7a7;color:rgba(169,68,66,0.8);background-image:-webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-repeat:repeat-x}.alert-success{background-color:rgba(223,240,216,0.8);background-image:linear-gradient(to bottom,rgba(223,240,216,0.8) 0%,rgba(200,229,188,0.8) 100%);border-color:#b2dba1;color:rgba(60,118,61,0.8);background-image:-webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-repeat:repeat-x}.alert-info{background-color:rgba(217,237,247,0.8);background-image:linear-gradient(to bottom,rgba(217,237,247,0.8) 0%,rgba(185,222,240,0.8) 100%);border-color:#9acfea;color:rgba(49,112,143,0.8);background-image:-webkit-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-repeat:repeat-x}.alert{max-width:500px;margin-left:auto;margin-right:auto;text-align:center;padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;text-shadow:0 1px 0 rgba(255,255,255,.2);-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05)}.alert > p{margin-bottom:0}#gsDropboxExtenderNav>span{margin-left:20px}#gsDropboxExtenderNav{position:fixed;bottom:0;height:32px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px}</style>');
 
 //Element caching
@@ -123,6 +120,11 @@ if ($('#user-avatar').length) {
 	userId = $('#user-avatar').attr('src').split('gravatar.com/avatar/')[1].split('?')[0];
 }
 
+//Add version number
+//Was main.before
+$('main').append('<div style="text-align: center; font-size: 11px;">Dropbox Forum Extender+ v' + GM_info.script.version + '</div>').css('margin-top', '14px');
+$('main nav.community-nav').css('padding-top', '14px');
+
 //Bypass TinyMCE text box - Props to Zendesk for making this nearly impossible to do
 if (page.isPost) {
 	$postField.attr('name', 'gsDropboxExtenderTemp');
@@ -134,11 +136,6 @@ if (page.isPost) {
 
 //Define empty variables
 var temp, i, l;
-
-//Add version number
-//Was main.before
-$('main').append('<div style="text-align: center; font-size: 11px;">Dropbox Forum Extender+ v' + GM_info.script.version + '</div>').css('margin-top', '14px');
-$('main nav.community-nav').css('padding-top', '14px');
 
 //highlightPost('Super User', color.gold);
 //highlightPost(500, color.green, 'Forum regular');
@@ -173,7 +170,6 @@ highlightThread(3, color.lightRed);
 function highlightThread() {
 	if (page.isTopic) {
 		var args = arguments, $threadList = $latestQuestions.filter(':not(.post-pinned)').find('.post-overview-count:eq(0) strong'), content;
-		//TODO filter out sticky threads
 		for (i = 0, l = $threadList.length; i < l; i++) {
 			content = parseInt($threadList.eq(i).html(), 10);
 			if (content >= args[0] - 1 && content <= args[args.length - 2] - 1) {
@@ -683,15 +679,18 @@ if (client.isAuthenticated()) {
 			//Handle messages TODO This will be broken once private UIDs are assigned
 			$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">Message User</a>');
 			$('article.post .post-footer .post-follow').css('margin-right', '0.4rem');
-			$('.gsDropboxExtenderMessageUser').click(function() {
+			$('.gsDropboxExtenderMessageUser').click(function(evt) {
 				showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="https://www.techgeek01.com/dropboxextplus/new/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
-					$('#gsDropboxExtenderModalContent form').submit();
 				});
 			});
 
 			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/new/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userUid + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
 			$('#gsDropboxExtenderMsgCounter').html('');
 			$('#gsDropboxExtenderMessageLink').attr('href', 'javascript:void(0)').attr('target', '');
+
+			$('#gsDropboxExtenderMessageLink').on('click', function() {
+				$('#gsDropboxExtenderMessageContainer form').submit();
+			});
 
 			if (token) {
 				(function pollServer() {
@@ -707,12 +706,13 @@ if (client.isAuthenticated()) {
 								}
 								$('#gsDropboxExtenderMsgCounter').html(' (Bad token. Click to fix)');
 							} else if (resp == 'Bad UID origin') {
-								//If bad UID origin, change form to allow for fix
-								if ($('#gsDropboxExtenderMessageContainer form input[value="create-account"]').length === 0) {
-									$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="action" value="fix-uid" />');
-								} else {
-									$('#gsDropboxExtenderMessageContainer form input[value="create-account"]').attr('value', 'fix-uid');
-								}
+								//If bad UID origin, swap out form to allow for fix
+								$('#gsDropboExtenderMessageContainer form').remove();
+								$('#gsDropboxExtenderMessageLink').off('click').on('click', function() {
+									showModal(['OK', 'Cancel'], 'Fix User ID', 'In order to change your user ID, for security reasons, please enter the username you use in the messaging system.<br><br><form id="gsDropboxExtenderUidFixForm" action="https://www.techgeek01.com/dropboxextplus/new/fix-uid.php" method="post"><input name="username" placeholder="Username" required /><input type="hidden" name="userToken" value="' + token + '" /><input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="uid" value="' + userUid + '" /></form>', function() {
+										$('#gsDropboxExtenderUidFixForm').submit();
+									});
+								});
 								$('#gsDropboxExtenderMsgCounter').html(' (Bad user ID. Click to fix)');
 							} else {
 								//Display message count
@@ -723,10 +723,6 @@ if (client.isAuthenticated()) {
 					setTimeout(pollServer, 20000);
 				})();
 			}
-
-			$('#gsDropboxExtenderMessageLink').on('click', function() {
-				$('#gsDropboxExtenderMessageContainer form').submit();
-			});
 		}
 
 		/*
