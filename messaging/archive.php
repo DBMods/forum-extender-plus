@@ -16,6 +16,7 @@ if ($userAuthenticated) {
 			if (htmlentities($row['forward']) != 0) { //PHP 5.4 bug with htmlspecialchars()
 				echo ' (FWD ' . htmlentities($row['forward']) . ')'; //PHP 5.4 bug with htmlspecialchars()
 			}
+			echo '<br>Subject: ' . htmlspecialchars($row['subject']);
 			echo '<br>Message:<br>' . nl2br(htmlspecialchars($row['msg'])) . '</p>';
 			msgOptions($row, "unarch");
 		}

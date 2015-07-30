@@ -70,8 +70,26 @@ function getUsername() {
 
 //Append message options
 function msgOptions($row, $option = 'arch') {
-	echo '<form method="post" action="compose.php" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button></form>';
-	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/><input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/><input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/><button type="submit" class="btn btn-warning btn-sm" name="action" value="forward">Forward</button><button type="submit" class="btn btn-primary btn-sm" name="action" value="' . $option . '">' . ucfirst($option) . 'ive</button></form>';
+	//Reply
+	echo '<form method="post" action="compose.php" class="menu">';
+	echo '<input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/>';
+	echo '<input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/>';
+	echo '<input name="subject" type="hidden" value="' . htmlspecialchars($row['subject']) . '"/>';
+	echo '<input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/>';
+	echo '<button type="submit" class="btn btn-success btn-sm" name="action" value="compose">Reply</button>';
+	echo '</form>';
+
+	//Forward and archive
+	echo '<form method="post" action="" class="menu">';
+	echo '<input name="msgid" type="hidden" value="' . htmlspecialchars($row['id']) . '"/>';
+	echo '<input name="msgto" type="hidden" value="' . htmlspecialchars($row['from']) . '"/>';
+	echo '<input name="subject" type="hidden" value="' . htmlspecialchars($row['subject']) . '"/>';
+	echo '<input name="context" type="hidden" value="' . htmlspecialchars($row['msg']) . '"/>';
+	echo '<button type="submit" class="btn btn-warning btn-sm" name="action" value="forward">Forward</button>';
+	echo '<button type="submit" class="btn btn-primary btn-sm" name="action" value="' . $option . '">' . ucfirst($option) . 'ive</button>';
+	echo '</form>';
+
+	//Delete
 	echo '<a data-id="' . htmlspecialchars($row['id']) . '" class="open-alertDelete btn btn-danger btn-sm" href="#alertDelete">Delete</a>';
 }
 ?>
