@@ -1,18 +1,18 @@
 <?php
 require 'header.php';
-//Gets username of authenticated user
-$username = getUsername();
 function settingsView($viewOption) {
 	global $username;
 	?>
 		<div class="settings-form">
-			<h4 class="center">Username</h4>
-			<div class="form-group">
-				<label class="col-md-4 control-label">Username (cannot be changed)</label>
-				<div class="col-md-4">
-					<input type="text" value="<?php echo $username; ?>" disabled class="form-control input-md">
+			<fieldset class='form-horizontal'>
+				<h4 class="center">Username</h4>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Username (cannot be changed)</label>
+					<div class="col-md-4">
+						<input type="text" value="<?php echo $username; ?>" disabled class="form-control input-md">
+					</div>
 				</div>
-			</div>
+			</fieldset>
 			<br>
 			<form method="post" action="" class="form-horizontal">
 				<fieldset>
