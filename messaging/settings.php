@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 function settingsView($viewOption) {
 	global $username;
 	?>
@@ -130,5 +130,5 @@ if ($userAuthenticated) {
 	}
 
 }
-require 'footer.php';
+require_once 'footer.php';
 ?>

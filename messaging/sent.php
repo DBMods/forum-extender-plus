@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 if ($userAuthenticated) {
 	getMessages();
 
@@ -14,5 +14,5 @@ if ($userAuthenticated) {
 		}
 	}
 }
-require 'footer.php';
+require_once 'footer.php';
 ?>

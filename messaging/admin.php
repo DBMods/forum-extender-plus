@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 if ($userAuthenticated) {
 	getMessages();
   if ($username == 'TechGeek01' || $username == 'nathancheek') {
@@ -67,5 +67,5 @@ if ($userAuthenticated) {
     echo "<div class='alert-center'><div id='alert-fade' class='alert alert-danger'><p><strong>Not permitted</strong></p></div></div>";
   }
 }
-require 'footer.php';
+require_once 'footer.php';
 ?>

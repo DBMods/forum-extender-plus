@@ -1,6 +1,6 @@
 <?php
-require 'db-login.php';
-require 'functions.php';
+require_once 'db-login.php';
+require_once 'functions.php';
 
 //If userToken and userid is posted, check login
 if ($_GET['to'] && $_GET['token']) {

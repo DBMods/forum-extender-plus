@@ -1,7 +1,7 @@
 <?php
 $uid = $_POST['uid'] or die('Insufficent permissions.');
 
-require 'header.php';
+require_once 'header.php';
 
 $username = $_POST['username'];
 $returnto = $_POST['returnto'];
@@ -25,5 +25,5 @@ if ($row) {
 
 echo '</p>';
 
-require 'footer.php';
+require_once 'footer.php';
 ?>

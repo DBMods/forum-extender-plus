@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 if ($userAuthenticated) {
 	getMessages();
 	echo '<h2>Stats</h2>';
@@ -16,5 +16,5 @@ if ($userAuthenticated) {
 	echo '</p>';
 	echo '<script>var msgcount=' . $msgcount . ';var options={width: msgcount.toString().length, timing: 500};document.getElementById("msg-count-text").style.display="none";$("#msg-count").flapper(options).val(msgcount).change();</script>';
 }
-require 'footer.php';
+require_once 'footer.php';
 ?>

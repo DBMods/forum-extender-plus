@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 //if ($userAuthenticated) {
 	echo '<h2>Report a Problem</h2>';
 	echo '<p class="topline">';
@@ -34,5 +34,5 @@ require 'header.php';
 	}
 	echo '</p>';
 //}
-require 'footer.php';
+require_once 'footer.php';
 ?>

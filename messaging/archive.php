@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 if ($userAuthenticated) {
 	if ($action == 'delete' || $action == 'unarch')
 		include 'manipulate-entry.php';
@@ -25,5 +25,5 @@ if ($userAuthenticated) {
 			echo '<p class="topline center"><br>It doesn\'t appear that you have any archived messages.</p>';
 	}
 }
-require 'footer.php';
+require_once 'footer.php';
 ?>

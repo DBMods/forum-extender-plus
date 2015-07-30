@@ -1,6 +1,6 @@
 <?php
-require 'db-login.php';
-require 'functions.php';
+require_once 'db-login.php';
+require_once 'functions.php';
 
 $dest = $_POST['msgto'];
 if ($_POST['userToken'] && $_POST['msgfrom']) {

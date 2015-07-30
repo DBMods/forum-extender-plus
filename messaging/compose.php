@@ -1,13 +1,13 @@
 <?php
 if ($action != 'send') {
-	require 'header.php';
+	require_once 'header.php';
 }
 
 if ($userAuthenticated) {
 	if ($action == 'send') {
-		require 'send.php';
+		require_once 'send.php';
 	} elseif ($action == 'addressbook') {
-		require 'address-book.php';
+		require_once 'address-book.php';
 	}
 
 	getMessages();
@@ -41,6 +41,6 @@ if ($userAuthenticated) {
 }
 
 if ($action != 'send') {
-	require 'footer.php';
+	require_once 'footer.php';
 }
 ?>

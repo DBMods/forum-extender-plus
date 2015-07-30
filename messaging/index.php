@@ -1,12 +1,12 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 if ($userAuthenticated) {
 	if ($action == 'send') {
-		require 'compose.php';
+		require_once 'compose.php';
 	} elseif ($action == 'delete' || $action == 'arch') {
-		require 'manipulate-entry.php';
+		require_once 'manipulate-entry.php';
 	} elseif ($action == 'forward' || $action == 'sendfwd') {
-		require 'forward-message.php';
+		require_once 'forward-message.php';
 	}
 
 	getMessages();
@@ -27,5 +27,5 @@ if ($userAuthenticated) {
 			echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
 	}
 }
-require 'footer.php';
+require_once 'footer.php';
 ?>
