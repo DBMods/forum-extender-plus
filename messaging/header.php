@@ -7,11 +7,11 @@ $pageName = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'], '/'
 
 //Sets local time display
 if (is_numeric($_POST['timeOffset']))
-	iCanHazCookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
+	makeCookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
 
 //Sets DB Forums page to return to
 if ($_POST['returnto'])
-	iCanHazCookie('returnto', strip_tags($_POST['returnto']));
+	makeCookie('returnto', strip_tags($_POST['returnto']));
 
 //Delete cookies on logoff
 if ($_POST['action'] == "logoff") {
@@ -20,7 +20,7 @@ if ($_POST['action'] == "logoff") {
 	$userLogoff = true;
 }
 
-//If userToken and userid are set, check login
+//If userToken and userid are set from previous login, check auth
 if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 	$userToken = htmlspecialchars($_COOKIE['userToken']);
 	$userid = htmlspecialchars($_COOKIE['userid']);
@@ -29,15 +29,15 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 
 	//If extension is trying to get a token, redirect to login - This is how everything knows the user is authenticated
 	if ($row && $_POST['action'] != "create-account" && $_POST['action'] != "pass-token") {
-		$username = htmlspecialchars($row['username']);
 		$userAuthenticated = true;
+		$username = htmlspecialchars($row['username']);
 	} else {
 		$badCookie = true;
 		$badAuth = true;
 	}
 }
 
-//If userToken and userid is posted, check login - Used for auth from userscsript
+//If userToken and userid are posted, check login - Used for auth from userscsript
 if ($_POST['userToken'] && $_POST['userid']) {
 	$userToken = htmlspecialchars($_POST['userToken']);
 	$userid = htmlspecialchars($_POST['userid']);
@@ -47,16 +47,19 @@ if ($_POST['userToken'] && $_POST['userid']) {
 	//This is how everything knows the user is authenticated
 	if ($row) {
 		$userAuthenticated = true;
+
 		$username = htmlspecialchars($row['username']);
-		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
-		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
+
+		makeCookie('userToken', $userToken, time() + 3600 * 24 * 30);
+		makeCookie('userid', $userid, time() + 3600 * 24 * 30);
 	} else {
 		$badAuth = true;
 	}
 }
 
-//Check login
+//If login form submitted, check auth
 if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token") {
+	//Query database for hash
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 	$passwordHash = mysqli_fetch_row($result);
 	$passwordHash = $passwordHash['0'];
@@ -64,15 +67,14 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 	//If the password is good, auth the user
 	if (password_verify($_POST['password'], $passwordHash)) {
 		$userAuthenticated = true;
-	}
 
-	if ($userAuthenticated) {
+		//Get token and UID
 		$result = mysqli_query($db, "SELECT userid, ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$row = mysqli_fetch_assoc($result);
-		$userToken = $row['ext_token'];
-		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
-		$userid = $row['userid'];
-		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
+
+		makeCookie('userToken', $row['ext_token'], time() + 3600 * 24 * 30);
+		makeCookie('userid', $row['userid'], time() + 3600 * 24 * 30);
+
 		$username = htmlspecialchars($_POST['username']);
 	} else {
 		$badAuth = true;

@@ -6,7 +6,7 @@ function sqlesc($string) {
 }
 
 //Create and set a cookie
-function iCanHazCookie($name, $val, $exp = 0) {
+function makeCookie($name, $val, $exp = 0) {
 	setcookie($name, $val, $exp);
 	$_COOKIE[$name] = $val;
 }
@@ -53,19 +53,6 @@ function getMessages() {
 	$countBadge = $count > 0 ? (' <span class="badge">' . $count . '</span>') : '';
 	$archCount = mysqli_num_rows($archive);
 	$archBadge = $archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '';
-}
-
-//Turn UID into username
-function idToName($usernum) {
-	global $db;
-	$result = mysqli_query($db, "SELECT username FROM `users` WHERE `userid` = '" . sqlesc($usernum) . "' LIMIT 1");
-	$row = mysqli_fetch_array($result);
-	return $row[0];
-}
-
-function getUsername() {
-	global $db, $userid;
-	return idToName($userid);
 }
 
 //Append message options
