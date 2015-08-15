@@ -9,11 +9,11 @@
 // @version 2.3.0.10pre4a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
-// @downloadURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
-// @updateURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
-// @resource customStyle https://github.com/DBMods/forum-extender-plus/raw/development/styles/style.css
-// @resource bootstrap https://github.com/DBMods/forum-extender-plus/raw/development/styles/bootstrap.css
-// @resource bootstrap-theme https://github.com/DBMods/forum-extender-plus/raw/development/styles/bootstrap-theme.css
+// @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
+// @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
+// @resource customStyle https://github.com/DBMods/forum-extender-plus/raw/master/styles/style.css
+// @resource bootstrap https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap.css
+// @resource bootstrap-theme https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap-theme.css
 // @grant GM_xmlhttpRequest
 // @grant GM_getResourceText
 // @grant GM_setValue
@@ -677,14 +677,14 @@ if (client.isAuthenticated()) {
 			var msgFormAction = userToken.length ? '' : '<input type="hidden" name="action" value="create-account" />';
 
 			//Handle messages TODO This will be broken once private UIDs are assigned
-			$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">Message User</a>');
+			/*$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">Message User</a>');
 			$('article.post .post-footer .post-follow').css('margin-right', '0.4rem');
 			$('.gsDropboxExtenderMessageUser').click(function(evt) {
-				showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="https://www.techgeek01.com/dropboxextplus/new/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
+				showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="https://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
 				});
-			});
+			});*/
 
-			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/new/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userUid + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
+			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userUid + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
 			$('#gsDropboxExtenderMsgCounter').html('');
 			$('#gsDropboxExtenderMessageLink').attr('href', 'javascript:void(0)').attr('target', '');
 
@@ -696,7 +696,7 @@ if (client.isAuthenticated()) {
 				(function pollServer() {
 					GM_xmlhttpRequest({
 						method: 'GET',
-						url: ('https://www.techgeek01.com/dropboxextplus/new/count-messages.php?to=' + userUid + '&token=' + token),
+						url: ('https://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userUid + '&token=' + token),
 						onload: function(response) {
 							var resp = response.responseText;
 							if (resp != 'Bad auth' && resp != 'Bad UID') {
@@ -708,7 +708,7 @@ if (client.isAuthenticated()) {
 								if (resp != 'Bad UID') {
 									$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="uToken" value="' + token + '" />');
 								}
-								$('#gsDropboxExtenderMessageContainer form').attr('action', 'https://www.techgeek01.com/dropboxextplus/new/fix-auth.php');
+								$('#gsDropboxExtenderMessageContainer form').attr('action', 'https://www.techgeek01.com/dropboxextplus/fix-auth.php');
 								$('#gsDropboxExtenderMsgCounter').html(' (Bad auth. Click to fix)');
 							}
 						}
