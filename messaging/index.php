@@ -7,6 +7,8 @@ if ($userAuthenticated) {
 		require_once 'manipulate-entry.php';
 	} elseif ($action == 'forward' || $action == 'sendfwd') {
 		require_once 'forward-message.php';
+	} elseif ($action == 'report') {
+		require_once 'report.php';
 	}
 
 	getMessages();

@@ -14,8 +14,8 @@ require_once 'header.php';
 		echo 'Having a problem with the system? Report a problem to the developers!';
 		echo '<form action="" method="post">';
 		echo '<input type="hidden" name="report" value="' . $report . '" />';
-		echo '<input id="summary" name="summary" type="textbox" style="width:100%" class="form-control" placeholder="Summary" required /><br>';
-		echo '<textarea name="comments" placeholder="Additional comments?" class="form-control" rows="9" style="width:100%"></textarea><br><br>';
+		echo '<input id="summary" name="summary" type="textbox" style="width:100%" class="form-control" placeholder="Summary" value="' . $_POST['summary'] . '" required /><br>';
+		echo '<textarea name="comments" placeholder="Additional comments?" class="form-control" rows="9" style="width:100%" value="' . $_POST['comments'] . '"></textarea><br><br>';
 		echo '<button class="btn btn-success" name="action" value="confirmreport">Send</button>';
 		echo '</form>';
 	} elseif ($action == 'confirmreport') {
