@@ -1,6 +1,6 @@
 <?php
 //Not logged in or bad auth
-if (!$userAuthenticated && $pageName != 'report.php' && $pageName != 'fix-uid.php' && $pageName != 'fix-auth.php') {
+if (!$userAuthenticated && $pageName != 'report.php' && $pageName != 'fix-auth.php') {
 	if ($userLogoff)
 		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
 	require_once "sign-in.php";
