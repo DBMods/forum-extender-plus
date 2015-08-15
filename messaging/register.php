@@ -39,7 +39,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 			$usernameUsed = true;
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Username already in use!</strong></p></div></div>";
 			registerPanel($userid);
-		} elseif (preg_match('[\W]', $_POST['username']) || is_numeric($_POST['username']) || empty($_POST['username']) || strlen($_POST['username']) > 15) {
+		} elseif (preg_match('/[^A-Za-z0-9]/', $_POST['username']) || empty($_POST['username']) || strlen($_POST['username']) > 30) {
 			//Username doesn't pass restrictions
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Please choose a different username without special characters</strong></p></div></div>";
 			registerPanel($userid);
