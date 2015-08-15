@@ -13,7 +13,7 @@ if ($userAuthenticated) {
 		while ($row = mysqli_fetch_assoc($archive)) {
 			echo '<p class="topline">';
 			echo '<br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: ' . htmlentities($row['from']); //PHP 5.4 bug with htmlspecialchars()
-			if (htmlentities($row['forward']) != 0) { //PHP 5.4 bug with htmlspecialchars()
+			if (htmlentities($row['forward']) !== '0') { //PHP 5.4 bug with htmlspecialchars()
 				echo ' (FWD ' . htmlentities($row['forward']) . ')'; //PHP 5.4 bug with htmlspecialchars()
 			}
 			echo '<br>Subject: ' . htmlspecialchars($row['subject']);

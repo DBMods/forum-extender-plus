@@ -17,7 +17,7 @@ if ($userAuthenticated) {
 		echo '<h2>Inbox - ' . $count . '</h2>';
 		while ($row = mysqli_fetch_assoc($result)) {
 			echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: ' . ($row['from']); //PHP 5.4 bug with htmlspecialchars()
-			if ($row['forward'] != 0) { //PHP 5.4 bug with htmlspecialchars()
+			if ($row['forward'] !== '0') { //PHP 5.4 bug with htmlspecialchars()
 				echo ' (FWD ' . $row['forward'] . ')'; //PHP 5.4 bug with htmlspecialchars()
 			}
 			echo '<br>Subject: ' . htmlspecialchars($row['subject']);
