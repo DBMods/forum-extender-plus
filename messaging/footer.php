@@ -36,13 +36,16 @@ mysqli_close($db);
 			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');
 			linkActivity('<a href="settings.php">Settings</a>');
 			linkActivity('<a href="stats.php">Stats</a>');
+			if ($username == 'TechGeek01' || $username == 'nathancheek') {
+				linkActivity('<a href="admin.php">Admin</a>');
+			}
 			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
 			if($userAuthenticated)
 				linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');
 			?>
 		</ul>
 		<div class="site-title">
-			<h3 class="text-muted"><a href=''>Dropbox Forum Extender+ Messenger</a></h3>
+			<h3 class="text-muted"><a href=''>Forum Extender+ Messenger</a></h3>
 		</div>
 	</div>
 </div>
