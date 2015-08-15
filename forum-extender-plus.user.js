@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.3.0.10pre3a
+// @version 2.3.0.10pre4a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/development/forum-extender-plus.user.js
@@ -699,24 +699,17 @@ if (client.isAuthenticated()) {
 						url: ('https://www.techgeek01.com/dropboxextplus/new/count-messages.php?to=' + userUid + '&token=' + token),
 						onload: function(response) {
 							var resp = response.responseText;
-							if (resp == 'Incorrect token') {
-								//If bad token, change form to allow for fix
-								if ($('#gsDropboxExtenderMessageContainer form input[value="create-account"]').length === 0) {
-									$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="action" value="create-account" />');
-								}
-								$('#gsDropboxExtenderMsgCounter').html(' (Bad token. Click to fix)');
-							} else if (resp == 'Bad UID origin') {
-								//If bad UID origin, swap out form to allow for fix
-								$('#gsDropboExtenderMessageContainer form').remove();
-								$('#gsDropboxExtenderMessageLink').off('click').on('click', function() {
-									showModal(['OK', 'Cancel'], 'Fix User ID', 'In order to change your user ID, for security reasons, please enter the username you use in the messaging system.<br><br><form id="gsDropboxExtenderUidFixForm" action="https://www.techgeek01.com/dropboxextplus/new/fix-uid.php" method="post"><input name="username" placeholder="Username" required /><input type="hidden" name="userToken" value="' + token + '" /><input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="uid" value="' + userUid + '" /></form>', function() {
-										$('#gsDropboxExtenderUidFixForm').submit();
-									});
-								});
-								$('#gsDropboxExtenderMsgCounter').html(' (Bad user ID. Click to fix)');
-							} else {
+							if (resp != 'Bad auth' && resp != 'Bad UID') {
 								//Display message count
 								$('#gsDropboxExtenderMsgCounter').html(resp > 0 ? (' (' + resp + ')') : '');
+							} else {
+								//Bad auth, offer to fix
+								$('#gsDropboxExtenderMessageContainer form').html('<input type="hidden" name="uid" value="' + userUid + '" />');
+								if (resp != 'Bad UID') {
+									$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="uToken" value="' + token + '" />');
+								}
+								$('#gsDropboxExtenderMessageContainer form').attr('action', 'https://www.techgeek01.com/dropboxextplus/new/fix-auth.php');
+								$('#gsDropboxExtenderMsgCounter').html(' (Bad auth. Click to fix)');
 							}
 						}
 					});
