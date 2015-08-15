@@ -36,7 +36,7 @@ mysqli_close($db);
 			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');
 			linkActivity('<a href="settings.php">Settings</a>');
 			linkActivity('<a href="stats.php">Stats</a>');
-			if ($username == 'TechGeek01' || $username == 'nathancheek') {
+			if ($username == 'TechGeek01' || $username == 'nathanc') {
 				linkActivity('<a href="admin.php">Admin</a>');
 			}
 			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
