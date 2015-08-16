@@ -6,14 +6,15 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.4.0
+// @version 2.4.0.1pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
-// @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
-// @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
-// @resource customStyle https://github.com/DBMods/forum-extender-plus/raw/master/styles/style.css
-// @resource bootstrap https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap.css
-// @resource bootstrap-theme https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap-theme.css
+// @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
+// @downloadURL https://github.com/DBMods/forum-extender-plus/raw/core-api-development/forum-extender-plus.user.js
+// @updateURL https://github.com/DBMods/forum-extender-plus/raw/core-api-development/forum-extender-plus.user.js
+// @resource customStyle https://github.com/DBMods/forum-extender-plus/raw/core-api-development/styles/style.css
+// @resource bootstrap https://github.com/DBMods/forum-extender-plus/raw/core-api-development/styles/bootstrap.css
+// @resource bootstrap-theme https://github.com/DBMods/forum-extender-plus/raw/core-api-development/styles/bootstrap-theme.css
 // @grant GM_xmlhttpRequest
 // @grant GM_getResourceText
 // @grant GM_setValue
@@ -364,10 +365,11 @@ function makePage(slug, title, content) {
 }
 
 /*
- * Work with Dropbox datastore API
+ * Work with Dropbox datastore API TODO replace this with core API
  */
 
-var client = new Dropbox.Client({key: 'qq5ygjct1pt4eud'});
+var dsClient = new Dropbox.Client({key: 'qq5ygjct1pt4eud'}); //Datastore API key
+var client = new Dropbox.Client({key: '7c1z8hgsri89yhp'});
 
 function deleteTable(table) {
 	var records = table.query(), i = records.length;
@@ -377,7 +379,7 @@ function deleteTable(table) {
 }
 
 //Try to finish OAuth authorization
-client.authenticate({
+dsClient.authenticate({
 	interactive: false
 }, function(error) {
 	if (error) {
@@ -387,8 +389,21 @@ client.authenticate({
 });
 
 if (client.isAuthenticated()) {
+	//Code!!
+	$navBar.append('<span id="fuckYeahBitch">Whoo!</span>');
+} else {
+	$navBar.append('<span id="dropboxlink">Link to new Dropbox</span>');
+
+	//Start authentication process
+	$('#dropboxlink').on('click', function(e) {
+		e.preventDefault();
+		client.authenticate();
+	});
+}
+
+if (dsClient.isAuthenticated()) {
 	console.log('Authed Datastore API');
-	client.getDatastoreManager().openDefaultDatastore(function(error, datastore) {
+	dsClient.getDatastoreManager().openDefaultDatastore(function(error, datastore) {
 		if (error) {
 			console.log('Error opening default datastore. Retrying');
 			document.location.reload();
@@ -396,7 +411,7 @@ if (client.isAuthenticated()) {
 
 		console.log('Opened Datastore');
 
-		var userUid = client.dropboxUid();
+		var userUid = dsClient.dropboxUid();
 
 		//Get tables
 		var prefTable = datastore.getTable('prefs');
@@ -611,8 +626,8 @@ if (client.isAuthenticated()) {
 						snip[0].set('value', $('#snippetfull').val());
 						snip[0].set('name', $('#friendlyname').val());
 						if ($('#oldname').val() !== '') {
-						$('#snippetlist option[value="' + $('#oldname').val() + '"]').val($('#friendlyname').val()).html($('#friendlyname').val());
-					}
+							$('#snippetlist option[value="' + $('#oldname').val() + '"]').val($('#friendlyname').val()).html($('#friendlyname').val());
+						}
 					} else {
 						//If the snippet is new, add it to the list, and then re-sort the list to put it in the appropriate spot in the list
 						snippetTable.insert({
@@ -751,12 +766,12 @@ if (client.isAuthenticated()) {
 		//$userRole.filter(':contains("Super User")').parent().parent().find('strong').find('img').attr('src', modIcon.length ? modIcon[0].get('value') : 'https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif');
 	});
 } else {
-	$navBar.append('<span id="dropboxlink">' + ((page.check(fullUrl)) ? 'Link to Dropbox' : 'You\'re not linked to Dropbox yet, but you can do so from the <a href="' + page.front + '">front page</a>') + '</span>');
+	$navBar.append('<span id="dropboxlinkold">' + ((page.check(fullUrl)) ? 'Link to Dropbox' : 'You\'re not linked to Dropbox yet, but you can do so from the <a href="' + page.front + '">front page</a>') + '</span>');
 
 	//Start authentication process
-	$('#dropboxlink').on('click', function(e) {
+	$('#dropboxlinkold').on('click', function(e) {
 		e.preventDefault();
-		client.authenticate();
+		dsClient.authenticate();
 	});
 }
 
