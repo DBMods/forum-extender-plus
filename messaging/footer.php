@@ -1,6 +1,6 @@
 <?php
 //Not logged in or bad auth
-if (!$userAuthenticated && $pageName != 'report.php' && $pageName != 'fix-uid.php' && $pageName != 'fix-auth.php') {
+if (!$userAuthenticated && $pageName != 'report.php' && $pageName != 'fix-auth.php') {
 	if ($userLogoff)
 		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
 	require_once "sign-in.php";
@@ -36,7 +36,7 @@ mysqli_close($db);
 			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');
 			linkActivity('<a href="settings.php">Settings</a>');
 			linkActivity('<a href="stats.php">Stats</a>');
-			if ($username == 'TechGeek01' || $username == 'nathancheek') {
+			if ($username == 'TechGeek01' || $username == 'nathanc') {
 				linkActivity('<a href="admin.php">Admin</a>');
 			}
 			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
