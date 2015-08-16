@@ -1,8 +1,8 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 if ($userAuthenticated) {
 	getMessages();
-  if ($userid=='433256745' || $userid=='434617605') {
+  if ($username == 'TechGeek01' || $username == 'nathanc') {
     if ($_POST['dashmodapply']) {
       //If password is being changed
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
@@ -67,5 +67,5 @@ if ($userAuthenticated) {
     echo "<div class='alert-center'><div id='alert-fade' class='alert alert-danger'><p><strong>Not permitted</strong></p></div></div>";
   }
 }
-require 'footer.php';
+require_once 'footer.php';
 ?>

@@ -1,6 +1,6 @@
 <?php
-require 'db-login.php';
-require 'functions.php';
+require_once 'db-login.php';
+require_once 'functions.php';
 
 $dest = $_POST['msgto'];
 if ($_POST['userToken'] && $_POST['msgfrom']) {
@@ -12,8 +12,8 @@ if ($_POST['userToken'] && $_POST['msgfrom']) {
 	//This is how everything knows the user is authenticated
 	if ($row){
 		$userAuthenticated = true;
-		iCanHazCookie('userToken', $userToken, time() + 3600 * 24 * 30);
-		iCanHazCookie('userid', $userid, time() + 3600 * 24 * 30);
+		makeCookie('userToken', $userToken, time() + 3600 * 24 * 30);
+		makeCookie('userid', $userid, time() + 3600 * 24 * 30);
 	}else{
 		$badAuth = true;
 	}

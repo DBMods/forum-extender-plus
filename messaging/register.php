@@ -39,7 +39,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 			$usernameUsed = true;
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Username already in use!</strong></p></div></div>";
 			registerPanel($userid);
-		} elseif (pregmatch('[\W]', $_POST['username']) || is_numeric($_POST['username']) || empty($_POST['username']) || strlen($_POST['username']) > 15) {
+		} elseif (preg_match('/[^A-Za-z0-9]/', $_POST['username']) || empty($_POST['username']) || strlen($_POST['username']) > 30) {
 			//Username doesn't pass restrictions
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Please choose a different username without special characters</strong></p></div></div>";
 			registerPanel($userid);
@@ -69,8 +69,9 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 			$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 			$create_time = time();
 			$create_ip = $_SERVER['REMOTE_ADDR'];
-			$result = mysqli_query($db, "INSERT INTO `users` (userid, username, password, ext_token, create_time, create_ip) VALUES ('" . sqlesc($userid) . "', '" . sqlesc($username) . "', '" . sqlesc($password) . "', '" . sqlesc($token) . "', '" . sqlesc($create_time) . "', '" . sqlesc($create_ip) . "')");
-			echo '<h4 class="center">Account created. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the account creation process.</h4><p class="center">In order to finish the account creation process, we must redirect you back to the forums. However, this will only happen during registration.</p>';
+			$defaultUidOrigin = mySqli_fetch_assoc(mysqli_query($db, "SELECT * FROM `config` WHERE `setting` = 'default_uid_origin' LIMIT 1"));
+			$result = mysqli_query($db, "INSERT INTO `users` (userid, uid_origin, username, password, ext_token, create_time, create_ip) VALUES ('" . sqlesc($userid) . "', '" . $defaultUidOrigin['val'] . "', '" . sqlesc($username) . "', '" . sqlesc($password) . "', '" . sqlesc($token) . "', '" . sqlesc($create_time) . "', '" . sqlesc($create_ip) . "')");
+			echo '<h4 class="center">Account created. Click <a href="' . $returnto . '?msgtoken=' . $token . '">here</a> to finish the account creation process.</h4><p class="center">In order to finish the account creation process, we must redirect you back to the forums. However, this will only happen during registration.</p>';
 		}
 	}
 
@@ -89,7 +90,7 @@ if ($_POST['action'] == "create-account" && is_numeric($_POST['userid'])) {
 		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$token = mysqli_fetch_row($result);
 		$token = $token['0'];
-		echo '<h4 class="center">Successfully signed in. Click <a href="https://forums.dropbox.com/?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
+		echo '<h4 class="center">Successfully signed in. Click <a href="' . $returnto . '?msgtoken=' . $token . '">here</a> to finish the sign in process.</h4><p class="center">In order to finish the sign in process, we must redirect you back to the forums. However, this will only happen once.</p>';
 	} else {
 		//Authentication unsuccessful
 		badAuth();
