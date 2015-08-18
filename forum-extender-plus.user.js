@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.4.0.1pre2a
+// @version 2.4.0.1pre2b
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
@@ -413,11 +413,12 @@ function read(file, Deferred) {
 	});
 }
 
-function write(file, obj) {
+function write(file, obj, callback) {
 	client.writeFile(file, JSON.stringify(obj), function(error, stat) {
 		if (error) {
 			return showError(error);
 		}
+		callback();
 	});
 }
 
@@ -575,6 +576,13 @@ if (client.isAuthenticated()) {
 				if ($('#snippetlist').html() !== '') {
 					delete snippets[$('#snippetlist').val()];
 					$('#snippetlist option[value="' + $('#snippetlist').val() + '"]').remove();
+
+					//If we're deleting the last snippet, change the default select text, and delete the file
+					if (!len(snippets)) {
+						$('#snippetlist option[value=""]').html('You don\'t have any snippets');
+						remove('snippets');
+					}
+					//Save to user's Dropbox
 					write('snippets', snippets);
 					hoverMsg('warning', 'Snippet deleted');
 					$('#friendlyname, #snippetfull').val('');
@@ -585,6 +593,7 @@ if (client.isAuthenticated()) {
 			});
 
 			$('#savesnippet').on('click', function() {
+				$('#snippetlist option[value=""]').html('Select a snippet');
 				if ($('#friendlyname').val() !== '' && $('#snippetfull').val() !== '') {
 					var targetName = $('#oldname').val() === '' ? $('#friendlyname').val() : $('#oldname').val();
 					var snip = snippets[targetName];
@@ -620,6 +629,91 @@ if (client.isAuthenticated()) {
 					hoverMsg('danger', 'Please fill out both fields.');
 				}
 			});
+		}
+
+		/*
+		 * Messaging
+		 */
+
+		if (userUid) {
+			//If the message system is returning a token, log it
+			if (urlVars.msgtoken) {
+				var tokenval = urlVars.msgtoken;
+				var redirUrl = fullUrl.indexOf('?msgtoken=') > -1 ? fullUrl.split('?msgtoken=')[0] : fullUrl.split('&msgtoken=')[0]; //Grab redirect URL
+				config.userToken = tokenval;
+
+				//Save token, and reload the page
+				write('config', config, function() {
+					window.location.href = redirUrl;
+				});
+			}
+
+			var token = config.userToken || '', msgFormAction, userPassed;
+
+			//If user token not present, check if user is registered, and repond appropriately with form action
+			if (!token) {
+				GM_xmlhttpRequest({
+					method: 'GET',
+					url: ('https://www.techgeek01.com/dropboxextplus/check-uid.php?uid=' + userUid),
+					onload: function(response) {
+						var resp = response.responseText;
+						if (resp == 'Pass') {
+							msgFormAction = '';
+							//Bad auth, offer to fix
+							$('#gsDropboxExtenderMessageContainer form').html('<input type="hidden" name="uid" value="' + userUid + '" />');
+							if (resp != 'Bad UID') {
+								$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="uToken" value="' + token + '" />');
+							}
+							$('#gsDropboxExtenderMessageContainer form').attr('action', 'https://www.techgeek01.com/dropboxextplus/fix-auth.php');
+							$('#gsDropboxExtenderMsgCounter').html(' (Bad auth. Click to fix)');
+						} else {
+							msgFormAction = '<input type="hidden" name="action" value="create-account" />';
+						}
+					}
+				});
+			}
+
+			//Handle messages TODO This will be broken once private UIDs are assigned
+			/*$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">Message User</a>');
+			$('article.post .post-footer .post-follow').css('margin-right', '0.4rem');
+			$('.gsDropboxExtenderMessageUser').click(function(evt) {
+				showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="https://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
+				});
+			});*/
+
+			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userUid + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
+			$('#gsDropboxExtenderMsgCounter').html('');
+			$('#gsDropboxExtenderMessageLink').attr('href', 'javascript:void(0)').attr('target', '');
+
+			$('#gsDropboxExtenderMessageLink').on('click', function() {
+				$('#gsDropboxExtenderMessageContainer form').submit();
+			});
+
+
+			(function pollServer() {
+				if (token) {
+					GM_xmlhttpRequest({
+						method: 'GET',
+						url: ('https://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userUid + '&token=' + token),
+						onload: function(response) {
+							var resp = response.responseText;
+							if (resp != 'Bad auth' && resp != 'Bad UID') {
+								//Display message count
+								$('#gsDropboxExtenderMsgCounter').html(resp > 0 ? (' (' + resp + ')') : '');
+							} else {
+								//Bad auth, offer to fix
+								$('#gsDropboxExtenderMessageContainer form').html('<input type="hidden" name="uid" value="' + userUid + '" />');
+								if (resp != 'Bad UID') {
+									$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="uToken" value="' + token + '" />');
+								}
+								$('#gsDropboxExtenderMessageContainer form').attr('action', 'https://www.techgeek01.com/dropboxextplus/fix-auth.php');
+								$('#gsDropboxExtenderMsgCounter').html(' (Bad auth. Click to fix)');
+							}
+						}
+					});
+					setTimeout(pollServer, 20000);
+				}
+			})();
 		}
 	});
 } else {
@@ -897,7 +991,7 @@ if (dsClient.isAuthenticated()) {
 		 * Messaging
 		 */
 
-		if (userId) {
+		/*if (userId) {
 			//If the message system is returning a token, log it
 			if (urlVars.msgtoken) {
 				var tokenval = urlVars.msgtoken;
@@ -929,7 +1023,7 @@ if (dsClient.isAuthenticated()) {
 				});
 			});*/
 
-			$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userUid + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
+			/*$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userUid + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
 			$('#gsDropboxExtenderMsgCounter').html('');
 			$('#gsDropboxExtenderMessageLink').attr('href', 'javascript:void(0)').attr('target', '');
 
@@ -961,7 +1055,7 @@ if (dsClient.isAuthenticated()) {
 					setTimeout(pollServer, 20000);
 				})();
 			}
-		}
+		}*/
 
 		/*
 		 * Aesthetics
