@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.4.0.1pre1a
+// @version 2.4.0.1pre2a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
@@ -135,7 +135,7 @@ if (page.isPost) {
 }
 
 //Define empty variables
-var temp, i, l;
+var tmp, tmpb, i, l;
 
 //highlightPost('Super User', color.gold);
 //highlightPost(500, color.green, 'Forum regular');
@@ -365,7 +365,7 @@ function makePage(slug, title, content) {
 }
 
 /*
- * Work with Dropbox datastore API TODO replace this with core API
+ * Work with Dropbox Core API TODO replace this with core API
  */
 
 var dsClient = new Dropbox.Client({key: 'qq5ygjct1pt4eud'}); //Datastore API key
@@ -383,16 +383,247 @@ dsClient.authenticate({
 	interactive: false
 }, function(error) {
 	if (error) {
+		console.log('Datastore auth error. Retrying');
+		document.location.reload();
+	}
+});
+
+//Attempt to finish OAuth authorization
+client.authenticate({
+	interactive: false
+}, function(error) {
+	if (error) {
 		console.log('Auth error. Retrying');
 		document.location.reload();
 	}
 });
 
+function len(obj) {
+	return Object.keys(obj).length;
+}
+
+function read(file, Deferred) {
+	client.readFile(file, function(error, data) {
+		if (error) {
+			console.log(showError(error));
+			Deferred.resolve({});
+		} else {
+			Deferred.resolve(JSON.parse(data));
+		}
+	});
+}
+
+function write(file, obj) {
+	client.writeFile(file, JSON.stringify(obj), function(error, stat) {
+		if (error) {
+			return showError(error);
+		}
+	});
+}
+
+function remove(file) {
+	client.remove(file, function(error) {
+		if (error) {
+			console.log(showError(error));
+			return;
+		}
+	});
+}
+
+function showError(e) {
+	switch (e.status) {
+		case Dropbox.ApiError.INVALID_TOKEN:
+			//If you're using dropbox.js, only cause is the user token expired
+			//Get the user through authentication flow again
+			return 'Bad token';
+			break;
+
+		case Dropbox.ApiError.NOT_FOUND:
+			//File or folder is not in user's Dropbox
+			return 'File not found';
+			break;
+
+		case Dropbox.ApiError.OVER_QUOTA:
+			//User is over quota - Refreshing won't help
+			return 'User over quota';
+			break;
+
+		case Dropbox.ApiError.RATE_LIMITED:
+			//Too many API requests. Tell the user to try again later.
+			//Long term, optimize code to use fewer API calls
+			return 'Too many API calls';
+			break;
+
+		case Dropbox.ApiError.NETWORK_ERROR:
+			//An error occurred at the XMLHttpRequest layer
+			//Most likely, user's network connection is down
+			//API calls will not succeed until user is back online
+			return 'Network error';
+			break;
+
+		case Dropbox.ApiError.INVALID_PARAM:
+		case Dropbox.ApiError.OAUTH_ERROR:
+		case Dropbox.ApiError.INVALID_METHOD:
+		default:
+			//Caused by a bug in dropbox.js, in the application, or in Dropbox
+			//Tell user error occurred, ask to refresh page
+			return 'Default dropbox.js error';
+	}
+}
+
 if (client.isAuthenticated()) {
-	//Code!!
-	$navBar.append('<span id="fuckYeahBitch">Whoo!</span>');
+	console.log('Authed Core API');
+
+	//Grab UID
+	var userUid = client.dropboxUid();
+
+	//Query data
+	var prefsFile = new $.Deferred();
+	read('prefs', prefsFile);
+	var draftsFile = new $.Deferred();
+	read('drafts', draftsFile);
+	var snippetsFile = new $.Deferred();
+	read('snippets', snippetsFile);
+	var configFile = new $.Deferred();
+	read('config', configFile);
+
+	$.when(prefsFile, draftsFile, snippetsFile, configFile).done(function(prefs, drafts, snippets, config) {
+		console.log('Loaded all files');
+
+		//Grab key data
+		var token = config.token;
+
+		//Manage Preferences
+		if (pageUrl == 'preferences') {
+			var reloadTimeList, reloadTimes = [0, 30, 60, 120, 300, 600, 900, 1200, 1800, 2700, 3600];
+			for (i = 0, l = reloadTimes.length; i < l; i++) {
+				reloadTimeList += '<option value="' + reloadTimes[i] + '">' + (reloadTimes[i] ? (reloadTimes[i] < 60 ? (reloadTimes[i] + ' seconds') : ((reloadTimes[i] / 60) + ' minute' + (reloadTimes[i] > 60 ? 's' : ''))) : 'Never') + '</option>';
+			}
+			///$('#main .topline').html('<a href="snippets">Manage your snippets here!</a><br><br><textarea name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br><select name="theme"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></select><br><input type="checkbox" id="collapseFooter" name="collapseFooter" /> <label for="collapseFooter" style="font-weight:normal">Automatically collapse footer</label><br><br>Reload front page every <select name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select name="reloadSticky">' + reloadTimeList + '</select><br><br><select id="modIcon" name="modIcon"><option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select>&nbsp;<img id="modIconPreview"/><br><br><button class="btn btn-success" id="save">Save</button><button class="btn btn-warning btn-right" id="deleteprefs">Trash Preferences</button><button class="btn btn-warning btn-right" id="deletedrafts">Trash Drafts</button>');
+			$('#main .topline').html('<a href="snippets">Manage your snippets here!</a><br><br><textarea name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br><input type="checkbox" id="collapseFooter" name="collapseFooter" /> <label for="collapseFooter" style="font-weight:normal">Automatically collapse footer</label><br><br>Reload front page every <select name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select name="reloadSticky">' + reloadTimeList + '</select><br><br><button class="btn btn-success" id="save">Save</button><button class="btn btn-warning btn-right" id="deleteprefs">Trash Preferences</button><button class="btn btn-warning btn-right" id="deletedrafts">Trash Drafts</button>');
+
+			//Mod icons TODO remove?
+			/*
+			var modIconList = ['Dropbox Flat', 'Dropbox Flat Green', 'Dropbox Flat Lime', 'Dropbox Flat Gold', 'Dropbox Flat Orange', 'Dropbox Flat Red', 'Dropbox Flat Pink', 'Dropbox Flat Purple', 'Dropbox', 'Dropbox Green', 'Dropbox Lime', 'Dropbox Gold', 'Dropbox Orange', 'Dropbox Red', 'Dropbox Pink', 'Dropbox Purple', 'Gold Star'];
+			tmp = '';
+			for (i = 0, l = modIconList.length; i < l; i++) {
+				tmp += '<option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/' + modIconList[i].toLowerCase().replace(' ', '') + '.png">' + modIconList[i] + '</option>';
+			}
+			$('#modIcon').append(tmp);*/
+
+			//Load current settings
+			var pref, $elemList = $('#main select, #main textarea, #main input[type="checkbox"]'), $elem;
+			for (i = 0, l = $elemList.length; i < l; i++) {
+				$elem = $elemList.eq(i), pref = prefs[$elem.attr('name')];
+				if (pref) {
+					if ($elem.is('select')) {
+						$elem.find('option[value="' + pref + '"]').attr('selected', 'selected');
+					} else if ($elem.is('texarea')) {
+						$elem.val(pref);
+					} else if ($elem.is('input[type="checkbox"]')) {
+						$elem.prop('checked', pref);
+					}
+				}
+			}
+
+			//$('#modIconPreview').attr('src', $('#modIcon').val());
+
+			$('#deleteprefs').on('click', function() {
+				remove('prefs');
+				prefs = {};
+				hoverMsg('warning', 'Preferences trashed.');
+			});
+			$('#deletedrafts').on('click', function() {
+				remove('drafts');
+				drafts = {};
+				hoverMsg('warning', 'Drafts trashed.');
+			});
+
+			/*$('#modIcon').change(function() {
+				$('#modIconPreview').attr('src', $('#modIcon').val());
+			});*/
+			$('#save').on('click', function() {
+				$('#main select, #main textarea, #main input[type="checkbox"]').each(function() {
+					prefs[$(this).attr('name')] = $(this).is('input[type="checkbox"]') ? $(this).prop('checked') : $(this).val();
+				});
+				write('prefs', prefs);
+				hoverMsg('success', 'Your settings have been saved.');
+			});
+		}
+
+		//Handle snippet manager
+		if (pageUrl == 'snippets') {
+			$('#main .topline').html('<br><select id="snippetlist"><option value="">' + (len(snippets) ? 'Select a snippet' : 'You don\'t have any snippets') + '</option></select>&nbsp;&nbsp;<button id="loadsnippet" class="btn btn-success">Load</button><button id="deletesnippet" class="btn btn-danger">Delete</button><button id="clearsnippet" class="btn btn-primary">Clear form</button><br><br><input type="hidden" id="oldname" value="" /><input id="friendlyname" type="textbox" style="width:100%" placeholder="Friendly name"/><br><textarea id="snippetfull" placeholder="Snippet text" rows="9" style="width:100%"></textarea><button id="savesnippet" class="btn btn-success">Save</button>');
+
+			//Load list of snippets
+			if (len(snippets)) {
+				var snippetName;
+				tmp = '';
+				for (i in snippets) {
+					tmp += '<option value="' + i + '">' + i + '</option>';
+				}
+				$('#snippetlist').append(tmp);
+			}
+
+			$('#loadsnippet').on('click', function() {
+				if ($('#snippetlist').html() !== '') {
+					$('#friendlyname, #oldname').val($('#snippetlist').val());
+					$('#snippetfull').val(snippets[$('#snippetlist').val()]);
+				}
+			});
+			$('#deletesnippet').on('click', function() {
+				if ($('#snippetlist').html() !== '') {
+					delete snippets[$('#snippetlist').val()];
+					$('#snippetlist option[value="' + $('#snippetlist').val() + '"]').remove();
+					write('snippets', snippets);
+					hoverMsg('warning', 'Snippet deleted');
+					$('#friendlyname, #snippetfull').val('');
+				}
+			});
+			$('#clearsnippet').on('click', function() {
+				$('#oldname, #friendlyname, #snippetfull').val('');
+			});
+
+			$('#savesnippet').on('click', function() {
+				if ($('#friendlyname').val() !== '' && $('#snippetfull').val() !== '') {
+					var targetName = $('#oldname').val() === '' ? $('#friendlyname').val() : $('#oldname').val();
+					var snip = snippets[targetName];
+					if (snippets[targetName]) {
+						//If the snippet exists, delete and recreate
+						delete snippets[targetName];
+						if ($('#oldname').val() !== '') {
+							$('#snippetlist option[value="' + $('#oldname').val() + '"]').val($('#friendlyname').val()).html($('#friendlyname').val());
+						}
+					}
+
+					//Then, save the new value, sort the list, and save the list to user's list
+					snippets[$('#friendlyname').val()] = $('#snippetfull').val();
+					tmp = Object.keys(snippets).sort();
+
+					tmpb = snippets, snippets = {}
+					for (i = 0, l = tmp.length; i < l; i++) {
+						snippets[tmp[i]] = tmpb[tmp[i]];
+					}
+					write('snippets', snippets);
+
+					//Update dropdown
+					tmp = '<option value="">' + $('#snippetlist option').eq(0).html() + '</option>';
+					for (i in snippets) {
+						tmp += '<option value="' + i + '">' + i + '</option>';
+					}
+					$('#snippetlist').html(tmp);
+
+					//Empty the form, and display success message
+					$('#friendlyname, #snippetfull, #oldname').val('');
+					hoverMsg('success', 'Snippet saved.');
+				} else {
+					hoverMsg('danger', 'Please fill out both fields.');
+				}
+			});
+		}
+	});
 } else {
-	$navBar.append('<span id="dropboxlink">Link to new Dropbox</span>');
+	$navBar.append(page.front.active ? '<span id="dropboxlink">Link to new Dropbox</span>' : '<span>You haven\'t linked to Dropbox yet. You can do so from the <a href="' + page.front.value + '">front page</a></span>.');
 
 	//Start authentication process
 	$('#dropboxlink').on('click', function(e) {
@@ -480,14 +711,14 @@ if (dsClient.isAuthenticated()) {
 			$('h3.answer-list-heading').css('margin-top', '5px');
 			$('#gsDropboxExtenderPostExtras').append('<br><span id="gsDropboxExtenderPostExtras-inner"><select id="snippets"><option name="default" value="">' + (snippetList.length ? 'Select a snippet' : 'You don\'t have any snippets') + '</option><optgroup label="--Snippets--" /></select></span>');
 
-			temp = [];
+			tmp = [];
 			for (i = 0, l = snippetList.length; i < l; i++) {
-				temp.push($('<option />', {
+				tmp.push($('<option />', {
 					text: snippetList[i].name,
 					value: snippetList[i].value
 				}));
 			}
-			$('#snippets optgroup').append(temp);
+			$('#snippets optgroup').append(tmp);
 
 			$('#snippets').change(function() {
 				if ($(this).val()) {
@@ -530,7 +761,7 @@ if (dsClient.isAuthenticated()) {
 		}
 
 		//Pages
-		if (pageUrl == 'preferences') {
+		/*if (pageUrl == 'preferences') {
 			var reloadTimeList, reloadTimes = [0, 30, 60, 120, 300, 600, 900, 1200, 1800, 2700, 3600];
 			for (i = 0, l = reloadTimes.length; i < l; i++) {
 				reloadTimeList += '<option value="' + reloadTimes[i] + '">' + (reloadTimes[i] ? (reloadTimes[i] < 60 ? (reloadTimes[i] + ' seconds') : ((reloadTimes[i] / 60) + ' minute' + (reloadTimes[i] > 60 ? 's' : ''))) : 'Never') + '</option>';
@@ -538,11 +769,11 @@ if (dsClient.isAuthenticated()) {
 			$('#main .topline').html('<a href="snippets">Manage your snippets here!</a><br><br><textarea name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br><select name="theme"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></select><br><input type="checkbox" id="collapseFooter" name="collapseFooter" /> <label for="collapseFooter" style="font-weight:normal">Automatically collapse footer</label><br><br>Reload front page every <select name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select name="reloadSticky">' + reloadTimeList + '</select><br><br><select id="modIcon" name="modIcon"><option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select>&nbsp;<img id="modIconPreview"/><br><br><button class="btn btn-success" id="save">Save</button><button class="btn btn-warning btn-right" id="deleteprefs">Trash Preferences</button><button class="btn btn-warning btn-right" id="deletedrafts">Trash Drafts</button>');
 
 			var modIconList = ['Dropbox Flat', 'Dropbox Flat Green', 'Dropbox Flat Lime', 'Dropbox Flat Gold', 'Dropbox Flat Orange', 'Dropbox Flat Red', 'Dropbox Flat Pink', 'Dropbox Flat Purple', 'Dropbox', 'Dropbox Green', 'Dropbox Lime', 'Dropbox Gold', 'Dropbox Orange', 'Dropbox Red', 'Dropbox Pink', 'Dropbox Purple', 'Gold Star'];
-			temp = '';
+			tmp = '';
 			for (i = 0, l = modIconList.length; i < l; i++) {
-				temp += '<option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/' + modIconList[i].toLowerCase().replace(' ', '') + '.png">' + modIconList[i] + '</option>';
+				tmp += '<option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/' + modIconList[i].toLowerCase().replace(' ', '') + '.png">' + modIconList[i] + '</option>';
 			}
-			$('#modIcon').append(temp);
+			$('#modIcon').append(tmp);
 
 			//Load current settings
 			var pref, $elemList = $('#main select, #main textarea, #main input[type="checkbox"]'), $elem;
@@ -592,12 +823,12 @@ if (dsClient.isAuthenticated()) {
 			$('#main .topline').html('<br><select id="snippetlist"><option value="">' + (snippetList.length ? 'Select a snippet' : 'You don\'t have any snippets') + '</option></select>&nbsp;&nbsp;<button id="loadsnippet" class="btn btn-success">Load</button><button id="deletesnippet" class="btn btn-danger">Delete</button><button id="clearsnippet" class="btn btn-primary">Clear form</button><br><br><input type="hidden" id="oldname" value="" /><input id="friendlyname" type="textbox" style="width:100%" placeholder="Friendly name"/><br><textarea id="snippetfull" placeholder="Snippet text" rows="9" style="width:100%"></textarea><button id="savesnippet" class="btn btn-success">Save</button>');
 
 			var snippetName;
-			temp = '';
+			tmp = '';
 			for (i = 0, l = snippetList.length; i < l; i++) {
 				snippetName = snippetList[i].name;
-				temp += '<option value="' + snippetName + '">' + snippetName + '</option>';
+				tmp += '<option value="' + snippetName + '">' + snippetName + '</option>';
 			}
-			$('#snippetlist').append(temp);
+			$('#snippetlist').append(tmp);
 
 			$('#loadsnippet').on('click', function() {
 				if ($('#snippetlist').html() !== '') {
@@ -648,11 +879,11 @@ if (dsClient.isAuthenticated()) {
 							}
 							return 0;
 						});
-						temp = '<option value="">' + $('#snippetlist option').eq(0).html() + '</option>';
+						tmp = '<option value="">' + $('#snippetlist option').eq(0).html() + '</option>';
 						for (i = 0, l = snippetList.length; i < l; i++) {
-							temp += '<option value="' + snippetList[i].name + '">' + snippetList[i].name + '</option>';
+							tmp += '<option value="' + snippetList[i].name + '">' + snippetList[i].name + '</option>';
 						}
-						$('#snippetlist').html(temp);
+						$('#snippetlist').html(tmp);
 					}
 					$('#friendlyname, #snippetfull, #oldname').val('');
 					hoverMsg('success', 'Snippet saved.');
@@ -660,7 +891,7 @@ if (dsClient.isAuthenticated()) {
 					hoverMsg('danger', 'Please fill out both fields.');
 				}
 			});
-		}
+		}*/
 
 		/*
 		 * Messaging
@@ -1091,11 +1322,11 @@ function insertAndMarkupTextAtCursorPosition() {
 	if (SelectedTextEnd - SelectedTextStart) {
 		SelectedText = $postField.val().slice(SelectedTextStart, SelectedTextEnd);
 	}
-	var offset = 0, i = args.length, temp = SelectedText;
+	var offset = 0, i = args.length, tmp = SelectedText;
 	while (i--) {
-		temp = '<' + args[i] + '>' + temp + '</' + args[i] + '>', offset += 2 + args[i].length;
+		tmp = '<' + args[i] + '>' + tmp + '</' + args[i] + '>', offset += 2 + args[i].length;
 	}
-	insertTextAtCursorPosition(temp);
+	insertTextAtCursorPosition(tmp);
 	if (!SelectedText) {
 		$postField.setCursorPosition(EndCursorPosition + offset);
 	}
@@ -1112,11 +1343,11 @@ function insertAndMarkupTextAtCursorPosition() {
 	if (SelectedTextEnd - SelectedTextStart) {
 		SelectedText = $postField.val().slice(SelectedTextStart, SelectedTextEnd);
 	}
-	var offset = 0, i = args.length, temp = SelectedText;
+	var offset = 0, i = args.length, tmp = SelectedText;
 	while (i--) {
-		temp = markdownMap[args[i]][0] + temp + markdownMap[args[i]][1], offset += markdownMap[args[i]][0].length;
+		tmp = markdownMap[args[i]][0] + tmp + markdownMap[args[i]][1], offset += markdownMap[args[i]][0].length;
 	}
-	insertTextAtCursorPosition(temp);
+	insertTextAtCursorPosition(tmp);
 	if (!SelectedText) {
 		$postField.setCursorPosition(EndCursorPosition + offset);
 	}
@@ -1210,11 +1441,11 @@ function showModal(buttons, title, content, action, actionTwo) {
 	$('#gsDropboxExtenderModalTitle').html(title);
 	$('#gsDropboxExtenderModalContent').html(content);
 
-	temp = '';
+	tmp = '';
 	for (i = 0, l = buttons.length; i < l; i++) {
-		temp += '<a href="javascript:void(0);" class="gsDropboxExtenderModal' + buttonMap[buttons[i]] + '" style="margin-left:18px">' + buttons[i] + '</a>';
+		tmp += '<a href="javascript:void(0);" class="gsDropboxExtenderModal' + buttonMap[buttons[i]] + '" style="margin-left:18px">' + buttons[i] + '</a>';
 	}
-	$('#gsDropboxExtenderModalActionButtons').html(temp);
+	$('#gsDropboxExtenderModalActionButtons').html(tmp);
 
 	//Cache elements
 	var $action = $('.gsDropboxExtenderModalAction');

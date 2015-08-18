@@ -1,6 +1,12 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.4.0.1pre2a-----
++ Initial Core API linkage
+- Removed theme and mod icon options in preferences
+* Implemented data querying
+# Snippet manager and preferences menu are migrated to new system
+
 -----2.4.0.1pre1a-----
 + Added integration for new Core API
 
