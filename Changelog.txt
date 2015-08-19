@@ -1,6 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.4.0.1pre3a-----
++ Added @num notation for linking to help center articles
+# Signature usage, drafts, and snippets have been migrated to the new system
+
 -----2.4.0.1pre2b-----
 * Fixed bug where having a valid UID but no token (correct or otherwise) would assume you need to register, rather than checking if your UID exists in the system
 # Messaging system has been migrated to new system
