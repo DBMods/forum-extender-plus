@@ -1,6 +1,15 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+***** Help Center Link Completion
+
+-----2.4.0.1pre3b-----
++ Added suggestion flyout for Help Center linking autocomplete
+- Removed old code pertaining to Datastore API
+* Fixed bug with topic highlighting not working on post list
+* Fixed rare bug with grabbing user avatar ID halting script execution
+# Changed front page reloading to reload the posts page
+
 -----2.4.0.1pre3a-----
 + Added @num notation for linking to help center articles
 # Signature usage, drafts, and snippets have been migrated to the new system

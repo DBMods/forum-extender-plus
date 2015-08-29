@@ -6,10 +6,10 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.4.0.1pre3a
+// @version 2.4.0.1pre3b
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
-// @require https://www.dropbox.com/static/api/dropbox-datastores-1.2-latest.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
+// @require https://github.com/DBMods/forum-extender-plus/raw/core-api-development/resources/js/helpList.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @resource customStyle https://github.com/DBMods/forum-extender-plus/raw/master/styles/style.css
@@ -42,7 +42,7 @@
 //Set global variables
 var fullUrl = window.location.href, strippedUrl = fullUrl.split('?')[0];
 var lang = fullUrl.split('https://www.dropboxforum.com/hc/')[1].split('/')[0];
-var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')[1] || '', urlVars = getUrlVars(), modalOpen = false, userId = '';
+var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')[1] || '', urlVars = getUrlVars(), modalOpen = false, loggedIn = false;
 var color = {
 	lightBlue: '#e7f2fc',
 	green: '#beff9e',
@@ -57,7 +57,10 @@ $('head').append('<style>.textinput{padding:0px!important}</style>');
 //Set up page parameters and list
 var page = {
 	front: new Url(''),
-	newPost: new Url('community/posts/new'),
+	posts: {
+		list: new Url('community/posts'),
+		new: new Url('community/posts/new')
+	},
 	//unanswered: new Url('https://www.dropboxforum.com/hc/communities/public/questions/unanswered'),
 	topic: {
 		//list: new Url('https://www.dropboxforum.com/hc/communities/public/topics'),
@@ -78,8 +81,8 @@ var page = {
 		frBugs: new Url('community/topics/200303965--FR-Probl%C3%A8mes-et-r%C3%A9solution'),
 		frOther: new Url('community/topics/200294229--FR-Autres-sujets')
 	},
-	isPost: pageUrl.indexOf('community/posts') > -1,
-	isTopic: pageUrl.indexOf('community/topics') > -1,
+	isPost: pageUrl.indexOf('community/posts/') > -1,
+	isTopic: pageUrl.indexOf('community/topics/') > -1,
 	check: function(check) {
 		if (typeof check == 'string' && check.indexOf('://') > -1) {
 			//Check if a URL is listed
@@ -118,7 +121,7 @@ var $forumList = $('.community-nav .pinned-categories'), $forumListRows = $forum
 var $navBar = $('#gsDropboxExtenderNav'), $modal = $('#gsDropboxExtenderModal'), $screenOverlay = $('#gsDropboxExtenderScreenOverlay');
 
 if ($('#user-avatar').length) {
-	userId = $('#user-avatar').attr('src').split('gravatar.com/avatar/')[1].split('?')[0];
+	loggedIn = true;
 }
 
 /*showModalNew({
@@ -188,7 +191,7 @@ function highlightThread() {
 		}
 	}
 }
-/*
+
 //Emphasize new replies to threads you've interacted with
 if (page.isPost) {
 	$postForm.on('submit', function() {
@@ -196,29 +199,33 @@ if (page.isPost) {
 		if (GM_getValue('date', 0) < today) {
 			//If we're starting a new day, flush all old threads, and start over
 			GM_setValue('date', today);
-			GM_setValue('todayThreads', urlVars.id);
-			GM_setValue('postNumbers', [parseInt($('#topic_posts').html().split('(')[1].split(' ')[0], 10) + 1]);
+			GM_setValue('todayThreads', strippedUrl);
+			GM_setValue('postNumbers', [parseInt($('.post-stats .comment-count').html().split(' ')[0], 10) + 1]);
 		} else if (GM_getValue('date') == today) {
 			//Otherwise, add the current thread ID to the list
 			var todayThreads = GM_getValue('todayThreads', '').split(',');
-			if (todayThreads.indexOf(urlVars.id) == -1) {
+			if (todayThreads.indexOf(strippedUrl) == -1) {
 				//Add thread ID to list
-				todayThreads.push(urlVars.id);
+				todayThreads.push(strippedUrl);
 				GM_setValue('todayThreads', todayThreads.toString());
 			}
 			//Add post count for tracking purposes
 			var postNumbers = GM_getValue('postNumbers', [0]);
-			postNumbers[todayThreads.indexOf(urlVars.id)] = parseInt($('#topic_posts').html().split('(')[1].split(' ')[0], 10) + 1;
+			postNumbers[todayThreads.indexOf(strippedUrl)] = parseInt($('.post-stats .comment-count').html().split(' ')[0], 10) + 1;
 		}
 	});
 }
-if (page.front.active || page.isTopic) {
-	var todayThreads = GM_getValue('todayThreads', '').split(','), $threadPageList = $latest.find('tr:not(.sticky, .super-sticky) td:nth-child(1) a');
-	for (i = 0, l = todayThreads.length; i < l; i++) {
-		$threadPageList.filter('[href$="?id=' + todayThreads[i] + '"]').parent().parent().css('font-weight', 'bold');
-	}
+if (page.posts.list.active || page.isTopic) {
+	var todayThreads = GM_getValue('todayThreads', '').split(','), $threadPageList = $latest.find('div.post-overview:not(.post-pinned) .post-overview-info');
 
-	//Later, only bold if post count different - prevents emphasis until change in thread
+	//Filter list to only those threads posted on today
+	for (i = 0, l = todayThreads.length; i < l; i++) {
+		tmp = $threadPageList.find('a[href^="' + todayThreads[i] + '"]');
+		if (tmp.length && parseInt(tmp.parent().parent().find('.post-overview-count:nth-child(1)'), 10) != postNumbers[i]) {
+			//If thread was posted on today, check if post count is different, and emphasize if needed
+			tmp.parent().find('a, span.meta-group').css('padding-left', '50px');
+		}
+	}
 }
 
 //Modify posts
@@ -247,8 +254,8 @@ if ($('#topic-info .topictitle:contains(") - "):contains(" Build - ")').length) 
 					var newSticky = $(response.responseText).find('td:contains("' + threadType + '") big a');
 					if (newSticky.length) {
 						window.location.href = newSticky.eq(0).attr('href');
-
-}				}
+					}
+				}
 			});
 		});
 	}
@@ -361,6 +368,58 @@ if (page.isPost) {
 	});*/
 
 	//Insert help center links with @n like a total badass
+	//Manage popup suggestion menu
+	$postField.after('<div id="gsDropboxExtenderHelpCenterFlyout" style="display:none;color:#aaa;background:white;border:1px solid #eee"><div id="gsDropboxExtenderHelpCenterFlyoutHeader" style="background:#f3f3f3">Help Center Links</div><div id="gsDropboxExtenderHelpCenterLinkContainer" style="max-height:120px;overflow-y:scroll" /></div>');
+	$('#gsDropboxExtenderHelpCenterFlyout').css('width', $postField.css('width'));
+	$('#gsDropboxExtenderHelpCenterFlyoutHeader, .gsDropboxExtenderHelpCenterLinkItem').css({
+    'height': '20px',
+    'padding': '5px',
+    'font-size': '13px',
+    'font-family': 'Arial'
+	});
+	var preventChangeTrigger = false;
+	$postField.on('input', function() {
+		var start = $postField.val().substring(0, $postField[0].selectionStart);
+
+		var match = start.match(/(^|[^\w])@\d*$/g);
+		if (match) {
+			match = (match + '').split('@').pop() || '';
+			$('#gsDropboxExtenderHelpCenterLinkContainer').html('');
+			for (i in helpList) {
+				if (i.indexOf(match) == 0) {
+					$('#gsDropboxExtenderHelpCenterLinkContainer').append('<div class="gsDropboxExtenderHelpCenterLinkItem"><strong style="color:#000">' + i + '</strong><span style="margin-left:18px;">' + helpList[i] + '</span></div>')
+				}
+			}
+			$('.gsDropboxExtenderHelpCenterLinkItem').hover(function () {
+		    $(this).css({
+		        'background': '#439fe0',
+		        'padding-bottom': '4px',
+		        'border-bottom': '1px solid #2a8029'
+		    });
+		    $(this).find('strong, span').css('color', '#fff');
+			}, function () {
+			    $(this).css({
+			        'background': 'none',
+			        'padding-bottom': '5px',
+			        'border': 'none'
+			    });
+			    $(this).find('strong').css('color', '#000');
+			    $(this).find('span').css('color', '#aaa');
+			});
+			$('.gsDropboxExtenderHelpCenterLinkItem').click(function() {
+				var completedVal = $(this).find('strong').html().substring(match.length, $(this).find('strong').html().length);
+				insertTextAtCursorPosition(completedVal);
+				$('#gsDropboxExtenderHelpCenterFlyout').hide();
+			});
+			//$('#gsDropboxExtenderHelpCenterFlyout').css('top', '-' + $('#gsDropboxExtenderHelpCenterFlyout').css('height'));
+			if ($('.gsDropboxExtenderHelpCenterLinkItem').length) {
+				$('#gsDropboxExtenderHelpCenterFlyout').show();
+			}
+		} else {
+			$('#gsDropboxExtenderHelpCenterFlyout').hide();
+		}
+	});
+
 	$postForm.find('.comment-container .comment-form-controls input[type="submit"]').on('click', function() {
 		$postField.val($postField.val().replace(/[^\w]*@(\d+)\b/g, '<a href="https://www.dropbox.com/help/$1">https://www.dropbox.com/help/$1</a>'));
 	});
@@ -380,28 +439,10 @@ function makePage(slug, title, content) {
 }
 
 /*
- * Work with Dropbox Core API TODO replace this with core API
+ * Work with Dropbox Core API
  */
 
-var dsClient = new Dropbox.Client({key: 'qq5ygjct1pt4eud'}); //Datastore API key
 var client = new Dropbox.Client({key: '7c1z8hgsri89yhp'});
-
-function deleteTable(table) {
-	var records = table.query(), i = records.length;
-	while (i--) {
-		records[i].deleteRecord();
-	}
-}
-
-//Try to finish OAuth authorization
-dsClient.authenticate({
-	interactive: false
-}, function(error) {
-	if (error) {
-		console.log('Datastore auth error. Retrying');
-		document.location.reload();
-	}
-});
 
 //Attempt to finish OAuth authorization
 client.authenticate({
@@ -541,14 +582,14 @@ if (client.isAuthenticated()) {
 		}
 
 		//Auto reload Pages
-		//reloadPage('Front');
+		reloadPage('Front');
 		reloadPage('Forum');
 		reloadPage('Sticky');
 
 		function reloadPage(pageType) {
 			var reloadIndex = {
 				'Sticky': page.isPost && $('article.post.post-pinned').length,
-				'Front': page.front.active,
+				'Front': page.posts.list.active,
 				'Forum': page.isTopic
 			};
 			var reloadDelay = prefs['reload' + pageType];
@@ -841,6 +882,39 @@ if (client.isAuthenticated()) {
 				}
 			})();
 		}
+
+		/*
+		 * Aesthetics
+		 */
+
+		 //Collapse footer TODO rewrite this if we ever use it again
+ 		/*if ($(window).height() + $('#footer').height() < $(document).height() && collapseFooter.length && collapseFooter[0].get('value')) {
+ 			//Style footer
+ 			$('#footer').css({
+ 				'border': '1px solid #bbb',
+ 				'border-bottom': 'none',
+ 				'border-radius': '25px 25px 0 0'
+ 			}).append($('span:contains("Protected by Arash")')).wrapInner('<div id="footercontent" />').prepend('<div id="footertoggle"><div id="footerarrowup" /><div id="footerarrowdown" style="display:none" /></div>');
+ 			$('#footerarrowup, #footerarrowdown').css({
+ 				'height': '0',
+ 				'width': '0',
+ 				'border-left': '5px solid transparent',
+ 				'border-right': '5px solid transparent',
+ 				'margin': '12px auto 0'
+ 			});
+ 			$('#footerarrowup').css('border-bottom', '10px solid #bbb');
+ 			$('#footerarrowdown').css('border-top', '10px solid #bbb');
+ 			$('#footercontent').toggle();
+ 			$('#footertoggle').css('height', '25px').on('click', function() {
+ 				$('#footercontent').slideToggle('slow', function() {
+ 					$('#footerarrowup, #footerarrowdown').toggle();
+ 				});
+ 			});
+ 		}*/
+
+ 		//Super User icons TODO: Rewrite this for new forums
+ 		//var modIcon = prefTable.query({preference: 'modIcon'});
+ 		//$userRole.filter(':contains("Super User")').parent().parent().find('strong').find('img').attr('src', modIcon.length ? modIcon[0].get('value') : 'https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif');
 	});
 } else {
 	$navBar.append(page.front.active ? '<span id="dropboxlink">Link to Dropbox</span>' : '<span>You haven\'t linked to Dropbox yet. You can do so from the <a href="' + page.front.value + '">front page</a></span>.');
@@ -849,380 +923,6 @@ if (client.isAuthenticated()) {
 	$('#dropboxlink').on('click', function(e) {
 		e.preventDefault();
 		client.authenticate();
-	});
-}
-
-if (dsClient.isAuthenticated()) {
-	console.log('Authed Datastore API');
-	dsClient.getDatastoreManager().openDefaultDatastore(function(error, datastore) {
-		if (error) {
-			console.log('Error opening default datastore. Retrying');
-			document.location.reload();
-		}
-
-		console.log('Opened Datastore');
-
-		var userUid = dsClient.dropboxUid();
-
-		//Get tables
-		var prefTable = datastore.getTable('prefs');
-		var draftTable = datastore.getTable('draft');
-		var configTable = datastore.getTable('config');
-		var snippetTable = datastore.getTable('snippets');
-
-		var snippets = snippetTable.query();
-		var theme = prefTable.query({preference: 'theme'});
-		var collapseFooter = prefTable.query({preference: 'collapseFooter'});
-		var userToken = configTable.query({name: 'userToken'});
-
-		var snippetList = [];
-		for (i = 0, l = snippets.length; i < l; i++) {
-			snippetList[i] = {
-				name: snippets[i].get('name'),
-				value: snippets[i].get('value')
-			};
-		}
-		snippetList.sort(function (a, b) {
-			if (a.name > b.name) {
-				return 1;
-			}
-			if (a.name < b.name) {
-				return -1;
-			}
-			return 0;
-		});
-
-		/*if (theme.length) {
-			//forumVersion(theme[0].get('value'));
-		}
-
-		//Custom signature
-		var sig = prefTable.query({name: 'signature'});
-		$('#siglink').show();
-		$('.gsDropboxExtenderSignatureInsert').on('click', function() {
-			$postField.setCursorPosition($postField.val().length);
-			insertTextAtCursorPosition("\n\n--\n" + (sig.length ? sig[0].get('value') : 'You haven\'t set your signature yet. Head over to the preferences menu to do that.'));
-		});
-
-		//reloadPage('Front');
-		reloadPage('Forum');
-		reloadPage('Sticky');
-
-		function reloadPage(pageType) {
-			var reloadIndex = {
-				'Sticky': page.isPost && $('#topic_labels .sticky').length,
-				'Front': page.front.active,
-				'Forum': page.isTopic
-			};
-			var reloadDelay = prefTable.query({preference: 'reload' + pageType});
-			if (reloadIndex[pageType] && reloadDelay.length && reloadDelay[0].get('value') != '0') {
-				setTimeout(function() {
-					if (!modalOpen && !$postField.val()) {
-						document.location.reload();
-					} else {
-						reloadPage(pageType);
-					}
-				}, reloadDelay[0].get('value') * 1000);
-			}
-		}*/
-
-		/*if (page.isPost) {
-			//Add post snippets
-			$('h3.answer-list-heading').css('margin-top', '5px');
-			$('#gsDropboxExtenderPostExtras').append('<br><span id="gsDropboxExtenderPostExtras-inner"><select id="snippets"><option name="default" value="">' + (snippetList.length ? 'Select a snippet' : 'You don\'t have any snippets') + '</option><optgroup label="--Snippets--" /></select></span>');
-
-			tmp = [];
-			for (i = 0, l = snippetList.length; i < l; i++) {
-				tmp.push($('<option />', {
-					text: snippetList[i].name,
-					value: snippetList[i].value
-				}));
-			}
-			$('#snippets optgroup').append(tmp);
-
-			$('#snippets').change(function() {
-				if ($(this).val()) {
-					insertTextAtCursorPosition($(this).val());
-					$(this).val('');
-				}
-			});
-
-			//Manage drafts
-			var thread = strippedUrl;
-			$('#gsDropboxExtenderPostExtras-inner').append(' - <a href="javascript:void(0)" id="modpostdraft">Draft Post</a> - <a href="javascript:void(0)" id="modpostrestoredraft">Restore Draft</a>');
-			$('#modpostdraft').on('click', function() {
-				var draft = draftTable.query({pageid: thread});
-				if ($postField.val()) {
-					if (draft.length) {
-						draft[0].set('draft', $postField.val());
-					} else {
-						draftTable.insert({
-							pageid: thread,
-							draft: $postField.val()
-						});
-					}
-					$postField.focus();
-					hoverMsg('success', 'Draft saved');
-				} else {
-					hoverMsg('info', 'Your draft has no content');
-				}
-			});
-			$('#modpostrestoredraft').on('click', function() {
-				var draft = draftTable.query({pageid: thread})[0];
-				if (draft) {
-					$postField.val(draft.get('draft'));
-					$postField.focus();
-					draft.deleteRecord();
-					hoverMsg('success', 'Draft successfully restored');
-				} else {
-					hoverMsg('info', 'You don\'t have a draft for this thread');
-				}
-			});
-		}*/
-
-		//Pages
-		/*if (pageUrl == 'preferences') {
-			var reloadTimeList, reloadTimes = [0, 30, 60, 120, 300, 600, 900, 1200, 1800, 2700, 3600];
-			for (i = 0, l = reloadTimes.length; i < l; i++) {
-				reloadTimeList += '<option value="' + reloadTimes[i] + '">' + (reloadTimes[i] ? (reloadTimes[i] < 60 ? (reloadTimes[i] + ' seconds') : ((reloadTimes[i] / 60) + ' minute' + (reloadTimes[i] > 60 ? 's' : ''))) : 'Never') + '</option>';
-			}
-			$('#main .topline').html('<a href="snippets">Manage your snippets here!</a><br><br><textarea name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br><select name="theme"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></select><br><input type="checkbox" id="collapseFooter" name="collapseFooter" /> <label for="collapseFooter" style="font-weight:normal">Automatically collapse footer</label><br><br>Reload front page every <select name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select name="reloadSticky">' + reloadTimeList + '</select><br><br><select id="modIcon" name="modIcon"><option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select>&nbsp;<img id="modIconPreview"/><br><br><button class="btn btn-success" id="save">Save</button><button class="btn btn-warning btn-right" id="deleteprefs">Trash Preferences</button><button class="btn btn-warning btn-right" id="deletedrafts">Trash Drafts</button>');
-
-			var modIconList = ['Dropbox Flat', 'Dropbox Flat Green', 'Dropbox Flat Lime', 'Dropbox Flat Gold', 'Dropbox Flat Orange', 'Dropbox Flat Red', 'Dropbox Flat Pink', 'Dropbox Flat Purple', 'Dropbox', 'Dropbox Green', 'Dropbox Lime', 'Dropbox Gold', 'Dropbox Orange', 'Dropbox Red', 'Dropbox Pink', 'Dropbox Purple', 'Gold Star'];
-			tmp = '';
-			for (i = 0, l = modIconList.length; i < l; i++) {
-				tmp += '<option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/' + modIconList[i].toLowerCase().replace(' ', '') + '.png">' + modIconList[i] + '</option>';
-			}
-			$('#modIcon').append(tmp);
-
-			//Load current settings
-			var pref, $elemList = $('#main select, #main textarea, #main input[type="checkbox"]'), $elem;
-			for (i = 0, l = $elemList.length; i < l; i++) {
-				$elem = $elemList.eq(i), pref = prefTable.query({preference: $elem.attr('name')})[0];
-				if (pref) {
-					if ($elem.is('select')) {
-						$elem.find('option[value="' + pref.get('value') + '"]').attr('selected', 'selected');
-					} else if ($elem.is('texarea')) {
-						$elem.val(pref.get('value'));
-					} else if ($elem.is('input[type="checkbox"]')) {
-						$elem.prop('checked', pref.get('value'));
-					}
-				}
-			}
-
-			$('#modIconPreview').attr('src', $('#modIcon').val());
-
-			$('#deleteprefs').on('click', function() {
-				deleteTable(prefTable);
-				hoverMsg('warning', 'Preferences trashed.');
-			});
-			$('#deletedrafts').on('click', function() {
-				deleteTable(draftTable);
-				hoverMsg('warning', 'Drafts trashed.');
-			});
-
-			$('#modIcon').change(function() {
-				$('#modIconPreview').attr('src', $('#modIcon').val());
-			});
-			$('#save').on('click', function() {
-				$('#main select, #main textarea, #main input[type="checkbox"]').each(function() {
-					var pref = prefTable.query({preference: $(this).attr('name')});
-					if (pref.length) {
-						pref[0].set('value', $(this).is('input[type="checkbox"]') ? $(this).prop('checked') : $(this).val());
-					} else {
-						prefTable.insert({
-							preference: $(this).attr('name'),
-							value: $(this).is('input[type="checkbox"]') ? $(this).prop('checked') : $(this).val()
-						});
-					}
-				});
-				hoverMsg('success', 'Your settings have been saved.');
-			});
-		}
-		if (pageUrl == 'snippets') {
-			$('#main .topline').html('<br><select id="snippetlist"><option value="">' + (snippetList.length ? 'Select a snippet' : 'You don\'t have any snippets') + '</option></select>&nbsp;&nbsp;<button id="loadsnippet" class="btn btn-success">Load</button><button id="deletesnippet" class="btn btn-danger">Delete</button><button id="clearsnippet" class="btn btn-primary">Clear form</button><br><br><input type="hidden" id="oldname" value="" /><input id="friendlyname" type="textbox" style="width:100%" placeholder="Friendly name"/><br><textarea id="snippetfull" placeholder="Snippet text" rows="9" style="width:100%"></textarea><button id="savesnippet" class="btn btn-success">Save</button>');
-
-			var snippetName;
-			tmp = '';
-			for (i = 0, l = snippetList.length; i < l; i++) {
-				snippetName = snippetList[i].name;
-				tmp += '<option value="' + snippetName + '">' + snippetName + '</option>';
-			}
-			$('#snippetlist').append(tmp);
-
-			$('#loadsnippet').on('click', function() {
-				if ($('#snippetlist').html() !== '') {
-					var result = snippetTable.query({name: $('#snippetlist').val()})[0];
-					$('#friendlyname, #oldname').val(result.get('name'));
-					$('#snippetfull').val(result.get('value'));
-				}
-			});
-			$('#deletesnippet').on('click', function() {
-				if ($('#snippetlist').html() !== '') {
-					snippetTable.query({name: $('#snippetlist').val()})[0].deleteRecord();
-					$('#snippetlist option[value="' + $('#snippetlist').val() + '"]').remove();
-					hoverMsg('warning', 'Snippet deleted');
-					$('#friendlyname, #snippetfull').val('');
-				}
-			});
-			$('#clearsnippet').on('click', function() {
-				$('#oldname, #friendlyname, #snippetfull').val('');
-			});
-
-			$('#savesnippet').on('click', function() {
-				if ($('#friendlyname').val() !== '' && $('#snippetfull').val() !== '') {
-					var targetName = $('#oldname').val() === '' ? $('#friendlyname').val() : $('#oldname').val();
-					var snip = snippetTable.query({name: targetName});
-					if (snip.length) {
-						snip[0].set('value', $('#snippetfull').val());
-						snip[0].set('name', $('#friendlyname').val());
-						if ($('#oldname').val() !== '') {
-							$('#snippetlist option[value="' + $('#oldname').val() + '"]').val($('#friendlyname').val()).html($('#friendlyname').val());
-						}
-					} else {
-						//If the snippet is new, add it to the list, and then re-sort the list to put it in the appropriate spot in the list
-						snippetTable.insert({
-							name: $('#friendlyname').val(),
-							value: $('#snippetfull').val()
-						});
-
-						snippetList[snippetList.length] = {
-							name: $('#friendlyname').val(),
-							value: $('#snippetfull').val()
-						};
-						snippetList.sort(function (a, b) {
-							if (a.name > b.name) {
-								return 1;
-							}
-							if (a.name < b.name) {
-								return -1;
-							}
-							return 0;
-						});
-						tmp = '<option value="">' + $('#snippetlist option').eq(0).html() + '</option>';
-						for (i = 0, l = snippetList.length; i < l; i++) {
-							tmp += '<option value="' + snippetList[i].name + '">' + snippetList[i].name + '</option>';
-						}
-						$('#snippetlist').html(tmp);
-					}
-					$('#friendlyname, #snippetfull, #oldname').val('');
-					hoverMsg('success', 'Snippet saved.');
-				} else {
-					hoverMsg('danger', 'Please fill out both fields.');
-				}
-			});
-		}*/
-
-		/*
-		 * Messaging
-		 */
-
-		/*if (userId) {
-			//If the message system is returning a token, log it
-			if (urlVars.msgtoken) {
-				var tokenval = urlVars.msgtoken;
-				var redirUrl = fullUrl.indexOf('?msgtoken=') > -1 ? fullUrl.split('?msgtoken=')[0] : fullUrl.split('&msgtoken=')[0]; //Grab redirect URL
-				if (userToken.length === 0) { //If we don't yet have a token, log it, otherwise, update it
-					configTable.insert({
-						name: 'userToken',
-						value: tokenval
-					});
-				} else {
-					userToken[0].set('value', tokenval);
-				}
-				datastore.syncStatusChanged.addListener(function() {
-					//Wait until we've logged it successfully, then reload the page
-					if (!datastore.getSyncStatus().uploading) {
-						window.location.href = redirUrl;
-					}
-				});
-			}
-
-			var token = userToken[0].get('value') || '';
-			var msgFormAction = userToken.length ? '' : '<input type="hidden" name="action" value="create-account" />';
-
-			//Handle messages TODO This will be broken once private UIDs are assigned
-			/*$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <a href="javascript:void(0)" class="gsDropboxExtenderMessageUser">Message User</a>');
-			$('article.post .post-footer .post-follow').css('margin-right', '0.4rem');
-			$('.gsDropboxExtenderMessageUser').click(function(evt) {
-				showModal(['Send'], 'Message User', '<form id="gsDropboxExtenderMessageForm" action="https://www.techgeek01.com/dropboxextplus/process-message.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input name="msgto" id="gsDropboxExtenderMsgTo" type="textbox" style="width:100%" placeholder="Recipient" value="' + getUserId(evt.target) + '"/><br><input name="msgfrom" id="gsDropboxExtenderMsgFrom" type="hidden" value = "' + userId + '"/><textarea name="msgtext" id="gsDropboxExtenderMsgText" style="width:100%" placeholder="Message"></textarea><input type="hidden" name="returnto" id="gsDropboxExtenderMsgReturnLocation" value="' + fullUrl + '" /></form>', function() {
-				});
-			});*/
-
-			/*$('#gsDropboxExtenderMessageContainer').prepend('<form style="display:none" action="https://www.techgeek01.com/dropboxextplus/index.php" method="post"><input type="hidden" name="userToken" value="' + token + '" />' + msgFormAction + '<input type="hidden" name="returnto" value="' + fullUrl + '" /><input type="hidden" name="userid" value="' + userUid + '" /><input type="hidden" name="timeOffset" value="' + new Date().getTimezoneOffset() + '" /></form>');
-			$('#gsDropboxExtenderMsgCounter').html('');
-			$('#gsDropboxExtenderMessageLink').attr('href', 'javascript:void(0)').attr('target', '');
-
-			$('#gsDropboxExtenderMessageLink').on('click', function() {
-				$('#gsDropboxExtenderMessageContainer form').submit();
-			});
-
-			if (token) {
-				(function pollServer() {
-					GM_xmlhttpRequest({
-						method: 'GET',
-						url: ('https://www.techgeek01.com/dropboxextplus/count-messages.php?to=' + userUid + '&token=' + token),
-						onload: function(response) {
-							var resp = response.responseText;
-							if (resp != 'Bad auth' && resp != 'Bad UID') {
-								//Display message count
-								$('#gsDropboxExtenderMsgCounter').html(resp > 0 ? (' (' + resp + ')') : '');
-							} else {
-								//Bad auth, offer to fix
-								$('#gsDropboxExtenderMessageContainer form').html('<input type="hidden" name="uid" value="' + userUid + '" />');
-								if (resp != 'Bad UID') {
-									$('#gsDropboxExtenderMessageContainer form').append('<input type="hidden" name="uToken" value="' + token + '" />');
-								}
-								$('#gsDropboxExtenderMessageContainer form').attr('action', 'https://www.techgeek01.com/dropboxextplus/fix-auth.php');
-								$('#gsDropboxExtenderMsgCounter').html(' (Bad auth. Click to fix)');
-							}
-						}
-					});
-					setTimeout(pollServer, 20000);
-				})();
-			}
-		}*/
-
-		/*
-		 * Aesthetics
-		 */
-
-		//Collapse footer
-		/*if ($(window).height() + $('#footer').height() < $(document).height() && collapseFooter.length && collapseFooter[0].get('value')) {
-			//Style footer
-			$('#footer').css({
-				'border': '1px solid #bbb',
-				'border-bottom': 'none',
-				'border-radius': '25px 25px 0 0'
-			}).append($('span:contains("Protected by Arash")')).wrapInner('<div id="footercontent" />').prepend('<div id="footertoggle"><div id="footerarrowup" /><div id="footerarrowdown" style="display:none" /></div>');
-			$('#footerarrowup, #footerarrowdown').css({
-				'height': '0',
-				'width': '0',
-				'border-left': '5px solid transparent',
-				'border-right': '5px solid transparent',
-				'margin': '12px auto 0'
-			});
-			$('#footerarrowup').css('border-bottom', '10px solid #bbb');
-			$('#footerarrowdown').css('border-top', '10px solid #bbb');
-			$('#footercontent').toggle();
-			$('#footertoggle').css('height', '25px').on('click', function() {
-				$('#footercontent').slideToggle('slow', function() {
-					$('#footerarrowup, #footerarrowdown').toggle();
-				});
-			});
-		}*/
-
-		//Super User icons TODO: Rewrite this for new forums
-		//var modIcon = prefTable.query({preference: 'modIcon'});
-		//$userRole.filter(':contains("Super User")').parent().parent().find('strong').find('img').attr('src', modIcon.length ? modIcon[0].get('value') : 'https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif');
-	});
-} else {
-	$navBar.append('<span id="dropboxlinkold">' + ((page.check(fullUrl)) ? 'Link to Dropbox' : 'You\'re not linked to Dropbox yet, but you can do so from the <a href="' + page.front + '">front page</a>') + '</span>');
-
-	//Start authentication process
-	$('#dropboxlinkold').on('click', function(e) {
-		e.preventDefault();
-		dsClient.authenticate();
 	});
 }
 
@@ -1348,7 +1048,7 @@ function forumVersion(versionDate) {
 			$('#forumlist tr:not(:first)').css('line-height', '17px');
 			$('#forumlist td span').css('font-size', '11px');
 
-			var topicHeader = '<span style="float:left">Topic — <a href="' + page.newPost.value + '" style="font-style:italic">Add New »</a></span><span style="float:right">Sort by:';
+			var topicHeader = '<span style="float:left">Topic — <a href="' + page.posts.new.value + '" style="font-style:italic">Add New »</a></span><span style="float:right">Sort by:';
 			var sorts = $('.community-sub-nav ul li');
 			for (var i = 0, l = sorts.length; i < l; i++) {
 				topicHeader += ' ' + sorts.eq(i).html();
