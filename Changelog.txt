@@ -1,31 +1,15 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
-***** Help Center Link Completion
-
------2.4.0.1pre3b-----
+-----2.5.0-----
++ Added @num notation for linking to help center articles
 + Added suggestion flyout for Help Center linking autocomplete
-- Removed old code pertaining to Datastore API
+- Removed theme and mod icon options in preferences
+* Fixed bug where having a valid UID but no token (correct or otherwise) would assume you need to register, rather than checking if your UID exists in the system
 * Fixed bug with topic highlighting not working on post list
 * Fixed rare bug with grabbing user avatar ID halting script execution
+# Migrated from Datastore API to Core API
 # Changed front page reloading to reload the posts page
-
------2.4.0.1pre3a-----
-+ Added @num notation for linking to help center articles
-# Signature usage, drafts, and snippets have been migrated to the new system
-
------2.4.0.1pre2b-----
-* Fixed bug where having a valid UID but no token (correct or otherwise) would assume you need to register, rather than checking if your UID exists in the system
-# Messaging system has been migrated to new system
-
------2.4.0.1pre2a-----
-+ Initial Core API linkage
-- Removed theme and mod icon options in preferences
-* Implemented data querying
-# Snippet manager and preferences menu are migrated to new system
-
------2.4.0.1pre1a-----
-+ Added integration for new Core API
 
 -----2.4.0-----
 + Added mod topic to URL list
