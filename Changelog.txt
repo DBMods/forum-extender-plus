@@ -1,6 +1,21 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.6.0-----
++ Help Center autocomplete will add a space if needed after the clicked match
++ Rewrote modal system to add support for multiple modals at a time
++ Added ES and PT language forum lists
++ Added recents forum list
++ Added sync icons as an indicator for syncing
+- Removed old code for markdown syntax
+* Hovering over the Help Center autocomplete list now shows the proper cursor
+* Fixed regex bug for @n Help Center link notation, which shouldn't be triggered by a letter immediately before the @
+* Fixed bug with bad raw link to help center list
+* Reduced latency with Help Center autocomplete
+* Fixed bug where Help Center notation would auto replace @
+# Tweaked Help Center autocomplete styling
+# Preferences and snippet manager menus has been moved back to a modal window
+
 -----2.5.0-----
 + Added @num notation for linking to help center articles
 + Added suggestion flyout for Help Center linking autocomplete
