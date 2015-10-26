@@ -96,13 +96,61 @@ if ($userAuthenticated) {
 	$showinbox = true;
 }
 ?>
+
 <html>
 	<head>
-		<title>Forum Extender+ Messages</title>
+		<title>Forum Extender+ Messenger</title>
 		<link rel='stylesheet' href='css/style.css' />
-		<link rel="stylesheet" href="css/bootstrap.css" />
-		<link rel="stylesheet" href="css/bootstrap-theme.css" />
 	</head>
 	<body>
-		<div id="wrapper" class="container">
-			<div class="jumbotron" id="main">
+		<div id='wrapper'>
+			<header id='head'>
+				Dropbox Forum Extender+
+				<div id='meta'>
+					<div class='buttongroup'>
+						<?php
+						echo '<a class=\'button blue\' href=\'' . $returnto . '\'>Return to Forums</a>';
+						?>
+
+						<a class='button' href='logoff.php'>Log Out</a>
+					</div>
+
+					<?php
+					if($userAuthenticated && false) {
+						echo '<form style="display:inline" action="" method="post"><button type="submit" class="button" name="action" value="logoff">Log out Old</button></form>';
+					}
+					?>
+				</div>
+			</header>
+			<header id='context'>
+				<div class='title'>
+					<a href='index.php'>Messenger</a>
+				</div>
+				<div class='tools'>
+					<a class='button padded' href='javascript:void(0)'>Refresh</a>
+					<div class='buttongroup padded'>
+						<a class='button' href='javascript:void(0)'>Reply</a>
+						<a class='button' href='javascript:void(0)'>Forward</a>
+						<a class='button' href='javascript:void(0)'>Archive</a>
+						<a class='button danger' href='javascript:void(0)'>Delete</a>
+					</div>
+				</div>
+				<div class='clearfix'></div>
+			</header>
+			<div id='container'>
+				<div id='nav'>
+					<a class='button wide blue' href='compose.php'>Compose</a><br>
+					<?php
+					getMessages();
+					echo linkActivity('<a href="index.php">Inbox' . $countBadge . '</a>') . '<br>';
+					echo linkActivity('<a href="sent.php">Sent</a>') . '<br>';
+					echo linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>') . '<br>';
+					echo linkActivity('<a href="settings.php">Settings</a>') . '<br>';
+					echo linkActivity('<a href="stats.php">Stats</a>');
+					if ($username == 'TechGeek01' || $username == 'nathanc') {
+						echo '<br>';
+						echo linkActivity('<a href="admin.php">Admin</a>');
+					}
+					?>
+				</div>
+				<div id='content'>

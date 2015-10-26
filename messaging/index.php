@@ -11,22 +11,28 @@ if ($userAuthenticated) {
 		require_once 'report.php';
 	}
 
-	getMessages();
-
 	if ($showinbox) {
-		echo '<h2>Inbox - ' . $count . '</h2>';
-		while ($row = mysqli_fetch_assoc($result)) {
-			echo '<p class="topline"><br>Time: ' . gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds) . '<br>From: ' . ($row['from']); //PHP 5.4 bug with htmlspecialchars()
-			if ($row['forward'] !== '0') { //PHP 5.4 bug with htmlspecialchars()
-				echo ' (FWD ' . $row['forward'] . ')'; //PHP 5.4 bug with htmlspecialchars()
+		if ($count == 0) {
+			echo 'It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."';
+		} else {
+			echo '<table>';
+
+			while ($row = mysqli_fetch_assoc($result)) {
+				echo '<tr><td class=\'check\'><input type=\'checkbox\' /></td><td class=\'name\'>';
+				echo $row['from'];
+				echo '</td><td class=\'subject\'><span class=\'subject\'>';
+				echo htmlspecialchars($row['subject']);
+				echo '</span><span class=\'contentPreview\'> - ';
+				echo nl2br(htmlspecialchars($row['msg']));
+				echo '</span></td><td class=\'date\'>';
+				echo gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds);
+				echo '</td></tr>';
+				//msgOptions($row);
 			}
-			echo '<br>Subject: ' . htmlspecialchars($row['subject']);
-			echo '<br>Message:<br>' . nl2br(htmlspecialchars($row['msg'])) . '</p>';
-			msgOptions($row);
+			deleteConfirm();
+
+			echo '</table>';
 		}
-		deleteConfirm();
-		if ($count == 0)
-			echo '<p class="topline center"><br>It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."</p>';
 	}
 }
 require_once 'footer.php';

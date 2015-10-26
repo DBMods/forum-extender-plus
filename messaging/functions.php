@@ -50,11 +50,12 @@ function badAuth() {
 //Append a link to the navbar
 function linkActivity($string) {
 	global $pageName, $userAuthenticated, $showinbox;
-	echo '<li class="' . ((strpos($string, $pageName) !== false && $userAuthenticated && $showinbox) ? '' : 'in') . 'active">' . $string . '</li>';
+	echo ((strpos($string, 'href=\'' . $pageName . '\'>') !== false || strpos($string, 'href="' . $pageName . '">') !== false) && $userAuthenticated && $showinbox) ? ('<a class=\'active\'' . substr($string, 3)) : $string;
 }
 
 //Show delete confirmation modal
 function deleteConfirm() {
+	return;
 	echo '<div class="modal fade in" id="alertDelete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
 	echo '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>';
 	echo '<h3 class="modal-title">Are you sure?</h3>';
@@ -78,9 +79,11 @@ function getMessages() {
 
 	//Message counter navbar badges
 	$count = mysqli_num_rows($result);
-	$countBadge = $count > 0 ? (' <span class="badge">' . $count . '</span>') : '';
+	//$countBadge = $count > 0 ? (' <span class="badge">' . $count . '</span>') : '';
+	$countBadge = $count > 0 ? (' (' . $count . ')') : '';
 	$archCount = mysqli_num_rows($archive);
-	$archBadge = $archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '';
+	//$archBadge = $archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '';
+	$archBadge = $archCount > 0 ? (' (' . $archCount . ')') : '';
 }
 
 //Append message options
