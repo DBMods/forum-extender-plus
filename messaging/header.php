@@ -127,8 +127,12 @@ if ($userAuthenticated) {
 					<a href='index.php'>Messenger</a>
 				</div>
 				<div class='tools'>
+					<?php	if ($pageName == 'index.php' || $pageName == 'archive.php' || $pageName == 'sent.php') { ?>
 					<a class='button padded' href='javascript:void(0)'>Refresh</a>
-					<?php	if ($pageName == 'index.php' || $pageName == 'archive.php') { ?>
+					<?php
+					}
+					if ($pageName == 'index.php' || $pageName == 'archive.php' || $pageName == 'view.php') {
+					?>
 					<div id='messageActionButtons' class='buttongroup padded' style='display:none'>
 						<a id='viewBtn' href='javascript:void(0)' class='button'>View</a>
 						<a id='repBtn' href='javascript:void(0)' class='button'>Reply</a>
