@@ -112,7 +112,7 @@ if ($userAuthenticated) {
 						echo '<a class=\'button blue\' href=\'' . $returnto . '\'>Return to Forums</a>';
 						?>
 
-						<a class='button' href='logoff.php'>Log Out</a>
+						<a class='button' href='javascript:void(0)'>Log Out</a>
 					</div>
 
 					<?php
@@ -128,11 +128,29 @@ if ($userAuthenticated) {
 				</div>
 				<div class='tools'>
 					<a class='button padded' href='javascript:void(0)'>Refresh</a>
-					<div class='buttongroup padded'>
-						<a class='button' href='javascript:void(0)'>Reply</a>
-						<a class='button' href='javascript:void(0)'>Forward</a>
-						<a class='button' href='javascript:void(0)'>Archive</a>
-						<a class='button danger' href='javascript:void(0)'>Delete</a>
+					<?php	if ($pageName == 'index.php' || $pageName == 'archive.php') { ?>
+					<div id='messageActionButtons' class='buttongroup padded' style='display:none'>
+						<a id='repBtn' href='javascript:void(0)' class='button'>Reply</a>
+						<a id='fwdBtn' href='javascript:void(0)' class='button'>Forward</a>
+						<a id='archBtn' href='javascript:void(0)' class='button'><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></a>
+						<a id='delBtn' href='javascript:void(0)' class='button danger'>Delete</a>
+					</div>
+					<?php } ?>
+					<div id='metaForms' style='display:none'>
+						<form id='replyForm' method='post' action'compose.php'>
+							<input name='action' value='compose' />
+							<input name='msgid' value='' />
+							<input name='msgto' value='' />
+							<input name='subject' value='' />
+							<input name='context' value='' />
+						</form>
+						<form id='archForm' method='post' action''>
+							<input name='action' value='' />
+							<input name='msgid' value='' />
+							<input name='msgto' value='' />
+							<input name='subject' value='' />
+							<input name='context' value='' />
+						</form>
 					</div>
 				</div>
 				<div class='clearfix'></div>
