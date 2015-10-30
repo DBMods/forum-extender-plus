@@ -84,13 +84,18 @@ if (!$_POST['action'] == 'create-account' && is_numeric($_POST['userid'])) {
 		signinPanel("showTokenRedir", "pass-token");
 	}
 } else if ($_POST['action'] == "pass-token" && $_POST['username'] && $_POST['password']) {
+	//Verify password
 	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 	$passwordHash = mysqli_fetch_row($result);
 	$passwordHash = $passwordHash['0'];
-	if (password_verify($_POST['password'], $passwordHash))
+
+	//If password matches, auth the user
+	if (password_verify($_POST['password'], $passwordHash)) {
 		$userAuthenticated = true;
+	}
+
 	if ($userAuthenticated) {
-		//Authentication successful
+		//Authentication successful, so get the token, and prompt the user to return it to the userscript
 		$result = mysqli_query($db, "SELECT ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
 		$token = mysqli_fetch_row($result);
 		$token = $token['0'];
