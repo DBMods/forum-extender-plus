@@ -27,7 +27,7 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 
 	if (pageUrl == 'index.php' || pageUrl == 'archive.php') {
 		//initialize buttons
-		$('#repBtn, #fwdBtn').addClass('grayed');
+		$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
 		var archAct = pageUrl == 'index.php' ? 'arch' : 'unarch';
 
 		$('table tr').on('click', function() {
@@ -38,14 +38,17 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 			$(this).addClass('highlighted');
 
 			//Add ID to forms for manipulation
-			$('#replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(id);
+			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(id);
 
 			//Enable buttons
 			$('#messageActionButtons').show();
-			$('#repBtn, #fwdBtn').removeClass('grayed');
+			$('#viewBtn, #repBtn, #fwdBtn').removeClass('grayed');
 		});
 
 		//Form submits for meta buttons
+		$('#viewBtn').on('click', function() {
+			$('#viewForm').submit();
+		});
 		$('#repBtn').on('click', function() {
 			$('#replyForm').submit();
 		});

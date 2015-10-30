@@ -130,6 +130,7 @@ if ($userAuthenticated) {
 					<a class='button padded' href='javascript:void(0)'>Refresh</a>
 					<?php	if ($pageName == 'index.php' || $pageName == 'archive.php') { ?>
 					<div id='messageActionButtons' class='buttongroup padded' style='display:none'>
+						<a id='viewBtn' href='javascript:void(0)' class='button'>View</a>
 						<a id='repBtn' href='javascript:void(0)' class='button'>Reply</a>
 						<a id='fwdBtn' href='javascript:void(0)' class='button'>Forward</a>
 						<a id='archBtn' href='javascript:void(0)' class='button'><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></a>
@@ -137,21 +138,24 @@ if ($userAuthenticated) {
 					</div>
 					<?php } ?>
 					<div id='metaForms' style='display:none'>
-						<form id='replyForm' method='post' action'compose.php'>
+						<form id='viewForm' method='post' action='view.php'>
+							<input name='msgid' value='' />
+						</form>
+						<form id='replyForm' method='post' action='compose.php'>
 							<input name='action' value='compose' />
 							<input name='msgid' value='' />
 							<input name='msgto' value='' />
 							<input name='subject' value='' />
 							<input name='context' value='' />
 						</form>
-						<form id='archForm' method='post' action''>
+						<form id='archForm' method='post' action=''>
 							<input name='action' value='' />
 							<input name='msgid' value='' />
 							<input name='msgto' value='' />
 							<input name='subject' value='' />
 							<input name='context' value='' />
 						</form>
-						<form id='delForm' method='post' action''>
+						<form id='delForm' method='post' action=''>
 							<input name='action' value='delete' />
 							<input name='msgid' value='' />
 						</form>
