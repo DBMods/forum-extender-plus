@@ -130,7 +130,7 @@
 
 body {
 	background-color: #ddd;
-	background-image: url('background.png') fixed top center;
+	background-image: url('../images/background.png') fixed top center;
 	font-family: Arial;
 	font-size: 14px;
 }
