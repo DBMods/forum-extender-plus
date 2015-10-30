@@ -29,7 +29,7 @@ if ($userAuthenticated) {
 				echo '</td></tr>';
 				//msgOptions($row);
 			}
-			deleteConfirm();
+			//deleteConfirm();
 
 			echo '</table>';
 		}

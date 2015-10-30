@@ -10,8 +10,6 @@ if ($userAuthenticated) {
 		require_once 'address-book.php';
 	}
 
-	getMessages();
-
 	if ($action != 'addressbook' && ($action != 'send' || $senderror)) {
 		$showinbox = false;
 
