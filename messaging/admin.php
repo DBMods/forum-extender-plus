@@ -31,37 +31,31 @@ if ($userAuthenticated) {
     }
     echo '<h2>Admin Dashboard</h2>';
 ?>
-<div class="table-responsive">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Userid</th>
-        <th>Username</th>
-        <th>Create Date</th>
-        <th>Create IP</th>
-        <th>Token</th>
-        <th>New Password</th>
-      </tr>
-    </thead>
-    <tbody>
+<table>
+  <tr>
+    <th>UID</th>
+    <th>Username</th>
+    <th>Create Date</th>
+    <th>Create IP</th>
+    <th>Token</th>
+    <th>New Password</th>
+  </tr>
 <?php
     //Get list of users
     $result = mysqli_query($db, "SELECT * FROM `users`");
     //List users in rows
     while ($row = mysqli_fetch_assoc($result)) {
       echo '<tr>';
-      echo '<th>' . htmlspecialchars($row['userid']) . '</th>';
-      echo '<th>' . htmlspecialchars($row['username']) . '</th>';
-      echo '<th>' . gmdate('Y-m-d g:i A', $row['create_time']) . '</th>';
-      echo '<th>' . htmlspecialchars($row['create_ip']) . '</th>';
-      echo '<th>' . htmlspecialchars($row['ext_token']) . '</th>';
-      echo '<th><form method="post" action=""><div class="admin-input pull-left"><input name="dashmodpassword" id="dashmodpassword" class="form-control input-sm" type="password"><input name="dashuserid" id="dashuserid" type="hidden" value="' . $row['userid'] . '"></div><div class="pull-left"><button name="dashmodapply" id="dashmodapply" type="submit" class="btn btn-success" value="change">Change</button></div></form></th>';
+      echo '<td>' . htmlspecialchars($row['userid']) . '</td>';
+      echo '<td>' . htmlspecialchars($row['username']) . '</td>';
+      echo '<td>' . gmdate('Y-m-d g:i A', $row['create_time']) . '</td>';
+      echo '<td>' . htmlspecialchars($row['create_ip']) . '</td>';
+      echo '<td>' . htmlspecialchars($row['ext_token']) . '</t>';
+      echo '<td><form method="post" action=""><div class="admin-input pull-left"><input name="dashmodpassword" id="dashmodpassword" class="form-control input-sm" type="password"><input name="dashuserid" id="dashuserid" type="hidden" value="' . $row['userid'] . '"></div><div class="pull-left"><button name="dashmodapply" id="dashmodapply" type="submit" class="btn btn-success" value="change">Change</button></div></form></td>';
       echo '</tr>';
     }
 ?>
-    </tbody>
-  </table>
-</div>
+</table>
 <?php
   }else {
     echo "<div class='alert-center'><div id='alert-fade' class='alert alert-danger'><p><strong>Not permitted</strong></p></div></div>";
