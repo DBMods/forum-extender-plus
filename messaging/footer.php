@@ -24,11 +24,13 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
 <script>
 	var pageUrl = '<?php echo $pageName; ?>';
+	var archAct;
 
 	if (pageUrl == 'index.php' || pageUrl == 'archive.php') {
+		archAct = pageUrl == 'index.php' ? 'arch' : 'unarch';
+
 		//initialize buttons
 		$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
-		var archAct = pageUrl == 'index.php' ? 'arch' : 'unarch';
 
 		$('table tr').on('click', function() {
 			var id = $(this).attr('data-id');
@@ -44,26 +46,39 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 			$('#messageActionButtons').show();
 			$('#viewBtn, #repBtn, #fwdBtn').removeClass('grayed');
 		});
+	} else if (pageUrl == 'view.php') {
+		archAct = '<?php echo $buttonMetaArch; ?>';
+		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive');
 
-		//Form submits for meta buttons
-		$('#viewBtn').on('click', function() {
-			$('#viewForm').submit();
-		});
-		$('#repBtn').on('click', function() {
-			$('#replyForm').submit();
-		});
-		$('#fwdBtn').on('click', function() {
-			$('#archForm input[name="action"]').attr('value', 'forward');
-			$('#archForm').submit();
-		});
-		$('#archBtn').on('click', function() {
-			$('#archForm input[name="action"]').attr('value', archAct);
-			$('#archForm').submit();
-		});
-		$('#delBtn').on('click', function() {
-			$('#delForm').submit();
-		});
+		//Add ID to forms for manipulation
+		$('#replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val('<?php echo $buttonMetaId ?>');
+
+		//Change meta forms to throw back to the inbox to avoid displaying errors to the user after message is moved or deleted
+		$('#delForm, #archForm').attr('action', 'index.php');
+
+		//Enable buttons
+		$('#viewBtn').remove();
+		$('#messageActionButtons').show();
 	}
+
+	//Form submits for meta buttons
+	$('#viewBtn').on('click', function() {
+		$('#viewForm').submit();
+	});
+	$('#repBtn').on('click', function() {
+		$('#replyForm').submit();
+	});
+	$('#fwdBtn').on('click', function() {
+		$('#archForm input[name="action"]').attr('value', 'forward');
+		$('#archForm').submit();
+	});
+	$('#archBtn').on('click', function() {
+		$('#archForm input[name="action"]').attr('value', archAct);
+		$('#archForm').submit();
+	});
+	$('#delBtn').on('click', function() {
+		$('#delForm').submit();
+	});
 </script>
 
 <script src='js/bootstrap.js'></script>

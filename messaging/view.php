@@ -24,6 +24,9 @@ if ($userAuthenticated) {
 		echo $typestring . '<br>';
 		echo '<strong>Subject:</strong> ' . htmlspecialchars($row['subject']) . '<br>';
 		echo '<p>' . $row['msg'] . '</p>';
+
+		$buttonMetaId = $_POST['msgid'];
+		$buttonMetaArch = $row['archive'] == 0 ? 'arch' : 'unarch';
 	} else {
 		echo 'Something went wrong. Please try again later.';
 	}
