@@ -151,6 +151,10 @@ if ($userAuthenticated) {
 							<input name='subject' value='' />
 							<input name='context' value='' />
 						</form>
+						<form id='delForm' method='post' action''>
+							<input name='action' value='delete' />
+							<input name='msgid' value='' />
+						</form>
 					</div>
 				</div>
 				<div class='clearfix'></div>

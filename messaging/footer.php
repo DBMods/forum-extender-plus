@@ -38,7 +38,7 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 			$(this).addClass('highlighted');
 
 			//Add ID to forms for manipulation
-			$('#replyForm input[name="msgid"], #archForm input[name="msgid"]').val(id);
+			$('#replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(id);
 
 			//Enable buttons
 			$('#messageActionButtons').show();
@@ -56,6 +56,9 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 		$('#archBtn').on('click', function() {
 			$('#archForm input[name="action"]').attr('value', archAct);
 			$('#archForm').submit();
+		});
+		$('#delBtn').on('click', function() {
+			$('#delForm').submit();
 		});
 	}
 </script>
