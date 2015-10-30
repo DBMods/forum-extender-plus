@@ -13,7 +13,7 @@ if ($userAuthenticated) {
 			echo '<table>';
 
 			while ($row = mysqli_fetch_assoc($archive)) {
-				echo '<tr><td class=\'check\'><input type=\'checkbox\' /></td><td class=\'name\'>';
+				echo '<tr data-id="' . htmlspecialchars($row['id']) . '"><td class=\'check\'><input type=\'checkbox\' /></td><td class=\'name\'>';
 				echo $row['from'];
 				echo '</td><td class=\'subject\'><span class=\'subject\'>';
 				echo htmlspecialchars($row['subject']);
@@ -22,9 +22,8 @@ if ($userAuthenticated) {
 				echo '</span></td><td class=\'date\'>';
 				echo gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds);
 				echo '</td></tr>';
-				//msgOptions($row);
 			}
-			deleteConfirm();
+			//deleteConfirm();
 
 			echo '</table>';
 		}
