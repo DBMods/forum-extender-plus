@@ -23,7 +23,6 @@ if ($userAuthenticated) {
 				echo gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds);
 				echo '</td></tr>';
 			}
-			//deleteConfirm();
 
 			echo '</table>';
 		}
