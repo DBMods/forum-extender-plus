@@ -79,6 +79,17 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 	$('#delBtn').on('click', function() {
 		$('#delForm').submit();
 	});
+
+	//Main function buttons
+	$('#cancelBtn').on('click', function() {
+		$('#cancelForm').submit();
+	});
+	$('#sendBtn').on('click', function() {
+		$('#messageform').submit();
+	});
+	$('#addressBtn').on('click', function() {
+		$('#addressform').submit();
+	});
 </script>
 
 <script src='js/bootstrap.js'></script>

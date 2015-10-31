@@ -140,6 +140,11 @@ if ($userAuthenticated) {
 						<a id='archBtn' href='javascript:void(0)' class='button'><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></a>
 						<a id='delBtn' href='javascript:void(0)' class='button danger'>Delete</a>
 					</div>
+					<?php
+					}
+					if ($pageName == 'compose.php') {
+					?>
+					<a class='button' href='javascript:void(0)'>Address Book</a>
 					<?php } ?>
 					<div id='metaForms' style='display:none'>
 						<form id='viewForm' method='post' action='view.php'>
@@ -162,6 +167,9 @@ if ($userAuthenticated) {
 						<form id='delForm' method='post' action=''>
 							<input name='action' value='delete' />
 							<input name='msgid' value='' />
+						</form>
+						<form id='addressForm' action='compose.php'>
+							<input name='action' value='addressbook' />
 						</form>
 					</div>
 				</div>
