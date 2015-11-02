@@ -29,7 +29,6 @@ if ($userAuthenticated) {
       $result = mysqli_query($db, "UPDATE users set password='" . sqlesc($modpasswordhash) . "', ext_token='" . sqlesc($token) . "' WHERE userid='" . sqlesc($_POST['dashuserid']) . "' LIMIT 1");
       echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Password changed</strong></p></div></div>";
     }
-    echo '<h2>Admin Dashboard</h2>';
 ?>
 <table>
   <tr>
@@ -51,7 +50,7 @@ if ($userAuthenticated) {
       echo '<td>' . gmdate('Y-m-d g:i A', $row['create_time']) . '</td>';
       echo '<td>' . htmlspecialchars($row['create_ip']) . '</td>';
       echo '<td>' . htmlspecialchars($row['ext_token']) . '</t>';
-      echo '<td><form method="post" action=""><div class="admin-input pull-left"><input name="dashmodpassword" id="dashmodpassword" class="form-control input-sm" type="password"><input name="dashuserid" id="dashuserid" type="hidden" value="' . $row['userid'] . '"></div><div class="pull-left"><button name="dashmodapply" id="dashmodapply" type="submit" class="btn btn-success" value="change">Change</button></div></form></td>';
+      echo '<td><form method="post" action="" style="margin:0px"><input name="dashmodpassword" id="dashmodpassword" type="password"><input name="dashuserid" id="dashuserid" type="hidden" value="' . $row['userid'] . '"> <button name="dashmodapply" id="dashmodapply" type="submit" class="button blue" value="change">Change</button></form></td>';
       echo '</tr>';
     }
 ?>

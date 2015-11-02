@@ -1,5 +1,3 @@
-<h2>Address Book</h2>
-<p class='topline'>
 <form method='post' action='' class='menu'>
 	<input type='hidden' name='action' value='compose' />
 	<select name='msgto' class='form-control'>
@@ -13,8 +11,7 @@
 	?>
 	</select>
 	<br>
-	<button type='submit' class='btn btn-success'>
+	<button type='submit' class='button blue'>
 		Message User
 	</button>
 </form>
-</p>
