@@ -133,20 +133,57 @@ if ($userAuthenticated) {
 					}
 					if ($pageName == 'index.php' || $pageName == 'archive.php' || $pageName == 'view.php') {
 					?>
-					<div id='messageActionButtons' class='buttongroup padded' style='display:none'>
-						<a id='viewBtn' href='javascript:void(0)' class='button'>View</a>
+					<div id='messageActionButtons' class='buttongroup padded' <?php echo $pageName != 'view.php' ? 'display:none' : ''; ?>>
+						<!--<a id='viewBtn' href='javascript:void(0)' class='button'>View</a>
 						<a id='repBtn' href='javascript:void(0)' class='button'>Reply</a>
 						<a id='fwdBtn' href='javascript:void(0)' class='button'>Forward</a>
-						<a id='archBtn' href='javascript:void(0)' class='button'><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></a>
-						<a id='delBtn' href='javascript:void(0)' class='button danger'>Delete</a>
+						<a id='archBtn' href='javascript:void(0)' class='button'></a>
+						<a id='delBtn' href='javascript:void(0)' class='button danger'>Delete</a>-->
+
+						<?php if ($pageName != 'view.php') { ?>
+						<form id='viewForm' class='inline' method='post' action='view.php'>
+							<input type='hidden' name='msgid' value='' />
+							<button class='button first' type='submit'>View</button>
+						</form>
+						<?php } ?>
+
+						<form id='replyForm' class='inline' method='post' action='compose.php'>
+							<input type='hidden' name='action' value='compose' />
+							<input type='hidden' name='msgid' value='' />
+							<input type='hidden' name='msgto' value='' />
+							<input type='hidden' name='subject' value='' />
+							<input type='hidden' name='context' value='' />
+							<button class='button<?php echo $pageName != 'view.php' ? '' : ' first'; ?>' type='submit'>Reply</button>
+						</form>
+						<form id='forwardForm' class='inline' method='post' action=''>
+							<input type='hidden' name='action' value='forward' />
+							<input type='hidden' name='msgid' value='' />
+							<input type='hidden' name='msgto' value='' />
+							<input type='hidden' name='subject' value='' />
+							<input type='hidden' name='context' value='' />
+							<button class='button' type='submit'>Forward</button>
+						</form>
+						<form id='archForm' class='inline' method='post' action=''>
+							<input type='hidden' name='action' value='' />
+							<input type='hidden' name='msgid' value='' />
+							<input type='hidden' name='msgto' value='' />
+							<input type='hidden' name='subject' value='' />
+							<input type='hidden' name='context' value='' />
+							<button class='button' type='submit'><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></button>
+						</form>
+						<form id='delForm' class='inline' method='post' action=''>
+							<input type='hidden' name='action' value='delete' />
+							<input type='hidden' name='msgid' value='' />
+							<button class='button last danger' type='submit'>Delete</button>
+						</form>
 					</div>
 					<?php
 					}
 					if ($pageName == 'compose.php') {
 					?>
-					<a class='button' href='javascript:void(0)'>Address Book</a>
+					<a id='addressBtn' class='button' href='javascript:void(0)'>Address Book</a>
 					<?php } ?>
-					<div id='metaForms' style='display:none'>
+					<!--<div id='metaForms' style='display:none'>
 						<form id='viewForm' method='post' action='view.php'>
 							<input name='msgid' value='' />
 						</form>
@@ -171,7 +208,7 @@ if ($userAuthenticated) {
 						<form id='addressForm' action='compose.php'>
 							<input name='action' value='addressbook' />
 						</form>
-					</div>
+					</div>-->
 				</div>
 				<div class='clearfix'></div>
 			</header>

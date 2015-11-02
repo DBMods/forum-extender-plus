@@ -209,6 +209,10 @@ a {
 	margin-right: 0;
 }
 
+form.inline {
+	display: inline;
+}
+
 .button {
 	font-size: 11px;
 	font-weight: bold;
@@ -223,8 +227,11 @@ a.button {
 	line-height: 39px!important;
 }
 button.button {
-	padding: 6px 20px;
-	font-weight: normal;
+	margin: 4px 0;
+	padding: 7px 20px 6px;
+	font-weight: bold;
+	font-family: Arial;
+	cursor: pointer;
 }
 .button:hover {
 	background: #f5f5f5;
@@ -262,20 +269,20 @@ button.button {
 	font-size: 0;
 	display: inline-block;
 }
-.buttongroup .button:not(:last-child) {
+.buttongroup a.button:not(:last-child), .buttongroup button.button:not(.last) {
 	border-right: none;
 }
-.buttongroup .button:first-child {
+.buttongroup a.button:first-child, .buttongroup button.button.first {
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
 	padding-right: 15px;
 }
-.buttongroup .button:last-child {
+.buttongroup a.button:last-child, .buttongroup button.button.last {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 	padding-left: 15px;
 }
-.buttongroup .button:not(:first-child):not(:last-child) {
+.buttongroup a.button:not(:first-child):not(:last-child), .buttongroup button.button:not(.first):not(.last) {
 	border-radius: 0;
 	padding-left: 15px;
 	padding-right: 15px;
