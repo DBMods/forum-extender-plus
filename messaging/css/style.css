@@ -129,7 +129,6 @@
 
 
 body {
-	background-color: #ddd;
 	background-image: url('../images/background.png') fixed top center;
 	font-family: Arial;
 	font-size: 14px;
@@ -228,7 +227,7 @@ a.button {
 }
 button.button {
 	margin: 4px 0;
-	padding: 7px 20px 6px;
+	padding: 6.5px 20px;
 	font-weight: bold;
 	font-family: Arial;
 	cursor: pointer;
