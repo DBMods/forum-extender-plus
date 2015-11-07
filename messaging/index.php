@@ -25,7 +25,7 @@ if ($userAuthenticated) {
 				echo '</span><span class=\'contentPreview\'> - ';
 				echo nl2br(htmlspecialchars($row['msg']));
 				echo '</span></td><td class=\'date\'>';
-				echo gmdate('Y-m-d g:i A', $row['time'] - $timeOffsetSeconds);
+				echo parseDate($row['time'] - $timeOffsetSeconds);
 				echo '</td></tr>';
 			}
 

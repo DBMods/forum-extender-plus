@@ -19,6 +19,27 @@ function delCookie($cookie) {
 	}
 }
 
+//Get formatted date string
+function parseDate($time) {
+	global $timeOffsetSeconds;
+
+	if (daysInPast($time) == 0) {
+		return 'Today, ' . gmdate('g:i A', $time);
+	} else if (daysInPast($time) == 1) {
+		return 'Yesterday, ' . gmdate('g:i A', $time);
+	} else if (gmdate('Y', $time) == gmdate('Y', time() - $timeOffsetSeconds)) {
+		return gmdate('M j, g:i A', $time);
+	} else {
+		return gmdate('M j, Y, g:i A', $time);
+	}
+}
+
+//Calculate days in past for a given timestamp
+function daysInPast($time) {
+	global $timeOffsetSeconds;
+	return unixtojd(time() - $timeOffsetSeconds) - unixtojd($time + $timeOffsetSeconds); //Adding the time offset negates subtraction in $time
+}
+
 //Show a sign in panel
 function signinPanel($showOption, $addAction) {
 	//$showOption can show the Register form or a login form to redirect back to the forums with msgtoken
