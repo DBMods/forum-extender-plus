@@ -107,10 +107,6 @@ if (!$_POST['action'] == 'create-account' && is_numeric($_POST['userid'])) {
 	}
 } else {
 	//No request from extension to create the account
-	echo '<div class="small-center">';
-	echo '<div class="panel panel-primary">';
-	echo '<div class="panel-heading"><h3>Sign up</h3></div>';
-	echo '<div class="panel-body"><p>The Dropbox Forum Extender+ extension is required to use this site.  Please install from <a href="https://github.com/dbmods/forum-extender-plus">Github</a></div>';
-	echo '</div></div>';
+	echo 'The Dropbox Forum Extender+ extension is required to use this site.  Please install from <a href="https://github.com/DBMods/forum-extender-plus">Github</a>.';
 }
 ?>

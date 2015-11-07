@@ -211,6 +211,9 @@ a {
 form.inline {
 	display: inline;
 }
+fieldset {
+	border: none;
+}
 
 .button {
 	font-size: 11px;
