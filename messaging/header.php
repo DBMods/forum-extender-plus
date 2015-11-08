@@ -110,9 +110,13 @@ if ($userAuthenticated) {
 					<div class='buttongroup'>
 						<?php
 						echo '<a class=\'button blue\' href=\'' . $returnto . '\'>Return to Forums</a>';
-						?>
 
-						<a class='button' href='javascript:void(0)'>Log Out</a>
+						if ($userAuthenticated) {
+						?>
+						<form class='inline' action='' method='post'>
+							<button type='submit' class='button last' name='action' value='logoff'>Log out</button>
+						</form>
+						<?php } ?>
 					</div>
 
 					<?php
@@ -134,12 +138,6 @@ if ($userAuthenticated) {
 					if ($pageName == 'index.php' || $pageName == 'archive.php' || $pageName == 'view.php') {
 					?>
 					<div id='messageActionButtons' class='buttongroup padded' <?php echo $pageName != 'view.php' ? 'style="display:none"' : ''; ?>>
-						<!--<a id='viewBtn' href='javascript:void(0)' class='button'>View</a>
-						<a id='repBtn' href='javascript:void(0)' class='button'>Reply</a>
-						<a id='fwdBtn' href='javascript:void(0)' class='button'>Forward</a>
-						<a id='archBtn' href='javascript:void(0)' class='button'></a>
-						<a id='delBtn' href='javascript:void(0)' class='button danger'>Delete</a>-->
-
 						<?php if ($pageName != 'view.php') { ?>
 						<form id='viewForm' class='inline' method='post' action='view.php'>
 							<input type='hidden' name='msgid' value='' />
