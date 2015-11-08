@@ -128,7 +128,7 @@ if ($userAuthenticated) {
 				</div>
 				<div class='tools'>
 					<?php	if ($pageName == 'index.php' || $pageName == 'archive.php' || $pageName == 'sent.php') { ?>
-					<a class='button padded' href='javascript:void(0)'>Refresh</a>
+					<a class='button padded grayed' href='javascript:void(0)'>Refresh</a>
 					<?php
 					}
 					if ($pageName == 'index.php' || $pageName == 'archive.php' || $pageName == 'view.php') {
