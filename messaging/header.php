@@ -179,34 +179,10 @@ if ($userAuthenticated) {
 					}
 					if ($pageName == 'compose.php') {
 					?>
-					<a id='addressBtn' class='button' href='javascript:void(0)'>Address Book</a>
+					<form class='inline' action='compose.php'>
+						<button type='submit' class='button' name='action' value='addressbook'>Address Book</button>
+					</form>
 					<?php } ?>
-					<!--<div id='metaForms' style='display:none'>
-						<form id='viewForm' method='post' action='view.php'>
-							<input name='msgid' value='' />
-						</form>
-						<form id='replyForm' method='post' action='compose.php'>
-							<input name='action' value='compose' />
-							<input name='msgid' value='' />
-							<input name='msgto' value='' />
-							<input name='subject' value='' />
-							<input name='context' value='' />
-						</form>
-						<form id='archForm' method='post' action=''>
-							<input name='action' value='' />
-							<input name='msgid' value='' />
-							<input name='msgto' value='' />
-							<input name='subject' value='' />
-							<input name='context' value='' />
-						</form>
-						<form id='delForm' method='post' action=''>
-							<input name='action' value='delete' />
-							<input name='msgid' value='' />
-						</form>
-						<form id='addressForm' action='compose.php'>
-							<input name='action' value='addressbook' />
-						</form>
-					</div>-->
 				</div>
 				<div class='clearfix'></div>
 			</header>
