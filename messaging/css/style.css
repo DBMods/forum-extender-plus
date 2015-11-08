@@ -277,17 +277,33 @@ button.button {
 .buttongroup a.button:first-child, .buttongroup button.button.first {
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
+}
+.buttongroup a.button:first-child {
 	padding-right: 15px;
+}
+.buttongroup button.button.first {
+	padding-right: 10px;
 }
 .buttongroup a.button:last-child, .buttongroup button.button.last {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
+}
+.buttongroup a.button:last-child {
 	padding-left: 15px;
+}
+.buttongroup button.button.last {
+	padding-left: 10px;
 }
 .buttongroup a.button:not(:first-child):not(:last-child), .buttongroup button.button:not(.first):not(.last) {
 	border-radius: 0;
+}
+.buttongroup a.button:not(:first-child):not(:last-child) {
 	padding-left: 15px;
 	padding-right: 15px;
+}
+.buttongroup button.button:not(.first):not(.last) {
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 table {
