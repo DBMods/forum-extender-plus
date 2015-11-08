@@ -26,26 +26,62 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 	var pageUrl = '<?php echo $pageName; ?>';
 	var archAct;
 
+	var selectedList = [];
+
 	if (pageUrl == 'index.php' || pageUrl == 'archive.php') {
 		archAct = pageUrl == 'index.php' ? 'arch' : 'unarch';
 
 		//initialize buttons
 		$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
 
-		$('table tr').on('click', function() {
-			var id = $(this).attr('data-id');
+		//Select message when clicking on message
+		$('table tr td:not(:first-child)').on('click', function() {
+			var id = $(this).parent().attr('data-id');
 
 			//Highlight selection
+			$('table tr.highlighted .check input').prop('checked', false);
 			$('table tr.highlighted').removeClass('highlighted');
-			$(this).addClass('highlighted');
+			$(this).parent().addClass('highlighted');
+			$(this).parent().find('.check input').prop('checked', 'checked');
+
+			selectedList = [id];
 
 			//Add ID to forms for manipulation
-			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(id);
+			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
 
 			//Enable buttons
-			$('#messageActionButtons').show();
 			$('#viewBtn, #repBtn, #fwdBtn').removeClass('grayed');
+			$('#messageActionButtons').show();
 		});
+
+		//Add message to selection when clicked on checkbox
+		$('table tr .check input').on('click', function() {
+			var id = $(this).parent().parent().attr('data-id');
+
+			//Highlight message appropriately, and change selection list
+			if ($(this).prop('checked')) {
+				$(this).parent().parent().addClass('highlighted');
+				selectedList.push(id);
+			} else {
+				$(this).parent().parent().removeClass('highlighted');
+				selectedList.splice(selectedList.indexOf(id), 1);
+			}
+
+			//Add ID to forms for manipulation
+			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
+
+			//Manage meta bar buttons
+			if (selectedList.length == 0) {
+				$('#messageActionButtons').hide();
+			} else if (selectedList.length == 1) {
+				$('#viewBtn, #repBtn, #fwdBtn').removeClass('grayed');
+				$('#messageActionButtons').show();
+			} else if (selectedList.length > 1) {
+				$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
+				$('#messageActionButtons').show();
+			}
+		});
+
 	} else if (pageUrl == 'view.php') {
 		archAct = '<?php echo $buttonMetaArch; ?>';
 		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive');
