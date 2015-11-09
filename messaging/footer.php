@@ -9,6 +9,21 @@ mysqli_close($db);
 ?>
 
 </div>
+<div id='nav'>
+	<a class='button wide blue' href='compose.php'>Compose</a><br>
+	<?php
+	getMessages();
+	echo linkActivity('<a href="index.php">Inbox' . $countBadge . '</a>') . '<br>';
+	echo linkActivity('<a href="sent.php">Sent</a>') . '<br>';
+	echo linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>') . '<br>';
+	echo linkActivity('<a href="settings.php">Settings</a>') . '<br>';
+	echo linkActivity('<a href="stats.php">Stats</a>');
+	if ($username == 'TechGeek01' || $username == 'nathanc') {
+		echo '<br>';
+		echo linkActivity('<a href="admin.php">Admin</a>');
+	}
+	?>
+</div>
 <div class='clearfix'></div>
 </div>
 <footer>
