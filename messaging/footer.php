@@ -102,7 +102,7 @@ Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a>
 		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive');
 
 		//Add ID to forms for manipulation
-		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val('<?php echo $buttonMetaId ?>');
+		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
 
 		//Change meta forms to throw back to the inbox to avoid displaying errors to the user after message is moved or deleted
 		$('#delForm, #archForm').attr('action', 'index.php');
