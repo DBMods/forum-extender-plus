@@ -21,7 +21,6 @@ if ($userAuthenticated) {
 				echo parseDate($row['time'] - $timeOffsetSeconds);
 				echo '</td></tr>';
 			}
-			deleteConfirm();
 
 			echo '</table>';
 		}
