@@ -17,33 +17,13 @@ function settingsView($viewOption) {
 			<form method="post" action="" class="form-horizontal">
 				<fieldset>
 					<h4 class="center">Change password*</h4>
-					<div class="form-group">
-						<label class="col-md-4 control-label">Current password</label>
-						<div class="col-md-4">
-							<input id="curpassword" name="curpassword" type="password" class="form-control input-md">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label">New password</label>
-						<div class="col-md-4">
-							<input id="modpassword" name="modpassword" type="password" class="form-control input-md">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label">Verify password</label>
-						<div class="col-md-4">
-							<input id="modverifypassword" name="modverifypassword" type="password" class="form-control input-md">
-						</div>
-					</div>
-					<h5 class="center">*You must sign in after changing your password</h5>
+					<input id='curpassword' name='curpassword' type='password' placeholder='Current Password' />
+					<input id='modpassword' name='modpassword' type='password' placeholder='New Password' />
+					<input id='modverifypassword' name='modverifypassword' type='password' placeholder='Repeat New Password' />
 					<br>
-					<div class="form-group">
-						<div class="col-md-4">
-						</div>
-						<div class="col-md-4">
-							<button id="modapply" name="modapply" type="submit" class="button blue">Apply</button>
-						</div>
-					</div>
+					<small class="center">*You must sign in after changing your password</small>
+					<br>
+					<button id='modapply' name='modapply' type='submit' class='button blue'>Apply</button>
 				</fieldset>
 			</form>
 		</div>
