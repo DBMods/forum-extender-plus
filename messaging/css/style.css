@@ -129,7 +129,7 @@
 
 
 body {
-	background-image: url('../images/background.png') fixed top center;
+	background: url('../images/background.png') fixed top center;
 	font-family: Arial;
 	font-size: 14px;
 }
@@ -196,6 +196,32 @@ a {
 }
 #nav a.active {
 	font-weight: bold;
+}
+
+form {
+	margin: 0;
+}
+
+.floatbox {
+	margin: 10px 0;
+	display:table;
+}
+.floatbox .small, .floatbox .large {
+	display: table-cell;
+}
+.floatbox .small {
+	width: 222px;
+}
+.floatbox .large {
+	width: 465px;
+}
+
+.floatbox > :first-child {
+	padding-right: 20px;
+	border-right: 1px solid #ccc;
+}
+.floatbox > :nth-child(2) {
+	padding-left: 20px;
 }
 
 .button.padded, .buttongroup.padded {
