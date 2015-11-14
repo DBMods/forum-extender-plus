@@ -57,7 +57,8 @@ if ($userAuthenticated) {
 </table>
 <?php
   }else {
-    echo "<div class='alert-center'><div id='alert-fade' class='alert alert-danger'><p><strong>Not permitted</strong></p></div></div>";
+    echo '<h2.>Error</h2>';
+		echo '<p>You are not authorized to access this page.</p>';
   }
 }
 require_once 'footer.php';
