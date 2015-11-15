@@ -26,14 +26,28 @@ mysqli_close($db);
 </div>
 <div class='clearfix'></div>
 </div>
-<footer>
-Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
-<!--<form action="compose.php" method="post" class="form-link">
-	<input type="hidden" name="msgto" value="TechGeek01" />
-	<input type="hidden" name="subject" value="Bug report: " />
-	<button type="submit" class="btn-link">Problem?</button>
-</form>-->
+<footer class='columnbox'>
+	<div class='column'>
+		<strong>Dropbox</strong><br>
+		<a href='https://www.dropbox.com'>Dropbox</a><br>
+		<a href='https://www.dropboxforum.com'>Dropbox Forums</a>
+	</div>
+	<div class='column'>
+		<strong>Extender+</strong><br>
+		<a href='https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey'>Official Thread</a><br>
+		<a href='https://www.github.com/DBMods/forum-extender-plus'>GitHub</a>
+	</div>
 </footer>
+</div>
+<div id='attrib' class='tab blue'>
+	<footer>
+	Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
+	<!--<form action="compose.php" method="post" class="form-link">
+		<input type="hidden" name="msgto" value="TechGeek01" />
+		<input type="hidden" name="subject" value="Bug report: " />
+		<button type="submit" class="btn-link">Problem?</button>
+	</form>-->
+	</footer>
 </div>
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>

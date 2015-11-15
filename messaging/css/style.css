@@ -136,10 +136,11 @@ body {
 
 #wrapper {
 	width: 980px;
-	margin: 30px auto;
+	margin: 30px auto 0;
 	background: #fff;
 	border: 1px solid #aaa;
-	box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.6);
+	border-radius: 3px;
+	box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.6);
 }
 
 #head {
@@ -168,6 +169,38 @@ footer {
 	border-top: 1px solid #e3e3e3;
 }
 
+#linkfooter, #linkfooter a:not(:hover) {
+	color: #666!important;
+}
+
+#attrib {
+	width: 460px;
+}
+
+.tab footer {
+	border-top: none;
+}
+.tab {
+	text-align: center;
+	border: 1px solid #444;
+	border-top: none;
+	background: #ddd;
+	margin:0 auto 30px;
+	box-shadow: inset 0px 5px 8px -5px rgba(0,0,0,0.6),
+		5px 3px 8px -4px rgba(0, 0, 0, 0.3),
+		-5px 3px 8px -4px rgba(0, 0, 0, 0.3);
+	border-radius: 0 0 5px 5px;
+}
+
+.tab.blue {
+	background: #1080de;
+	color: #fff;
+	box-shadow: inset 0px 0 8px 3px rgba(7, 53, 93, 0.2);
+}
+.tab.blue a {
+	color: #ccc!important;
+}
+
 #nav, #context .title {
 	float: left;
 	width: 150px;
@@ -194,6 +227,9 @@ a {
 #nav a.active, header a, footer a, #head. #context .title {
 	color: #1080de;
 }
+footer a {
+	color: #1080de!important;
+}
 #nav a.active {
 	font-weight: bold;
 }
@@ -215,13 +251,29 @@ form {
 .floatbox .large {
 	width: 465px;
 }
-
 .floatbox > :first-child {
 	padding-right: 20px;
 	border-right: 1px solid #ccc;
 }
 .floatbox > :nth-child(2) {
 	padding-left: 20px;
+}
+
+.column {
+	width: min-content;
+	display: table-cell;
+	padding: 0 20px;
+	border-left: 1px solid #e3e3e3;
+	border-right: none;
+	line-height: 20px
+}
+.columnbox .column:first-child {
+	padding-left: 0;
+	border-left: none;
+}
+.columnbox .column:last-child {
+	padding-right: 0;
+	border-right: none;
 }
 
 .button.padded, .buttongroup.padded {
