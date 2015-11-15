@@ -185,17 +185,20 @@ footer {
 	border: 1px solid #444;
 	border-top: none;
 	background: #ddd;
-	margin:0 auto 30px;
-	box-shadow: inset 0px 5px 8px -5px rgba(0,0,0,0.6),
-		5px 3px 8px -4px rgba(0, 0, 0, 0.3),
-		-5px 3px 8px -4px rgba(0, 0, 0, 0.3);
+	margin: 0 auto 30px;
+	box-shadow: inset 0px 5px 8px -5px rgba(0, 0, 0, 0.6),
+		6px 4px 8px -3px rgba(0, 0, 0, 0.28),
+		-6px 4px 8px -3px rgba(0, 0, 0, 0.28);
 	border-radius: 0 0 5px 5px;
 }
 
 .tab.blue {
 	background: #1080de;
 	color: #fff;
-	box-shadow: inset 0px 0 8px 3px rgba(7, 53, 93, 0.2);
+	box-shadow: inset 0px 5px 8px -5px rgba(0, 0, 0, 0.6),
+		6px 4px 8px -3px rgba(0, 0, 0, 0.28),
+		-6px 4px 8px -3px rgba(0, 0, 0, 0.28),
+		inset 0px 0 8px 3px rgba(7, 53, 93, 0.2);
 }
 .tab.blue a {
 	color: #ccc!important;
@@ -262,7 +265,7 @@ form {
 .column {
 	width: min-content;
 	display: table-cell;
-	padding: 0 20px;
+	padding: 0 30px;
 	border-left: 1px solid #e3e3e3;
 	border-right: none;
 	line-height: 20px
