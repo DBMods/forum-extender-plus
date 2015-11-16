@@ -143,9 +143,9 @@ mysqli_close($db);
 	 */
 
 	$('#attrib').hover(function() {
-		$('#attribmore').stop(true, false).slideDown();
+		$('#attribmore').stop(true).slideDown();
 	}, function() {
-		$('#attribmore').stop(true, false),slideUp();
+		$('#attribmore').stop(true),slideUp();
 	});
 </script>
 
