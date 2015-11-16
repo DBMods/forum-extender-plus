@@ -235,7 +235,7 @@ td.subject span.subject {
 }
 
 tr.highlighted {
-	background: #81c1f6;
+	background: #7fb7e6;
 }
 tr.highlighted td.subject {
 	color: #eee;
@@ -279,7 +279,7 @@ tr.highlighted td.subject {
 	padding-right: 20px;
 	border-right: 1px solid #ccc;
 }
-.floatbox > :nth-child(2) {
+.floatbox > :last-child {
 	padding-left: 20px;
 }
 
@@ -296,7 +296,7 @@ tr.highlighted td.subject {
 		6px 4px 8px -3px rgba(0, 0, 0, 0.28),
 		-6px 4px 8px -3px rgba(0, 0, 0, 0.28),
 		inset 0 0 8px 3px rgba(0, 0, 0, 0.2);
-	border-radius: 0 0 5px 5px;
+	border-radius: 0 0 7px 7px;
 }
 .tab.blue {
 	background: #1080de;
@@ -308,4 +308,22 @@ tr.highlighted td.subject {
 }
 .tab.blue a {
 	color: #ccc;
+}
+
+#attribmore {
+	display: none;
+	margin: 0 20px;
+	padding: 20px;
+	border-bottom: 1px solid #fff;
+}
+
+#footertoggle {
+	height: 26px;
+	width: 26px;
+	margin: 0 auto 10px;
+	background: #fff;
+	border-radius: 13px;
+	border:1px solid #aaa;
+	position: relative;
+	top: -10px;
 }

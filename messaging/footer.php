@@ -40,13 +40,17 @@ mysqli_close($db);
 </footer>
 </div>
 <div id='attrib' class='tab blue'>
+	<div id='attribmore'>
+		This messaging system has been designed and coded with love from the DBMods team!<br>
+		<small><br>Forum Extender+ - <small>EST.</small> some time in the past <span style='color:#ccc'>(May 23, 2013)</span></small>
+	</div>
 	<footer>
-	Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
-	<!--<form action="compose.php" method="post" class="form-link">
-		<input type="hidden" name="msgto" value="TechGeek01" />
-		<input type="hidden" name="subject" value="Bug report: " />
-		<button type="submit" class="btn-link">Problem?</button>
-	</form>-->
+		Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
+		<!--<form action="compose.php" method="post" class="form-link">
+			<input type="hidden" name="msgto" value="TechGeek01" />
+			<input type="hidden" name="subject" value="Bug report: " />
+			<button type="submit" class="btn-link">Problem?</button>
+		</form>-->
 	</footer>
 </div>
 
@@ -132,6 +136,16 @@ mysqli_close($db);
 	});
 	$('#sendBtn').on('click', function() {
 		$('#messageform').submit();
+	});
+
+	/*
+	 * Effects
+	 */
+
+	$('#attrib').hover(function() {
+		$('#attribmore').stop(true, false).slideDown();
+	}, function() {
+		$('#attribmore').stop(true, false),slideUp();
 	});
 </script>
 
