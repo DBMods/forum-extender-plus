@@ -19,7 +19,7 @@ if ($userAuthenticated) {
 				echo '</td><td class=\'subject\'><span class=\'subject\'>';
 				echo htmlspecialchars($row['subject']);
 				echo '</span><span class=\'contentPreview\'> - ';
-				echo nl2br(htmlspecialchars($row['msg']));
+				echo str_replace('\n', ' ', htmlspecialchars($row['msg']));
 				echo '</span></td><td class=\'date\'>';
 				echo parseDate( $row['time'] - $timeOffsetSeconds);
 				echo '</td></tr>';
