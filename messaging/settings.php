@@ -17,50 +17,24 @@ function settingsView($viewOption) {
 			<form method="post" action="" class="form-horizontal">
 				<fieldset>
 					<h4 class="center">Change password*</h4>
-					<div class="form-group">
-						<label class="col-md-4 control-label">Current password</label>
-						<div class="col-md-4">
-							<input id="curpassword" name="curpassword" type="password" class="form-control input-md">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label">New password</label>
-						<div class="col-md-4">
-							<input id="modpassword" name="modpassword" type="password" class="form-control input-md">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label">Verify password</label>
-						<div class="col-md-4">
-							<input id="modverifypassword" name="modverifypassword" type="password" class="form-control input-md">
-						</div>
-					</div>
-					<h5 class="center">*You must sign in after changing your password</h5>
+					<input id='curpassword' name='curpassword' type='password' placeholder='Current Password' />
+					<input id='modpassword' name='modpassword' type='password' placeholder='New Password' />
+					<input id='modverifypassword' name='modverifypassword' type='password' placeholder='Repeat New Password' />
 					<br>
-					<div class="form-group">
-						<div class="col-md-4">
-						</div>
-						<div class="col-md-4">
-							<button id="modapply" name="modapply" type="submit" class="btn btn-success">Apply</button>
-						</div>
-					</div>
+					<small class="center">*You must sign in after changing your password</small>
+					<br>
+					<button id='modapply' name='modapply' type='submit' class='button blue'>Apply</button>
 				</fieldset>
 			</form>
 		</div>
 	<?php
 }
-//Writes the "Settings" header after error message
-function writeSettingsHeader() {
-	echo '<h2>Settings</h2>';
-	echo '<p class="topline"></p>';
-}
+
 $curpassword = $_POST['curpassword'];
 $modpassword = $_POST['modpassword'];
 $modverifypassword = $_POST['modverifypassword'];
 if ($userAuthenticated) {
 	//If user is logged in
-	//getMessages() gets the navbar badge numbers
-	getMessages();
 	if (isset($_POST['modapply'])) {
 		if (!empty($curpassword) && !empty($modpassword) && !empty($modverifypassword)){
 			//If password requested to be changed
@@ -75,18 +49,17 @@ if ($userAuthenticated) {
 			}else {
 				$passwordFail = true;
 				$passwordMod = false;
+				http://youtu.be/IfllOzPCkn8
 			}
 		}
 
 		if ($passwordFail) {
 			//If current password is incorrect
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Wrong password</strong></p></div></div>";
-			writeSettingsHeader();
 			settingsView('changeFailPassword');
 		} elseif ($modpassword != $modverifypassword) {
 			//If new passwords don't match
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Passwords not the same</strong></p></div></div>";
-			writeSettingsHeader();
 			settingsView('changeFailPassword');
 		} elseif (isset($passwordMod)) {
 			//No issues with changing settings AND something was modified
@@ -116,16 +89,13 @@ if ($userAuthenticated) {
 				$result = mysqli_query($db, "UPDATE users set password='" . sqlesc($modpasswordhash) . "', ext_token='" . sqlesc($token) . "' WHERE userid='" . sqlesc($userid) . "' LIMIT 1");
 			}
 			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Settings saved</strong></p></div></div>";
-			writeSettingsHeader();
 			settingsView("changeSuccess");
 		} else {
 			//No settings changed
-			writeSettingsHeader();
 			settingsView("view");
 		}
-	}else{
+	} else {
 		//Loading the normal page (settings aren't being changed yet)
-		writeSettingsHeader();
 		settingsView("view");
 	}
 

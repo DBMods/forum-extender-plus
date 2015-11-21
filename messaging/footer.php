@@ -7,52 +7,148 @@ if (!$userAuthenticated && $pageName != 'report.php' && $pageName != 'fix-auth.p
 }
 mysqli_close($db);
 ?>
+
 </div>
+<div id='nav'>
+	<a class='button wide blue' href='compose.php'>Compose</a><br>
+	<?php
+	getMessages();
+	echo linkActivity('<a href="index.php">Inbox' . $countBadge . '</a>') . '<br>';
+	echo linkActivity('<a href="sent.php">Sent</a>') . '<br>';
+	echo linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>') . '<br>';
+	echo linkActivity('<a href="settings.php">Settings</a>') . '<br>';
+	echo linkActivity('<a href="stats.php">Stats</a>');
+	if ($username == 'TechGeek01' || $username == 'nathanc') {
+		echo '<br>';
+		echo linkActivity('<a href="admin.php">Admin</a>');
+	}
+	?>
 </div>
-<div class="container">
+<div class='clearfix'></div>
+</div>
+<footer class='columnbox'>
+	<div class='column'>
+		<strong>Dropbox</strong><br>
+		<a href='https://www.dropbox.com'>Dropbox</a><br>
+		<a href='https://www.dropboxforum.com'>Dropbox Forums</a>
+	</div>
+	<div class='column'>
+		<strong>Extender+</strong><br>
+		<a href='https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey'>Official Thread</a><br>
+		<a href='https://www.github.com/DBMods/forum-extender-plus'>GitHub</a>
+	</div>
+</footer>
+</div>
+<div id='attrib' class='tab blue'>
+	<div id='attribmore'>
+		This messaging system has been designed and coded with love from the DBMods team!<br>
+		<small><br>Forum Extender+ - <small>EST.</small> some time in the past <span style='color:#ccc'>(May 23, 2013)</span></small>
+	</div>
 	<footer>
-		<hr>
-		<div>
-			Developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a> -
-			<!--<form action="compose.php" method="post" class="form-link">
-				<input type="hidden" name="msgto" value="TechGeek01" />
-				<input type="hidden" name="subject" value="Bug report: " />
-				<button type="submit" class="btn-link">Problem?</button>
-			</form>-->
-			<form action="report.php" method="post" class="form-link">
-				<button type="submit" name="action" class="btn-link" value="report">Problem?</button>
-			</form>
-		</div>
+		Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
+		<!--<form action="compose.php" method="post" class="form-link">
+			<input type="hidden" name="msgto" value="TechGeek01" />
+			<input type="hidden" name="subject" value="Bug report: " />
+			<button type="submit" class="btn-link">Problem?</button>
+		</form>-->
 	</footer>
 </div>
-<noscript><div class="js-error">Please enable JavaScript for full site functionality</div></noscript>
-<div class="container navbar-fixed-top">
-	<div class="header">
-		<ul class="nav nav-pills pull-left">
-			<?php
-			linkActivity('<a href="index.php">Inbox' . $countBadge . '</a>');
-			linkActivity('<a href="compose.php">Compose</a>');
-			linkActivity('<a href="sent.php">Sent</a>');
-			linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>');
-			linkActivity('<a href="settings.php">Settings</a>');
-			linkActivity('<a href="stats.php">Stats</a>');
-			if ($username == 'TechGeek01' || $username == 'nathanc') {
-				linkActivity('<a href="admin.php">Admin</a>');
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
+<script>
+	var pageUrl = '<?php echo $pageName; ?>';
+	var archAct;
+
+	var selectedList = [];
+
+	if (pageUrl == 'index.php' || pageUrl == 'archive.php') {
+		archAct = pageUrl == 'index.php' ? 'arch' : 'unarch';
+
+		//initialize buttons
+		$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
+
+		//Select message when clicking on message
+		$('table tr td:not(:first-child)').on('click', function() {
+			var id = $(this).parent().attr('data-id');
+
+			//Highlight selection
+			$('table tr.highlighted .check input').prop('checked', false);
+			$('table tr.highlighted').removeClass('highlighted');
+			$(this).parent().addClass('highlighted');
+			$(this).parent().find('.check input').prop('checked', 'checked');
+
+			selectedList = [id];
+
+			//Add ID to forms for manipulation
+			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
+
+			//Enable buttons
+			$('#viewBtn, #repBtn, #fwdBtn').removeClass('grayed');
+			$('#messageActionButtons').show();
+		});
+
+		//Add message to selection when clicked on checkbox
+		$('table tr .check input').on('click', function() {
+			var id = $(this).parent().parent().attr('data-id');
+
+			//Highlight message appropriately, and change selection list
+			if ($(this).prop('checked')) {
+				$(this).parent().parent().addClass('highlighted');
+				selectedList.push(id);
+			} else {
+				$(this).parent().parent().removeClass('highlighted');
+				selectedList.splice(selectedList.indexOf(id), 1);
 			}
-			linkActivity('<a href="' . $returnto . '">Back to Forums</a>');
-			if($userAuthenticated)
-				linkActivity('<form action="" method="post" class="form-pill"><button type="submit" class="btn-pill" name="action" value="logoff">Log out</button></form>');
-			?>
-		</ul>
-		<div class="site-title">
-			<h3 class="text-muted"><a href=''>Forum Extender+ Messenger</a></h3>
-		</div>
-	</div>
-</div>
-<?php
-if ($pageName != 'stats.php')
-	echo "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>";
-?>
+
+			//Add ID to forms for manipulation
+			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
+
+			//Manage meta bar buttons
+			if (selectedList.length == 0) {
+				$('#messageActionButtons').hide();
+			} else if (selectedList.length == 1) {
+				$('#viewBtn, #repBtn, #fwdBtn').removeClass('grayed');
+				$('#messageActionButtons').show();
+			} else if (selectedList.length > 1) {
+				$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
+				$('#messageActionButtons').show();
+			}
+		});
+
+	} else if (pageUrl == 'view.php') {
+		archAct = '<?php echo $buttonMetaArch; ?>';
+		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive');
+
+		//Add ID to forms for manipulation
+		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
+
+		//Change meta forms to throw back to the inbox to avoid displaying errors to the user after message is moved or deleted
+		$('#delForm, #archForm').attr('action', 'index.php');
+
+		//Enable buttons
+		$('#viewBtn').remove();
+		$('#messageActionButtons').show();
+	}
+
+	//Main function buttons
+	$('#cancelBtn').on('click', function() {
+		$('#cancelForm').submit();
+	});
+	$('#sendBtn').on('click', function() {
+		$('#messageform').submit();
+	});
+
+	/*
+	 * Effects
+	 */
+
+	$('#attrib').hover(function() {
+		$('#attribmore').stop(true).slideDown();
+	}, function() {
+		$('#attribmore').stop(true),slideUp();
+	});
+</script>
+
 <script src='js/bootstrap.js'></script>
 <script>
 	window.setTimeout(function() {

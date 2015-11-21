@@ -7,27 +7,22 @@ $uToken = $_POST['uToken'];
 
 function authSigninPanel() {
 	global $uid, $uToken;
-	echo '<div class="small-center">';
-	echo '<div class="panel panel-primary">';
-	echo '<div class="panel-heading"><h3>Sign in</h3></div>';
-	echo '<div class="panel-body">';
+	echo '<div class="floatbox">';
+	echo '<div class="small">';
 	echo '<form method="post" action="">';
-	echo '<fieldset>';
-	echo '<div class="form-group"><input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required="" /></div>';
-	echo '<div class="form-group"><input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required="" /></div>';
+	echo '<input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required /><br>';
+	echo '<input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required /><br>';
 	if ($uid) {
     echo '<input type="hidden" name="uid" value="' . $uid . '" />';
   }
 	if ($uToken) {
     echo '<input type="hidden" name="uToken" value="' . $uToken . '" />';
   }
-	echo '<div class="form-group">';
-	echo '<button name="action" value="fixAuth" class="btn btn-success">Sign in</button>';
-	echo '</div>';
-	echo '</fieldset>';
+	echo '<button name="action" value="fixAuth" class="button blue">Sign in</button>';
 	echo '</form>';
-	echo "<p>Sign in to allow the extension to access your messaging account</p>";
-	echo '</div>';
+	echo '</div><div class="large">';
+	echo '<p>Please sign in to allow the extension to access your messaging account.</p>';
+	echo '<p>This will allow the extension to gather the necessary information and fix the automatic auth process.</p>';
 	echo '</div>';
 	echo '</div>';
 }
@@ -56,7 +51,7 @@ if ($action != 'fixAuth') {
 		} else {
 			$url = $returnto . (strpos($returnto, '?') === false ? '?' : '&') . 'msgtoken=' . $userToken;
 		}
-    echo '<p class="topline">Success! Your information was updated successfully. You may now click <a href="' . $url . '">here</a> to return to the forums' . ($userToken != $uToken ? ' and update your token' : '') . '.</p>';
+    echo 'Success! Your information was updated successfully. You may now click <a href="' . $url . '">here</a> to return to the forums' . ($userToken != $uToken ? ' and update your token' : '') . '.';
   }
 }
 
