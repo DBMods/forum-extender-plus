@@ -30,6 +30,7 @@ if ($userAuthenticated) {
 		echo '<input id="msgto" name="msgto" type="textbox" style="width:100%" class="form-control" placeholder="Recipient*" value="' . htmlspecialchars($_POST['msgto']) . '" required /><br>';
 		echo '<input id="subject" name="subject" type="textbox" style="width:100%" class="form-control" placeholder="Subject*" value="' . $subj . '" required /><br>';
 		echo '<textarea name="msgtext" placeholder="Message" rows="9" style="width:100%" class="form-control" required>' . htmlspecialchars($_POST['msgtext']) . '</textarea><br>';
+		echo '<input type="hidden" name="action" value="send" />';
 		echo '</form><form id="cancelForm" style="display:none" action="./" method="post"></form>';
 		echo '<p class="buttongroup"><a id="sendBtn" class="button" href="javascript:void(0)">Send</a><a id="cancelBtn" class="button danger" href="javascript:void(0)">Cancel</a></p>';
 	}
