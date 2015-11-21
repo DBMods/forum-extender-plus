@@ -12,6 +12,7 @@ if ($userAuthenticated) {
 	}
 
 	if ($showinbox) {
+		getMessages();
 		if ($count == 0) {
 			echo 'It doesn\'t appear that you have any messages. Check back later, or start a conversation by clicking "Compose."';
 		} else {

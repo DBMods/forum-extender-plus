@@ -7,6 +7,7 @@ if ($userAuthenticated) {
 		include 'forward-message.php';
 
 	if ($showinbox) {
+		getMessages();
 		if ($archCount == 0) {
 			echo 'It doesn\'t appear that you have any archived messages.';
 		} else {
