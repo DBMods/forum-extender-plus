@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.6.1-----
+# Updated page list to reflect new topic pages
+
 -----2.6.0-----
 + Help Center autocomplete will add a space if needed after the clicked match
 + Rewrote modal system to add support for multiple modals at a time

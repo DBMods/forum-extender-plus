@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.6.0
+// @version 2.6.1pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
 // @require https://github.com/DBMods/forum-extender-plus/raw/master/resources/js/helpList.js
@@ -61,26 +61,29 @@ var page = {
 	topic: {
 		//list: new Url('https://www.dropboxforum.com/hc/communities/public/topics'),
 		apiDev: new Url('community/topics/200209245-API-Development'),
-		bugs: new Url('community/topics/200203389-Bugs-Troubleshooting'),
+		archBeta: new Url('community/topics/200324789-Archive-file-type-beta-community'),
+		badgeBeta: new Url('community/topics/200329795-Badge-Beta-Community'),
+		bugs: new Url('community/topics/200203389-Issues-Troubleshooting'),
+		basicPro: new Url('community/topics/200204189-Dropbox-Basic-Pro'),
 		carousel: new Url('community/topics/200211225-Carousel-Photos'),
 		desktopClient: new Url('community/topics/200210355-Desktop-Client-Builds'),
-		dfb: new Url('community/topics/200284219-Dropbox-for-Business'),
+		dfbe: new Url('community/topics/200284219-Dropbox-Business-Enterprise'),
 		//everythingElse: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200209235-Everything-Else'),
 		feedback: new Url('community/topics/200209235-Product-Feedback'),
 		//gettingStarted: new Url('https://www.dropboxforum.com/hc/communities/public/topics/200204189-Getting-Started'),
 		mailbox: new Url('community/topics/200211215-Mailbox'),
 		mobile: new Url('community/topics/200277665-Mobile'),
 		mods: new Url('community/topics/200211775-Moderators-only'),
-		personal: new Url('community/topics/200204189-Your-Personal-Dropbox'),
+		//personal: new Url('community/topics/200204189-Your-Personal-Dropbox'),
 		recents: new Url('community/topics/200330365-Recents'),
-		deBugs: new Url('community/topics/200220199--DE-Fehler-und-Probleml%C3%B6sungen'),
-		deOther: new Url('community/topics/200229725--DE-Allgemeine-Fragen'),
-		esBugs: new Url('community/topics/200321729--ES-Problemas-y-resoluciones'),
-		esOther: new Url('community/topics/200321739--ES-Otros-temas'),
-		frBugs: new Url('community/topics/200303965--FR-Probl%C3%A8mes-et-r%C3%A9solution'),
-		frOther: new Url('community/topics/200294229--FR-Autres-sujets'),
-		ptBugs: new Url('community/topics/200321709--PT-Problemas-e-solu%C3%A7%C3%B5es'),
-		ptOther: new Url('community/topics/200321719--PT-Outros-assuntos')
+		//deBugs: new Url('community/topics/200220199--DE-Fehler-und-Probleml%C3%B6sungen'),
+		//deOther: new Url('community/topics/200229725--DE-Allgemeine-Fragen'),
+		//esBugs: new Url('community/topics/200321729--ES-Problemas-y-resoluciones'),
+		//esOther: new Url('community/topics/200321739--ES-Otros-temas'),
+		//frBugs: new Url('community/topics/200303965--FR-Probl%C3%A8mes-et-r%C3%A9solution'),
+		//frOther: new Url('community/topics/200294229--FR-Autres-sujets'),
+		//ptBugs: new Url('community/topics/200321709--PT-Problemas-e-solu%C3%A7%C3%B5es'),
+		//ptOther: new Url('community/topics/200321719--PT-Outros-assuntos')
 	},
 	isPost: pageUrl.indexOf('community/posts/') > -1,
 	isTopic: pageUrl.indexOf('community/topics/') > -1,
@@ -194,18 +197,18 @@ if (page.isPost) {
 		if (GM_getValue('date', 0) < today) {
 			//If we're starting a new day, flush all old threads, and start over
 			GM_setValue('date', today);
-			GM_setValue('todayThreads', strippedUrl);
+			GM_setValue('todayThreads', [strippedUrl]);
 			GM_setValue('postNumbers', [parseInt($('.post-stats .comment-count').html().split(' ')[0], 10) + 1]);
 		} else if (GM_getValue('date') == today) {
 			//Otherwise, add the current thread ID to the list
-			var todayThreads = GM_getValue('todayThreads', '').split(',');
+			var todayThreads = GM_getValue('todayThreads', []);
 			if (todayThreads.indexOf(strippedUrl) == -1) {
 				//Add thread ID to list
 				todayThreads.push(strippedUrl);
 				GM_setValue('todayThreads', todayThreads.toString());
 			}
 			//Add post count for tracking purposes
-			var postNumbers = GM_getValue('postNumbers', [0]);
+			var postNumbers = GM_getValue('postNumbers', []);
 			postNumbers[todayThreads.indexOf(strippedUrl)] = parseInt($('.post-stats .comment-count').html().split(' ')[0], 10) + 1;
 		}
 	});
