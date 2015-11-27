@@ -6,15 +6,12 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.6.1pre1a
+// @version 2.6.1pre2a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
 // @require https://github.com/DBMods/forum-extender-plus/raw/master/resources/js/helpList.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
-// @resource customStyle https://github.com/DBMods/forum-extender-plus/raw/master/styles/style.css
-// @resource bootstrap https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap.css
-// @resource bootstrap-theme https://github.com/DBMods/forum-extender-plus/raw/master/styles/bootstrap-theme.css
 // @grant GM_xmlhttpRequest
 // @grant GM_setValue
 // @grant GM_getValue
