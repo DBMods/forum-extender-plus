@@ -4,7 +4,7 @@
 // @description Scrapes data for helpList.js
 // @include https://www.dropboxforum.com/hc/scrapeHelpList/*
 // @include https://www.dropboxforum.com/hc/scrapeHelpList
-// @version 1.0.1
+// @version 1.0.2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @grant GM_xmlhttpRequest
 // ==/UserScript==
@@ -18,6 +18,7 @@
 window.onload = function() {
   $('body').html('Checking <span id="check">*starting*</span><br><br>var helpList = {<span id="list"></span><br>};');
 
+  var firstItem = true;
   var i, l;
 
   for (i = 0, l = 12000; i < l; i++) {
@@ -41,7 +42,8 @@ function getEntry(num) {
       if (resp) {
         var title = resp.split('</title>')[0].split('<title>')[1];
         if (title != 'Dropbox - 404') {
-          $('#list').append('<br>\'' + num + '\': \'' + title.split(' (Dropbox Help Center)')[0] + '\',');
+          $('#list').append((firstItem ? '' : ',') + '<br>\'' + num + '\': \'' + title.split(' (Dropbox Help Center)')[0] + '\'');
+          firstItem = false;
         }
       }
       //$('#check').html('*idle*');
