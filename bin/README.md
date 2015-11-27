@@ -1,2 +1,2 @@
 #Important notice
-This folder contains various external requirements and dependencies from the main script. The folder itself isn't crucial to the execution of the script. However, the files within it are.
+This folder contains various external requirements and dependencies from the main script. Not all files are crucial to the operation of the userscript, though they may be required for the creation of such files
