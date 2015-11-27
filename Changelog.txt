@@ -1,7 +1,7 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
------2.6.1-----
+-----2.6.1pre1a-----
 # Updated page list to reflect new topic pages
 
 -----2.6.0-----
