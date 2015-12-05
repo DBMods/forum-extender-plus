@@ -95,8 +95,8 @@ function getMessages() {
 	global $db, $username, $result, $archive, $count, $countBadge, $archCount, $archBadge;
 
 	//Get lists
-	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 0 ORDER BY `time` DESC");
-	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 ORDER BY `time` DESC");
+	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 0 AND `unread` = 1 ORDER BY `time` DESC");
+	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 AND `unread` = 1 ORDER BY `time` DESC");
 
 	//Message counter navbar badges
 	$count = mysqli_num_rows($result);
