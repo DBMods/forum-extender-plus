@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.6.1pre2a
+// @version 2.6.1pre2b
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
 // @require https://github.com/DBMods/forum-extender-plus/raw/master/resources/js/helpList.js
@@ -22,13 +22,13 @@
  *
  * Reemphasize new replies to your threads
  * Nested quoting
- * Fix Super User links
- * Fix forum messaging
+ * Fix forum messaging - This may never work, due to the lack of public UIDs
  *
  * ** Waiting on a published forum fix **
  *
  * $userRole fix
  * ** Sticky managing needs to be fixed
+ * Fix Super User highlighting
  */
 
 //Set global variables
@@ -135,7 +135,7 @@ $('main nav.community-nav').css('padding-top', '14px');
 
 //Bypass TinyMCE text box - Props to Zendesk for making this nearly impossible to do
 if (page.isPost) {
-	$postField.attr('name', 'gsDropboxExtenderTemp');
+	$postField.attr('name', 'niceTry-Zendesk');
 	$postField.on('focus', function() {
 		$postField.attr('name', 'community_comment[body]');
 		$postField.off('focus');
@@ -725,6 +725,7 @@ if (client.isAuthenticated()) {
 										snippets[$('#friendlyname').val()] = $('#snippetfull').val();
 										tmp = Object.keys(snippets).sort();
 
+										//Sort object alphabetically by property name
 										tmpb = snippets, snippets = {}
 										for (i = 0, l = tmp.length; i < l; i++) {
 											snippets[tmp[i]] = tmpb[tmp[i]];

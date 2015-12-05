@@ -1,8 +1,14 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.6.1pre2b-----
+# Minor code changes
+# Rewrote comments for clarity
+
 -----2.6.1pre2a-----
 - Removed unnecessary @resource entries from metadata block
+* Fixed @ help notation bug where certain matches replaced incorrectly
+# Changes to code for easier readability
 
 -----2.6.1pre1a-----
 # Updated page list to reflect new topic pages
