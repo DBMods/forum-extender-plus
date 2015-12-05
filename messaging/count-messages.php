@@ -16,7 +16,7 @@ if ($_GET['to'] && $_GET['token']) {
 		//Check to make sure our UID origin is from the right place
 		if ($row['uid_origin'] == $cfg['val']) {
 			//If origin is correct, return message count
-			$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($row['username']) . "' AND `archived` = 0");
+			$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($row['username']) . "' AND `archived` = 0 AND `unread` = 1");
 			$msgcount = mysqli_num_rows($result);
 			echo $msgcount;
 		} else {
