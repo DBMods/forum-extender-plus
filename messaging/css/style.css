@@ -234,6 +234,11 @@ td.subject span.subject {
 	color: #000;
 }
 
+tr.unread {
+	font-weight: bold;
+	background: #fff;
+}
+
 tr.highlighted {
 	background: #7fb7e6;
 }
