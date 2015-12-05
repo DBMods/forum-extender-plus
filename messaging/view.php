@@ -11,6 +11,11 @@ if ($userAuthenticated) {
 	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE id = '" . sqlesc($_POST['msgid']) . "'");
 	$row = mysqli_fetch_assoc($result);
 
+	//Mark as read if needed
+	if ($row['unread'] == 1) {
+		mysqli_query($db, "UPDATE `msglist` SET unread = 0 WHERE id = '" . sqlesc($_POST['msgid']) . "'");
+	}
+
 	$typestring;
 	if (htmlspecialchars($row['to']) == $username) {
 		$typestring = '<strong>From:</strong> ' . htmlspecialchars($row['from']);
