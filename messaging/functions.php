@@ -92,9 +92,17 @@ function deleteConfirm() {
 
 //Gather messages in inbox
 function getMessages() {
-	global $db, $username, $result, $archive, $count, $countBadge, $archCount, $archBadge;
+	global $db, $username, $result, $archive, $count, $total, $countBadge, $archCount, $archTotal, $archBadge;
 
-	//Get lists
+	//Get totals
+	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 0 ORDER BY `time` DESC");
+	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 ORDER BY `time` DESC");
+
+	//Count totals
+	$total = mysqli_num_rows($result);
+	$archTotal = mysqli_num_rows($archive);
+
+	//Get count lists
 	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 0 AND `unread` = 1 ORDER BY `time` DESC");
 	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 AND `unread` = 1 ORDER BY `time` DESC");
 
