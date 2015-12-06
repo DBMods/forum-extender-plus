@@ -8,8 +8,10 @@ if ($userAuthenticated) {
 	}
 
 	if ($showinbox) {
-		getMessages();
-		if ($archTotal == 0) {
+		//Get count
+		$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 ORDER BY `time` DESC");
+		$total = mysqli_num_rows($result);
+		if ($total == 0) {
 			echo 'It doesn\'t appear that you have any archived messages.';
 		} else {
 			echo '<table>';

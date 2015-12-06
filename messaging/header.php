@@ -88,6 +88,8 @@ $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $timeOffsetSeconds = $timeoffset * 60;
 $returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://www.dropboxforum.com');
 $action = $_POST['action'];
+$total;
+$archTotal;
 
 //Not used yet, but may be in future
 $indirectcall = true;
