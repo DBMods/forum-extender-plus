@@ -3,7 +3,7 @@ require_once 'header.php';
 if ($userAuthenticated) {
 	if ($action == 'send') {
 		require_once 'compose.php';
-	} elseif ($action == 'delete' || $action == 'arch') {
+	} elseif ($action == 'delete' || $action == 'arch' || $action == 'markRead' || $action == 'markUnread') {
 		require_once 'manipulate-entry.php';
 	} elseif ($action == 'forward' || $action == 'sendfwd') {
 		require_once 'forward-message.php';

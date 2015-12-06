@@ -169,10 +169,20 @@ if ($userAuthenticated) {
 							<input type='hidden' name='context' value='' />
 							<button id='archBtn' class='button' type='submit'><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></button>
 						</form>
+						<form id='readForm' class='inline' method='post' action=''>
+							<input type='hidden' name='action' value='markRead' />
+							<input type='hidden' name='msgid' value='' />
+							<button id='delBtn' class='button' type='submit'>Mark Read</button>
+						</form>
+						<form id='unreadForm' class='inline' method='post' action=''>
+							<input type='hidden' name='action' value='markUnread' />
+							<input type='hidden' name='msgid' value='' />
+							<button id='delBtn' class='button' type='submit'>Mark Unread</button>
+						</form>
 						<form id='delForm' class='inline' method='post' action=''>
 							<input type='hidden' name='action' value='delete' />
 							<input type='hidden' name='msgid' value='' />
-							<button id='delBtn' class='button last danger' type='submit'>Delete</button>
+							<button id='delBtn' class='button danger last' type='submit'>Delete</button>
 						</form>
 					</div>
 					<?php

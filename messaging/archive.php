@@ -1,10 +1,11 @@
 <?php
 require_once 'header.php';
 if ($userAuthenticated) {
-	if ($action == 'delete' || $action == 'unarch')
+	if ($action == 'delete' || $action == 'unarch' || $action == 'markRead' || $action == 'markUnread') {
 		include 'manipulate-entry.php';
-	elseif ($action == 'forward' || $action == 'sendfwd')
+	} elseif ($action == 'forward' || $action == 'sendfwd') {
 		include 'forward-message.php';
+	}
 
 	if ($showinbox) {
 		getMessages();
