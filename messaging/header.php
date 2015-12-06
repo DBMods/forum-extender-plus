@@ -105,6 +105,7 @@ if ($userAuthenticated) {
 		<link rel='stylesheet' href='css/style.css' />
 	</head>
 	<body>
+		<div id='toastArea'></div>
 		<div id='wrapper'>
 			<header id='head'>
 				Dropbox Forum Extender+

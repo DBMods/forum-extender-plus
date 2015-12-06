@@ -1,4 +1,23 @@
 /*
+ * Keyframes
+ */
+
+@keyframes fadeInOut {
+	0% {
+		opacity: 0;
+	}
+	17% {
+		opacity: 1;
+	}
+	83% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+/*
  * Page layout
  */
 
@@ -244,6 +263,51 @@ tr.highlighted {
 }
 tr.highlighted td.subject {
 	color: #eee;
+}
+
+/*
+ * Toasts
+ */
+
+#toastArea {
+	position: fixed;
+	top: 30px;
+	left: 50%;
+	text-align: center;
+	width: 980px;
+	margin-left: -490px;;
+}
+
+.toast {
+	padding: 10px 15px;
+	position:
+	width: fit-content;
+	border: 1px solid;
+	border-radius: 5px;
+	font-size: 12px;
+	opacity: 0;
+	animation: fadeInOut 4.6s;
+}
+
+.toast.success {
+	background: #e8f7ed;
+	border-color: #30b661;
+	color: #30b661;
+}
+.toast.info {
+	background: #e1f2fb;
+	border-color: #5bb8e8;
+	color: #5bb8e8;
+}
+.toast.warning {
+	background: #fff9e1;
+	border-color: #ffd335;
+	color: #ffd335;
+}
+.toast.danger {
+	background: #fef1f1;
+	border-color: #e2a8a8;
+	color: #e2a8a8;
 }
 
 /*
