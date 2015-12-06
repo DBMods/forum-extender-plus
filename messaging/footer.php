@@ -101,7 +101,7 @@ mysqli_close($db);
 			}
 
 			//Add ID to forms for manipulation
-			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
+			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #readForm input[name="msgid"], #unreadForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
 
 			//Manage meta bar buttons
 			if (selectedList.length == 0) {
@@ -120,7 +120,7 @@ mysqli_close($db);
 		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive');
 
 		//Add ID to forms for manipulation
-		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
+		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #archForm input[name="msgid"], #readForm input[name="msgid"], #unreadForm input[name="msgid"], #delForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
 
 		//Change meta forms to throw back to the inbox to avoid displaying errors to the user after message is moved or deleted
 		$('#delForm, #archForm').attr('action', 'index.php');
