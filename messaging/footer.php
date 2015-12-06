@@ -68,7 +68,7 @@ mysqli_close($db);
 		$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
 
 		//Select message when clicking on message
-		$('table tr td:not(:first-child)').on('click', function() {
+		$('table tr td:not(.check)').on('click', function() {
 			var id = $(this).parent().attr('data-id');
 
 			//Highlight selection
