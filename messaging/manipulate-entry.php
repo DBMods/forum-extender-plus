@@ -20,11 +20,11 @@ if ($action == 'delete') {
 	for ($i = 0; $i < sizeof($msgIdList); $i++) {
 		$result = mysqli_query($db, "UPDATE `msglist` SET `unread` = 0 WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "'");
 	}
-	echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message(s) unarchived.</strong></p></div></div>';
+	echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message(s) marked as read.</strong></p></div></div>';
 } elseif ($action == 'markUnread') {
 	for ($i = 0; $i < sizeof($msgIdList); $i++) {
 		$result = mysqli_query($db, "UPDATE `msglist` SET `unread` = 1 WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "'");
 	}
-	echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message(s) unarchived.</strong></p></div></div>';
+	echo '<div class="alert-center"><div id="alert-fade" class="alert alert-success"><p><strong>Message(s) marked as unread.</strong></p></div></div>';
 }
 ?>
