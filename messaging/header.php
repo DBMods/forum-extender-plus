@@ -182,6 +182,11 @@ if ($userAuthenticated) {
 							<button id='delBtn' class='button danger last' type='submit'>Delete</button>
 						</form>
 					</div>
+					<?php } else if (strpos($pageName, 'admin/') === 0) { ?>
+					<div id='adminbar' class='buttongroup'>
+						<a href='/' class='button'>Dashboard</a>
+						<a href='userdata.php' class='button'>User Database</a>
+					</div>
 					<?php
 					}
 					if ($pageName == 'compose.php') {
