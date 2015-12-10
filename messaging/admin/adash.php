@@ -1,5 +1,5 @@
 <?php
-require_once 'header.php';
+require_once '../header.php';
 if ($userAuthenticated) {
 	getMessages();
   if ($username == 'TechGeek01' || $username == 'nathanc') {
@@ -61,5 +61,5 @@ if ($userAuthenticated) {
 		echo '<p>You are not authorized to access this page.</p>';
   }
 }
-require_once 'footer.php';
+require_once '../footer.php';
 ?>
