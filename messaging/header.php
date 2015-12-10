@@ -102,7 +102,7 @@ if ($userAuthenticated) {
 <html>
 	<head>
 		<title>Forum Extender+ Messenger</title>
-		<link rel='stylesheet' href='css/style.css' />
+		<link rel='stylesheet' href='https://www.techgeek01.com/dropboxextplus/css/style.css' />
 	</head>
 	<body>
 		<div id='toastArea'></div>
@@ -131,7 +131,7 @@ if ($userAuthenticated) {
 			</header>
 			<header id='context'>
 				<div class='title'>
-					<a href='index.php'>Messenger</a>
+					<a href='https://www.techgeek01.com/dropboxextplus'>Messenger</a>
 				</div>
 				<div class='tools'>
 					<?php	if ($pageName == 'index.php' || $pageName == 'archive.php' || $pageName == 'sent.php') { ?>

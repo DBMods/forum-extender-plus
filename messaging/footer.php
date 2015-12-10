@@ -149,7 +149,7 @@ mysqli_close($db);
 	});
 </script>
 
-<script src='js/bootstrap.js'></script>
+<script src='https://www.techgeek01.com/dropboxextplus/js/bootstrap.js'></script>
 <script>
 	window.setTimeout(function() {
 		$('#alert-fade').addClass('fade');
