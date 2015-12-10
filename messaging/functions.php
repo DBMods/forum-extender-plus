@@ -80,7 +80,7 @@ function linkActivity($page, $singlePage, $text, $altCheck = false) {
 	if ($singlePage) {
 		$endCondition = $pageName == $page || ($altCheck && $pageName == $altCheck);
 	} else {
-		$endCondition = strpos($pageName, $page) !== false || ($altCheck && strpos($pageName, $altCheck) !== false);
+		$endCondition = strpos($pageName, $page) !== false || ($altCheck && strpos($pageName, $altCheck) === 0);
 	}
 
 	return '<a' . (($endCondition && $userAuthenticated && $showinbox) ? ' class="active"' : '') . ' href="https://www.techgeek01.com/dropboxextplus/' . $page . '">' . $text . '</a>';
