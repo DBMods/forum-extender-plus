@@ -121,12 +121,6 @@ if ($userAuthenticated) {
 						</form>
 						<?php } ?>
 					</div>
-
-					<?php
-					if($userAuthenticated && false) {
-						echo '<form style="display:inline" action="" method="post"><button type="submit" class="button" name="action" value="logoff">Log out Old</button></form>';
-					}
-					?>
 				</div>
 			</header>
 			<header id='context'>
