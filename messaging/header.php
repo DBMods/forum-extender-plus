@@ -3,7 +3,7 @@ require_once 'db-login.php';
 require_once 'functions.php';
 
 //Set global variables
-$pageName = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'], '/') + 1);
+$pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], 'dropboxextplus/') + 15);
 
 //Sets local time display
 if (is_numeric($_POST['timeOffset']))

@@ -13,14 +13,14 @@ mysqli_close($db);
 	<a class='button wide blue' href='compose.php'>Compose</a><br>
 	<?php
 	getMessages();
-	echo linkActivity('<a href="index.php">Inbox' . $countBadge . '</a>') . '<br>';
-	echo linkActivity('<a href="sent.php">Sent</a>') . '<br>';
-	echo linkActivity('<a href="archive.php">Archive' . $archBadge . '</a>') . '<br>';
-	echo linkActivity('<a href="settings.php">Settings</a>') . '<br>';
-	echo linkActivity('<a href="stats.php">Stats</a>');
+	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php') . '<br>';
+	echo linkActivity('sent.php', true, 'Sent') . '<br>';
+	echo linkActivity('archive.php', true, 'Archive' . $archBadge) . '<br>';
+	echo linkActivity('settings.php', true, 'Settings') . '<br>';
+	echo linkActivity('stats.php', true, 'Stats');
 	if ($username == 'TechGeek01' || $username == 'nathanc') {
 		echo '<br>';
-		echo linkActivity('<a href="admin.php">Admin</a>');
+		echo linkActivity('admin/', false, 'Admin');
 	}
 	?>
 </div>

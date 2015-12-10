@@ -69,9 +69,21 @@ function badAuth() {
 }
 
 //Append a link to the navbar
-function linkActivity($string) {
+/*function linkActivity($string) {
 	global $pageName, $userAuthenticated, $showinbox;
 	echo ((strpos($string, 'href=\'' . $pageName . '\'>') !== false || strpos($string, 'href="' . $pageName . '">') !== false) && $userAuthenticated && $showinbox) ? ('<a class=\'active\' ' . substr($string, 3)) : $string;
+}*/
+function linkActivity($page, $singlePage, $text, $altCheck = false) {
+	global $pageName, $userAuthenticated, $showinbox;
+
+	//Check URL of page to go to, and an optional alternate URL
+	if ($singlePage) {
+		$endCondition = $pageName == $page || ($altCheck && $pageName == $altCheck);
+	} else {
+		$endCondition = strpos($pageName, $page) !== false || ($altCheck && strpos($pageName, $altCheck) !== false);
+	}
+
+	return '<a' . (($endCondition && $userAuthenticated && $showinbox) ? ' class="active"' : '') . ' href="https://www.techgeek01.com/dropboxextplus/' . $page . '">' . $text . '</a>';
 }
 
 //Gather messages in inbox
