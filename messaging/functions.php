@@ -74,22 +74,6 @@ function linkActivity($string) {
 	echo ((strpos($string, 'href=\'' . $pageName . '\'>') !== false || strpos($string, 'href="' . $pageName . '">') !== false) && $userAuthenticated && $showinbox) ? ('<a class=\'active\' ' . substr($string, 3)) : $string;
 }
 
-//Show delete confirmation modal
-function deleteConfirm() {
-	return;
-	echo '<div class="modal fade in" id="alertDelete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
-	echo '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>';
-	echo '<h3 class="modal-title">Are you sure?</h3>';
-	echo '</div>';
-	echo '<div class="modal-body">';
-	echo '<h4>If you delete this message, it is gone forever!</h4>';
-	echo '</div>';
-	echo '<div class="modal-footer">';
-	echo '<button class="button" data-dismiss="modal">Cancel</button>';
-	echo '<form method="post" action="" class="menu"><input name="msgid" type="hidden" id="msgid" value="" /><button type="submit" class="button blue" name="action" value="delete">Delete</button></form>';
-	echo '</div></div></div></div>';
-}
-
 //Gather messages in inbox
 function getMessages() {
 	global $db, $username, $result, $archive, $count, $countBadge, $archCount, $archBadge;
