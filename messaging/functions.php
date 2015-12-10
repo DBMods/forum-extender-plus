@@ -69,10 +69,6 @@ function badAuth() {
 }
 
 //Append a link to the navbar
-/*function linkActivity($string) {
-	global $pageName, $userAuthenticated, $showinbox;
-	echo ((strpos($string, 'href=\'' . $pageName . '\'>') !== false || strpos($string, 'href="' . $pageName . '">') !== false) && $userAuthenticated && $showinbox) ? ('<a class=\'active\' ' . substr($string, 3)) : $string;
-}*/
 function linkActivity($page, $singlePage, $text, $altCheck = false) {
 	global $pageName, $userAuthenticated, $showinbox;
 
