@@ -184,7 +184,7 @@ if ($userAuthenticated) {
 					</div>
 					<?php } else if (strpos($pageName, 'admin/') === 0) { ?>
 					<div id='adminbar' class='buttongroup'>
-						<a href='/' class='button'>Dashboard</a>
+						<a href='https://www.techgeek01.com/dropboxextplus/admin' class='button'>Dashboard</a>
 						<a href='userdata.php' class='button'>User Database</a>
 					</div>
 					<?php
