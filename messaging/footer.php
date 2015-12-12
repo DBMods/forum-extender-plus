@@ -128,6 +128,16 @@ mysqli_close($db);
 		//Enable buttons
 		$('#viewBtn').remove();
 		$('#messageActionButtons').show();
+	} else if (pageUrl == 'admin/userdata.php') {
+		//Manage modals on user table
+		$('.dashmodapply').click(function() {
+			var $userform = $(this).parent();
+			if ($userform.find('.dashmodpassword').val() != '') {
+				modal('Reset password', 'You are about to reset the password of the user with UID ' + $userform.find('.dashuserid').val() + '.', 'reset password', 'Reset password', $userform);
+			} else {
+				modal('Clear password', 'You are about to clear the password of the user with UID ' + $userform.find('.dashuserid').val() + '. This is <strong>extremely insecure</strong> and not recommended.', 'Clear password', 'Clear password', $userform);
+			}
+		});
 	}
 
 	//Main function buttons
@@ -155,7 +165,7 @@ mysqli_close($db);
 	function modal(title, message, confirmText, button, $form) {
 		$('#modal .modalTitle').html(title);
 		$('#modal .modalContent .message').html(message);
-		$('#modal .modalConfirmText').html(confirmText);
+		$('#modal .modalConfirmText').html(confirmText.toUpperCase());
 		$('#modalConfirmButton').html(button);
 		$('#modalConfirmBox').val('');
 
@@ -174,6 +184,7 @@ mysqli_close($db);
 		$('#modalConfirmButton').click(function() {
 			if ($('#modalConfirmBox').val().toLowerCase() == confirmText.toLowerCase()) {
 				$('#modal, #modalShade').hide();
+				$form.attr('onsubmit', '');
 				$form.submit();
 			} else {
 				$('#modalConfirmBox').val('');
