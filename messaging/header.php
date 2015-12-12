@@ -115,7 +115,7 @@ if ($userAuthenticated) {
 			</div>
 			<div class='modalContent'>
 				<span class='message'>You are about to delete an entire table.</span> Type <span class='modalConfirmText'>DROP USERS</span> to confirm.
-				<form class='modalConfirmForm'>
+				<form class='modalConfirmForm' onsubmit='return false;'>
 					<input type='hidden' name='action' value='checkform' />
 					<input id='modalConfirmBox' class='fancy' style='position:relative;top:2px;' />
 					<button type='button' id='modalConfirmButton' class='button danger' href='javascript:void(0)'>Drop Table</button>
