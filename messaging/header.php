@@ -109,16 +109,16 @@ if ($userAuthenticated) {
 		<div id='modalShade'></div>
 		<div id='modal'>
 			<div class='modalHeader'>
-				<span class='modalTitle'>Confirm Delete</span>
+				<span class='modalTitle'></span>
 				<span class='modalClose'>X</span>
 				<div class='clearfix'></div>
 			</div>
 			<div class='modalContent'>
-				<span class='message'>You are about to delete an entire table.</span> Type <span class='modalConfirmText'>DROP USERS</span> to confirm.
+				<span class='message'></span> Type <span class='modalConfirmText'></span> to confirm.
 				<form class='modalConfirmForm' onsubmit='return false;'>
 					<input type='hidden' name='action' value='checkform' />
 					<input id='modalConfirmBox' class='fancy' style='position:relative;top:2px;' />
-					<button type='button' id='modalConfirmButton' class='button danger' href='javascript:void(0)'>Drop Table</button>
+					<button type='button' id='modalConfirmButton' class='button danger' href='javascript:void(0)'></button>
 				</form>
 			</div>
 		</div>
