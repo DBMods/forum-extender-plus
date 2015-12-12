@@ -106,6 +106,22 @@ if ($userAuthenticated) {
 	</head>
 	<body>
 		<div id='toastArea'></div>
+		<div id='modalShade'></div>
+		<div id='modal'>
+			<div class='modalHeader'>
+				<span class='modalTitle'>Confirm Delete</span>
+				<span class='modalClose'>X</span>
+				<div class='clearfix'></div>
+			</div>
+			<div class='modalContent'>
+				<span class='message'>You are about to delete an entire table.</span> Type <span class='modalConfirmText'>DROP USERS</span> to confirm.
+				<form class='modalConfirmForm'>
+					<input type='hidden' name='action' value='checkform' />
+					<input id='modalConfirmBox' class='fancy' style='position:relative;top:2px;' />
+					<button type='button' id='modalConfirmButton' class='button danger' href='javascript:void(0)'>Drop Table</button>
+				</form>
+			</div>
+		</div>
 		<div id='wrapper'>
 			<header id='head'>
 				Dropbox Forum Extender+

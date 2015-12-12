@@ -147,6 +147,55 @@ mysqli_close($db);
 	}, function() {
 		$('#attribmore').stop(true).slideUp();
 	});
+
+	/*
+	 * Functions
+	 */
+
+	function modal(title, message, confirmText, button, $form) {
+		$('#modal .modalTitle').html(title);
+		$('#modal .modalContent .message').html(message);
+		$('#modal .modalConfirmText').html(confirmText);
+		$('#modalConfirmButton').html(button);
+		$('#modalConfirmBox').val('');
+
+		$('.modalClose').click(function() {
+			$('#modal, #modalShade').hide();
+		});
+
+		$('#modal').css('visibility', 'hidden').show();
+
+		//Style Modal
+		$('#modal').css('margin-top', '-' + (parseInt($('#modal').css('height')) / 2 - 14) + 'px');
+		$('#modalConfirmBox').css('width', (parseInt($('#modal').css('width')) - 2 * parseInt($('.modalContent').css('padding-left')) - parseInt($('#modalConfirmButton').css('width')) - 11) + 'px');
+
+		$('#modal, #modalShade').css('visibility', 'visible').show();
+
+		$('#modalConfirmButton').click(function() {
+			if ($('#modalConfirmBox').val().toLowerCase() == confirmText.toLowerCase()) {
+				$('#modal, #modalShade').hide();
+				$form.submit();
+			} else {
+				$('#modalConfirmBox').val('');
+				$('#modal').shake(4);
+			}
+		});
+	}
+
+	$.fn.shake = function(times){
+		var interval = 100;
+		var distance = 10;
+
+		var base = parseInt(this.css('margin-left'));
+
+		for(var iter = 0; iter < times + 1; iter++){
+			this.animate({
+				'margin-left': base - (iter % 2 == 0 ? distance : distance * -1)
+			}, interval);
+		}
+
+		this.animate({'margin-left': base}, interval);
+	}
 </script>
 
 <script src='https://www.techgeek01.com/dropboxextplus/js/bootstrap.js'></script>
