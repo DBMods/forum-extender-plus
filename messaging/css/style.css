@@ -396,3 +396,70 @@ tr.highlighted td.subject {
 	position: relative;
 	top: -10px;
 }
+
+/*
+ * Modal window
+ */
+
+ #modalShade, #modal {
+	 display: none;
+ }
+
+#modalShade {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 50;
+}
+
+#modal {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 500px;
+	margin-left: -250px;
+	z-index: 51;
+
+	background: #fff;
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.6);
+}
+
+.modalHeader {
+	padding: 10px 12px;
+	border-bottom: 1px solid #ddd;
+}
+.modalTitle {
+	float: left;
+	font-size: 30px;
+	color: #1080de;
+}
+.modalClose {
+	float: right;
+	font-size: 24px;
+	color: #bbb;
+	cursor: pointer;
+}
+
+.modalContent {
+	padding: 30px 20px;
+}
+
+.modalConfirmText {
+	font-weight: bold;
+	font-size: 14px;
+}
+.modalConfirmForm {
+	margin-top: 10px;
+	text-align: right;
+}
+
+input.fancy {
+	height: 31px;
+	border: 1px solid #ccc;
+	margin-right: 7px;
+}
