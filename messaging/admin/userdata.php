@@ -50,7 +50,7 @@ if ($userAuthenticated) {
       echo '<td>' . gmdate('Y-m-d g:i A', $row['create_time']) . '</td>';
       echo '<td>' . htmlspecialchars($row['create_ip']) . '</td>';
       echo '<td>' . htmlspecialchars($row['ext_token']) . '</t>';
-      echo '<td><form method="post" onsubmit="return false;" action="" style="margin:0px"><input name="dashmodpassword" class="dashmodpassword" type="password" /><input name="dashuserid" class="dashuserid" type="hidden" value="' . $row['userid'] . '"/> <button name="dashmodapply" class="dashmodapply" type="button" class="button danger" value="change">Change</button></form></td>';
+      echo '<td><form method="post" action="" style="margin:0px"><input name="dashmodpassword" class="dashmodpassword" type="password" /><input name="dashuserid" class="dashuserid" type="hidden" value="' . $row['userid'] . '"/> <input type="hidden" name="dashmodapply" class="dashmodapply" value="change" /></form><a href="javascript:void(0)" class="button danger changepass">Change</a></td>';
       echo '</tr>';
     }
 ?>

@@ -130,8 +130,8 @@ mysqli_close($db);
 		$('#messageActionButtons').show();
 	} else if (pageUrl == 'admin/userdata.php') {
 		//Manage modals on user table
-		$('.dashmodapply').click(function() {
-			var $userform = $(this).parent();
+		$('.changepass').click(function() {
+			var $userform = $(this).parent().find('form');
 			if ($userform.find('.dashmodpassword').val() != '') {
 				modal('Reset password', 'You are about to reset the password of the user with UID ' + $userform.find('.dashuserid').val() + '.', 'reset password', 'Reset password', $userform);
 			} else {
