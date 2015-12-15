@@ -20,6 +20,8 @@ if ($_POST['action'] == "logoff") {
 	$userLogoff = true;
 }
 
+$userIsAdmin = false;
+
 //If userToken and userid are set from previous login, check auth
 if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 	$userToken = htmlspecialchars($_COOKIE['userToken']);
@@ -31,6 +33,7 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 	if ($row && $_POST['action'] != "create-account" && $_POST['action'] != "pass-token") {
 		$userAuthenticated = true;
 		$username = htmlspecialchars($row['username']);
+		$userIsAdmin = $row['admin'] == 1;
 	} else {
 		$badCookie = true;
 		$badAuth = true;
@@ -49,6 +52,7 @@ if ($_POST['userToken'] && $_POST['userid']) {
 		$userAuthenticated = true;
 
 		$username = htmlspecialchars($row['username']);
+		$userIsAdmin = $row['admin'] == 1;
 
 		makeCookie('userToken', $userToken, time() + 3600 * 24 * 30);
 		makeCookie('userid', $userid, time() + 3600 * 24 * 30);
@@ -76,6 +80,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		makeCookie('userid', $row['userid'], time() + 3600 * 24 * 30);
 
 		$username = htmlspecialchars($_POST['username']);
+		$userIsAdmin = $row['admin'] == 1;
 	} else {
 		$badAuth = true;
 	}

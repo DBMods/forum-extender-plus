@@ -2,7 +2,7 @@
 require_once '../header.php';
 if ($userAuthenticated) {
 	getMessages();
-  if ($username == 'TechGeek01' || $username == 'nathanc') {
+  if ($userIsAdmin) {
 		if ($action == 'updateadmin') {
 			//Code
 		}
