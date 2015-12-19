@@ -63,6 +63,7 @@ mysqli_close($db);
 
 	if (pageUrl == 'index.php' || pageUrl == 'archive.php') {
 		archAct = pageUrl == 'index.php' ? 'arch' : 'unarch';
+		$('#archForm input[name="action"]').val(archAct);
 
 		//initialize buttons
 		$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
@@ -118,6 +119,7 @@ mysqli_close($db);
 	} else if (pageUrl == 'view.php') {
 		archAct = '<?php echo $buttonMetaArch; ?>';
 		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive');
+		$('#archForm input[name="action"]').val(archAct);
 
 		//Add ID to forms for manipulation
 		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #archForm input[name="msgid"], #readForm input[name="msgid"], #unreadForm input[name="msgid"], #delForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
