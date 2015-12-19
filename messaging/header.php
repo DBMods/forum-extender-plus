@@ -182,9 +182,6 @@ if ($userAuthenticated) {
 						<form id='archForm' class='inline' method='post' action=''>
 							<input type='hidden' name='action' value='' />
 							<input type='hidden' name='msgid' value='' />
-							<input type='hidden' name='msgto' value='' />
-							<input type='hidden' name='subject' value='' />
-							<input type='hidden' name='context' value='' />
 							<button id='archBtn' class='button' type='submit'><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></button>
 						</form>
 						<form id='readForm' class='inline' method='post' action=''>
