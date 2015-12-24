@@ -18,9 +18,8 @@ mysqli_close($db);
 	echo linkActivity('archive.php', true, 'Archive' . $archBadge) . '<br>';
 	echo linkActivity('settings.php', true, 'Settings') . '<br>';
 	echo linkActivity('stats.php', true, 'Stats');
-	if ($username == 'TechGeek01' || $username == 'nathanc') {
-		echo '<br>';
-		echo linkActivity('admin/', false, 'Admin');
+	if ($userIsAdmin) {
+		echo '<br>' . linkActivity('admin/', false, 'Admin');
 	}
 	?>
 </div>
