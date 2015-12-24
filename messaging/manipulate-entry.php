@@ -1,29 +1,39 @@
 <?php
+//Grab message list
 $msgIdList = explode(',', $_POST['msgid']);
+
+//If we're deleting, do that
 if ($action == 'delete') {
 	for ($i = 0; $i < sizeof($msgIdList); $i++) {
 		$result = mysqli_query($db, "DELETE FROM `msglist` WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "'");
 	}
 	echo $result ? '<span class="toast warning">Message(s) deleted</span>' : '<span class="toast danger">Message does not exist or you do not have permission</span>';
-} elseif ($action == 'arch') {
-	for ($i = 0; $i < sizeof($msgIdList); $i++) {
-		$result = mysqli_query($db, "UPDATE `msglist` SET `archived` = 1 WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "' AND `archived` = 0");
+} elseif ($action == 'arch' || $action == 'unarch' || $action == 'markRead' || $action == 'markUnread') {
+	//Else modify database accordingly
+	$toasMsg = '';
+	$dbField = '';
+	$setVal = '';
+	$checkVal = '';
+
+	//Set toast message and database fields to modify
+	if ($action == 'arch' || $action == 'unarch') {
+		$dbField = 'archived';
+		$setVal = $action == 'arch' ? '1' : '0';
+		$checkVal = $action == 'unarch' ? '1' : '0';
+		$toastMsg = $action . 'ived';
+	} else if ($action == 'markRead' || $action == 'markUnread') {
+		$dbField = 'unread';
+		$setVal = $action == 'markUnread' ? '1' : '0';
+		$checkVal = $action == 'markRead' ? '1' : '0';
+		$toastMsg = 'marked as ' . ($action == 'markUnread' ? 'un' : '') . 'read';
 	}
-	echo '<span class="toast success">Message(s) archived</span>';
-} elseif ($action == 'unarch') {
+
+	//Run query
 	for ($i = 0; $i < sizeof($msgIdList); $i++) {
-		$result = mysqli_query($db, "UPDATE `msglist` SET `archived` = 0 WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "' AND `archived` = 1");
+		$result = mysqli_query($db, "UPDATE `msglist` SET `" . $dbField . "` = " . $setVal . " WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "' AND `" . $dbField . "` = " . $checkVal);
 	}
-	echo '<span class="toast success">Message(s) unarchived</span>';
-} elseif ($action == 'markRead') {
-	for ($i = 0; $i < sizeof($msgIdList); $i++) {
-		$result = mysqli_query($db, "UPDATE `msglist` SET `unread` = 0 WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "' AND `unreda` = 1");
-	}
-	echo '<span class="toast success">Message(s) marked as read</span>';
-} elseif ($action == 'markUnread') {
-	for ($i = 0; $i < sizeof($msgIdList); $i++) {
-		$result = mysqli_query($db, "UPDATE `msglist` SET `unread` = 1 WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "' AND `unread` = 0");
-	}
-	echo '<span class="toast success">Message(s) marked as unread</span>';
+
+	//Display toast
+	echo '<span class="toast success">Message(s) ' . $toastMsg . '</span>';
 }
 ?>
