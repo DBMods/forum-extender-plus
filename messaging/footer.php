@@ -10,7 +10,7 @@ mysqli_close($db);
 
 </div>
 <div id='nav'>
-	<a class='button wide blue' href='compose.php'>Compose</a><br>
+	<a class='button wide blue' href='https://www.techgeek01.com/dropboxextplus/compose.php'>Compose</a><br>
 	<?php
 	getMessages();
 	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php') . '<br>';
