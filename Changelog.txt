@@ -1,17 +1,17 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
------2.6.1pre2b-----
+-----2.6.1-----
++ Pagination is now appended to the top of the post list as well as the bottom
+- Removed unnecessary @resource entries from metadata block
+- Clickable links no longer use javascript:void(0) as a link target
+* Fixed @ help notation bug where certain matches replaced incorrectly
+* Fixed modal height modifying on actions
+* Script is now JSHint valid and mostly JSLint valid
+* Minor performance boost
+# Updated page list to reflect new topic pages
 # Minor code changes
 # Rewrote comments for clarity
-
------2.6.1pre2a-----
-- Removed unnecessary @resource entries from metadata block
-* Fixed @ help notation bug where certain matches replaced incorrectly
-# Changes to code for easier readability
-
------2.6.1pre1a-----
-# Updated page list to reflect new topic pages
 
 -----2.6.0-----
 + Help Center autocomplete will add a space if needed after the clicked match
