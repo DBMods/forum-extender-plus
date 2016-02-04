@@ -2,3 +2,4 @@ db-login.php
 error_log
 *.tmp
 messaging/tests/**
+tests/**
