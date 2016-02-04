@@ -6,7 +6,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.6.1
+// @version 2.6.2pre1a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
 // @require https://github.com/DBMods/forum-extender-plus/raw/master/resources/js/helpList.js
@@ -36,8 +36,8 @@
 
 //Set global variables
 var fullUrl = window.location.href, strippedUrl = fullUrl.split('?')[0];
-var lang = fullUrl.split('https://www.dropboxforum.com/hc/')[1].split('/')[0];
-var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')[1] || '', urlVars = getUrlVars(), modalCount = 0, loggedIn = false;
+var lang = fullUrl.split('https://www.dropboxforum.com/hc/')[1].split('/')[0].split('?')[0];
+var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')[1] || '', urlVars = getUrlVars(), modalCount = 0;
 var syncWaitCount = 0;
 var color = {
 	lightBlue: '#e7f2fc',
@@ -47,6 +47,7 @@ var color = {
 	lightGold: '#fff8ce',
 	lightRed: '#ffe9e9'
 };
+var loggedIn = false, userIsMod = $('#user-menu a:contains("Open agent interface")').length > 0;
 var userUid = '';
 
 //Define empty variables
@@ -397,6 +398,28 @@ if (page.isPost) {
 	});
 }
 
+//Add custom pages by swapping out 404s TODO add head title changing attribute
+makePage('credits', 'A Special Thanks', '<p>This project has been in ongoing development since May of 2013, and I could not have done it without the help of a select few individuals. I\'d like to give a special thanks to those that have helped contribute to the script in some way.</p><p><strong>Nathan Cheek</strong> - Co-development of message system, and side development of userscript<br><span style="display:inline-block;padding-left:5em;color:#bbb">Also, for claiming he knows nothing about UI design, and leaving me to design a graphical interface from scratch ;)</span><br><strong>Raymond Ma</strong> - Side development of userscript and CDN links to resources<br><span style="display:inline-block;padding-left:5em;color:#bbb">Quite a lot of work for a guy that\'s only like, 16 :)</span><br><strong>Richard Price</strong> - Inspiration for all of the features, and permission to incorporate the old Forum Extender into the script<br><span style="display:inline-block;padding-left:5em;color:#bbb">The same Forum Extender he probably wrote on whatever Windows phone or tablet he had at the time :)</span><br><br><strong>Ed Giansante</strong> - Helping with gathering resources, and not <em>always</em> sitting behind a desk and doing nothing :)<br><span style="display:inline-block;padding-left:5em;color:#bbb">Oh, hi dee di dee di dee di dee di dee di dee di!</span><br><br><strong>XKCD</strong> - Providing inspiration for the many easter eggs hidden within the code<br><span style="display:inline-block;padding-left:5em;color:#bbb">Random number: ' + getRandomNumber() + '</span></p>')
+
+function makePage(slug, title, content) {
+	if (pageUrl == slug) {
+		var $cont = $('.segment__container .error-page');
+
+		//Remove junk
+		$cont.find('h2').remove();
+		$cont.find('a').remove();
+		$cont.find('.error-page__image').remove();
+		$cont.find('p').remove();
+
+		//Add page content
+		$cont.find('h1').add('head title').html(title);
+		$cont.append(content);
+
+		//Left-align paragraphs
+		$cont.find('p').css('text-align', 'left');
+	}
+}
+
 /*
  * Work with Dropbox Core API
  */
@@ -535,7 +558,7 @@ if (client.isAuthenticated()) {
 		var theme = prefs.theme;
 
 		if (theme) {
-			//forumVersion(theme);
+			forumVersion(theme);
 		}
 
 		//Custom signature
@@ -636,8 +659,8 @@ if (client.isAuthenticated()) {
 			showModal({
 				buttons: ['OK', 'Cancel'],
 				title: 'Preferences',
-				content: '<span id="gsDropboxExtenderSnippetManager" class="clickable">Snippet manager</span><br><br><textarea class="gsDropboxExtenderPrefItem" name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br>Reload front page every <select class="gsDropboxExtenderPrefItem" name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select class="gsDropboxExtenderPrefItem" name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select class="gsDropboxExtenderPrefItem" name="reloadSticky">' + reloadTimeList + '</select><br><br><button id="deleteprefs">Trash Preferences</button><button id="deletedrafts">Trash Drafts</button>',
-				dimm: [450, 750],
+				content: '<span id="gsDropboxExtenderSnippetManager" class="clickable">Snippet manager</span><br><br><textarea class="gsDropboxExtenderPrefItem" name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br>Forum theme <select class="gsDropboxExtenderPrefItem" name="theme"><option value="">No theme</option><option value="8.8.2012">8.8.2012 Original forum revamp</option></select><br><br>Reload front page every <select class="gsDropboxExtenderPrefItem" name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select class="gsDropboxExtenderPrefItem" name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select class="gsDropboxExtenderPrefItem" name="reloadSticky">' + reloadTimeList + '</select><br><br><button id="deleteprefs">Trash Preferences</button><button id="deletedrafts">Trash Drafts</button><br><br><a href="https://www.dropboxforum.com/hc/' + lang + '/credits">Script credits and thanks</a>',
+				dimm: [500, 750],
 				init: function() {
 					//Load current settings
 					var pref, $elemList = $('.gsDropboxExtenderPrefItem'), $elem;
@@ -764,7 +787,7 @@ if (client.isAuthenticated()) {
 						prefs[$(this).attr('name')] = $(this).is('input[type="checkbox"]') ? $(this).prop('checked') : $(this).val();
 					});
 					write('prefs', prefs, function() {
-						hoverMsg('success', 'Your settings have been saved.');
+						hoverMsg('success', 'Your preferences have been saved.');
 					});
 				}
 			});
@@ -950,17 +973,188 @@ $latestQuestions.css('padding', '15px 20px').find('.question-title').css('margin
 
 //Skin forums
 function forumVersion(versionDate) {
+	//Amazon link https://forum-extender-plus.s3-us-west-2.amazonaws.com/forumsheader.jpg
 	if (versionDate == '8.8.2012') {
+		$('main').css({
+			'width': '990px',
+			'margin': '0 auto',
+			'background': 'url(https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/forumheader.jpg) no-repeat center top'
+		});
+
+		//Move annoucement to nav bar, and add home link
+		$('#gsDropboxExtenderNav').append('<span class="annoucement">Important updates on Carousel and Mailbox - <a href="https://www.dropboxforum.com/hc/en-us/articles/207049853-Important-updates-on-Carousel-and-Mailbox-">Learn more</a></span>');
+		$('#gsDropboxExtenderNav a:first').after('<span><a href="' + page.front.value + '">Take me home!</a></span>');
+
+		//Remove large header block and  annoucement
+		$('div.segment.segment--hero, div.segment.segment--announcement').remove();
+
+		//Set up header and floats
+		$('main').prepend('<div id="header" class="clearfix" />');
+		$('#header').css('height', '94px');
+
+		//Append user login nav
+		var $langChange = $('.dropdown.language-selector .dropdown-menu a'), userNav;
+		if (loggedIn) {
+			userNav = 'Welcome, <a href="/hc/requests?community_id=public">' + $('#user-name').html() + '</a>';
+			userNav += ' | <a href="https://www.dropbox.com/help" target="_blank">Help</a>';
+			if (userIsMod) {
+				userNav += ' | <a href="/access/return_to?return_to=https://dropboxforum.zendesk.com/agent" target="_blank">Admin</a>';
+			}
+			userNav += ' | <a href="' + $langChange.attr('href') + '">' + $langChange.html() + '</a>';
+			userNav += ' | <a href="/access/logout">Log Out</a>';
+		} else {
+			var loginBtn = $('a.login');
+			userNav = 'Welcome. <a href="' + loginBtn.attr('href') + '">Log in</a>';
+			userNav += ' | <a href="https://www.dropbox.com/help" target="_blank">Help</a>';
+			userNav += ' | <a href="' + $langChange.attr('href') + '">' + $langChange.html() + '</a>';
+		}
+		$('#header').append('<span id="greet">' + userNav + '</span>');
+		$('#header a').css({
+			'text-decoration': 'none',
+			'color': '#1f75cc'
+		});
+		$('#greet').css({
+			'float': 'left',
+			'clear': 'none',
+			'font-size': '12px',
+			'font-weight': 'normal'
+		});
+
+		//Append logo TODO: Figure out a good way to add a frontpage link
+		/*$('#header').append('<a id="logoLink" href="' + page.front.value + '"><svg width="140px" height="120px"></svg></a>');
+		$('#logoLink').html('<svg width="143px" height="165px" viewBox="1.536 14.451 3.535 2.695">' + $('#header-logo svg#logo').html() + '</svg>');
+		$('#logoLink g#text').remove();
+		$('#logoLink').css({
+			'float': 'left',
+			'position': 'absolute',
+			'top': '-25px',
+			'left': '50%',
+			'margin-left': '-66px'
+		});*/
+
+		//Append search form
+		$('#header').append('<form class="search" method="get" action="' + $('form.search').attr('action') + '" accept-charset="UTF-8" />');
+		$('header').remove();
+		$('form.search').html('<input id="q" size="14" style="height:28px;width:170px;margin-right:3px"></input><input class="bluebutton" type="button" style="height:30px;width:101px" value="Search »"></input>');
+		$('form.search').css({
+			'float': 'right',
+			'clear': 'none'
+		});
+
+		//Style tables
+		if (page.front.active || page.isTopic) {
+			//Cache topic block list
+			var $topics = $('#categories-list h3.categories-list__title, #topic-overview li a h3');
+
+			if (page.front.active) {
+				//Create width topic list on front page
+				var forumList = new ThemedTable('forumlist', ['Topic', 'Posts', 'Followers'], ['690px', '150px', '150px']);
+				forumList.add(['<a href="' + page.topic.basicPro.value + '">Dropbox Basic & Pro</a>', topicData('Dropbox Basic & Pro', 'posts'), topicData('Dropbox Basic & Pro', 'followers')]);
+				forumList.add(['<a href="' + page.topic.desktopClient.value + '">Desktop Client Builds</a><span>All things desktop client!</span>', topicData('Desktop Client Builds', 'posts'), topicData('Desktop Client Builds', 'followers')]);
+				forumList.add(['<a href="' + page.topic.dfbe.value + '">Dropbox Business & Enterprise</a>', topicData('Dropbox Business & Enterprise', 'posts'), topicData('Dropbox Business & Enterprise', 'followers')]);
+				forumList.add(['<a href="' + page.topic.apiDev.value + '">API Development</a><span>Questions relating to our API', topicData('API Development', 'posts'), topicData('API Development', 'followers')]);
+				forumList.add(['<a href="' + page.topic.archBeta.value + '">Archive File Type Beta Community</a>', topicData('Archive file type beta community', 'posts'), topicData('Archive file type beta community', 'followers')]);
+				forumList.add(['<a href="' + page.topic.badgeBeta.value + '">Badge Beta Community</a>', topicData('Badge Beta Community', 'posts'), topicData('Badge Beta Community', 'followers')]);
+				forumList.add(['<a href="' + page.topic.carousel.value + '">Carousel & Photos</a>', topicData('Carousel & Photos', 'posts'), topicData('Carousel & Photos', 'followers')]);
+				forumList.add(['<a href="' + page.topic.bugs.value + '">Bugs & Troubleshooting</a><span>Tell us what\'s wrong</span>', topicData('Issues & Troubleshooting', 'posts'), topicData('Issues & Troubleshooting', 'followers')]);
+				forumList.add(['<a href="' + page.topic.mailbox.value + '">Mailbox</a>', topicData('Mailbox', 'posts'), topicData('Mailbox', 'followers')]);
+				forumList.add(['<a href="' + page.topic.mobile.value + '">Mobile</a>', topicData('Mobile', 'posts'), topicData('Mobile', 'followers')]);
+				if (userIsMod) {
+					forumList.add(['<a href="' + page.topic.mods.value + '">Moderators Only</a><span>A place for Super Users to discuss stuff</span>', topicData('Moderators only', 'posts'), topicData('Moderators only', 'followers')]);
+				}
+				forumList.add(['<a href="' + page.topic.feedback.value + '">Product Feedback</a>', topicData('Product Feedback', 'posts'), topicData('Product Feedback', 'followers')]);
+				forumList.add(['<a href="' + page.topic.recents.value + '">Recents</a>', topicData('Recents', 'posts'), topicData('Recents', 'followers')]);
+
+				//Replace front page fancy list with table
+				$('main div.segment .segment__container').html(forumList.value);
+			} else {
+				//TODO: Sidebar topic list on topic pages
+
+				//Append thread list to
+				var topicHeader = '<span style="float:left">Topic — <a href="' + page.posts.new.value + '" style="font-style:italic">Add New »</a></span><span style="float:right">Sort by:';
+				var sorts = $('.community-sub-nav ul li');
+				for (var i = 0, l = sorts.length; i < l; i++) {
+					topicHeader += ' ' + sorts.eq(i).html();
+				}
+				topicHeader += '</span>';
+				//$('.community-sub-nav').remove();
+				var topicList = new ThemedTable('latest', [topicHeader, 'Posts', 'Last Poster', 'Freshness'], ['547px', '48px', '92px', '71px']);
+				var topics = $('.question-list li.question:not(.sticky-post)');
+				var topic, topicMeta, title, posts, last, freshness;
+				for (i = 0, l = topics.length; i < l; i++) {
+					topic = topics.eq(i);
+					topicMeta = topic.find('.question-meta');
+
+					title = topic.find('.question-title').html();
+					posts = parseInt(topicMeta.find('.question-answers').html(), 10) + 1;
+					last = topicMeta.find('.question-author').html();
+					freshness = topicMeta.find('.question-published').html().split(' ago')[0];
+
+					topicList.add([title, posts, last, freshness]);
+				}
+				$('#rfloat').append(topicList.value);
+				$('#latest th a').css({
+					'color': '#ccc',
+					'font-weight': 'normal'
+				});
+				$('#latest a').css('text-decoration', 'none');
+				$('#latest td:nth-child(1) a, #latest td:nth-child(2), #latest td:nth-child(4)').css('color', '#1f75cc');
+				$('#latest td:not(:nth-child(1))').css('font-size', '11px');
+				$('.question-list').hide();
+			}
+			//$('.community-nav').remove();
+			$('#forumlist a').css({
+				'color': '#1f75cc',
+				'text-decoration': 'none'
+			});
+			$('#forumlist tr:not(:first)').css('line-height', '17px');
+			$('#forumlist td span').css({
+				'font-size': '11px',
+				'padding-left': '15px',
+				'color': '#aaa'
+			});
+
+			$('body').on('DOMNodeInserted', '.question-list li.sticky-post', function() {
+				var $topic, $topicMeta, title, posts, last, freshness;
+				$topic = $(this);
+				$topicMeta = $topic.find('.question-meta');
+
+				title = '[sticky] ' + $topic.find('.question-title').html().replace('★	', '');
+				posts = '';
+				last = '';
+				freshness = '';
+
+				topicList.sticky([title, posts, last, freshness]);
+				$('#latest').html($(topicList.value).html());
+				$('#latest td:nth-child(1) a, #latest td:nth-child(2), #latest td:nth-child(4)').css('color', '#1f75cc');
+				$('#latest tr td:not(:nth-child(1))').css('font-size', '11px');
+				$('#latest tr.sticky td:nth-child(1)').css('font-size', '14px');
+				$('#latest th a').css({
+					'color': '#ccc',
+					'font-weight': 'normal'
+				});
+				$('#latest a').css('text-decoration', 'none');
+			}).on('DOMNodeInserted', '#latest tr p', function() { //Get rid of those pesky admin user details that mess up our tables
+				$(this).remove();
+			});/*.on('DOMSubtreeModified', '#latest td:nth-child(4) time', function() {
+				if ($.contains(this, ' ago')) {
+					$(this).html($(this).html().split(' ago')[0]);
+				}
+			});*/
+		} else {
+			$('#header').css('height', '174px');
+		}
+	} else if (versionDate == '8.8.2013') {
 		//Reformat header
 		$('main').css({
 			'width': '990px',
 			'margin': '0 auto',
-			'background': 'url(https://forum-extender-plus.s3-us-west-2.amazonaws.com/forumsheader.jpg) no-repeat center top'
+			'background': 'url(https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/forumheader.jpg) no-repeat center top'
 		});
 
 		if (page.front.active || page.isTopic) {
-			$('main').prepend('<div id="lfloat" style="float:left"><h2>Forums</h2></div><div id="rfloat" style="float:right"><h2>Latest Discussions</h2></div>');
-			$('#lfloat h2, #rfloat h2').css({
+			$('main').prepend('<div class="lfloat" style="float:left"><h2>Forums</h2></div><div class="rfloat" style="float:right"><h2>Latest Discussions</h2></div>');
+			$('.lfloat h2, .rfloat h2').css({
 				'line-height': '15px',
 				'margin': '0 0 19px',
 				'font-size': '17px',
@@ -1123,6 +1317,10 @@ function forumVersion(versionDate) {
 			});
 		});
 	}
+
+	function topicData(searchString, subSearch) {
+		return '' + parseInt($topics.filter(':contains("' + searchString + '")').parent().find('.meta-group span:contains("' + subSearch + '")').html());
+	}
 }
 
 /*
@@ -1130,14 +1328,12 @@ function forumVersion(versionDate) {
  */
 
 function Url(value) {
-	var args = arguments;
-	if (args.length == 1) {
-		this.value = 'https://www.dropboxforum.com/hc/' + lang;
-		if (value) {
-			this.value += '/' + value;
-		}
-		this.active = strippedUrl == this.value;
+	this.value = 'https://www.dropboxforum.com/hc/' + lang;
+	if (value) {
+		this.value += '/' + value;
+		this.value = this.value.split('?')[0];
 	}
+	this.active = strippedUrl == this.value;
 }
 
 //Create a tabled themed with the 8.8.2012 theme
@@ -1330,7 +1526,7 @@ function showModal(modConfig) {
 
 	modalCount++;
 
-	$('#gsDropboxExtenderModalContainer').append('<div id="gsDropboxExtenderModalGroup' + (modalCount - 1) + '" style="position:fixed;display:none"><div class="gsDropboxExtenderScreenOverlay" style="position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:' + (modalCount > 1 ? '0.4' : '0.7') + '" /><div class="gsDropboxExtenderModal" style="position:fixed;background:#fff;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px"><a class="gsDropboxExtenderModalClose clickable" style="font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block">x</a><h1 class="gsDropboxExtenderModalTitle" style="text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px"></h1><br /><br /><div class="gsDropboxExtenderModalContent" /><div class="gsDropboxExtenderModalActionButtons" style="text-align:right" /></div></div>');
+	$('#gsDropboxExtenderModalContainer').append('<div id="gsDropboxExtenderModalGroup' + (modalCount - 1) + '" style="position:fixed;display:none"><div class="gsDropboxExtenderScreenOverlay" style="position:fixed;bottom:0;right:0;top:0;left:0;background:#000;border:1px solid #cecece;z-index:50;opacity:' + (modalCount > 1 ? '0.4' : '0.7') + '" /><div class="gsDropboxExtenderModal" style="position:fixed;background:#fff;border:2px solid #cecece;z-index:50;padding:12px;font-size:13px"><a class="gsDropboxExtenderModalClose clickable" style="font-size:14px;line-height:14px;right:6px;top:4px;position:absolute;color:#6fa5fd;font-weight:700;display:block">x</a><h1 class="gsDropboxExtenderModalTitle" style="text-align:left;color:#6FA5FD;font-size:22px;font-weight:700;border-bottom:1px dotted #D3D3D3;padding-bottom:2px;margin-bottom:20px"></h1><div class="gsDropboxExtenderModalContent" /><div class="gsDropboxExtenderModalActionButtons" style="text-align:right" /></div></div>');
 	var $mGroup = $('#gsDropboxExtenderModalGroup' + (modalCount - 1));
 
 	var $modal = $mGroup.find('.gsDropboxExtenderModal');

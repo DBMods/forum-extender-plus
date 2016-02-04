@@ -1,6 +1,14 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.6.2pre1a
++ Re-enabled forum theming
++ 8.8.2012 theme is partially ported to new forum
++ Added credits menu
+* Fixed bug with language detection from URL in Url() methods
+* Fixed bad link destination for Help Center in 8.8.2012 theme
+# Changed wording on preferences save
+
 -----2.6.1-----
 + Pagination is now appended to the top of the post list as well as the bottom
 - Removed unnecessary @resource entries from metadata block
