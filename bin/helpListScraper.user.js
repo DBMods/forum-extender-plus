@@ -4,7 +4,7 @@
 // @description Scrapes data for helpList.js
 // @include https://www.dropboxforum.com/hc/scrapeHelpList/*
 // @include https://www.dropboxforum.com/hc/scrapeHelpList
-// @version 1.0.5
+// @version 1.0.6
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/helpListScraper.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/helpListScraper.user.js
