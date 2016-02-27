@@ -10,7 +10,7 @@ if ($action == 'delete') {
 	echo $result ? '<span class="toast warning">Message(s) deleted</span>' : '<span class="toast danger">Message does not exist or you do not have permission</span>';
 } elseif ($action == 'arch' || $action == 'unarch' || $action == 'markRead' || $action == 'markUnread') {
 	//Else modify database accordingly
-	$toasMsg = '';
+	$toastMsg = '';
 	$dbField = '';
 	$setVal = '';
 	$checkVal = '';
