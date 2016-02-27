@@ -51,7 +51,7 @@ function getEntry(num) {
           missCounter = 0;
           var string = firstItem ? '' : ',';
           var articleTitle = title.split(' (Dropbox Help Center)')[0].trim();
-          string = '<span class="validEntry">' + string + '<br>\'' + num + '\': \'' + articleTitle.replace('\'', '\\\'') + '\'</span>';
+          string = '<span class="validEntry">' + string + '<br>\'' + num + '\': \'' + articleTitle.replace('\'', '\\\'').replace('’', '\\\'') + '\'</span>';
           $('#list').append(string);
           firstItem = false;
         } else {
