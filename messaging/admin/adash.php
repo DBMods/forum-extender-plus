@@ -33,6 +33,8 @@ if ($userAuthenticated) {
 ?>
 <!--</table>-->
 <form action='' method='post'>
+
+	<br>
 	<button type='submit' class='button danger' name='action' value='updateadmin'>Update Settings</button>
 </form>
 <?php

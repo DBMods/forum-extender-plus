@@ -239,15 +239,18 @@ td {
 td.check {
 	width: 10px;
 }
+td.name {
+	width: 115px;
+}
 td.subject {
-	max-width: 428px;
+	max-width: 423px;
 	overflow: hidden;
 	text-overflow:  ellipsis;
 	white-space: nowrap;
 	color: #999;
 }
-td.name, td.date {
-	width: 120px;
+td.date {
+	width: 130px;
 }
 td.subject span.subject {
 	color: #000;
