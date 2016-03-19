@@ -1,7 +1,15 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
------2.6.2pre1a
+-----2.6.2pre1b-----
++ Added authentication help explanation
++ Added people to credits
++ Post field now resized to show more than 3 lines at a time
+* Fixed further bug with bad language detection with Url() methods
+* Post toolbar now shows all tools as clickable links
+* Fixed post quoting
+
+-----2.6.2pre1a-----
 + Re-enabled forum theming
 + 8.8.2012 theme is partially ported to new forum
 + Added credits menu
