@@ -6,10 +6,10 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.6.2pre1b
+// @version 2.6.2pre2a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
-// @require https://github.com/DBMods/forum-extender-plus/raw/master/resources/js/helpList.js
+// @require https://github.com/DBMods/forum-extender-plus/raw/master/bin/js/helpList.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/forum-extender-plus.user.js
 // @grant GM_xmlhttpRequest
@@ -20,16 +20,13 @@
 /*
  * ** List of needed changes **
  *
- * Reemphasize new replies to your threads
- * Fix quoting
- * Nested quoting
- * Fix forum messaging - This may never work, due to the lack of public UIDs
+ * FIXME Fix quoting
+ * FIXME Nested quoting
  *
  * ** Waiting on a published forum fix **
  *
- * $userRole fix
- * ** Sticky managing needs to be fixed
- * Fix Super User highlighting
+ * FIXME $userRole fix
+ * FIXME Fix Super User highlighting
  */
 
 'use strict';
@@ -41,7 +38,7 @@ var pageUrl = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')
 var syncWaitCount = 0;
 var color = {
 	lightBlue: '#e7f2fc',
-	dropboxBlue: '#0073ee5',
+	dropboxBlue: '#007ee5',
 	green: '#beff9e',
 	lightGreen: '#daffc7',
 	gold: '#fff19d',
@@ -98,7 +95,7 @@ var page = {
 //Append necessary elements
 $('head').append('<style>@keyframes spin{from {transform:rotate(0deg);}to{transform:rotate(359deg);}}</style>');
 $('body.community-enabled').append('<div id="gsDropboxExtenderModalContainer" style="position:fixed" />');
-$('body.community-enabled').append('<div id="gsDropboxExtenderNav"><a class="clickable"><img id="gsDropboxExtenderLogo" src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/resources/images/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /></a><span id="gsDropboxExtenderSyncIcon" style="position:fixed;left:65px;bottom:-15px;z-index:12"></span><span><a href="https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"></span></span><span style="font-weight:bold;display:none">Important Notice: The messaging system has been updated. If you have previously registered, please trash your preferences and register again.</span></div>').css('padding-bottom', '33px');
+$('body.community-enabled').append('<div id="gsDropboxExtenderNav"><a class="clickable"><img id="gsDropboxExtenderLogo" src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/bin/img/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /></a><span id="gsDropboxExtenderSyncIcon" style="position:fixed;left:65px;bottom:-15px;z-index:12"></span><span><a href="https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"></span></span><span style="font-weight:bold;display:none">Important Notice: The messaging system has been updated. If you have previously registered, please trash your preferences and register again.</span></div>').css('padding-bottom', '33px');
 $('head').append('<style>.clickable{cursor:pointer;color:#007ee5}.alert-center{width:500px;position:absolute;left:50%;margin-left:-250px;z-index:1}.alert-warning{background-color:rgba(252,248,227,0.8);background-image:linear-gradient(to bottom,rgba(252,248,227,0.8) 0%,rgba(248,239,192,0.8) 100%);border-color:#f5e79e;color:rgba(138,109,59,0.8);background-image:-webkit-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-repeat:repeat-x}.alert-danger{background-color:rgba(242,222,222,0.8);background-image:linear-gradient(to bottom,rgba(242,222,222,0.8) 0%,rgba(231,195,195,0.8) 100%);border-color:#dca7a7;color:rgba(169,68,66,0.8);background-image:-webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-repeat:repeat-x}.alert-success{background-color:rgba(223,240,216,0.8);background-image:linear-gradient(to bottom,rgba(223,240,216,0.8) 0%,rgba(200,229,188,0.8) 100%);border-color:#b2dba1;color:rgba(60,118,61,0.8);background-image:-webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-repeat:repeat-x}.alert-info{background-color:rgba(217,237,247,0.8);background-image:linear-gradient(to bottom,rgba(217,237,247,0.8) 0%,rgba(185,222,240,0.8) 100%);border-color:#9acfea;color:rgba(49,112,143,0.8);background-image:-webkit-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-repeat:repeat-x}.alert{max-width:500px;margin-left:auto;margin-right:auto;text-align:center;padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;text-shadow:0 1px 0 rgba(255,255,255,.2);-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05)}.alert > p{margin-bottom:0}#gsDropboxExtenderNav>span{margin-left:20px}#gsDropboxExtenderNav{position:fixed;bottom:0;height:32px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px}</style>');
 //http://www.dropboxforum.com/hc/' + lang + '/preferences"' + (!page.front.active ? ' target="blank"' : '') + '
 
@@ -138,21 +135,28 @@ if (page.isPost) {
 //highlightPost(100, color.lightGreen, 'New forum regular');
 
 function highlightPost(check, color, label) {
-	var selectors = {
-		'string': ':contains("' + check + '")',
-		'number': function() {
-			return parseInt($(this).parent().parent().html().split('Posts: ')[1], 10) >= check;
-		}
-	}, $postList = $userRole.filter(selectors[typeof check]).filter(':not(.checkedHighlight)'), rolePosts = $postList.length;
-	label = label || check;
-	if (rolePosts) {
-		$postList.addClass('checkedHighlight');
+	//Sanity check
+	if ((typeof check === 'number' || typeof check === 'string') && typeof color === 'string') {
+		var selectors = {
+			'string': ':contains("' + check + '")',
+			'number': function() {
+				return parseInt($(this).parent().parent().html().split('Posts: ')[1], 10) >= check;
+			}
+		}, $postList = $userRole.filter(selectors[typeof check]).filter(':not(.checkedHighlight)'), rolePosts = $postList.length;
+		label = label || check;
+		if (rolePosts) {
+			$postList.addClass('checkedHighlight');
 
-		//Enable highlighting if post count doesn't exceed the 60% threshold
-		var totalPosts = $threadAuthor.length, highlightingEnabled = !(totalPosts > 1 && rolePosts / totalPosts > 0.6), message = '<li style="text-align: center;">' + label + ' highlighting ' + (highlightingEnabled ? 'en' : 'dis') + 'abled</li>';
-		$thread.prepend(message).append(message);
-		if (highlightingEnabled) {
-			$postList.parent().parent().parent().parent().find('.threadpost').css('background', color);
+			//Enable highlighting if post count doesn't exceed the 60% threshold
+			var totalPosts = $threadAuthor.length, highlightingEnabled = !(totalPosts > 1 && rolePosts / totalPosts > 0.6), message = '<li style="text-align: center;">' + label + ' highlighting ' + (highlightingEnabled ? 'en' : 'dis') + 'abled</li>';
+			if (highlightingEnabled) {
+				$postList.parent().parent().parent().parent().find('.threadpost').css('background', color);
+			}
+
+			//Append message
+			if (typeof label === 'string') {
+				$thread.prepend(message).append(message);
+			}
 		}
 	}
 }
@@ -164,8 +168,11 @@ highlightThread(2, color.lightGold);
 highlightThread(3, color.lightRed);
 
 function highlightThread() {
-	if (page.isTopic) {
-		var args = arguments, $threadList = $latestQuestions.filter(':not(.post-pinned)').find('.post-overview-count:eq(0) strong'), content;
+	var args = arguments;
+
+	//Sanity check
+	if (page.isTopic && typeof args[0] === 'number' && typeof args[args.length - 2] === 'number' && typeof args[args.length - 1] === 'string') {
+		var $threadList = $latestQuestions.filter(':not(.post-pinned)').find('.post-overview-count:eq(0) strong'), content;
 		i = $threadList.length;
 		while (i--) {
 			content = parseInt($threadList.eq(i).html(), 10);
@@ -185,7 +192,7 @@ $('nav.pagination').css({
 	'margin': '25px 0'
 });
 
-//Emphasize new replies to threads you've interacted with
+//Emphasize new replies to threads you've interacted with FIXME Fix thread activity highlighting
 var postNumbers = GM_getValue('postNumbers', []);
 
 if (page.isPost) {
@@ -196,10 +203,10 @@ if (page.isPost) {
 			GM_setValue('date', today);
 			GM_setValue('todayThreads', [strippedUrl]);
 			GM_setValue('postNumbers', [parseInt($('.post-stats .comment-count').html().split(' ')[0], 10) + 1]);
-		} else if (GM_getValue('date') == today) {
+		} else if (GM_getValue('date') === today) {
 			//Otherwise, add the current thread ID to the list
 			var todayThreads = GM_getValue('todayThreads', []);
-			if (todayThreads.indexOf(strippedUrl) == -1) {
+			if (todayThreads.indexOf(strippedUrl) === -1) {
 				//Add thread ID to list
 				todayThreads.push(strippedUrl);
 				GM_setValue('todayThreads', todayThreads.toString());
@@ -223,14 +230,14 @@ if (page.posts.list.active || page.isTopic) {
 	}
 }
 
-//Modify posts
+//Modify user tags TODO Rewrite user tagging for new forums
 //$userRole.filter('[href$="=1618104"]').html('Master of Super Users');
 
-//Detect and manage unstickied threads
+//Detect and manage unstickied threads FIXME Fix sticky managing
 if ($('#topic-info .topictitle:contains(") - "):contains(" Build - ")').length) {
 	var stickyList = GM_getValue('stickies', '').split(',');
 	if ($('#topic_labels .sticky').length) {
-		if (stickyList.indexOf(urlVars.id) == -1) {
+		if (stickyList.indexOf(urlVars.id) === -1) {
 			//If this thread is currently sticky, and is not monitored, start monitoring it
 			stickyList.push(urlVars.id);
 			GM_setValue('stickies', stickyList.toString());
@@ -267,6 +274,7 @@ if ($('#topic-info .topictitle:contains(") - "):contains(" Build - ")').length) 
 
 /*
 //Append the posting form if necessary
+//NOTE Posting form appending not necessary, unless a new forum system makes it so
 if (page.isPost && !$postForm.length) {
 	$.get($('h2.post-form a').attr('href'), function(data) {
 		$('#main').append($(data).find('#postform'));
@@ -334,7 +342,7 @@ if (page.isPost) {
 
 	//Insert a link
 	$('.gsDropboxExtenderLinkInsert').on('click', function() {
-		//TODO: Text boxes used to be 16px - Padding needs to be fixed
+		//FIXME Text boxes used to be 16px - Padding needs to be fixed
 		showModal({
 			buttons: ['Add'],
 			title: 'Add Link',
@@ -402,12 +410,20 @@ if (page.isPost) {
 	});
 }
 
-//Add custom pages by swapping out 404s TODO add head title changing attribute
+//Add custom pages by swapping out 404s
 makePage('credits', 'A Special Thanks', '<p>This project has been in ongoing development since May of 2013, and I could not have done it without the help of a select few individuals. I\'d like to give a special thanks to those that have helped contribute to the script in some way.</p><p><strong>Nathan Cheek</strong> - Co-development of message system, and side development of userscript<br><span style="display:inline-block;padding-left:5em;color:#bbb">Also, for claiming he knows nothing about UI design, and leaving me to design a graphical interface from scratch ;)</span><br><strong>Raymond Ma</strong> - Side development of userscript and CDN links to resources<br><span style="display:inline-block;padding-left:5em;color:#bbb">Quite a lot of work for a guy that\'s only like, 16 :)</span><br><strong>Richard Price</strong> - Inspiration for all of the features, and permission to incorporate the old Forum Extender into the script<br><span style="display:inline-block;padding-left:5em;color:#bbb">The same Forum Extender he probably wrote on whatever Windows phone or tablet he had at the time :)</span><br><br><strong>Chris Jones</strong> - Extensive error reporting and debugging of the script before pushing early versions to the public<br><br><strong>Ed Giansante</strong> - Helping with gathering resources, and not <em>always</em> sitting behind a desk and doing nothing :)<br><span style="display:inline-block;padding-left:5em;color:#bbb">Oh, hi dee di dee di dee di dee di dee di dee di!</span><br><br><strong>XKCD</strong> - Providing inspiration for the many easter eggs hidden within the code<br><span style="display:inline-block;padding-left:5em;color:#bbb">Random number: ' + getRandomNumber() + '</span></p>');
 makePage('authhelp', 'Authenticate Dropbox Forum Extender+', '<p>In order for the Dropbox API to authenticate, the request must be sent from specific URLs defined for the app. However, the URL has to match exactly, down to the anchors or parameters passed into the page. This is why, for example, if your front page URL is <code>https://www.dropboxforum.com/fc/en-us?flash_digest=k5m3 ...</code>, you will be prompted to go to the front page to authenticate. The URLs do not match, and as such, will not work.</p><p>When you authenticate with the Dropbox API, this gives the Forum Extender+ extension access to its own folder. From this folder, it will read and write to config files it uses to store data. Simply put, this allows you to set preferences, snippets, even post drafts, and no matter what you do in the script config, it will sync to your Dropbox. This allows every installation of the userscript that you\'ve linked to access this data as well, and so your preferences will travel between conputers.</p><p>For convenience, you can also authenticate the script straight from this page by clicking <span class="dropboxlink clickable">here</span>.</p>');
 
-function makePage(slug, title, content) {
-	if (pageUrl == slug) {
+//makePage(slug, title, [head,] content)
+function makePage() {
+	//Set up vars
+	var args = arguments;
+	var slug = args[0], title = args[1];
+	var content = args[args.length = 1];
+	var head = args.length === 4 ? args[2] : title;
+
+	//Sanity check
+	if (pageUrl === slug && typeof title === 'string' && typeof content === 'string') {
 		var $cont = $('.segment__container .error-page');
 
 		//Remove junk
@@ -417,7 +433,8 @@ function makePage(slug, title, content) {
 		$cont.find('p').remove();
 
 		//Add page title
-		$cont.find('h1').add('head title').html(title);
+		$cont.find('h1').html(title);
+		$cont.find('head title').html(head + ' - Dropbox Forums');
 		$cont.append(content);
 
 		//Left-align paragraphs
@@ -441,31 +458,68 @@ client.authenticate({
 	}
 });
 
+//Shorthand for getting length of an object TODO Move this to helper functions?
 function len(obj) {
 	return Object.keys(obj).length;
 }
 
 function read(file, Deferred) {
-	console.log('Reading from file "' + file + '"');
-	client.readFile(file, function(error, data) {
-		if (error) {
-			console.log('Error reading ' + file + ': ' + showError(error));
-			Deferred.resolve({});
-		} else {
-			Deferred.resolve(JSON.parse(data));
-		}
-	});
+	//Sanity check
+	if (file && typeof file === 'string') {
+		console.log('Reading from file "' + file + '"');
+		client.readFile(file, function(error, data) {
+			if (error) {
+				console.log('Error reading ' + file + ': ' + showError(error));
+				Deferred.resolve({});
+			} else {
+				Deferred.resolve(JSON.parse(data));
+			}
+		});
+	} else {
+		//Throw error on invalid filename
+		console.log('Error reading file: Invalid filename');
+	}
 }
 
 function write(file, obj, callback) {
-	//If object is not empty, write to file, otherwise, delete it
-	manageSynced(false);
-	console.log('Writing to file "' + file + '"');
-	if (Object.keys(obj).length) {
-		client.writeFile(file, JSON.stringify(obj), function(error, stat) {
+	//Sanity check
+	if (file && typeof file === 'string') {
+		//If object is not empty, write to file, otherwise, delete it
+		manageSynced(false);
+		console.log('Writing to file "' + file + '"');
+		if (Object.keys(obj).length) {
+			client.writeFile(file, JSON.stringify(obj), function(error, stat) {
+				if (error) {
+					console.log('Error writing ' + file + ': ' + showError(error));
+					return;
+				}
+				if (callback) {
+					callback();
+				}
+				manageSynced(true);
+			});
+		} else {
+			syncWaitCount--;
+			if (callback) {
+				remove(file, callback);
+			} else {
+				remove(file);
+			}
+		}
+	} else {
+		//Throw error on invalid filename
+		console.log('Error writing file: Invalid filename');
+	}
+}
+
+function remove(file, callback) {
+	//Sanity check
+	if (file && typeof file === 'string') {
+		manageSynced(false);
+		console.log('Removing file "' + file + '"');
+		client.remove(file, function(error) {
 			if (error) {
-				console.log('Error writing ' + file + ': ' + showError(error));
-				return;
+				console.log('Error removing ' + file + ': ' + showError(error));
 			}
 			if (callback) {
 				callback();
@@ -473,27 +527,9 @@ function write(file, obj, callback) {
 			manageSynced(true);
 		});
 	} else {
-		syncWaitCount--;
-		if (callback) {
-			remove(file, callback);
-		} else {
-			remove(file);
-		}
+		//Throw error on invalid filename
+		console.log('Error removing file: Invalid filename');
 	}
-}
-
-function remove(file, callback) {
-	manageSynced(false);
-	console.log('Removing file "' + file + '"');
-	client.remove(file, function(error) {
-		if (error) {
-			console.log('Error removing ' + file + ': ' + showError(error));
-		}
-		if (callback) {
-			callback();
-		}
-		manageSynced(true);
-	});
 }
 
 function showError(e) {
@@ -523,13 +559,13 @@ function showError(e) {
 			return 'Network error';
 
 		case Dropbox.ApiError.INVALID_PARAM:
-			break;
+			return 'Invalid parameters';
 
 		case Dropbox.ApiError.OAUTH_ERROR:
-			break;
+			return 'OAuth Authentication error';
 
 		case Dropbox.ApiError.INVALID_METHOD:
-			break;
+			return 'Invalid method';
 
 		default:
 			//Caused by a bug in dropbox.js, in the application, or in Dropbox
@@ -564,7 +600,7 @@ if (client.isAuthenticated()) {
 
 		//Apply theme, if there is any set
 		if (theme) {
-			if (document.readyState == 'complete') {
+			if (document.readyState === 'complete') {
 				forumVersion(theme);
 			} else {
 				window.onload = function() {
@@ -658,7 +694,7 @@ if (client.isAuthenticated()) {
 		}
 
 		//Redefine page
-		if (pageUrl == 'authhelp') {
+		if (pageUrl === 'authhelp') {
 			$('.segment__container .error-page p').remove();
 			$('.segment__container .error-page').append('<p style="text-align:center">Looks like you\'re all set! <a href="' + page.front.value + '">Take me home!</a></p>');
 		}
@@ -812,7 +848,7 @@ if (client.isAuthenticated()) {
 
 			///$('#main .topline').html('<a href="snippets">Manage your snippets here!</a><br><br><textarea name="signature" placeholder="Signature" rows="5" style="width:100%"></textarea><br><br><select name="theme"><option value="original">Original</option><option value="8.8.2012">8.8.2012</option><option value="" selected="selected">Current Theme (No Change)</option></select><br><input type="checkbox" id="collapseFooter" name="collapseFooter" /> <label for="collapseFooter" style="font-weight:normal">Automatically collapse footer</label><br><br>Reload front page every <select name="reloadFront">' + reloadTimeList + '</select><br>Reload forum pages every <select name="reloadForum">' + reloadTimeList + '</select><br>Reload stickies every <select name="reloadSticky">' + reloadTimeList + '</select><br><br><select id="modIcon" name="modIcon"><option value="https://forum-extender-plus.s3-us-west-2.amazonaws.com/icons/nyancatright.gif" selected="selected">Nyan Cat (Default)</option></select>&nbsp;<img id="modIconPreview"/><br><br><button class="btn btn-success" id="save">Save</button><button class="btn btn-warning btn-right" id="deleteprefs">Trash Preferences</button><button class="btn btn-warning btn-right" id="deletedrafts">Trash Drafts</button>');
 
-			//Mod icons TODO remove?
+			//Mod icons TODO Remove mod icons?
 			/*
 			var modIconList = ['Dropbox Flat', 'Dropbox Flat Green', 'Dropbox Flat Lime', 'Dropbox Flat Gold', 'Dropbox Flat Orange', 'Dropbox Flat Red', 'Dropbox Flat Pink', 'Dropbox Flat Purple', 'Dropbox', 'Dropbox Green', 'Dropbox Lime', 'Dropbox Gold', 'Dropbox Orange', 'Dropbox Red', 'Dropbox Pink', 'Dropbox Purple', 'Gold Star'];
 			tmp = '';
@@ -854,7 +890,7 @@ if (client.isAuthenticated()) {
 					url: ('https://www.techgeek01.com/dropboxextplus/check-uid.php?uid=' + userUid),
 					onload: function(response) {
 						var resp = response.responseText;
-						if (resp == 'Pass') {
+						if (resp === 'Pass') {
 							msgFormAction = '';
 							//Bad auth, offer to fix
 							$('#gsDropboxExtenderMessageContainer form').html('<input type="hidden" name="uid" value="' + userUid + '" />');
@@ -870,8 +906,8 @@ if (client.isAuthenticated()) {
 				});
 			}
 
-			//Handle messages TODO This will be broken once private UIDs are assigned
-			/*$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <span class="gsDropboxExtenderMessageUser clickable">Message User</a>');
+			//Handle messages FIXME This will be broken once private UIDs are assigned
+			/*$('article.post .post-footer, .comment .comment-vote.vote').append('<img src="https://github.com/DBMods/forum-extender-plus/raw/master/bin/img/send-envelope.png" style="height:12px;position:relative;top:1px;margin-left:1.2rem;" /> <span class="gsDropboxExtenderMessageUser clickable">Message User</a>');
 			$('article.post .post-footer .post-follow').css('margin-right', '0.4rem');
 			$('.gsDropboxExtenderMessageUser').click(function(evt) {
 				showModal({
@@ -920,7 +956,7 @@ if (client.isAuthenticated()) {
 		 * Aesthetics
 		 */
 
-		 //Collapse footer TODO rewrite this if we ever use it again
+		 //Collapse footer TODO Rewrite footer collapsing if we ever use it again
 		 /*if ($(window).height() + $('#footer').height() < $(document).height() && collapseFooter.length && collapseFooter[0].get('value')) {
 			 //Style footer
 			 $('#footer').css({
@@ -991,12 +1027,18 @@ $latestQuestions.css('padding', '15px 20px').find('.question-title').css('margin
 
 //Skin forums
 function forumVersion(versionDate) {
+	//Sanity check
+	if (typeof versionDate !== 'string') {
+		console.log('Invalid theme name');
+		return;
+	}
+
 	//Amazon link https://forum-extender-plus.s3-us-west-2.amazonaws.com/forumsheader.jpg
-	if (versionDate == '8.8.2012') {
+	if (versionDate === '8.8.2012') {
 		$('main').css({
 			'width': '990px',
 			'margin': '0 auto',
-			'background': 'url(https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/forumheader.jpg) no-repeat center top'
+			'background': 'url(https://github.com/DBMods/forum-extender-plus/raw/master/bin/img/forumheader.jpg) no-repeat center top'
 		});
 
 		//Move annoucement to nav bar, and add home link
@@ -1038,7 +1080,7 @@ function forumVersion(versionDate) {
 			'font-weight': 'normal'
 		});
 
-		//Append logo TODO: Figure out a good way to add a frontpage link
+		//Append logo
 		/*$('#header').append('<a id="logoLink" href="' + page.front.value + '"><svg width="140px" height="120px"></svg></a>');
 		$('#logoLink').html('<svg width="143px" height="165px" viewBox="1.536 14.451 3.535 2.695">' + $('#header-logo svg#logo').html() + '</svg>');
 		$('#logoLink g#text').remove();
@@ -1183,12 +1225,12 @@ function forumVersion(versionDate) {
 		} else {
 			$('#header').css('height', '174px');
 		}
-	} else if (versionDate == '8.8.2013') {
+	} /*else if (versionDate === '8.8.2013') {
 		//Reformat header
 		$('main').css({
 			'width': '990px',
 			'margin': '0 auto',
-			'background': 'url(https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/forumheader.jpg) no-repeat center top'
+			'background': 'url(https://github.com/DBMods/forum-extender-plus/raw/master/bin/img/forumheader.jpg) no-repeat center top'
 		});
 
 		if (page.front.active || page.isTopic) {
@@ -1325,11 +1367,11 @@ function forumVersion(versionDate) {
 				$('#latest a').css('text-decoration', 'none');
 			}).on('DOMNodeInserted', '#latest tr p', function() { //Get rid of those pesky admin user details that mess up our tables
 				$(this).remove();
-			});/*.on('DOMSubtreeModified', '#latest td:nth-child(4) time', function() {
+			});.on('DOMSubtreeModified', '#latest td:nth-child(4) time', function() {
 				if ($.contains(this, ' ago')) {
 					$(this).html($(this).html().split(' ago')[0]);
 				}
-			});*/
+			});
 		} else {
 			$('#header').css('height', '174px');
 		}
@@ -1355,6 +1397,8 @@ function forumVersion(versionDate) {
 				'background-image': '-moz-linear-gradient(top, #33a0e8, #2180ce)'
 			});
 		});
+	}*/ else {
+		console.log('Theme ' + versionDate + ' not found');
 	}
 
 	function addTopicItem(list, item) {
@@ -1370,16 +1414,27 @@ function forumVersion(versionDate) {
  */
 
 function Url(value) {
-	this.value = 'https://www.dropboxforum.com/hc/' + lang;
-	if (value) {
-		this.value += '/' + value;
-		this.value = this.value.split('?')[0];
+	//Sanity check
+	if (typeof value === 'string') {
+		this.value = 'https://www.dropboxforum.com/hc/' + lang;
+		if (value) {
+			this.value += '/' + value;
+			this.value = this.value.split('?')[0];
+		}
+		this.active = strippedUrl === this.value;
+	} else {
+		this.value = null;
+		this.activ = false;
 	}
-	this.active = strippedUrl == this.value;
 }
 
 //Create a tabled themed with the 8.8.2012 theme
 function ThemedTable(id, cols, width) {
+	//Sanity check
+	if (typeof id !== 'string' || !(typeof cols === 'object' || typeof cols === 'string') || !(typeof width === 'object' || typeof width === 'string')) {
+		return;
+	}
+
 	this.count = 0;
 	this.id = id;
 	this.width = width;
@@ -1394,16 +1449,16 @@ function ThemedTable(id, cols, width) {
 			vals[i] = '<td style="border:2px solid #f7f7f7;padding:3px 10px;font-size:12.5px">' + vals[i] + '</td>';
 		}
 		this.content += '<tr style="background:' + ((this.count % 2 === 0 && this.count > 0) ? '#f7f7f7' : '#fff') + '">' + vals.join('') + '</tr>';
-		this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width == 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
+		this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width === 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
 	};
 	this.sticky = function(vals) {
 		for (i = 0, l = vals.length; i < l; i++) {
 			vals[i] = '<td style="border:2px solid #f7f7f7;padding:3px 10px;font-size:12.5px">' + vals[i] + '</td>';
 		}
 		this.content = '<tr class="sticky" style="background:#f4faff">' + vals.join('') + '</tr>' + this.content;
-		this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width == 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
+		this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width === 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
 	};
-	this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width == 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
+	this.value = '<table id="' + this.id + '" style="margin:0 auto;border:2px solid #f7f7f7' + (typeof this.width === 'string' ? (';width:' + this.width + '"') : '') + '">' + this.headers + this.content + '</table>';
 }
 
 /*
@@ -1411,60 +1466,78 @@ function ThemedTable(id, cols, width) {
  */
 
 function manageSynced(test) {
-	//Increment counter - In case we have multiple actions waiting
-	if (test && syncWaitCount > 0) {
-		syncWaitCount--;
-	} else {
-		syncWaitCount++;
-	}
+	//Sanity check
+	if (typeof test === 'boolean') {
+		//Increment counter - In case we have multiple actions waiting
+		if (test && syncWaitCount > 0) {
+			syncWaitCount--;
+		} else {
+			syncWaitCount++;
+		}
 
-	//Select appropriate sync icon
-	var image;
-	if (!test) {
-		image = '<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/sync-flat.png" style="animation:spin 1.5s infinite linear;height:32px;width:32px" />';
-	} else {
-		image = '<img src="https://github.com/DBMods/forum-extender-plus/raw/master/resources/images/check.png" style="height:32px;width:32px" />';
-	}
+		//Select appropriate sync icon
+		var image;
+		if (!test) {
+			image = '<img src="https://github.com/DBMods/forum-extender-plus/raw/master/bin/img/sync-flat.png" style="animation:spin 1.5s infinite linear;height:32px;width:32px" />';
+		} else {
+			image = '<img src="https://github.com/DBMods/forum-extender-plus/raw/master/bin/img/check.png" style="height:32px;width:32px" />';
+		}
 
-	//Only change image if it's not already changed
-	if ($('#gsDropboxExtenderSyncIcon').html() != image) {
-		$('#gsDropboxExtenderSyncIcon').html(image);
+		//Only change image if it's not already changed
+		if ($('#gsDropboxExtenderSyncIcon').html() != image) {
+			$('#gsDropboxExtenderSyncIcon').html(image);
+		}
+	} else {
+		//Throw error on invalid test
+		console.log('Sync test not a boolean');
 	}
 }
 
 function htmlToMarkdown(base) {
-	var baseSelect = base.replace(/<li>/g, '* ').replace(/<p>/g, '\n\n').replace(/<h1>/g, '# ').replace(/<h2>/g, '## ').replace(/<h3>/g, '### ').replace(/<h4>/g, '#### ').replace(/<h5>/g, '##### ').replace(/<h6>/g, '###### ').replace(/<\/?strong>/g, '**').replace(/<\/?i>/g, '*').replace(/<\/h1>|<\/h2>|<\/h3>|<\/h4>|<\/h5>|<\/h6>|<\/?ul>|<\/p>|<\/li>|<ol>|<\/ol>|<ul>|<\/ul>/g, '').replace(/<a\ href="/g, '[').replace(/("\ .{1,})*">/g, '](').replace(/<\/a>/g, ')').replace(/\n\n/g, '\n');
+	//Sanity check
+	if (typeof base === 'string') {
+		var baseSelect = base.replace(/<li>/g, '* ').replace(/<p>/g, '\n\n').replace(/<h1>/g, '# ').replace(/<h2>/g, '## ').replace(/<h3>/g, '### ').replace(/<h4>/g, '#### ').replace(/<h5>/g, '##### ').replace(/<h6>/g, '###### ').replace(/<\/?strong>/g, '**').replace(/<\/?i>/g, '*').replace(/<\/h1>|<\/h2>|<\/h3>|<\/h4>|<\/h5>|<\/h6>|<\/?ul>|<\/p>|<\/li>|<ol>|<\/ol>|<ul>|<\/ul>/g, '').replace(/<a\ href="/g, '[').replace(/("\ .{1,})*">/g, '](').replace(/<\/a>/g, ')').replace(/\n\n/g, '\n');
 
-	//Split off links into separate array
-	var linkArray = baseSelect.match(/\[.+\]\(.+\)/g);
-	if (!!linkArray) {
-		var textArray = baseSelect.split(/\[.+\]\(.+\)/g);
+		//Split off links into separate array
+		var linkArray = baseSelect.match(/\[.+\]\(.+\)/g);
+		if (!!linkArray) {
+			var textArray = baseSelect.split(/\[.+\]\(.+\)/g);
 
-		//Swap text and link
-		for (i = 0, l = linkArray.length; i < l; i++) {
-			linkArray[i] = '[' + linkArray[i].split('](')[1].split(')')[0] + '](' + linkArray[i].split('[')[1].split('](')[0] + ')';
+			//Swap text and link
+			for (i = 0, l = linkArray.length; i < l; i++) {
+				linkArray[i] = '[' + linkArray[i].split('](')[1].split(')')[0] + '](' + linkArray[i].split('[')[1].split('](')[0] + ')';
+			}
+
+			return $.trim(interleave(textArray, linkArray).join(''));
+		} else {
+			return $.trim(baseSelect);
 		}
-
-		return $.trim(interleave(textArray, linkArray).join(''));
 	} else {
-		return $.trim(baseSelect);
+		//Invalid thing to convert
+		console.log('HTML to markdown not a string');
 	}
 }
 
 function interleave(arr1, arr2) {
-	if (arr2.length > arr1.length) {
-		arr2.length = arr1.length;
-	}
-	var combinedArr = $.map(arr1, function(v, i) {
-		return [v, arr2[i]];
-	});
-	var newArr = [];
-	for(var i = 0, l = combinedArr.length; i < l; i++){
-		if (combinedArr[i]){
-			newArr.push(combinedArr[i]);
+	//Sanity check
+	if (typeof arr1 === typeof arr2 === 'object') {
+		if (arr2.length > arr1.length) {
+			arr2.length = arr1.length;
 		}
+		var combinedArr = $.map(arr1, function(v, i) {
+			return [v, arr2[i]];
+		});
+		var newArr = [];
+		for(var i = 0, l = combinedArr.length; i < l; i++){
+			if (combinedArr[i]){
+				newArr.push(combinedArr[i]);
+			}
+		}
+		return newArr;
+	} else {
+		//Invalid arrays
+		console.log('Arrays not valid, cannot interleave');
 	}
-	return newArr;
 }
 
 //Get post author markup
@@ -1472,7 +1545,7 @@ function getPostAuthorDetails(postEventTarget) {
 	var $stuff = $(postEventTarget).parent().parent();
 
 	//Grab author element
-	if ($stuff.attr('class') == 'post-footer') {
+	if ($stuff.attr('class') === 'post-footer') {
 		//If we're quoting an OP, then go up one, as we'll be in the footer, and not the post itself
 		$stuff = $stuff.parent().find('.post-container .post-header .post-author');
 	} else {
@@ -1506,6 +1579,11 @@ function insertAndMarkupTextAtCursorPosition() {
 
 //Insert text at required position
 function insertTextAtCursorPosition(TextToBeInserted) {
+	//Sanity check
+	if (typeof TextToBeInserted !== 'string') {
+		return;
+	}
+
 	var startPos = $postField[0].selectionStart;
 	$postField.val($postField.val().slice(0, startPos) + TextToBeInserted + $postField.val().slice($postField[0].selectionEnd));
 	$postField.setCursorPosition(startPos + TextToBeInserted.length);
@@ -1513,22 +1591,27 @@ function insertTextAtCursorPosition(TextToBeInserted) {
 
 //Move cursor to set position in text area
 $.fn.setCursorPosition = function(pos) {
-	var me = this.get(0);
-	if (me.createTextRange) {
-		var range = me.createTextRange();
-		range.moveEnd('character', pos);
-		range.moveStart('character', pos);
-		range.select();
+	if (typeof pos === 'number') {
+		var me = this.get(0);
+		if (me.createTextRange) {
+			var range = me.createTextRange();
+			range.moveEnd('character', pos);
+			range.moveStart('character', pos);
+			range.select();
+		} else {
+			me.focus();
+			me.setSelectionRange(pos, pos);
+		}
 	} else {
-		me.focus();
-		me.setSelectionRange(pos, pos);
+		//Invalid position
+		console.log('Cannot set cursor position, position is not a number');
 	}
 };
 
 //Insert quote
 function insertSelectedQuote(quote, postAuthorDetails) {
-	console.log(quote);
-	if (quote) {
+	//Sanity check
+	if (quote && typeof quote === 'string') {
 		postAuthorDetails = postAuthorDetails || '';
 
 		var SelectionStart = $postField[0].selectionStart;
@@ -1567,14 +1650,25 @@ function getSelectedText() {
 }
 
 function hoverMsg(type, message) {
-	$('#alert-fade').parent().remove();
-	$body.prepend('<div class="alert-center" style="position:fixed;top:50px;z-index:9999;font-size:21px"><div id="alert-fade" class="alert alert-' + type + '"><p><strong>' + message + '</strong></p></div></div>');
-	setTimeout(function() {
-		$('.alert-center').fadeOut();
-	}, 5000);
+	//Sanity check
+	if (typeof type === typeof message === 'string') {
+		$('#alert-fade').parent().remove();
+		$body.prepend('<div class="alert-center" style="position:fixed;top:50px;z-index:9999;font-size:21px"><div id="alert-fade" class="alert alert-' + type + '"><p><strong>' + message + '</strong></p></div></div>');
+		setTimeout(function() {
+			$('.alert-center').fadeOut();
+		}, 5000);
+	} else {
+		//Message type and content not both strings
+		console.log('Cannot display hoverMsg, type and content must be valid strings');
+	}
 }
 
 function showModal(modConfig) {
+	//Sanity check
+	if (typeof modConfig !== 'object') {
+		return;
+	}
+
 	var buttons = modConfig.buttons;
 	var title = modConfig.title;
 	var content = modConfig.content;
