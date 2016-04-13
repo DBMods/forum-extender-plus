@@ -4,7 +4,7 @@
 // @description Scrapes data for helpList.js
 // @include https://www.dropboxforum.com/hc/scrapeHelpList/*
 // @include https://www.dropboxforum.com/hc/scrapeHelpList
-// @version 1.0.6
+// @version 1.1.0
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/helpListScraper.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/helpListScraper.user.js
@@ -17,9 +17,12 @@
  * article list, as stored in helpList.js
  */
 
+var fullUrl = window.location.href;
+var urlVars = getUrlVars();
+
 var firstItem = true;
 var missCounter = 0;
-var articleNum = 1;
+var articleNum = urlVars.start || 1;
 var i, l;
 
 window.onload = function() {
@@ -63,4 +66,17 @@ function getEntry(num) {
       //$('#check').html('*idle*');
     }
   });
+}
+
+function getUrlVars() {
+	var vars = [], hash;
+	var hashes = fullUrl.split('#')[0].slice(fullUrl.indexOf('?') + 1).split('&');
+
+	for (i = 0, l = hashes.length; i < l; i++) {
+		hash = hashes[i].split('=');
+		vars.push(hash[0]);
+		vars[hash[0]] = hash[1];
+	}
+
+	return vars;
 }
