@@ -14,7 +14,7 @@ if ($_POST['returnto'])
 	makeCookie('returnto', strip_tags($_POST['returnto']));
 
 //Delete cookies on logoff
-if ($_POST['action'] == "logoff") {
+if ($_POST['action'] == 'logoff') {
 	delCookie('userToken');
 	delCookie('userid');
 	$userLogoff = true;
