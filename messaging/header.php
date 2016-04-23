@@ -202,6 +202,7 @@ if ($userAuthenticated) {
 	$showinbox = true;
 }
 ?>
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Forum Extender+ Messenger</title>
