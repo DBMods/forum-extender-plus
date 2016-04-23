@@ -1,0 +1,506 @@
+$dropboxBlue: #007ee5; //1080de
+
+$pageBackground: #ddd;
+$background: #fff;
+$table: #eee;
+$tableBorder: #ddd;
+$border: #aaa;
+$darkBorder: #444;
+$lightBorder: #fff;
+$accentBorder: #e3e3e3;
+$floatBorder: #ccc;
+
+$shadowHeavy: rgba(0, 0, 0, 0.8);
+$shadow: rgba(0, 0, 0, 0.6);
+$shadowLight: rgba(0, 0, 0, 0.28);
+$shadowLighter: rgba(0, 0, 0, 0.2);
+
+$lightText: #fff;
+$lightLink: #ccc;
+
+$toastSuccess: #e8f7ed;
+$toastSuccessAccent: #30b661;
+$toastInfo: #e1f2fb;
+$toastInfoAccent: #5bb8e8;
+$toastWarning: #fff9e1;
+$toastWarningAccent: #ffd335;
+$toastDanger: #fef1f1;
+$toastDangerAccent: #e2a8a8;
+
+$subjectText: #999;
+$highlightedSubjectText: #eee;
+$unread: #fff;
+$highlighted: #7fb7e6;
+
+$grayLink: #666;
+$mainLink: #fff;
+$blueLink: $dropboxBlue;
+$activeLink: $dropboxBlue;
+
+$button: #eee;
+$buttonHover: #f5f5f5;
+$buttonGray: #f5f5f5;
+$buttonText: #666;
+$buttonTextGray: #c3c3c3;
+$buttonBorder: #ddd;
+$buttonBlue: $dropboxBlue;
+$buttonBlueHover: #198eee;
+$buttonBlueText: #fff;
+$buttonBlueBorder: #0b6897;
+$buttonDanger: #c00;
+$buttonDangerHover: #d90000;
+$buttonDangerText: #fff;
+$buttonDangerBorder: #900;
+
+/*
+ * Page layout
+ */
+
+body {
+	background-color: $pageBackground;
+	background: url('../images/background.png') fixed top center;
+	font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+}
+
+a {
+	text-decoration: none;
+}
+
+a, header, #context, .title {
+	color: $blueLink;
+}
+
+#wrapper {
+	width: 980px;
+	margin: 30px auto 0;
+	background: $background;
+	border: 1px solid $border;
+	border-radius: 3px;
+	box-shadow: 0 0 8px 0 $shadowHeavy;
+}
+
+#content, #context .tools {
+	width: 770px;
+}
+
+#nav, #context .title {
+	float: left;
+	width: 150px;
+}
+#meta, #content, #context .tools {
+	float: right;
+}
+.clearfix {
+	clear: both;
+}
+
+#head, footer, #container {
+	padding: 20px 30px;
+}
+
+#head, #context .title {
+	height: 39px;
+	line-height: 39px;
+}
+
+#context {
+	padding: 5px 30px;
+}
+
+header {
+	font-size: 20px;
+	border-bottom: 1px solid $accentBorder;
+}
+
+footer {
+	border-top: 1px solid $accentBorder;
+}
+
+#linkfooter, #linkfooter a:not(:hover) {
+	color: $grayLink!important;
+}
+
+#nav a {
+	color: $mainLink;
+	line-height: 20px;
+
+	&.active {
+		color: $activeLink;
+		font-weight: bold;
+	}
+}
+
+#attrib {
+	width: 460px;
+}
+
+form {
+	margin: 0;
+
+	&.inline {
+		display: inline;
+	}
+}
+fieldset {
+	border: none;
+}
+
+.button.padded, .buttongroup.padded {
+	margin: 0 6px;
+}
+.tools .button.padded:first-child, .tools .buttongroup.padded:first-child {
+	margin-left: 0;
+}
+.tools .button.padded:last-child, .tools .buttongroup.padded:last-child {
+	margin-right: 0;
+}
+
+/*
+ * Buttons
+ */
+
+.button {
+	font-size: 11px;
+	font-weight: bold;
+	text-transform: uppercase;
+	background: $button;
+	color: $buttonText;
+	border: 1px solid $buttonBorder;
+	border-radius: 4px;
+
+	&:hover {
+		background: $buttonHover;
+	}
+
+	&.wide {
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+	&.grayed {
+		background: $buttonGray;
+		cursor: default;
+		pointer-events: none;
+		color: $buttonTextGray;
+	}
+
+	&.blue {
+		background: $buttonBlue;
+		border: 1px solid $buttonBlueBorder;
+		color: $buttonBlueText!important;
+		&:hover {
+			background: $buttonBlueHover;
+		}
+	}
+	&.danger {
+		background: $buttonDanger;
+		border: 1px solid $buttonDangerBorder;
+		color: $buttonDangerText!important;
+		&:hover {
+			background: $buttonDangerHover;
+		}
+	}
+}
+
+a.button {
+	padding: 8px 20px;
+	line-height: 39px!important;
+}
+button.button {
+	margin: 4px 0;
+	padding: 6.5px 17px;
+	font-family: Arial;
+	cursor: pointer;
+}
+
+.buttongroup {
+	display: inline-block;
+	font-size: 0;
+
+	a.button:not(:last-child), button.button:not(.last) {
+		border-right: none;
+	}
+	a.button:first-child, button.button.first {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	a.button:first-child {
+		padding-right: 15px;
+	}
+	button.button.first {
+		padding-right: 10px;
+	}
+	a.button:last-child, button.button.last {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	a.button:last-child {
+		padding-left: 15px;
+	}
+	button.button.last {
+		padding-left: 10px;
+	}
+	a.button:not(:first-child):not(:last-child), button.button:not(.first):not(.last) {
+		border-radius: 0;
+	}
+	a.button:not(:first-child):not(:last-child) {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+	button.button:not(.first):not(.last) {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+/*
+ * Tables (message lists)
+ */
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+td {
+	font-size: 12px;
+	padding: 8px;
+
+	&.check {
+		width: 10px;
+	}
+	&.name {
+		width: 115px;
+	}
+	&.subject {
+		max-width: 423px;
+		overflow: hidden;
+		text-overflow:  ellipsis;
+		white-space: nowrap;
+		color: $subjectText;
+
+		span.subject {
+			color: #000;
+		}
+	}
+	&.date {
+		width: 130px;
+	}
+}
+tr {
+	background: $table;
+	border: 1px solid $tableBorder;
+
+	&.unread {
+		font-weight: bold;
+		background: $unread;
+	}
+
+	&.highlighted {
+		background: $highlighted;
+
+		td.subject {
+			color: $highlightedSubjectText;
+		}
+	}
+}
+
+/*
+ * Toasts
+ */
+
+#toastArea {
+	position: fixed;
+	top: 30px;
+	left: 50%;
+	text-align: center;
+	width: 980px;
+	margin-left: -490px;;
+}
+
+.toast {
+	padding: 10px 15px;
+	position: fixed;
+	width: fit-content;
+	border: 1px solid;
+	border-radius: 5px;
+	font-size: 12px;
+	opacity: 0;
+	animation: fadeInOut 4.6s;
+
+	&.success {
+		background: $toastSuccess;
+		border-color: $toastSuccessAccent;
+		color: $toastSuccessAccent;
+	}
+	&.info {
+		background: $toastInfo;
+		border-color: $toastInfoAccent;
+		color: $toastInfoAccent;
+	}
+	&.warning {
+		background: $toastWarning;
+		border-color: $toastWarningAccent;
+		color: $toastWarningAccent;
+	}
+	&.danger {
+		background: $toastDanger;
+		border-color: $toastDangerAccent;
+		color: $toastDangerAccent;
+	}
+}
+
+/*
+ * Special styling
+ */
+
+.column {
+	width: min-content;
+	display: table-cell;
+	padding: 0 30px;
+	border-left: 1px solid $accentBorder;
+	border-right: none;
+	line-height: 20px
+}
+.columnbox .column:first-child {
+	padding-left: 0;
+	border-left: none;
+}
+.columnbox .column:last-child {
+	padding-right: 0;
+	border-right: none;
+}
+
+.floatbox {
+	margin: 10px 0;
+	display:table;
+
+	.small, .large {
+		display: table-cell;
+	}
+	.small {
+		width: 222px;
+	}
+	.large {
+		width: 465px;
+	}
+	> :first-child {
+		padding-right: 20px;
+		border-right: 1px solid $floatBorder;
+	}
+	> :last-child {
+		padding-left: 20px;
+	}
+}
+
+.tab footer {
+	border-top: none;
+}
+.tab {
+	text-align: center;
+	border: 1px solid $darkBorder;
+	border-top: none;
+	margin: 0 auto 30px;
+	background: $pageBackground;
+	box-shadow: inset 0 5px 8px -5px $shadow,
+		6px 4px 8px -3px $shadowLight,
+		-6px 4px 8px -3px $shadowLight,
+		inset 0 0 8px 3px $shadowLighter;
+	border-radius: 0 0 7px 7px;
+
+	footer {
+		border-top: none;
+	}
+	&.blue {
+		background: $dropboxBlue;
+		color: $lightText;
+
+		a {
+			color: $lightLink;
+		}
+	}
+}
+
+#attribmore {
+	display: none;
+	margin: 0 20px;
+	padding: 20px;
+	border-bottom: 1px solid $lightBorder;
+}
+
+#footertoggle {
+	height: 26px;
+	width: 26px;
+	margin: 0 auto 10px;
+	background: $background;
+	border-radius: 13px;
+	border: 1px solid $border;
+	position: relative;
+	top: -10px;
+}
+
+/*
+ * Modal window
+ */
+
+ #modalShade, #modal {
+	 display: none;
+ }
+
+#modalShade {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: $shadow;
+	z-index: 50;
+}
+
+#modal {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 500px;
+	margin-left: -250px;
+	z-index: 51;
+
+	background: #fff;
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	box-shadow: 0 0 8px 0 $shadow;
+}
+
+.modalHeader {
+	padding: 10px 12px;
+	border-bottom: 1px solid #ddd;
+}
+.modalTitle {
+	float: left;
+	font-size: 30px;
+	color: #1080de;
+}
+.modalClose {
+	float: right;
+	font-size: 24px;
+	color: #bbb;
+	cursor: pointer;
+}
+
+.modalContent {
+	padding: 30px 20px;
+}
+
+.modalConfirmText {
+	font-weight: bold;
+	font-size: 14px;
+}
+.modalConfirmForm {
+	margin-top: 10px;
+	text-align: right;
+}
+
+input.fancy {
+	height: 31px;
+	border: 1px solid #ccc;
+	margin-right: 7px;
+}
