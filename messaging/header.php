@@ -42,8 +42,8 @@ function daysInPast($time) {
 	return unixtojd(time() - $timeOffsetSeconds) - unixtojd($time + $timeOffsetSeconds); //Adding the time offset negates subtraction in $time
 }
 
-//Show a sign in panel
-function signinPanel($showOption, $addAction) {
+//Show a sign in panel XXX Cleanup
+/*function signinPanel($showOption, $addAction) {
 	//$showOption can show the Register form or a login form to redirect back to the forums with msgtoken
 	echo '<div class="small-center">';
 	echo '<div class="panel panel-primary">';
@@ -68,7 +68,7 @@ function signinPanel($showOption, $addAction) {
 }
 function badAuth() {
 	echo "<div class='alert-center'><div id='alert-fade' class='alert alert-danger'><p><strong>Wrong username or password</strong></p></div></div>";
-}
+}*/
 
 //Append a link to the navbar
 function linkActivity($page, $singlePage, $text, $altCheck = false) {
@@ -85,7 +85,7 @@ function linkActivity($page, $singlePage, $text, $altCheck = false) {
 }
 
 //Gather messages in inbox
-function getMessages() {
+/*function getMessages() {
 	global $db, $username, $result, $archive, $count, $countBadge, $archCount, $archBadge;
 
 	//Get count lists
@@ -99,7 +99,7 @@ function getMessages() {
 	$archCount = mysqli_num_rows($archive);
 	//$archBadge = $archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '';
 	$archBadge = $archCount > 0 ? (' (' . $archCount . ')') : '';
-}
+}*/
 
 //Set global variables
 $pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], 'dropboxextplus/') + 15);
