@@ -1,6 +1,13 @@
 /*
  * Page layout
  */
+input {
+  font-size: 15px;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 3px 0; }
+
 body {
   background-color: #ddd;
   background: url("../images/background.png") fixed top center;

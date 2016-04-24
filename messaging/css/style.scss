@@ -10,6 +10,8 @@ $lightBorder: #fff;
 $accentBorder: #e3e3e3;
 $floatBorder: #ccc;
 
+$formTextBorder: #ddd;
+
 $shadowHeavy: rgba(0, 0, 0, 0.8);
 $shadow: rgba(0, 0, 0, 0.6);
 $shadowLight: rgba(0, 0, 0, 0.28);
@@ -55,6 +57,14 @@ $buttonDangerBorder: #900;
 /*
  * Page layout
  */
+
+input {
+	font-size: 15px;
+	padding: 4px 8px;
+	border: 1px solid $formTextBorder;
+	border-radius: 3px;
+	margin: 3px 0;
+}
 
 body {
 	background-color: $pageBackground;
