@@ -105,12 +105,14 @@ function getMessages() {
 $pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], 'dropboxextplus/new/') + 19);
 
 //Sets local time display
-//if (is_numeric($_POST['timeOffset']))
-//	makeCookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
+if (is_numeric($_POST['timeOffset'])) {
+	makeCookie('timeoffset', htmlspecialchars($_POST['timeOffset']), time() + 3600 * 24 * 30);
+}
 
 //Sets DB Forums page to return to
-if ($_POST['returnto'])
+if ($_POST['returnto']) {
 	makeCookie('returnto', strip_tags($_POST['returnto']));
+}
 
 //Delete cookies on logoff
 /*if ($_POST['action'] == 'logoff') {
