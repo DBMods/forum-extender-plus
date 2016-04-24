@@ -7,7 +7,7 @@ if (count(get_included_files()) == 1) {
 <div id='nav'>
 	<a class='button wide blue' href='https://www.techgeek01.com/dropboxextplus/compose.php'>Compose</a><br>
 	<?php
-	//getMessages();
+	getMessages();
 	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php') . '<br>';
 	//echo linkActivity('sent.php', true, 'Sent') . '<br>';
 	//echo linkActivity('archive.php', true, 'Archive' . $archBadge) . '<br>';

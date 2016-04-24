@@ -89,21 +89,17 @@ function linkActivity($page, $singlePage, $text, $altCheck = false) {
 }
 
 //Gather messages in inbox
-/*function getMessages() {
-	global $db, $username, $result, $archive, $count, $countBadge, $archCount, $archBadge;
+function getMessages() {
+	global $db, $username, $count, $countBadge, $archCount, $archBadge;
 
-	//Get count lists
-	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 0 AND `unread` = 1 ORDER BY `time` DESC");
-	$archive = mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 AND `unread` = 1 ORDER BY `time` DESC");
+	//Count messages in inbox and archive
+	$count = mysqli_num_rows(mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 0 AND `unread` = 1 ORDER BY `time` DESC"));
+	$archCount = mysqli_num_rows(mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 AND `unread` = 1 ORDER BY `time` DESC"));
 
 	//Message counter navbar badges
-	$count = mysqli_num_rows($result);
-	//$countBadge = $count > 0 ? (' <span class="badge">' . $count . '</span>') : '';
 	$countBadge = $count > 0 ? (' (' . $count . ')') : '';
-	$archCount = mysqli_num_rows($archive);
-	//$archBadge = $archCount > 0 ? (' <span class="badge">' . $archCount . '</span>') : '';
 	$archBadge = $archCount > 0 ? (' (' . $archCount . ')') : '';
-}*/
+}
 
 //Set global variables
 $pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], 'dropboxextplus/new/') + 19);
