@@ -11,12 +11,12 @@ if ($userAuthenticated) {
 require_once 'header.php';
 
 echo '<h2>Sign In</h2>';
-echo 'Please sign in to continue.<br />';
+echo '<p>Please sign in to continue.</p>';
 echo '<form action="' . $pageName . '?dest=' . $_GET['dest'] . '" method="post">';
-echo '<input name="action" type="hidden" value="login" />';
 echo '<input name="username" placeholder="Username" /><br />';
-echo '<input name="password" type="password" placeholder="Password" /><br />';
-echo '<button class="button blue" type="submit">Sign in</button>';
+echo '<input name="password" type="password" placeholder="Password" />';
+echo '<p>Don\'t have an account yet? <a href="register.php">Sign up</a>!</p>';
+echo '<button name="action" class="button blue" value="login">Sign in</button>';
 echo '</form>';
 
 require_once 'footer.php';

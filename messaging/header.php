@@ -5,8 +5,8 @@ if (count(get_included_files()) == 1) {
 
 require_once 'head_stub.php';
 
-//If the user isn't authed, redirect to signin
-if (!$userAuthenticated && $pageName !== 'signin.php') {
+//If the user isn't authed, and is trying to access a system page, redirect to signin
+if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register.php') {
 	header('Location: https://www.techgeek01.com/dropboxextplus/new/signin.php?dest=' . $pageName);
 }
 ?>
@@ -18,7 +18,7 @@ if (!$userAuthenticated && $pageName !== 'signin.php') {
 		<link rel='stylesheet' href='https://www.techgeek01.com/dropboxextplus/css/style.css' />
 	</head>
 	<body>
-		<div id='toastArea'></div>
+		<!--<div id='toastArea'></div>-->
 		<div id='modalShade'></div>
 		<div id='modal'>
 			<div class='modalHeader'>
