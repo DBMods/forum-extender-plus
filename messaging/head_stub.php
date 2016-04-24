@@ -192,8 +192,8 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 //Set variables
 //$userid = htmlspecialchars($_COOKIE['userid']);
 //$userToken = htmlspecialchars($_COOKIE['userToken']);
-//$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
-//$timeOffsetSeconds = $timeoffset * 60;
+$timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
+$timeOffsetSeconds = $timeoffset * 60;
 $returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://www.dropboxforum.com');
 //$action = $_POST['action'];
 //$total;
