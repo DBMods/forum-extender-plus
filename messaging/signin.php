@@ -3,9 +3,7 @@ require_once 'head_stub.php';
 
 if ($userAuthenticated) {
 	//If user authenticated, redirect back to the destination
-	header('Location: https://www.techgeek01.com/dropboxextplus/new/' . $_GET['dest']);
-} else if (!$userAuthenticated && $action === 'login') {
-	echo '<'
+	header('Location: ' . $root . '/' . $_GET['dest']);
 }
 
 require_once 'header.php';

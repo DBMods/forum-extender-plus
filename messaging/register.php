@@ -13,17 +13,11 @@ function registerPanel($userId) {
 	echo '</form>';
 }
 
-/*
- * Username must not be taken
- * Username must not have special chracters
- * Passwords must match
- */
-
 $userid = $_POST['userid'];
 
 if (is_numeric($userid)) {
 	//UID present, so check if it's associated with an account
-	$result =mysqli_query($db, "SELECT * FROM `users` WHERE `userid` = '" . sqlesc($_POST['userid']) . "'");
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE `userid` = '" . sqlesc($_POST['userid']) . "'");
 
 	if (mysqli_fetch_row($result)) {
 		//Account already exists, so alert user

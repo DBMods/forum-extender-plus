@@ -5,10 +5,10 @@ if (count(get_included_files()) == 1) {
 ?>
 </div>
 <div id='nav'>
-	<a class='button wide blue' href='https://www.techgeek01.com/dropboxextplus/compose.php'>Compose</a><br>
+	<a class='button wide blue' href='<?php echo $root; ?>/compose.php'>Compose</a><br>
 	<?php
 	getMessages();
-	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php') . '<br>';
+	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php');
 	//echo linkActivity('sent.php', true, 'Sent') . '<br>';
 	//echo linkActivity('archive.php', true, 'Archive' . $archBadge) . '<br>';
 	//echo linkActivity('settings.php', true, 'Settings') . '<br>';
@@ -203,10 +203,7 @@ if (count(get_included_files()) == 1) {
 
 		this.animate({'margin-left': base}, interval);
 	}
-</script>
 
-<script src='https://www.techgeek01.com/dropboxextplus/js/bootstrap.js'></script>
-<script>
 	window.setTimeout(function() {
 		$('#alert-fade').addClass('fade');
 	}, 3000);

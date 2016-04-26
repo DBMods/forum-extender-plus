@@ -1,7 +1,7 @@
 <?php
 require_once 'db-login.php';
 
-if (count(get_included_files()) == 1) {
+if (count(get_included_files()) == 2) {
 	die('Insufficient permissions');
 }
 
@@ -26,7 +26,7 @@ function delCookie($cookie) {
 }
 
 //Get formatted date string XXX Cleanup
-/*function parseDate($time) {
+function parseDate($time) {
 	global $timeOffsetSeconds;
 
 	if (daysInPast($time) == 0) {
@@ -44,7 +44,7 @@ function delCookie($cookie) {
 function daysInPast($time) {
 	global $timeOffsetSeconds;
 	return unixtojd(time() - $timeOffsetSeconds) - unixtojd($time + $timeOffsetSeconds); //Adding the time offset negates subtraction in $time
-}*/
+}
 
 //Show a sign in panel
 /*function signinPanel($showOption, $addAction) {
@@ -85,7 +85,7 @@ function linkActivity($page, $singlePage, $text, $altCheck = false) {
 		$endCondition = strpos($pageName, $page) !== false || ($altCheck && strpos($pageName, $altCheck) === 0);
 	}
 
-	return '<a' . (($endCondition && $userAuthenticated && $showinbox) ? ' class="active"' : '') . ' href="https://www.techgeek01.com/dropboxextplus/' . $page . '">' . $text . '</a>';
+	return '<a' . (($endCondition && $userAuthenticated && $showinbox) ? ' class="active"' : '') . ' href="' . $root . $page . '">' . $text . '</a>';
 }
 
 //Gather messages in inbox
@@ -115,11 +115,10 @@ if ($_POST['returnto']) {
 }
 
 //Delete cookies on logoff
-/*if ($_POST['action'] == 'logoff') {
+if ($_POST['action'] == 'logoff') {
 	delCookie('userToken');
 	delCookie('userid');
-	$userLogoff = true;
-}*/
+}
 
 $userIsAdmin = false;
 
@@ -188,6 +187,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 }
 
 //Set variables
+$root = 'https://www.techgeek01.com/dropboxextplus/new';
 //$userid = htmlspecialchars($_COOKIE['userid']);
 //$userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);

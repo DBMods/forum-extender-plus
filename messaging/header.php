@@ -7,7 +7,7 @@ require_once 'head_stub.php';
 
 //If the user isn't authed, and is trying to access a system page, redirect to signin
 if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register.php') {
-	header('Location: https://www.techgeek01.com/dropboxextplus/new/signin.php?dest=' . $pageName);
+	header('Location: ' . $root . 'signin.php?dest=' . $pageName);
 }
 ?>
 <!DOCTYPE html>
@@ -15,7 +15,7 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Forum Extender+ Messenger</title>
-		<link rel='stylesheet' href='https://www.techgeek01.com/dropboxextplus/css/style.css' />
+		<link rel='stylesheet' href='<?php echo $root; ?>/css/style.css' />
 	</head>
 	<body>
 		<!--<div id='toastArea'></div>-->
@@ -54,7 +54,7 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 			</header>
 			<header id='context'>
 				<div class='title'>
-					<a href='https://www.techgeek01.com/dropboxextplus'>Messenger</a>
+					<a href='<?php echo $root; ?>'>Messenger</a>
 				</div>
 				<div class='tools'>
 					<?php	if ($pageName == 'index.php' || $pageName == 'archive.php' || $pageName == 'sent.php') { ?>
@@ -110,7 +110,7 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 					</div>
 					<?php } else if (strpos($pageName, 'admin/') === 0) { ?>
 					<div id='adminbar' class='buttongroup'>
-						<a href='https://www.techgeek01.com/dropboxextplus/admin' class='button'>Dashboard</a>
+						<a href='<?php echo $root; ?>/admin' class='button'>Dashboard</a>
 						<a href='userdata.php' class='button'>User Database</a>
 					</div>
 					<?php
