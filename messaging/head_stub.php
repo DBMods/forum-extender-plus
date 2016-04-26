@@ -1,9 +1,9 @@
 <?php
-require_once 'db-login.php';
-
-if (count(get_included_files()) == 2) {
+if (count(get_included_files()) == 1) {
 	die('Insufficient permissions');
 }
+
+require_once 'db-login.php';
 
 //Shorthand for mysqli_real_escape_string
 function sqlesc($string) {
