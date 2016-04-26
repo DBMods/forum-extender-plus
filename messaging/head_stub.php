@@ -80,12 +80,14 @@ function linkActivity($page, $singlePage, $text, $altCheck = false) {
 
 	//Check URL of page to go to, and an optional alternate URL
 	if ($singlePage) {
+		//If page is a single page, check if the name matches exactly
 		$endCondition = $pageName == $page || ($altCheck && $pageName == $altCheck);
 	} else {
+		//If page is not a single page (a directory), check if page name matches or starts with the check
 		$endCondition = strpos($pageName, $page) !== false || ($altCheck && strpos($pageName, $altCheck) === 0);
 	}
 
-	return '<a' . (($endCondition && $userAuthenticated && $showinbox) ? ' class="active"' : '') . ' href="' . $root . $page . '">' . $text . '</a>';
+	return '<a' . (($endCondition && $userAuthenticated) ? ' class="active"' : '') . ' href="' . $root . $page . '">' . $text . '</a>';
 }
 
 //Gather messages in inbox
