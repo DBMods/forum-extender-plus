@@ -9,12 +9,12 @@ if (count(get_included_files()) == 1) {
 	<?php
 	getMessages();
 	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php');
-	//echo linkActivity('sent.php', true, 'Sent') . '<br>';
-	//echo linkActivity('archive.php', true, 'Archive' . $archBadge) . '<br>';
-	//echo linkActivity('settings.php', true, 'Settings') . '<br>';
-	//echo linkActivity('stats.php', true, 'Stats');
+	echo '<br />' . linkActivity('sent.php', true, 'Sent');
+	//echo '<br />' . linkActivity('archive.php', true, 'Archive' . $archBadge);
+	//echo '<br />' . linkActivity('settings.php', true, 'Settings');
+	//echo '<br />' . linkActivity('stats.php', true, 'Stats');
 	if ($userIsAdmin) {
-		echo '<br>' . linkActivity('admin/', false, 'Admin');
+		echo '<br />' . linkActivity('admin/', false, 'Admin');
 	}
 	?>
 </div>
