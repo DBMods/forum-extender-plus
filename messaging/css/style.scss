@@ -58,12 +58,15 @@ $buttonDangerBorder: #900;
  * Page layout
  */
 
-input {
+input, textarea {
 	font-size: 15px;
 	padding: 4px 8px;
 	border: 1px solid $formTextBorder;
 	border-radius: 3px;
 	margin: 3px 0;
+}
+textarea {
+	font-family: Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -213,12 +216,12 @@ fieldset {
 }
 
 a.button {
-	padding: 8px 20px;
+	padding: 8px 20px 7px;
 	line-height: 39px!important;
 }
 button.button {
 	margin: 4px 0;
-	padding: 6.5px 17px;
+	padding: 6.5px 17px 5.5px;
 	font-family: Arial;
 	cursor: pointer;
 }
