@@ -7,7 +7,7 @@ require_once 'head_stub.php';
 
 //If the user isn't authed, and is trying to access a system page, redirect to signin
 if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register.php') {
-	header('Location: ' . $root . 'signin.php?dest=' . $pageName);
+	header('Location: ' . $root . '/signin.php?dest=' . $pageName);
 }
 ?>
 <!DOCTYPE html>
