@@ -10,7 +10,7 @@ if ($userAuthenticated) {
 		echo '<table>';
 
 		while ($row = mysqli_fetch_assoc($result)) {
-			echo '<tr ' . ($row['unread'] == 1 ? 'class="unread" ' : '') . 'data-id="' . htmlspecialchars($row['id']) . '"><td class="check"><input type="checkbox" /></td><td class="name">';
+			echo '<tr ' . 'data-id="' . htmlspecialchars($row['id']) . '"><td class="check"><input type="checkbox" /></td><td class="name">';
 			echo $row['from'];
 			echo '</td><td class="subject"><span class="subject">';
 			echo htmlspecialchars($row['subject']);
