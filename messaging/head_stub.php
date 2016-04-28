@@ -76,7 +76,7 @@ function badAuth() {
 
 //Append a link to the navbar
 function linkActivity($page, $singlePage, $text, $altCheck = false) {
-	global $pageName, $userAuthenticated, $showinbox;
+	global $pageName, $userAuthenticated, $root;
 
 	//Check URL of page to go to, and an optional alternate URL
 	if ($singlePage) {
@@ -87,7 +87,7 @@ function linkActivity($page, $singlePage, $text, $altCheck = false) {
 		$endCondition = strpos($pageName, $page) !== false || ($altCheck && strpos($pageName, $altCheck) === 0);
 	}
 
-	return '<a' . (($endCondition && $userAuthenticated) ? ' class="active"' : '') . ' href="' . $root . $page . '">' . $text . '</a>';
+	return '<a' . (($endCondition && $userAuthenticated) ? ' class="active"' : '') . ' href="' . $root . '/' . $page . '">' . $text . '</a>';
 }
 
 //Gather messages in inbox
@@ -195,7 +195,7 @@ $root = 'https://www.techgeek01.com/dropboxextplus/new';
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $timeOffsetSeconds = $timeoffset * 60;
 $returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://www.dropboxforum.com');
-//$action = $_POST['action'];
+$action = $_POST['action'];
 //$total;
 //$archTotal;
 ?>
