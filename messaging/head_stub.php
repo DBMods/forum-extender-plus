@@ -184,7 +184,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		$username = htmlspecialchars($_POST['username']);
 		$userIsAdmin = $row['admin'] == 1;
 	} else {
-		$badAuth = true;
+		$badAuth = true; //TODO I don't believe we need this anymore
 	}
 }
 

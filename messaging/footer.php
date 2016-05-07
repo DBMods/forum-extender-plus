@@ -44,7 +44,7 @@ if (count(get_included_files()) == 1) {
 			<input type="hidden" name="msgto" value="TechGeek01" />
 			<input type="hidden" name="subject" value="Bug report: " />
 			<button type="submit" class="btn-link">Problem?</button>
-		</form>-->
+		</form> TODO remove this?-->
 	</footer>
 </div>
 
