@@ -120,7 +120,12 @@ if (count(get_included_files()) == 1) {
 		//Enable buttons
 		$('#viewBtn').remove();
 		$('#messageActionButtons').show();
-	} else if (pageUrl == 'admin/userdata.php') {
+	} else if (pageUrl === 'admin/adash.php') {
+		//Manage modal on settings change
+		$('#adminsettings').click(function() {
+			modal('Update Settings', 'You are about to update the global system settings.', 'update settings', 'Update Settings', $('#adminsettingsform'));
+		});
+	} else if (pageUrl == 'admin/users.php') {
 		//Manage modals on user table
 		$('.changepass').click(function() {
 			var $userform = $(this).parent().find('form');
