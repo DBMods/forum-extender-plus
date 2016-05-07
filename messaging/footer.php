@@ -10,7 +10,7 @@ if (count(get_included_files()) == 1) {
 	getMessages();
 	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php');
 	echo '<br />' . linkActivity('sent.php', true, 'Sent');
-	//echo '<br />' . linkActivity('archive.php', true, 'Archive' . $archBadge);
+	echo '<br />' . linkActivity('archive.php', true, 'Archive' . $archBadge);
 	//echo '<br />' . linkActivity('settings.php', true, 'Settings');
 	//echo '<br />' . linkActivity('stats.php', true, 'Stats');
 	if ($userIsAdmin) {
