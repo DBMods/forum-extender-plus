@@ -98,7 +98,7 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 					<?php } else if (strpos($pageName, 'admin/') === 0) { ?>
 					<div id='adminbar' class='buttongroup'>
 						<a href='<?php echo $root; ?>/admin' class='button'>Dashboard</a>
-						<a href='userdata.php' class='button'>User Database</a>
+						<a href='users.php' class='button'>User Database</a>
 					</div>
 					<?php
 					}
