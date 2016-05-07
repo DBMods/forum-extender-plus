@@ -46,7 +46,7 @@ function daysInPast($time) {
 	return unixtojd(time() - $timeOffsetSeconds) - unixtojd($time + $timeOffsetSeconds); //Adding the time offset negates subtraction in $time
 }
 
-//Show a sign in panel
+//Show a sign in panel TODO Cleanup
 /*function signinPanel($showOption, $addAction) {
 	//$showOption can show the Register form or a login form to redirect back to the forums with msgtoken
 	echo '<div class="small-center">';
