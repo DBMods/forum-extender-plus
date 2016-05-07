@@ -18,7 +18,7 @@ if ($userAuthenticated && $userIsAdmin) {
 	$row = mysqli_fetch_assoc($result);
 
 	//Display settings
-	echo '<form onsubmit="returnfalse" id="adminsettingsform" action="" method="post">';
+	echo '<form onsubmit="return false;" id="adminsettingsform" action="" method="post">';
 	echo '<input type="hidden" name="action" value="updateadminconfig" />';
 	echo '<strong>default_uid_origin</strong>:<br />';
 	echo '<input type="text" name="default_uid_origin" value="' . $row['val'] . '" style="width:100%" />';
