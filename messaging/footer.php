@@ -57,7 +57,7 @@ if (count(get_included_files()) == 1) {
 
 	if (pageUrl == 'index.php' || pageUrl == 'archive.php') {
 		archAct = pageUrl == 'index.php' ? 'arch' : 'unarch';
-		$('#archForm input[name="action"]').val(archAct);
+		$('#archBtn').val(archAct);
 
 		//initialize buttons
 		$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
@@ -75,7 +75,7 @@ if (count(get_included_files()) == 1) {
 			selectedList = [id];
 
 			//Add ID to forms for manipulation
-			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
+			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #metaForm input[name="msgid"]').val(selectedList);
 
 			//Enable buttons
 			$('#viewBtn, #repBtn, #fwdBtn').removeClass('grayed');
@@ -96,7 +96,7 @@ if (count(get_included_files()) == 1) {
 			}
 
 			//Add ID to forms for manipulation
-			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #readForm input[name="msgid"], #unreadForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
+			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #metaForm input[name="msgid"]').val(selectedList);
 
 			//Manage meta bar buttons
 			if (selectedList.length == 0) {
@@ -112,14 +112,10 @@ if (count(get_included_files()) == 1) {
 
 	} else if (pageUrl == 'view.php') {
 		archAct = '<?php echo $buttonMetaArch; ?>';
-		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive');
-		$('#archForm input[name="action"]').val(archAct);
+		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive').val(archAct);
 
 		//Add ID to forms for manipulation
-		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #archForm input[name="msgid"], #readForm input[name="msgid"], #unreadForm input[name="msgid"], #delForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
-
-		//Change meta forms to throw back to the inbox to avoid displaying errors to the user after message is moved or deleted
-		$('#delForm, #archForm').attr('action', 'index.php');
+		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #metaForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
 
 		//Enable buttons
 		$('#viewBtn').remove();
