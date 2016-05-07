@@ -78,9 +78,6 @@ function badAuth() {
 function linkActivity($page, $singlePage, $text, $altCheck = false) {
 	global $pageName, $userAuthenticated, $root;
 
-	//Only add slash if page not empty string
-	$page = $page || '/' . $page;
-
 	//Check URL of page to go to, and an optional alternate URL
 	if ($singlePage) {
 		//If page is a single page, check if the name matches exactly
@@ -90,7 +87,7 @@ function linkActivity($page, $singlePage, $text, $altCheck = false) {
 		$endCondition = strpos($pageName, $page) !== false || ($altCheck && strpos($pageName, $altCheck) === 0);
 	}
 
-	return '<a' . (($endCondition && $userAuthenticated) ? ' class="active"' : '') . ' href="' . $root . $page . '">' . $text . '</a>';
+	return '<a' . (($endCondition && $userAuthenticated) ? ' class="active"' : '') . ' href="' . $root . '/' . $page . '">' . $text . '</a>';
 }
 
 //Gather messages in inbox
