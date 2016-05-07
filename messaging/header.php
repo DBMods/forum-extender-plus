@@ -87,25 +87,12 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 							<input type='hidden' name='context' value='' />
 							<button id='fwdBtn' class='button' type='submit'>Forward</button>
 						</form>
-						<form id='archForm' class='inline' method='post' action=''>
-							<input type='hidden' name='action' value='' />
+						<form id='metaForm' class='inline' method='post' action='meta_stub.php'>
 							<input type='hidden' name='msgid' value='' />
-							<button id='archBtn' class='button' type='submit'><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></button>
-						</form>
-						<form id='readForm' class='inline' method='post' action=''>
-							<input type='hidden' name='action' value='markRead' />
-							<input type='hidden' name='msgid' value='' />
-							<button id='delBtn' class='button' type='submit'>Mark Read</button>
-						</form>
-						<form id='unreadForm' class='inline' method='post' action=''>
-							<input type='hidden' name='action' value='markUnread' />
-							<input type='hidden' name='msgid' value='' />
-							<button id='delBtn' class='button' type='submit'>Mark Unread</button>
-						</form>
-						<form id='delForm' class='inline' method='post' action=''>
-							<input type='hidden' name='action' value='delete' />
-							<input type='hidden' name='msgid' value='' />
-							<button id='delBtn' class='button danger last' type='submit'>Delete</button>
+							<button id='archBtn' class='button' type='submit' name='action' value=''><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></button>
+							<button class='button' type='submit' name='action' value='markRead'>Mark Read</button>
+							<button class='button' type='submit' name='action' value='markUnread'>Mark Unread</button>
+							<button class='button last' type='submit' name='action' value='delete'>Delete</button>
 						</form>
 					</div>
 					<?php } else if (strpos($pageName, 'admin/') === 0) { ?>
