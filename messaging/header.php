@@ -92,7 +92,7 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 							<button id='archBtn' class='button' type='submit' name='action' value=''><?php echo ($pageName == 'index.php' ? 'A' : 'Una') . 'rchive'; ?></button>
 							<button class='button' type='submit' name='action' value='markRead'>Mark Read</button>
 							<button class='button' type='submit' name='action' value='markUnread'>Mark Unread</button>
-							<button class='button last' type='submit' name='action' value='delete'>Delete</button>
+							<button id="delBtn" class='button danger last' type='submit' name='action' value='delete'>Delete</button>
 						</form>
 					</div>
 					<?php } else if (strpos($pageName, 'admin/') === 0) { ?>

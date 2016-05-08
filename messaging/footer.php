@@ -137,12 +137,18 @@ if (count(get_included_files()) == 1) {
 		});
 	}
 
+
 	//Main function buttons
 	$('#cancelBtn').on('click', function() {
 		$('#cancelForm').submit();
 	});
 	$('#sendBtn').on('click', function() {
 		$('#messageform').submit();
+	});
+	$('#delBtn').click(function() {
+		$form = $(this).parent();
+		$form.attr('onsubmit', 'return false;');
+		modal('Delete message(s)', 'You are about to delete ' + selectedList.length + ' message' + (selectedList.length > 1 ? '(s)' : '') + ' from the system. This cannot be undone.', 'delete message' + (selectedList.length > 1 ? 's' : ''), 'Delete', $form);
 	});
 
 	/*
