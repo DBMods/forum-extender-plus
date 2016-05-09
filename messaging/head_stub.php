@@ -104,7 +104,7 @@ function getMessages() {
 }
 
 //Set global variables
-$pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], 'dropboxextplus/new/') + 19);
+$pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], '/dropboxextplus/new/') + 20);
 
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
@@ -127,8 +127,8 @@ $userIsAdmin = false;
 //If userToken and userid are set from previous login, check auth
 if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 	$userToken = htmlspecialchars($_COOKIE['userToken']);
-	$userid = htmlspecialchars($_COOKIE['userid']);
-	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
+	$userId = htmlspecialchars($_COOKIE['userid']);
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userId) . "') LIMIT 1");
 	$row = mysqli_fetch_array($result);
 
 	//If extension is trying to get a token, redirect to login - This is how everything knows the user is authenticated
@@ -145,8 +145,8 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 //If userToken and userid are posted, check login - Used for auth from userscsript
 if ($_POST['userToken'] && $_POST['userid']) {
 	$userToken = htmlspecialchars($_POST['userToken']);
-	$userid = htmlspecialchars($_POST['userid']);
-	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
+	$userId = htmlspecialchars($_POST['userid']);
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userId) . "') LIMIT 1");
 	$row = mysqli_fetch_array($result);
 
 	//This is how everything knows the user is authenticated
@@ -157,7 +157,7 @@ if ($_POST['userToken'] && $_POST['userid']) {
 		$userIsAdmin = $row['admin'] == 1;
 
 		makeCookie('userToken', $userToken, time() + 3600 * 24 * 30);
-		makeCookie('userid', $userid, time() + 3600 * 24 * 30);
+		makeCookie('userid', $userId, time() + 3600 * 24 * 30);
 	} else {
 		$badAuth = true;
 	}
@@ -190,7 +190,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 
 //Set variables
 $root = 'https://www.techgeek01.com/dropboxextplus/new';
-//$userid = htmlspecialchars($_COOKIE['userid']);
+//$userId = htmlspecialchars($_COOKIE['userid']);
 //$userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $timeOffsetSeconds = $timeoffset * 60;

@@ -4,9 +4,9 @@ require_once 'head_stub.php';
 //If UID and token posted, check login
 if ($_GET['to'] && $_GET['token']) {
 	$userToken = htmlspecialchars($_GET['token']);
-	$userid = htmlspecialchars($_GET['to']);
+	$uid = htmlspecialchars($_GET['to']);
 
-	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($userid) . "') LIMIT 1");
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE (ext_token = '" . sqlesc($userToken) . "' AND userid = '" . sqlesc($uid) . "') LIMIT 1");
 	$row = mysqli_fetch_array($result);
 
 	//If user authed, check UID origin

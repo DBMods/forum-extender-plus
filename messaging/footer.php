@@ -40,11 +40,6 @@ if (count(get_included_files()) == 1) {
 	</div>
 	<footer>
 		Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
-		<!--<form action="compose.php" method="post" class="form-link">
-			<input type="hidden" name="msgto" value="TechGeek01" />
-			<input type="hidden" name="subject" value="Bug report: " />
-			<button type="submit" class="btn-link">Problem?</button>
-		</form> TODO remove this?-->
 	</footer>
 </div>
 
@@ -138,13 +133,7 @@ if (count(get_included_files()) == 1) {
 	}
 
 
-	//Main function buttons
-	$('#cancelBtn').on('click', function() {
-		$('#cancelForm').submit();
-	});
-	$('#sendBtn').on('click', function() {
-		$('#messageform').submit();
-	});
+	//Manage delete modal
 	$('#delBtn').click(function() {
 		$form = $(this).parent();
 		$form.attr('onsubmit', 'return false;');
