@@ -71,21 +71,10 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 						</form>
 						<?php } ?>
 
-						<form id='replyForm' class='inline' method='post' action='compose.php'>
-							<input type='hidden' name='action' value='compose' />
+						<form id='msgForm' class='inline' method='post' action='compose.php'>
 							<input type='hidden' name='msgid' value='' />
-							<input type='hidden' name='msgto' value='' />
-							<input type='hidden' name='subject' value='' />
-							<input type='hidden' name='context' value='' />
-							<button id='repBtn' class='button<?php echo $pageName != 'view.php' ? '' : ' first'; ?>' type='submit'>Reply</button>
-						</form>
-						<form id='forwardForm' class='inline' method='post' action=''>
-							<input type='hidden' name='action' value='forward' />
-							<input type='hidden' name='msgid' value='' />
-							<input type='hidden' name='msgto' value='' />
-							<input type='hidden' name='subject' value='' />
-							<input type='hidden' name='context' value='' />
-							<button id='fwdBtn' class='button' type='submit'>Forward</button>
+							<button id='repBtn' class='button<?php echo $pageName != 'view.php' ? '' : ' first'; ?>' type='submit' name='action' value='reply'>Reply</button>
+							<button id='fwdBtn' class='button' type='submit' name='action' value='forward'>Forward</button>
 						</form>
 						<form id='metaForm' class='inline' method='post' action='meta_stub.php'>
 							<input type='hidden' name='msgid' value='' />
