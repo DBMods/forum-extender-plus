@@ -19,7 +19,7 @@ if ($userAuthenticated) {
 
 	//Set meta stuff for navbar buttons
 	$buttonMetaId = $_POST['msgid'];
-	$buttonMetaArch = $row['archive'] == 0 ? 'arch' : 'unarch';
+	$buttonMetaArch = $row['archived'] == 0 ? 'arch' : 'unarch';
 }
 
 require_once 'footer.php';
