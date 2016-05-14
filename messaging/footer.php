@@ -43,7 +43,6 @@ if (count(get_included_files()) == 1) {
 	</footer>
 </div>
 
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
 <script>
 	var pageUrl = '<?php echo $pageName; ?>';
 	var archAct;
