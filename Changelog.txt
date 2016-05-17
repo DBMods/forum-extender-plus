@@ -1,6 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.6.2pre2b-----
+* Minor code optimization
+# Changed post form textbox height
+
 -----2.6.2pre2a-----
 + Added proper sanity checks to code
 + Added separate head title variable to makePage()
