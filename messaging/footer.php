@@ -22,14 +22,19 @@ if (count(get_included_files()) == 1) {
 </div>
 <footer class='columnbox'>
 	<div class='column'>
-		<strong>Dropbox</strong><br>
-		<a href='https://www.dropbox.com'>Dropbox</a><br>
+		<strong>Dropbox</strong><br />
+		<a href='https://www.dropbox.com'>Dropbox</a><br />
 		<a href='https://www.dropboxforum.com'>Dropbox Forums</a>
 	</div>
 	<div class='column'>
-		<strong>Extender+</strong><br>
-		<a href='https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey'>Official Thread</a><br>
+		<strong>Extender+</strong><br />
+		<a href='https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey'>Official Thread</a><br />
 		<a href='https://www.github.com/DBMods/forum-extender-plus'>GitHub</a>
+	</div>
+	<div class='column'>
+		<strong>Messenger</strong><br />
+		<a href='https://www.techgeek01.com/dropboxextplus'>Stable</a><br />
+		<a href='https://www.techgeek01.com/dropboxextplus/beta'>Beta</a>
 	</div>
 </footer>
 </div>
