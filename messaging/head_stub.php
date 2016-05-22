@@ -103,8 +103,27 @@ function getMessages() {
 	$archBadge = $archCount > 0 ? (' (' . $archCount . ')') : '';
 }
 
-//Set global variables
-$pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], '/dropboxextplus/new/') + 20);
+//Set page variables
+$root = null;
+$pageName = null;
+
+$domain = $_SERVER['SERVER_NAME'];
+if (strpos($domain, 'techgeek01.com') !== false) {
+	//Live domain, so check whether stable or beta
+	if (strpos($_SERVER['PHP_SELF'], '/dropboxextplus/beta/') === false) {
+		//Stable
+		$root = 'https://www.techgeek01.com/dropboxextplus';
+		$pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], '/dropboxextplus/') + 16);
+	} else {
+		//Beta
+		$root = 'https://www.techgeek01.com/dropboxextplus/beta';
+		$pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], '/dropboxextplus/beta/') + 21);
+	}
+} else if ($domain === 'localhost') {
+	//Localhost testing
+	$root = 'http://localhost/dropboxextplus';
+	$pageName = substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'], '/dropboxextplus/') + 16);
+}
 
 //Sets local time display
 if (is_numeric($_POST['timeOffset'])) {
@@ -189,7 +208,6 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 }
 
 //Set variables
-$root = 'https://www.techgeek01.com/dropboxextplus/new';
 //$userId = htmlspecialchars($_COOKIE['userid']);
 //$userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
