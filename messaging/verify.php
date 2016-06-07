@@ -7,7 +7,7 @@ $action = $_GET['action'];
 
 echo '<h1>Account Verification</h1>';
 
-if (isset($user) && isset($authcode) && isset($action) && $user && strlen($authcode) === 60 && preg_match('/[A_Za-z\d]{60}/', $authcode) && ($action === 'register' || $action === 'decline')) {
+if (isset($user) && isset($authcode) && isset($action) && $user && strlen($authcode) === 60 && preg_match('/[A-Za-z\d]{60}/', $authcode) && ($action === 'register' || $action === 'decline')) {
 	//Variables all exist, and match criteria
 	$result = $result = mysqli_query($db, "SELECT * FROM `users` WHERE `userid` = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "' LIMIT 1");
 	$row = mysqli_fetch_assoc($result);
