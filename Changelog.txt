@@ -1,6 +1,10 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.6.2pre3a-----
++ Added links to view all posts to navbar
+* Fixed issue with URL detecting
+
 -----2.6.2pre2b-----
 + Post quoting now grabs HTML instead of raw text
 + Added image tag to markup toolbar

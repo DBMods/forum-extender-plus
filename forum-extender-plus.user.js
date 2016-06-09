@@ -11,7 +11,7 @@
 // @include http://localhost/dropboxextplus/register.php*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.6.2pre2b
+// @version 2.6.2pre3a
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
 // @require https://github.com/DBMods/forum-extender-plus/raw/master/bin/js/helpList.js
@@ -28,7 +28,8 @@
 var fullUrl = window.location.href;
 var domain = getDomain();
 var lang = getLang();
-var strippedUrl = fullUrl.split('?')[0].split('#')[0],
+var trimmedUrl = fullUrl.split('#')[0],
+	strippedUrl = trimmedUrl.split('?')[0],
 	slug = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')[1] || strippedUrl.split(domain + '/')[1] || '',
 	pageUrl = strippedUrl.substr(strippedUrl.lastIndexOf('/') + 1),
 	urlVars = getUrlVars();
@@ -63,6 +64,10 @@ var page = {
 	front: new Url(''),
 	posts: {
 		list: new Url('community/posts'),
+		sortedList: {
+			activity: new WholeUrl('community/posts?sort_by=recent_activity'),
+			create: new WholeUrl('community/posts?sort_by=created_at')
+		},
 		new: new Url('community/posts/new')
 	},
 	//unanswered: new Url('https://www.dropboxforum.com/hc/communities/public/questions/unanswered'),
@@ -108,7 +113,7 @@ var $body = $('body.community-enabled'),
 
 //Append necessary elements
 $head.append('<style>@keyframes "spin"{from{transform:rotate(0deg);}to{transform:rotate(359deg);}}#gsDropboxExtenderNav{position:fixed;bottom:0;height:32px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px}#gsDropboxExtenderNav span{margin-left:20px}.gsDropboxExtenderHelpCenterLinkItem{padding:2px 10px}.gsDropboxExtenderHelpCenterLinkItem strong{color:#000}.gsDropboxExtenderHelpCenterLinkItem span{margin-left:16px}.gsDropboxExtenderHelpCenterLinkItem:hover{background:#439fe0;border-bottom:1px solid #2a80b9;padding-bottom:1px !important;cursor:pointer}.gsDropboxExtenderHelpCenterLinkItem:hover strong,.gsDropboxExtenderHelpCenterLinkItem:hover span{color:#fff !important}.clickable{cursor:pointer;color:#007ee5}.textinput{padding:0px !important}.alert-center{width:500px;position:absolute;left:50%;margin-left:-250px;z-index:1}.alert{max-width:500px;margin:20px auto;text-align:center;padding:15px;border:1px solid transparent;border-radius:4px;text-shadow:0 1px 0 rgba(255, 255, 255, 0.2);box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 2px rgba(0, 0, 0, 0.5);-webkit-box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 2px rgba(0, 0, 0, 0.5)}.alert p{margin-bottom:0}.alert-warning{background-color:rgba(252, 248, 227, 0.8);background-image:linear-gradient(to bottom, rgba(252, 248, 227, 0.8) 0%, rgba(248, 239, 192, 0.8) 100%);background-image:-webkit-linear-gradient(top, #fcf8e3 0%, #f8efc0 100%);background-repeat:repeat-x;border-color:#f5e79e;color:rgba(138, 109, 59, 0.8)}.alert-danger{background-color:rgba(242, 222, 222, 0.8);background-image:linear-gradient(to bottom, rgba(242, 222, 222, 0.8) 0%, rgba(231, 195, 195, 0.8) 100%);background-image:-webkit-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);background-repeat:repeat-x;border-color:#dca7a7;color:rgba(169, 68, 66, 0.8)}.alert-success{background-color:rgba(223, 240, 216, 0.8);background-image:linear-gradient(to bottom, rgba(223, 240, 216, 0.8) 0%, rgba(200, 229, 188, 0.8) 100%);background-image:-webkit-linear-gradient(top, #dff0d8 0%, #c8e5bc 100%);background-repeat:repeat-x;border-color:#b2dba1;color:rgba(60, 118, 61, 0.8)}.alert-info{background-color:rgba(217, 237, 247, 0.8);background-image:linear-gradient(to bottom, rgba(217, 237, 247, 0.8) 0%, rgba(185, 222, 240, 0.8) 100%);background-image:-webkit-linear-gradient(top, #d9edf7 0%, #b9def0 100%);background-repeat:repeat-x;border-color:#9acfea;color:rgba(49, 112, 143, 0.8)}</style>');
-$body.append('<div id="gsDropboxExtenderModalContainer" style="position:fixed" /><div id="gsDropboxExtenderNav"><a class="clickable"><img id="gsDropboxExtenderLogo" src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/bin/img/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /></a><span id="gsDropboxExtenderSyncIcon" style="position:fixed;left:65px;bottom:-15px;z-index:12"></span><span><a href="https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"></span></span><span style="font-weight:bold;display:none">Important Notice: The messaging system has been updated. If you have previously registered, please trash your preferences and register again.</span></div>').css('padding-bottom', '33px');
+$body.append('<div id="gsDropboxExtenderModalContainer" style="position:fixed" /><div id="gsDropboxExtenderNav"><a class="clickable"><img id="gsDropboxExtenderLogo" src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/bin/img/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /></a><span id="gsDropboxExtenderSyncIcon" style="position:fixed;left:65px;bottom:-15px;z-index:12"></span><span><a href="' + page.posts.sortedList.activity.value + '">All posts by activity</a></span><span><a href="' + page.posts.sortedList.create.value + '">All posts by create date</a></span><span><a href="https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"></span></span><span style="font-weight:bold;display:none">Important Notice: The messaging system has been updated. If you have previously registered, please trash your preferences and register again.</span></div>').css('padding-bottom', '33px');
 
 //Default synced icon to false until we can connect to the user's config
 manageSynced(false);
@@ -1529,13 +1534,28 @@ function forumVersion(versionDate) {
  * Methods and prototyping
  */
 
+function WholeUrl(value) {
+	//Sanity check
+	if (typeof value === 'string') {
+		this.value = 'https://www.dropboxforum.com/hc/' + lang;
+		if (value) {
+			this.value += '/' + value;
+			this.value = this.value.split('#')[0];
+		}
+		this.active = trimmedUrl === this.value;
+	} else {
+		this.value = null;
+		this.activ = false;
+	}
+}
+
 function Url(value) {
 	//Sanity check
 	if (typeof value === 'string') {
 		this.value = 'https://www.dropboxforum.com/hc/' + lang;
 		if (value) {
 			this.value += '/' + value;
-			this.value = this.value.split('?')[0];
+			this.value = this.value.split('?')[0].split('#')[0];
 		}
 		this.active = strippedUrl === this.value;
 	} else {
