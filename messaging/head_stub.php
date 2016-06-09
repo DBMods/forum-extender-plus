@@ -208,6 +208,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 }
 
 //Set variables
+$userVerified = mysqli_fetch_assoc(mysqli_query($db, "SELECT verified FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'"))['verified'] == 1;
 //$userId = htmlspecialchars($_COOKIE['userid']);
 //$userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);

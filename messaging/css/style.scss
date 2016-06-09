@@ -54,6 +54,21 @@ $buttonDangerHover: #d90000;
 $buttonDangerText: #fff;
 $buttonDangerBorder: #900;
 
+$verifyWarningBack: #fff9e1;
+$verifyWarningText: #e8b500;
+$verifyWarningBorder: #ffd335;
+
+#verifyWarn {
+	border: 1px solid $verifyWarningBorder;
+	color: $verifyWarningText;
+	background: $verifyWarningBack;
+	border-radius: 6px;
+	padding: 10px 20px;
+	text-align: center;
+	font-size: 12px;
+	margin-bottom: 20px;
+}
+
 /*
  * Page layout
  */

@@ -102,4 +102,9 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 				<div class='clearfix'></div>
 			</header>
 			<div id='container'>
+				<?php if ($userAuthenticated && !$userVerified) { ?>
+				<div id='verifyWarn'>
+					Your email address has not yet been verified. Many features will not work without verification.
+				</div>
+				<?php } ?>
 				<div id='content'>
