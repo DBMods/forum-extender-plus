@@ -233,24 +233,24 @@ button.button {
 	a.button:not(:last-child), button.button:not(.last) {
 		border-right: none;
 	}
-	a.button:first-child, button.button.first {
+	a.button:first-child:not(:last-child), button.button.first:not(.last) {
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 	}
-	a.button:first-child {
+	a.button:first-child:not(:last-child) {
 		padding-right: 15px;
 	}
-	button.button.first {
+	button.button.first:not(.last) {
 		padding-right: 10px;
 	}
-	a.button:last-child, button.button.last {
+	a.button:last-child:not(:first-child), button.button.last:not(.first) {
 		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
 	}
-	a.button:last-child {
+	a.button:last-child:not(:first-child) {
 		padding-left: 15px;
 	}
-	button.button.last {
+	button.button.last:not(.first) {
 		padding-left: 10px;
 	}
 	a.button:not(:first-child):not(:last-child), button.button:not(.first):not(.last) {

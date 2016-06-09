@@ -140,19 +140,19 @@ button.button {
   font-size: 0; }
   .buttongroup a.button:not(:last-child), .buttongroup button.button:not(.last) {
     border-right: none; }
-  .buttongroup a.button:first-child, .buttongroup button.button.first {
+  .buttongroup a.button:first-child:not(:last-child), .buttongroup button.button.first:not(.last) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0; }
-  .buttongroup a.button:first-child {
+  .buttongroup a.button:first-child:not(:last-child) {
     padding-right: 15px; }
-  .buttongroup button.button.first {
+  .buttongroup button.button.first:not(.last) {
     padding-right: 10px; }
-  .buttongroup a.button:last-child, .buttongroup button.button.last {
+  .buttongroup a.button:last-child:not(:first-child), .buttongroup button.button.last:not(.first) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0; }
-  .buttongroup a.button:last-child {
+  .buttongroup a.button:last-child:not(:first-child) {
     padding-left: 15px; }
-  .buttongroup button.button.last {
+  .buttongroup button.button.last:not(.first) {
     padding-left: 10px; }
   .buttongroup a.button:not(:first-child):not(:last-child), .buttongroup button.button:not(.first):not(.last) {
     border-radius: 0; }
