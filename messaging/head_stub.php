@@ -46,6 +46,12 @@ function daysInPast($time) {
 	return unixtojd(time() - $timeOffsetSeconds) - unixtojd($time + $timeOffsetSeconds); //Adding the time offset negates subtraction in $time
 }
 
+function loggedInNotify() {
+	global $username;
+	echo '<h1>Already logged in</h1>';
+	echo '<p>You\'re already logged in as <strong>' . $username . '</strong>. If this isn\'t you, please log in with a different account.</p>';
+}
+
 //Show a sign in panel TODO Cleanup
 /*function signinPanel($showOption, $addAction) {
 	//$showOption can show the Register form or a login form to redirect back to the forums with msgtoken
