@@ -219,7 +219,7 @@ $userVerified = mysqli_fetch_assoc(mysqli_query($db, "SELECT verified FROM `user
 //$userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $timeOffsetSeconds = $timeoffset * 60;
-$returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://www.dropboxforum.com');
+$returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://www.dropboxforum.com/hc/en-us');
 $action = $_POST['action'];
 //$total;
 ?>
