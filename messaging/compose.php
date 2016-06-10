@@ -48,9 +48,9 @@ if ($userAuthenticated) {
 
 	echo '<form action="" method="post">';
 	echo '<input type="hidden" name="from" value="' . $username . '" />';
-	echo '<input name="recipient" placeholder="To" value="' . $dest . '" style="width:100%" required /><br />';
-	echo '<input name="subject" placeholder="Subject" value="' . $subj . '" style="width:100%" /><br />';
-	echo '<textarea name="message" placeholder="Message" rows="8" style="width:100%" required />' . $msg . '</textarea><br />';
+	echo '<input name="recipient" placeholder="To" value="' . $dest . '" style="width:752px" required /><br />';
+	echo '<input name="subject" placeholder="Subject" value="' . $subj . '" style="width:752px" /><br />';
+	echo '<textarea name="message" placeholder="Message" rows="8" style="width:752px" required />' . $msg . '</textarea><br />';
 	echo '<button name="action" value="send" class="button blue">Send</button>';
 	echo '</form>';
 }
