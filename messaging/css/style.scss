@@ -182,7 +182,7 @@ fieldset {
 	font-weight: bold;
 	text-transform: uppercase;
 	background: $button;
-	color: $buttonText;
+	color: $buttonText!important;
 	border: 1px solid $buttonBorder;
 	border-radius: 4px;
 
@@ -198,7 +198,7 @@ fieldset {
 		background: $buttonGray;
 		cursor: default;
 		pointer-events: none;
-		color: $buttonTextGray;
+		color: $buttonTextGray!important;
 	}
 
 	&.blue {

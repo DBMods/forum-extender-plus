@@ -99,7 +99,7 @@ fieldset {
   font-weight: bold;
   text-transform: uppercase;
   background: #eee;
-  color: #666;
+  color: #666 !important;
   border: 1px solid #ddd;
   border-radius: 4px; }
   .button:hover {
@@ -111,7 +111,7 @@ fieldset {
     background: #f5f5f5;
     cursor: default;
     pointer-events: none;
-    color: #c3c3c3; }
+    color: #c3c3c3 !important; }
   .button.blue {
     background: #007ee5;
     border: 1px solid #0b6897;
