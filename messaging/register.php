@@ -1,11 +1,8 @@
 <?php
 require_once 'header.php';
 
-function registerPanel($userId, $email, $username, $error) {
+function registerPanel($userId, $email, $username) {
 	echo '<h1>Register Your Account</h1>';
-	if (isset($error)) {
-		echo '<p class="error">' . $error . '</p>';
-	}
 	echo '<p>Please fill out the registration form below to complete registration.</p>';
 	echo '<form action="" method="post">';
 	echo '<input type="hidden" name="userid" value="' . $userId . '" />';
@@ -75,15 +72,22 @@ if (!$userAuthenticated) {
 			//Account does not yet exist, so check for errors
 			$result = mysqli_query($db, "SELECT * FROM `users` WHERE `username` = '" . sqlesc(htmlspecialchars($_POST['username'])) . "'");
 
-			if (mysqli_fetch_row($result)) {
+			if (!preg_match('/[A-Za-z\d]{' . strlen($_POST['username']) . '}/', $_POST['username'])) {
+				//Username has special characters
+				echo '<div class="toast error">Your username may only contain alphanumeric characters</div>';
+				registerPanel($userid, $email, '');
+			} else if (mysqli_fetch_row($result)) {
 				//Username taken
-				registerPanel($userid, $email, '', 'That username is already taken.');
+				echo '<div class="toast error">That username is already taken.</div>';
+				registerPanel($userid, $email, '');
 			} else if ($_POST['password'] !== $_POST['passwordagain']) {
 				//Passwords do not match
-				registerPanel($userid, $email, $_POST['username'], 'The passwords do not match.');
+				echo '<div class="toast error">The passwords do not match</div>';
+				registerPanel($userid, $email, $_POST['username']);
 			} else if (strlen($_POST['password']) < 7) {
 				//Password too short
-				registerPanel($userid, $email, $_POST['username'], 'Your password must be at least 7 characters.');
+				echo '<div class="toast error">Your password must be at least 7 characters</div>';
+				registerPanel($userid, $email, $_POST['username']);
 			} else {
 				//Generate email verification code
 				$verifyCode = genAlphaNum(60);
