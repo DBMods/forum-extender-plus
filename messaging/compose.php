@@ -8,7 +8,7 @@ if ($userAuthenticated && $userVerified) {
 
 	if ($action === 'send') {
 		//User is trying to send message
-		//Check for valid recipient so we don't get unresolved messages tuck in the database
+		//Check for valid recipient so we don't get unresolved messages stuck in the database
 		$result = mysqli_query($db, "SELECT * FROM `users` WHERE `username` = '" . sqlesc($dest) . "' LIMIT 1");
 		$row = mysqli_fetch_assoc($result);
 
@@ -27,6 +27,11 @@ require_once 'header.php';
 
 if ($userAuthenticated) {
 	if ($userVerified) {
+		if ($action === 'send') {
+			//If user is sending message, and we haven't been redirected by now, it failed
+			echo '<div class="toast error">Invalid recipient</div>';
+		}
+
 		$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `id` = '" . sqlesc($_POST['msgid']) . "'");
 		$row = mysqli_fetch_assoc($result);
 
