@@ -72,6 +72,7 @@ if (isset($action)) {
 				//User not verified, so verify them and alert user
 				mysqli_query($db, "UPDATE `users` SET verified = 1 WHERE userid = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "'");
 
+				$userVerified = true;
 				echo '<p>You\'re all set! Your email has been successfully verified, and you may now log in and use the system as normal';
 			} else {
 				//User already verified
