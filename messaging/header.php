@@ -103,7 +103,7 @@ if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register
 			</header>
 			<div id='container'>
 				<?php if ($userAuthenticated && !$userVerified) {
-					echo '<div class="toast info">Your email address has not yet been verified. Many features will not work without verification.</div>';
+					echo '<div class="toast info">Your email address has not yet been verified, and some features have been disabled. <a href="' . $root . '/verify.php?action=status">Verify your account</a></div>';
 				}
 				?>
 				<div id='content'>
