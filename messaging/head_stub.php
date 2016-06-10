@@ -142,7 +142,7 @@ if ($_POST['returnto']) {
 }
 
 //Delete cookies on logoff
-if ($_POST['action'] == 'logoff') {
+if ($_POST['action'] === 'logoff') {
 	delCookie('userToken');
 	delCookie('userid');
 }
@@ -190,8 +190,11 @@ if ($_POST['userToken'] && $_POST['userid']) {
 
 //If login form submitted, check auth
 if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token") {
+	//Check if "username" is a username or email
+	$field = preg_match('/@/', $_POST['username']) ? 'email' : 'username';
+
 	//Query database for hash
-	$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+	$result = mysqli_query($db, "SELECT password FROM `users` WHERE " . $field . " = '" . sqlesc($_POST['username']) . "'");
 	$passwordHash = mysqli_fetch_row($result);
 	$passwordHash = $passwordHash['0'];
 
@@ -200,13 +203,13 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		$userAuthenticated = true;
 
 		//Get token and UID
-		$result = mysqli_query($db, "SELECT userid, ext_token FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'");
+		$result = mysqli_query($db, "SELECT * FROM `users` WHERE " . $field . " = '" . sqlesc($_POST['username']) . "'");
 		$row = mysqli_fetch_assoc($result);
 
 		makeCookie('userToken', $row['ext_token'], time() + 3600 * 24 * 30);
 		makeCookie('userid', $row['userid'], time() + 3600 * 24 * 30);
 
-		$username = htmlspecialchars($_POST['username']);
+		$username = htmlspecialchars($row['username']);
 		$userIsAdmin = $row['admin'] == 1;
 	} else {
 		$badAuth = true; //TODO I don't believe we need this anymore
@@ -214,7 +217,7 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 }
 
 //Set variables
-$userVerified = mysqli_fetch_assoc(mysqli_query($db, "SELECT verified FROM `users` WHERE username = '" . sqlesc($_POST['username']) . "'"))['verified'] == 1;
+$userVerified = mysqli_fetch_row(mysqli_query($db, "SELECT verified FROM `users` WHERE userid = '" . sqlesc($_COOKIE['userid']) . "'"))['0'] == 1;
 //$userId = htmlspecialchars($_COOKIE['userid']);
 //$userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
