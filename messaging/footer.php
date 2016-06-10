@@ -5,8 +5,9 @@ if (count(get_included_files()) == 1) {
 ?>
 </div>
 <div id='nav'>
-	<a class='button wide blue' href='<?php echo $root; ?>/compose.php'>Compose</a><br>
 	<?php
+	echo '<a class="button wide ' . (!$userAuthenticated || $userVerified ? 'blue' : 'grayed') . '" href="' . $root . '/compose.php">Compose</a><br />';
+
 	getMessages();
 	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php');
 	echo '<br />' . linkActivity('sent.php', true, 'Sent');
