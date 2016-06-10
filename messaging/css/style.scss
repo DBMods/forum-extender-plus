@@ -20,15 +20,6 @@ $shadowLighter: rgba(0, 0, 0, 0.2);
 $lightText: #fff;
 $lightLink: #ccc;
 
-$toastSuccess: #e8f7ed;
-$toastSuccessAccent: #30b661;
-$toastInfo: #e1f2fb;
-$toastInfoAccent: #5bb8e8;
-$toastWarning: #fff9e1;
-$toastWarningAccent: #ffd335;
-$toastDanger: #fef1f1;
-$toastDangerAccent: #e2a8a8;
-
 $subjectText: #999;
 $highlightedSubjectText: #eee;
 $unread: #fff;
@@ -54,20 +45,18 @@ $buttonDangerHover: #d90000;
 $buttonDangerText: #fff;
 $buttonDangerBorder: #900;
 
-$verifyWarningBack: #fff9e1;
-$verifyWarningText: #e8b500;
-$verifyWarningBorder: #ffd335;
-
-#verifyWarn {
-	border: 1px solid $verifyWarningBorder;
-	color: $verifyWarningText;
-	background: $verifyWarningBack;
-	border-radius: 6px;
-	padding: 10px 20px;
-	text-align: center;
-	font-size: 12px;
-	margin-bottom: 20px;
-}
+$toastSuccessBack: #e8f7ed;
+$toastSuccessText: #30b661;
+$toastSuccessBorder: #30b661;
+$toastInfoBack: #e1f2fb;
+$toastInfoText: #45aee5;
+$toastInfoBorder: #5bb8e8;
+$toastWarningBack: #fff9e1;
+$toastWarningText: #e8b500;
+$toastWarningBorder: #ffd335;
+$toastErrorBack: #fef1f1;
+$toastErrorText: #d58282;
+$toastErrorBorder: #e2a8a8;
 
 /*
  * Page layout
@@ -346,34 +335,31 @@ tr {
 }
 
 .toast {
-	padding: 10px 15px;
-	position: fixed;
-	width: fit-content;
-	border: 1px solid;
-	border-radius: 5px;
+	border-radius: 6px;
+	padding: 10px 20px;
+	text-align: center;
 	font-size: 12px;
-	opacity: 0;
-	animation: fadeInOut 4.6s;
+	margin-bottom: 20px;
 
 	&.success {
-		background: $toastSuccess;
-		border-color: $toastSuccessAccent;
-		color: $toastSuccessAccent;
+		border: 1px solid $toastSuccessBorder;
+		color: $toastSuccessText;
+		background: $toastSuccessBack;
 	}
 	&.info {
-		background: $toastInfo;
-		border-color: $toastInfoAccent;
-		color: $toastInfoAccent;
+		border: 1px solid $toastInfoBorder;
+		color: $toastInfoText;
+		background: $toastInfoBack;
 	}
 	&.warning {
-		background: $toastWarning;
-		border-color: $toastWarningAccent;
-		color: $toastWarningAccent;
+		border: 1px solid $toastWarningBorder;
+		color: $toastWarningText;
+		background: $toastWarningBack;
 	}
-	&.danger {
-		background: $toastDanger;
-		border-color: $toastDangerAccent;
-		color: $toastDangerAccent;
+	&.error {
+		border: 1px solid $toastErrorBorder;
+		color: $toastErrorText;
+		background: $toastErrorBack;
 	}
 }
 
