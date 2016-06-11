@@ -9,18 +9,17 @@ if (!$userIsAdmin) {
 require_once '../header.php';
 
 if ($userAuthenticated && $userIsAdmin) {
-	$result = mysqli_query($db, "SELECT * FROM `users`");
+	$result = mysqli_query($db, "SELECT * FROM `users` ORDER BY `id` ASC");
 
 	//List users in database
-	echo '<table><tr><th>UID</th><th>Username</th><th>Create Date</th><th>Create IP</th><th>Token</th><th>New Password</th></tr>';
+	echo '<table><tr><th>ID</th><th>Dropbox UID</th><th>Username</th><th>Email</th><th>Verified</th></tr>';
 	while ($row = mysqli_fetch_assoc($result)) {
 		echo '<tr>';
+		echo '<td>' . htmlspecialchars($row['id']) . '</td>';
 		echo '<td>' . htmlspecialchars($row['userid']) . '</td>';
-		echo '<td>' . htmlspecialchars($row['username']) . '</td>';
-		echo '<td>' . gmdate('Y-m-d g:i A', $row['create_time']) . '</td>';
-		echo '<td>' . htmlspecialchars($row['create_ip']) . '</td>';
-		echo '<td>' . htmlspecialchars($row['ext_token']) . '</t>';
-		echo '<td><form onsubmit="return false;" method="post" action="" style="margin:0px"><input name="dashmodpassword" class="dashmodpassword" type="password" /><input name="dashuserid" class="dashuserid" type="hidden" value="' . $row['userid'] . '"/> <input type="hidden" name="dashmodapply" class="dashmodapply" value="change" /></form><a href="javascript:void(0)" class="button danger changepass">Change</a></td>';
+		echo '<td><a href="viewuser.php?id=' . htmlspecialchars($row['id']) . '">' . htmlspecialchars($row['username']) . '</a></td>';
+		echo '<td>' . htmlspecialchars($row['email']) . '</td>';
+		echo '<td>' . ($row['verified'] == '1' ? 'Yes' : '<span style="font-weight:bold;color:#b00">No</span>') . '</td>';
 		echo '</tr>';
 	}
 	echo '</table>';
