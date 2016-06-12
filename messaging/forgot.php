@@ -84,7 +84,7 @@ if ($action === 'resetpassword' && isset($user)) {
 		$message .= "<p>If you did not request to reset your password, or do not wish to reset it at this time, you may simply ignore this email.</p>\r\n";
 		$message .= "</div></div></body></html>";
 
-		$mailed = mail($email, 'New User Registration', $message, $headers);
+		$mailed = mail($email, 'Password Reset Request', $message, $headers);
 
 		if ($mailed == 1) {
 			echo '<p>An email with a link to reset your password has been sent to the email address associated with your Dropbox account. Please check your email to reset your password.</p>';
