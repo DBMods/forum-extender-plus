@@ -170,6 +170,9 @@ table {
   border-collapse: collapse;
   width: 100%; }
 
+th {
+  text-align: left; }
+
 td {
   font-size: 12px;
   padding: 8px; }
