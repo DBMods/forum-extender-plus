@@ -216,6 +216,10 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 	}
 }
 
+//Default $noRedirect if not set
+//$noRedirect is used before the require to specify a disallow of a signin form redirect
+$noRedirect = isset($noRedirect) ? $noRedirect : false;
+
 //Set variables
 $userVerified = mysqli_fetch_row(mysqli_query($db, "SELECT verified FROM `users` WHERE userid = '" . sqlesc($_COOKIE['userid']) . "'"))['0'] == 1;
 //$userId = htmlspecialchars($_COOKIE['userid']);

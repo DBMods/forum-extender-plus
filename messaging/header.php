@@ -6,7 +6,7 @@ if (count(get_included_files()) == 1) {
 require_once 'head_stub.php';
 
 //If the user isn't authed, and is trying to access a system page, redirect to signin
-if (!$userAuthenticated && $pageName !== 'signin.php' && $pageName !== 'register.php' && $pageName !== 'verify.php' && $pageName !== 'forgot.php' && $pageName !== 'resetpassword.php') {
+if (!$userAuthenticated &&!$noRedirect) {
 	header('Location: ' . $root . '/signin.php?dest=' . $pageName);
 }
 ?>

@@ -1,4 +1,5 @@
 <?php
+$noRedirect = true;
 require_once 'header.php';
 
 function registerPanel($userId, $email, $username) {

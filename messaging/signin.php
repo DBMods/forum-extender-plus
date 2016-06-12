@@ -1,4 +1,5 @@
 <?php
+$noRedirect = true;
 require_once 'head_stub.php';
 
 if ($userAuthenticated) {
