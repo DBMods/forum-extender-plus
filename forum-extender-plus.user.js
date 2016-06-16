@@ -11,7 +11,7 @@
 // @include http://localhost/dropboxextplus/register.php*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.6.2pre3b
+// @version 2.7.0
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
 // @require https://github.com/DBMods/forum-extender-plus/raw/master/bin/js/helpList.js
