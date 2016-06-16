@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.6.2pre3b-----
+* Fixed erratic nav bar item styling
+
 -----2.6.2pre3a-----
 + Added links to view all posts to navbar
 * Fixed issue with URL detecting
