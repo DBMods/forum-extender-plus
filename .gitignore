@@ -4,3 +4,4 @@ error_log
 **/tests/**
 **/.sass-cache
 *.map
+todo.md
