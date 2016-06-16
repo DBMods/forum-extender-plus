@@ -20,38 +20,6 @@ function collectData() {
 	echo '<p>There doesn\'t seem to be a user ID or email here, so we\'re attempting to load data from the userscript. This shouldn\'t take more than a few seconds. If it takes longer than usual, make sure you have the latest version of the userscript installed, and <a href="register.php">try again</a>. If the error persists, please try again later.';
 }
 
-function genAlphaNum($len, $uniqueField) {
-	global $db;
-	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
-	$genStr = '';
-
-	if (isset($uniqueField)) {
-		//If we need a unique string, recreate one until it's unique
-		$exists = true;
-
-		while ($exists === true) {
-			//Generate token
-			$genStr = '';
-			for ($i = 0; $i < $len; $i++) {
-				$genStr .= $chars[rand(0, strlen($chars) - 1)];
-			}
-
-			//Check if generated token exists
-			$result = mysqli_query($db, "SELECT * FROM `users` WHERE `$uniqueField` = '$genStr'");
-			if (mysqli_fetch_array($result) === NULL) {
-				$exists = false;
-			}
-		}
-	} else {
-		//Generate a random string that does not have to be unique
-		for ($i = 0; $i < $len; $i++) {
-			$genStr .= $chars[rand(0, strlen($chars) - 1)];
-		}
-	}
-
-	return $genStr;
-}
-
 if (!$userAuthenticated) {
 	$userid = $_POST['userid'];
 	$email = $_POST['email'];

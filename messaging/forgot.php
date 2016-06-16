@@ -2,38 +2,6 @@
 $noRedirect = true;
 require_once 'header.php';
 
-function genAlphaNum($len, $uniqueField) {
-	global $db;
-	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
-	$genStr = '';
-
-	if (isset($uniqueField)) {
-		//If we need a unique string, recreate one until it's unique
-		$exists = true;
-
-		while ($exists === true) {
-			//Generate token
-			$genStr = '';
-			for ($i = 0; $i < $len; $i++) {
-				$genStr .= $chars[rand(0, strlen($chars) - 1)];
-			}
-
-			//Check if generated token exists
-			$result = mysqli_query($db, "SELECT * FROM `users` WHERE `$uniqueField` = '$genStr'");
-			if (mysqli_fetch_array($result) === NULL) {
-				$exists = false;
-			}
-		}
-	} else {
-		//Generate a random string that does not have to be unique
-		for ($i = 0; $i < $len; $i++) {
-			$genStr .= $chars[rand(0, strlen($chars) - 1)];
-		}
-	}
-
-	return $genStr;
-}
-
 function showForm() {
 	echo '<p>To reset your password, we can send a password reset email to the email address associated with your account. Please enter your username or email below.</p>';
 	echo '<form action="" method="post">';

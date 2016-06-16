@@ -80,6 +80,39 @@ function badAuth() {
 	echo "<div class='alert-center'><div id='alert-fade' class='alert alert-danger'><p><strong>Wrong username or password</strong></p></div></div>";
 }*/
 
+//Generate a random alphanumeric string of specified length, either unique or not
+function genAlphaNum($len, $uniqueField) {
+	global $db;
+	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+	$genStr = '';
+
+	if (isset($uniqueField)) {
+		//If we need a unique string, recreate one until it's unique
+		$exists = true;
+
+		while ($exists === true) {
+			//Generate token
+			$genStr = '';
+			for ($i = 0; $i < $len; $i++) {
+				$genStr .= $chars[rand(0, strlen($chars) - 1)];
+			}
+
+			//Check if generated token exists
+			$result = mysqli_query($db, "SELECT * FROM `users` WHERE `$uniqueField` = '$genStr'");
+			if (mysqli_fetch_array($result) === NULL) {
+				$exists = false;
+			}
+		}
+	} else {
+		//Generate a random string that does not have to be unique
+		for ($i = 0; $i < $len; $i++) {
+			$genStr .= $chars[rand(0, strlen($chars) - 1)];
+		}
+	}
+
+	return $genStr;
+}
+
 //Append a link to the navbar
 function linkActivity($page, $singlePage, $text, $altCheck = false) {
 	global $pageName, $userAuthenticated, $root;
