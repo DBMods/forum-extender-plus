@@ -52,34 +52,6 @@ function loggedInNotify() {
 	echo '<p>You\'re already logged in as <strong>' . $username . '</strong>. If this isn\'t you, please log in with a different account.</p>';
 }
 
-//Show a sign in panel TODO Cleanup
-/*function signinPanel($showOption, $addAction) {
-	//$showOption can show the Register form or a login form to redirect back to the forums with msgtoken
-	echo '<div class="small-center">';
-	echo '<div class="panel panel-primary">';
-	echo '<div class="panel-heading"><h3>Sign in</h3></div>';
-	echo '<div class="panel-body">';
-	echo '<form method="post" action="">';
-	echo '<fieldset>';
-	echo '<div class="form-group"><input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required="" /></div>';
-	echo '<div class="form-group"><input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required="" /></div>';
-	echo '<div class="form-group">';
-	echo $addAction ? ("<button name=\"action\" value=\"" . $addAction . "\" class=\"button blue\">Sign in</button>") : ("<button class=\"button blue\">Sign in</button>");
-	echo '</div>';
-	echo '</fieldset>';
-	echo '</form>';
-	if ($showOption == "showRegister")
-		echo "<p>Not registered? <form method='post' action=''><button name='action' class='button' value='register'>Sign up!</button></form></p>";
-	if ($showOption == "showTokenRedir")
-		echo "<p>Sign in to allow the extension to access your messaging account</p>";
-	echo '</div>';
-	echo '</div>';
-	echo '</div>';
-}
-function badAuth() {
-	echo "<div class='alert-center'><div id='alert-fade' class='alert alert-danger'><p><strong>Wrong username or password</strong></p></div></div>";
-}*/
-
 //Generate a random alphanumeric string of specified length, either unique or not
 function genAlphaNum($len, $uniqueField) {
 	global $db;
@@ -195,7 +167,8 @@ if ($_COOKIE['userToken'] && $_COOKIE['userid']) {
 		$username = htmlspecialchars($row['username']);
 		$userIsAdmin = $row['admin'] == 1;
 	} else {
-		$badCookie = true;
+		//$badAuth used to detect proper auth when sign in has to be forced, since the user may already be logged in
+		//In which case, $userAuthenticated will not work
 		$badAuth = true;
 	}
 }
@@ -217,6 +190,8 @@ if ($_POST['userToken'] && $_POST['userid']) {
 		makeCookie('userToken', $userToken, time() + 3600 * 24 * 30);
 		makeCookie('userid', $userId, time() + 3600 * 24 * 30);
 	} else {
+		//$badAuth used to detect proper auth when sign in has to be forced, since the user may already be logged in
+		//In which case, $userAuthenticated will not work
 		$badAuth = true;
 	}
 }
@@ -245,7 +220,9 @@ if ($_POST['username'] && $_POST['password'] && $_POST['action'] != "pass-token"
 		$username = htmlspecialchars($row['username']);
 		$userIsAdmin = $row['admin'] == 1;
 	} else {
-		$badAuth = true; //TODO I don't believe we need this anymore
+		//$badAuth used to detect proper auth when sign in has to be forced, since the user may already be logged in
+		//In which case, $userAuthenticated will not work
+		$badAuth = true;
 	}
 }
 
@@ -255,11 +232,8 @@ $noRedirect = isset($noRedirect) ? $noRedirect : false;
 
 //Set variables
 $userVerified = mysqli_fetch_row(mysqli_query($db, "SELECT verified FROM `users` WHERE userid = '" . sqlesc($_COOKIE['userid']) . "'"))['0'] == 1;
-//$userId = htmlspecialchars($_COOKIE['userid']);
-//$userToken = htmlspecialchars($_COOKIE['userToken']);
 $timeoffset = htmlspecialchars($_COOKIE['timeoffset']);
 $timeOffsetSeconds = $timeoffset * 60;
 $returnto = (isset($_COOKIE['returnto']) ? $_COOKIE['returnto'] : 'https://www.dropboxforum.com/hc/en-us');
 $action = $_POST['action'];
-//$total;
 ?>
