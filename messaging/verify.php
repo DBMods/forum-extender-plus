@@ -68,7 +68,7 @@ if (isset($action)) {
 		$row = mysqli_fetch_assoc($result);
 
 		if ($row) {
-			//TODO If user matches UID and authcode, check if verified
+			//If user matches UID and authcode, check if verified
 			if ($row['verified'] == 0) {
 				//User not verified, so verify them and alert user
 				mysqli_query($db, "UPDATE `users` SET verified = 1 WHERE userid = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "'");
@@ -79,9 +79,6 @@ if (isset($action)) {
 				//User already verified
 				echo '<p>Seems like you\'ve already been verified. You may now log in and use the system as normal.</p>';
 			}
-				//TODO If not verified, verify user
-					//TODO Alert user
-				//TODO Else user already verified
 		} else {
 			//Invalid verification
 			echo '<p>The verification link provided does not correspond with any existing users. Please double check the URL for accuracy.</p>';
