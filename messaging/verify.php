@@ -63,25 +63,27 @@ if (isset($action)) {
 			echo '<p><a class="button blue" href="' . $pageName . '?action=resend">Resend verification email</a></p>';
 		}
 	} else if (isset($user) && isset($authcode) && $user && strlen($authcode) === 60 && preg_match('/[A-Za-z\d]{60}/', $authcode) && ($action === 'register' || $action === 'decline')) {
-		//Variables all exist, and match criteria
-		$result = $result = mysqli_query($db, "SELECT verified FROM `users` WHERE `userid` = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "' LIMIT 1");
-		$row = mysqli_fetch_assoc($result);
+		if ($action === 'register') {
+			//Variables all exist, and match criteria
+			$result = $result = mysqli_query($db, "SELECT verified FROM `users` WHERE `userid` = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "' LIMIT 1");
+			$row = mysqli_fetch_assoc($result);
 
-		if ($row) {
-			//If user matches UID and authcode, check if verified
-			if ($row['verified'] == 0) {
-				//User not verified, so verify them and alert user
-				mysqli_query($db, "UPDATE `users` SET verified = 1 WHERE userid = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "'");
+			if ($row) {
+				//If user matches UID and authcode, check if verified
+				if ($row['verified'] == 0) {
+					//User not verified, so verify them and alert user
+					mysqli_query($db, "UPDATE `users` SET verified = 1 WHERE userid = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "'");
 
-				$userVerified = true;
-				echo '<p>You\'re all set! Your email has been successfully verified, and you may now log in and use the system as normal';
+					$userVerified = true;
+					echo '<p>You\'re all set! Your email has been successfully verified, and you may now log in and use the system as normal';
+				} else {
+					//User already verified
+					echo '<p>Seems like you\'ve already been verified. You may now log in and use the system as normal.</p>';
+				}
 			} else {
-				//User already verified
-				echo '<p>Seems like you\'ve already been verified. You may now log in and use the system as normal.</p>';
+				//Invalid verification
+				echo '<p>The verification link provided does not correspond with any existing users. Please double check the URL for accuracy.</p>';
 			}
-		} else {
-			//Invalid verification
-			echo '<p>The verification link provided does not correspond with any existing users. Please double check the URL for accuracy.</p>';
 		}
 	} else {
 		//URL has bad formatting
