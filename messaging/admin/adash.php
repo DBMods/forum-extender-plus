@@ -1,47 +1,30 @@
 <?php
-require_once '../header.php';
-if ($userAuthenticated) {
-	getMessages();
-  if ($userIsAdmin) {
-		if ($action == 'updateadmin') {
-			//Code
-		}
-?>
-<!--<table>
-  <tr>
-    <th>UID</th>
-    <th>Username</th>
-    <th>Create Date</th>
-    <th>Create IP</th>
-    <th>Token</th>
-    <th>New Password</th>
-  </tr>-->
-<?php
-    //Get list of users
-    /*$result = mysqli_query($db, "SELECT * FROM `users`");
-    //List users in rows
-    while ($row = mysqli_fetch_assoc($result)) {
-      echo '<tr>';
-      echo '<td>' . htmlspecialchars($row['userid']) . '</td>';
-      echo '<td>' . htmlspecialchars($row['username']) . '</td>';
-      echo '<td>' . gmdate('Y-m-d g:i A', $row['create_time']) . '</td>';
-      echo '<td>' . htmlspecialchars($row['create_ip']) . '</td>';
-      echo '<td>' . htmlspecialchars($row['ext_token']) . '</t>';
-      echo '<td><form method="post" action="" style="margin:0px"><input name="dashmodpassword" id="dashmodpassword" type="password"><input name="dashuserid" id="dashuserid" type="hidden" value="' . $row['userid'] . '"> <button name="dashmodapply" id="dashmodapply" type="submit" class="button blue" value="change">Change</button></form></td>';
-      echo '</tr>';
-    }*/
-?>
-<!--</table>-->
-<form action='' method='post'>
+require_once '../head_stub.php';
 
-	<br>
-	<button type='submit' class='button danger' name='action' value='updateadmin'>Update Settings</button>
-</form>
-<?php
-  }else {
-    echo '<h2>Error</h2>';
-		echo '<p>You are not authorized to access this page.</p>';
-  }
+//If the user isn't an admin, throw them to the inbox, and make this page completely invisible to them
+if (!$userIsAdmin) {
+	header('Location: ' . $root);
 }
+
+require_once '../header.php';
+
+if ($userAuthenticated && $userIsAdmin) {
+	//Update database if necessary
+	if ($action === 'updateadminconfig') {
+		mysqli_query($db, "UPDATE `config` SET `value` = '" . $_POST['default_uid_origin'] . "' WHERE `setting` = 'default_uid_origin'");
+	}
+
+	$result = mysqli_query($db, "SELECT * FROM `config` WHERE `setting` = 'default_uid_origin' LIMIT 1");
+	$row = mysqli_fetch_assoc($result);
+
+	//Display settings
+	echo '<form onsubmit="return false;" id="adminsettingsform" action="" method="post">';
+	echo '<input type="hidden" name="action" value="updateadminconfig" />';
+	echo '<strong>default_uid_origin</strong>:<br />';
+	echo '<input type="text" name="default_uid_origin" value="' . $row['val'] . '" style="width:100%" />';
+	echo '</form>';
+	echo '<br /><a href="javascript:void(0)" id="adminsettings" class="button danger">Update</a>';
+}
+
 require_once '../footer.php';
 ?>

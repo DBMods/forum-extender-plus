@@ -1,104 +1,118 @@
 <?php
 require_once 'header.php';
-function settingsView($viewOption) {
-	global $username;
-	?>
-		<div class="settings-form">
-			<fieldset class='form-horizontal'>
-				<h4 class="center">Username</h4>
-				<div class="form-group">
-					<label class="col-md-4 control-label">Username (cannot be changed)</label>
-					<div class="col-md-4">
-						<input type="text" value="<?php echo $username; ?>" disabled class="form-control input-md">
-					</div>
-				</div>
-			</fieldset>
-			<br>
-			<form method="post" action="" class="form-horizontal">
-				<fieldset>
-					<h4 class="center">Change password*</h4>
-					<input id='curpassword' name='curpassword' type='password' placeholder='Current Password' />
-					<input id='modpassword' name='modpassword' type='password' placeholder='New Password' />
-					<input id='modverifypassword' name='modverifypassword' type='password' placeholder='Repeat New Password' />
-					<br>
-					<small class="center">*You must sign in after changing your password</small>
-					<br>
-					<button id='modapply' name='modapply' type='submit' class='button blue'>Apply</button>
-				</fieldset>
-			</form>
-		</div>
-	<?php
-}
 
-$curpassword = $_POST['curpassword'];
-$modpassword = $_POST['modpassword'];
-$modverifypassword = $_POST['modverifypassword'];
 if ($userAuthenticated) {
-	//If user is logged in
-	if (isset($_POST['modapply'])) {
-		if (!empty($curpassword) && !empty($modpassword) && !empty($modverifypassword)){
-			//If password requested to be changed
-			$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($username) . "'");
-			$passwordHash = mysqli_fetch_row($result);
-			$passwordHash = $passwordHash['0'];
+	//Grab user email for displaying form data
+	$result = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($username) . "'");
+	$row = mysqli_fetch_array($result);
 
-			//Check if the password is good
-			if (password_verify($curpassword, $passwordHash)){
-				$passwordFail = false;
-				$passwordMod = true;
-			}else {
-				$passwordFail = true;
-				$passwordMod = false;
-				http://youtu.be/IfllOzPCkn8
-			}
-		}
+	$userEmail = $row['email'];
+	$dispName = $row['name'];
+	$newEmail = $row['newEmail'];
 
-		if ($passwordFail) {
-			//If current password is incorrect
-			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Wrong password</strong></p></div></div>";
-			settingsView('changeFailPassword');
-		} elseif ($modpassword != $modverifypassword) {
-			//If new passwords don't match
-			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-warning'><p><strong>Passwords not the same</strong></p></div></div>";
-			settingsView('changeFailPassword');
-		} elseif (isset($passwordMod)) {
-			//No issues with changing settings AND something was modified
-			if ($passwordMod) {
-				//If password is being changed
-				$chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-				for ($i = 0; $i < 10; $i++) {
-					$random .= $chars[rand(0, strlen($chars) - 1)];
+	if ($action === 'changePass') {
+		//User wants to change password
+		$result = mysqli_query($db, "SELECT password FROM `users` WHERE username = '" . sqlesc($username) . "'");
+		$passwordHash = mysqli_fetch_row($result);
+		$passwordHash = $passwordHash['0'];
+
+		if (password_verify($_POST['curPass'], $passwordHash)) {
+			//Password matches, so check for matching new password
+			if ($_POST['newPass'] === $_POST['newPassAgain']) {
+				//Passwords match, check length
+				if (strlen($_POST['newPass']) >= 7) {
+					//Password is sufficient, so save it
+					$newPass = sqlesc(password_hash($_POST['newPass'], PASSWORD_BCRYPT));
+
+					mysqli_query($db, "UPDATE `users` SET password = '$newPass' WHERE username = '" . sqlesc($username) . "'");
+					echo '<div class="toast success">Your password has been changed</div>';
+				} else {
+					//Password too short
+					echo '<div class="toast error">Your password must be at least 7 characters</div>';
 				}
-
-				//Check if token already exists and if so gen another one
-				$exists = true;
-				while ($exists == true) {
-					$query = "SELECT * FROM `users` WHERE `ext_token` = '$random'";
-					$result = mysqli_query($sqlconnect, $query);
-					$row = mysqli_fetch_array($result);
-					if ($row !== NULL) {
-						$random = "";
-						for ($i = 0; $i < 10; $i++) {
-							$random .= $chars[rand(0, strlen($chars) - 1)];
-						}
-					} else
-						$exists = false;
-				}
-				$token = $random;
-				$modpasswordhash = password_hash($modpassword, PASSWORD_BCRYPT);
-				$result = mysqli_query($db, "UPDATE users set password='" . sqlesc($modpasswordhash) . "', ext_token='" . sqlesc($token) . "' WHERE userid='" . sqlesc($userid) . "' LIMIT 1");
+			} else {
+				//Passwords don't match
+				echo '<div class="toast error">The new passwords do not match</div>';
 			}
-			echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Settings saved</strong></p></div></div>";
-			settingsView("changeSuccess");
 		} else {
-			//No settings changed
-			settingsView("view");
+			//Incorrect initial password
+			echo '<div class="toast error">The password provided is incorrect</div>';
 		}
-	} else {
-		//Loading the normal page (settings aren't being changed yet)
-		settingsView("view");
+	} else if ($action === 'changesettings') {
+		$dispName = sqlesc($_POST['dispName']);
+		$email = htmlspecialchars($_POST['email']);
+
+		if ($userVerified && sqlesc($email) !== $userEmail) {
+			//User has changed email, so we need to confirm it
+			mysqli_query($db, "UPDATE `users` SET newEmail = '$email' WHERE username = '" . sqlesc($username) . "'");
+
+			$verifyCode = genAlphaNum(60);
+
+			$confirmLink = $root . '/changeemail.php?user=' . $userid . '&authcode=' . $verifyCode . '&action=confirm';
+			$denyLink = $root . '/changeemail.php?user=' . $userid . '&authcode=' . $verifyCode . '&action=decline';
+
+			$headers = "From: Forum Extender+ Messenger <noreply@techgeek01.com>\r\n";
+			$headers .= "Reply-To: noreply@techgeek01.com\r\n";
+			$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+			$headers .= "MIME-Version: 1.0\r\n";
+			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+			$message = "<html><head>\r\n";
+			$message .= "<style>a,a:hover{color:#007ee5;text-decoration:none;font-weight:bold}\r\n";
+			$message .= "blockquote{color:#aaa;border:1px solid #ddd;\r\n";
+			$message .= "border-left:3px solid #007ee5;border-radius:1px 6px 6px 1px;\r\n";
+			$message .= "margin:15px 50px;padding:15px 20px;font-size:12px}</style></head>\r\n";
+			$message .= "<body style='background:#007ee5;margin:0;font-family:Arial,sans-serif;color:#444'>\r\n";
+			$message .= "<div style='max-width:980px;margin:auto;padding:50px 30px'>\r\n";
+			$message .= "<div style='background:#fff;border:1px solid #aaa;padding:30px 40px;box-shadow:0px 0px 10px 0px rgba(0,0,0,0.6);border-radius:5px'>\r\n";
+			$message .= "<div style='font-size:48px;border-bottom:2px solid #ccc;''>Confirm email, <span style='font-size:32px;color:#aaa'>" . $username . "!</span></div>\r\n";
+			$message .= "<p>Your email address has been updated, but needs to be confirmed. If this is your desired email account, you may confirm the change by clicking <a href='" . $confirmLink . "'>here</a>. If clicking the link above doesn't work, you can copy and paste the URL below.</p>\r\n";
+			$message .= "<blockquote>" . $confirmLink . "</blockquote>\r\n";
+			$message .= "<p>If you did not request to change your email, or do not wish to change it at this time, you may deny the request by clicking <a href='" . $denyLink . "'>here</a>. If clicking the link above doesn't work, you can copy and paste the URL below.</p>\r\n";
+			$message .= "<blockquote>" . $denyLink . "</blockquote>\r\n";
+			$message .= "</div></div></body></html>";
+
+			$mailed = mail($email, 'Confirm Email Change', $message, $headers);
+
+			//Alert user
+			if ($mailed) {
+				echo '<div class="toast warning">Your email address has been changed, but needs to be confirmed first. Check your email for further intructions.</div>';
+			} else {
+				echo '<div class="toast error">We were unable to send a verification email to your desired email address</div>';
+			}
+		}
+
+		//Update settings and alert user
+		mysqli_query($db, "UPDATE `users` SET name = '$dispName' WHERE username = '" . sqlesc($username) . "'");
+		echo '<div class="toast success">Your settings have been saved</div>';
 	}
 
+	//Add email verification notice
+	//Variable set before email changed in database, so notice only shows on next page load
+	if ($newEmail != '') {
+		echo '<div class="toast info">Your new email has not yet been confirmed. Check the status of verification <a href="confirmemail.php?action=status">here</a>.</div>';
+	}
+
+	echo '<div class="floatbox">';
+	echo '<div class="small">';
+	echo '<h1>Settings</h1>';
+	echo '<form action="" method="post">';
+	echo '<strong>Username:</strong> ' . $username . '<br />';
+	echo '<input type="text" name="dispName" placeholder="Display Name" value="' . $dispName . '" /><br />';
+	echo '<input type="text" name="email" placeholder="Email" value="' . $userEmail . '" ' . ($userVerified ? '' : 'readonly ') . 'required /><br />';
+	echo '<button class="button blue" type="submit" name="action" value="changesettings">Submit</button>';
+	echo '</form>';
+	echo '</div><div class="large">';
+	echo '<h1>Change Password</h1>';
+	echo '<form action="" method="post">';
+	echo '<input type="password" name="curPass" placeholder="Current Password" required /><br />';
+	echo '<input type="password" name="newPass" placeholder="New Password" required /><br />';
+	echo '<input type="password" name="newPassAgain" placeholder="New Password Again" required /><br />';
+	echo '<button class="button blue" type="submit" name="action" value="changePass">Change password</button>';
+	echo '</form>';
+	echo '</div>';
+	echo '</div>';
 }
+
 require_once 'footer.php';
 ?>

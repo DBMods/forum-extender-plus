@@ -1,42 +1,70 @@
 <?php
-if ($action != 'send') {
-	require_once 'header.php';
+require_once 'head_stub.php';
+
+if ($userAuthenticated && $userVerified) {
+	$dest = $_POST['recipient'];
+	$subj = $_POST['subject'];
+	$msg = $_POST['message'];
+
+	if ($action === 'send') {
+		//User is trying to send message
+		//Check for valid recipient so we don't get unresolved messages stuck in the database
+		$result = mysqli_query($db, "SELECT * FROM `users` WHERE `username` = '" . sqlesc($dest) . "' LIMIT 1");
+		$row = mysqli_fetch_assoc($result);
+
+		if ($row) {
+			//Destination valid, so we can send the message
+			$vals = "'" . sqlesc($dest) . "', '" . sqlesc($username) . "', '" . sqlesc($subj) . "', '" . sqlesc($msg) . "', '" . time() . "'";
+			mysqli_query($db, "INSERT INTO `msglist` (`to`, `from`, `subject`, `msg`, `time`) VALUES(" . $vals . ")");
+
+			//Redirect to inbox after message sent
+			header('Location: ' . $root);
+		}
+	}
 }
+
+require_once 'header.php';
 
 if ($userAuthenticated) {
-	if ($action == 'send') {
-		require_once 'send.php';
-	} elseif ($action == 'addressbook') {
-		require_once 'address-book.php';
-	}
+	if ($userVerified) {
+		if ($action === 'send') {
+			//If user is sending message, and we haven't been redirected by now, it failed
+			echo '<div class="toast error">Invalid recipient</div>';
+		}
 
-	if ($action != 'addressbook' && ($action != 'send' || $senderror)) {
-		$showinbox = false;
+		$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `id` = '" . sqlesc($_POST['msgid']) . "'");
+		$row = mysqli_fetch_assoc($result);
 
-		$subj = htmlspecialchars($_POST['subject']);
+		if ($row) {
+			//If we're forwarding or replying to a message, change the default values accordingly
+			switch ($action) {
+				case 'reply':
+					$dest = $row['from'];
+					$subj = (strpos($row['subject'], 'Re: ') !== 0 ? 'Re: ' : '') . $row['subject'];
+					$msg = '';
+					break;
 
-		$msgplaceholder = 'This is where you would write your message. You know, sort of like this. I mean, you probably wouldn\'t actually write this up to send to someone, but if you were, that would be a proper use for the message system. I mean, you don\'t have to write a novel or anything, but you don\'t have to not write a novel. Heck, feel free to pour your heart and soul out into your message. Actually, wait, don\'t. That might be kinda weird. So anyway, like I said, it doesn\'t have to be a novel, but it can be. Novels are fun! Also, the devs of this script are pretty cool to talk to, so if you want to drop by to say hi, try sending a message to either Andy Y. or Nathan C. So you can pretty much message about anything you want here. You could even talk about rainbows and unicorns! If you want to talk to the admins, this isn\'t their topic of choice, though, but, I guess if you really wanted to, you could, and they might (reluctantly, of course) reply with some other nonsense. So what are you waiting for? Type away!';
-		echo $senderror;
-		if ($_POST['context']) {
-			//Display context
-			echo '<p>' . nl2br(htmlspecialchars($_POST['context'])) . '</p>';
-
-			//Tweak subject
-			if (strpos($subj, 'Re: ') !== 0) { //If the subject doesn't already have a reply tag on it, tag it appropriately
-				$subj = 'Re: ' . $subj;
+				case 'forward':
+					$dest = '';
+					$subj = (strpos($row['subject'], 'Fwd: ') !== 0 ? 'Fwd: ' : '') . $row['subject'];
+					$msg = $row['msg'];
+					break;
 			}
 		}
-		echo '<form id="messageform" action="./" method="post">';
-		echo '<input id="msgto" name="msgto" type="textbox" style="width:100%" class="form-control" placeholder="Recipient*" value="' . htmlspecialchars($_POST['msgto']) . '" required /><br>';
-		echo '<input id="subject" name="subject" type="textbox" style="width:100%" class="form-control" placeholder="Subject*" value="' . $subj . '" required /><br>';
-		echo '<textarea name="msgtext" placeholder="Message" rows="9" style="width:100%" class="form-control" required>' . htmlspecialchars($_POST['msgtext']) . '</textarea><br>';
-		echo '<input type="hidden" name="action" value="send" />';
-		echo '</form><form id="cancelForm" style="display:none" action="./" method="post"></form>';
-		echo '<p class="buttongroup"><a id="sendBtn" class="button" href="javascript:void(0)">Send</a><a id="cancelBtn" class="button danger" href="javascript:void(0)">Cancel</a></p>';
+
+		echo '<form action="" method="post">';
+		echo '<input type="hidden" name="from" value="' . $username . '" />';
+		echo '<input name="recipient" placeholder="To" value="' . $dest . '" style="width:752px" required /><br />';
+		echo '<input name="subject" placeholder="Subject" value="' . $subj . '" style="width:752px" /><br />';
+		echo '<textarea name="message" placeholder="Message" rows="8" style="width:752px" required />' . $msg . '</textarea><br />';
+		echo '<button name="action" value="send" class="button blue">Send</button>';
+		echo '</form>';
+	} else {
+		//User not verified, so don't allow sending
+		echo '<h1>Compose</h1>';
+		echo '<p>In order to send and receive messages, you need to verify your email.</p>';
 	}
 }
 
-if ($action != 'send') {
-	require_once 'footer.php';
-}
+require_once 'footer.php';
 ?>

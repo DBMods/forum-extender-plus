@@ -2,3 +2,6 @@ db-login.php
 error_log
 *.tmp
 **/tests/**
+**/.sass-cache
+*.map
+todo.md

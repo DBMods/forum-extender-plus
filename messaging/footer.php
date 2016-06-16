@@ -1,25 +1,21 @@
 <?php
-//Not logged in or bad auth
-if (!$userAuthenticated && $pageName != 'report.php' && $pageName != 'fix-auth.php') {
-	if ($userLogoff)
-		echo "<div class='alert-center'><div id='alert-fade' class='alert alert-success'><p><strong>Successfully logged out</strong></p></div></div>";
-	require_once "sign-in.php";
+if (count(get_included_files()) == 1) {
+	die('Insufficient permissions');
 }
-mysqli_close($db);
 ?>
-
 </div>
 <div id='nav'>
-	<a class='button wide blue' href='https://www.techgeek01.com/dropboxextplus/compose.php'>Compose</a><br>
 	<?php
+	echo '<a class="button wide ' . (!$userAuthenticated || $userVerified ? 'blue' : 'grayed') . '" href="' . $root . '/compose.php">Compose</a><br />';
+
 	getMessages();
-	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php') . '<br>';
-	echo linkActivity('sent.php', true, 'Sent') . '<br>';
-	echo linkActivity('archive.php', true, 'Archive' . $archBadge) . '<br>';
-	echo linkActivity('settings.php', true, 'Settings') . '<br>';
-	echo linkActivity('stats.php', true, 'Stats');
+	echo linkActivity('', true, 'Inbox' . $countBadge, 'index.php');
+	echo '<br />' . linkActivity('sent.php', true, 'Sent');
+	echo '<br />' . linkActivity('archive.php', true, 'Archive' . $archBadge);
+	echo '<br />' . linkActivity('settings.php', true, 'Settings');
+	//echo '<br />' . linkActivity('stats.php', true, 'Stats');
 	if ($userIsAdmin) {
-		echo '<br>' . linkActivity('admin/', false, 'Admin');
+		echo '<br />' . linkActivity('admin/', false, 'Admin');
 	}
 	?>
 </div>
@@ -27,14 +23,19 @@ mysqli_close($db);
 </div>
 <footer class='columnbox'>
 	<div class='column'>
-		<strong>Dropbox</strong><br>
-		<a href='https://www.dropbox.com'>Dropbox</a><br>
+		<strong>Dropbox</strong><br />
+		<a href='https://www.dropbox.com'>Dropbox</a><br />
 		<a href='https://www.dropboxforum.com'>Dropbox Forums</a>
 	</div>
 	<div class='column'>
-		<strong>Extender+</strong><br>
-		<a href='https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey'>Official Thread</a><br>
+		<strong>Extender+</strong><br />
+		<a href='https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey'>Official Thread</a><br />
 		<a href='https://www.github.com/DBMods/forum-extender-plus'>GitHub</a>
+	</div>
+	<div class='column'>
+		<strong>Messenger</strong><br />
+		<a href='https://www.techgeek01.com/dropboxextplus'>Stable</a><br />
+		<a href='https://www.techgeek01.com/dropboxextplus/beta'>Beta</a>
 	</div>
 </footer>
 </div>
@@ -45,15 +46,9 @@ mysqli_close($db);
 	</div>
 	<footer>
 		Proudly developed by <a href="http://techgeek01.com" target='_blank'>Andy Y.</a> and <a href="http://nathancheek.com" target='_blank'>Nathan C.</a>
-		<!--<form action="compose.php" method="post" class="form-link">
-			<input type="hidden" name="msgto" value="TechGeek01" />
-			<input type="hidden" name="subject" value="Bug report: " />
-			<button type="submit" class="btn-link">Problem?</button>
-		</form>-->
 	</footer>
 </div>
 
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
 <script>
 	var pageUrl = '<?php echo $pageName; ?>';
 	var archAct;
@@ -62,7 +57,7 @@ mysqli_close($db);
 
 	if (pageUrl == 'index.php' || pageUrl == 'archive.php') {
 		archAct = pageUrl == 'index.php' ? 'arch' : 'unarch';
-		$('#archForm input[name="action"]').val(archAct);
+		$('#archBtn').val(archAct);
 
 		//initialize buttons
 		$('#viewBtn, #repBtn, #fwdBtn').addClass('grayed');
@@ -80,7 +75,7 @@ mysqli_close($db);
 			selectedList = [id];
 
 			//Add ID to forms for manipulation
-			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
+			$('#viewForm input[name="msgid"], #msgForm input[name="msgid"], #metaForm input[name="msgid"]').val(selectedList);
 
 			//Enable buttons
 			$('#viewBtn, #repBtn, #fwdBtn').removeClass('grayed');
@@ -101,7 +96,7 @@ mysqli_close($db);
 			}
 
 			//Add ID to forms for manipulation
-			$('#viewForm input[name="msgid"], #replyForm input[name="msgid"], #archForm input[name="msgid"], #readForm input[name="msgid"], #unreadForm input[name="msgid"], #delForm input[name="msgid"]').val(selectedList);
+			$('#viewForm input[name="msgid"], #msgForm input[name="msgid"], #metaForm input[name="msgid"]').val(selectedList);
 
 			//Manage meta bar buttons
 			if (selectedList.length == 0) {
@@ -117,19 +112,20 @@ mysqli_close($db);
 
 	} else if (pageUrl == 'view.php') {
 		archAct = '<?php echo $buttonMetaArch; ?>';
-		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive');
-		$('#archForm input[name="action"]').val(archAct);
+		$('#archBtn').html(archAct[0].toUpperCase() + archAct.substr(1, archAct.length) + 'ive').val(archAct);
 
 		//Add ID to forms for manipulation
-		$('#replyForm input[name="msgid"], #forwardForm input[name="msgid"], #archForm input[name="msgid"], #readForm input[name="msgid"], #unreadForm input[name="msgid"], #delForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
-
-		//Change meta forms to throw back to the inbox to avoid displaying errors to the user after message is moved or deleted
-		$('#delForm, #archForm').attr('action', 'index.php');
+		$('#msgForm input[name="msgid"], #metaForm input[name="msgid"]').val(['<?php echo $buttonMetaId ?>']);
 
 		//Enable buttons
 		$('#viewBtn').remove();
 		$('#messageActionButtons').show();
-	} else if (pageUrl == 'admin/userdata.php') {
+	} else if (pageUrl === 'admin/adash.php') {
+		//Manage modal on settings change
+		$('#adminsettings').click(function() {
+			modal('Update Settings', 'You are about to update the global system settings.', 'update settings', 'Update Settings', $('#adminsettingsform'));
+		});
+	} else if (pageUrl == 'admin/users.php') {
 		//Manage modals on user table
 		$('.changepass').click(function() {
 			var $userform = $(this).parent().find('form');
@@ -141,12 +137,12 @@ mysqli_close($db);
 		});
 	}
 
-	//Main function buttons
-	$('#cancelBtn').on('click', function() {
-		$('#cancelForm').submit();
-	});
-	$('#sendBtn').on('click', function() {
-		$('#messageform').submit();
+
+	//Manage delete modal
+	$('#delBtn').click(function() {
+		$form = $(this).parent();
+		$form.attr('onsubmit', 'return false;');
+		modal('Delete message(s)', 'You are about to delete ' + selectedList.length + ' message' + (selectedList.length > 1 ? '(s)' : '') + ' from the system. This cannot be undone.', 'delete message' + (selectedList.length > 1 ? 's' : ''), 'Delete', $form);
 	});
 
 	/*
@@ -208,10 +204,7 @@ mysqli_close($db);
 
 		this.animate({'margin-left': base}, interval);
 	}
-</script>
 
-<script src='https://www.techgeek01.com/dropboxextplus/js/bootstrap.js'></script>
-<script>
 	window.setTimeout(function() {
 		$('#alert-fade').addClass('fade');
 	}, 3000);

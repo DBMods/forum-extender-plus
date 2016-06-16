@@ -2,41 +2,40 @@
 require_once 'header.php';
 
 if ($userAuthenticated) {
-	if ($action == 'send') {
-		require_once 'send.php';
-	} elseif ($action == 'addressbook') {
-		require_once 'address-book.php';
-	}
-
-	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE id = '" . sqlesc($_POST['msgid']) . "'");
+	$mid = $_POST['msgid'];
+	$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE id = '" . sqlesc($mid) . "'");
 	$row = mysqli_fetch_assoc($result);
 
-	//Mark as read if needed
+	//Mark message as read
 	if ($row['unread'] == 1) {
-		mysqli_query($db, "UPDATE `msglist` SET unread = 0 WHERE id = '" . sqlesc($_POST['msgid']) . "'");
+		mysqli_query($db, "UPDATE `msglist` SET unread = 0 WHERE id = '" . sqlesc($mid) . "'");
 	}
 
-	$typestring;
-	if (htmlspecialchars($row['to']) == $username) {
-		$typestring = '<strong>From:</strong> ' . htmlspecialchars($row['from']);
-	} else if (htmlspecialchars($row['from']) == $username) {
-		$typestring = '<strong>To:</strong> ' . htmlspecialchars($row['to']);
-	}
+	$userFromInfo = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($row['from']) . "'");
+	$userFrom = mysqli_fetch_assoc($userFromInfo);
+	$userToInfo = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($row['to']) . "'");
+	$userTo = mysqli_fetch_assoc($userToInfo);
 
-	echo '<p>';
-
-	if ($typestring) {
-		echo $typestring . '<br>';
-		echo '<strong>Subject:</strong> ' . htmlspecialchars($row['subject']) . '<br>';
-		echo '<p>' . $row['msg'] . '</p>';
-
-		$buttonMetaId = $_POST['msgid'];
-		$buttonMetaArch = $row['archive'] == 0 ? 'arch' : 'unarch';
+	//Display message
+	echo '<strong>From:</strong> ';
+	if ($userFrom['name'] != '') {
+		echo htmlspecialchars($userFrom['name']) . ' (' . htmlspecialchars($row['from']) . ')';
 	} else {
-		echo 'Something went wrong. Please try again later.';
+		echo htmlspecialchars($row['from']);
 	}
+	echo '<br><strong>To:</strong> ';
+	if ($userTo['name'] != '') {
+		echo htmlspecialchars($userTo['name']) . ' (' . htmlspecialchars($row['to']) . ')';
+	} else {
+		echo htmlspecialchars($row['to']);
+	}
+	echo '<br>';
+	echo '<strong>Subject:</strong> ' . htmlspecialchars($row['subject']) . '<br>';
+	echo '<p>' . $row['msg'] . '</p>';
 
-	echo '</p>';
+	//Set meta stuff for navbar buttons
+	$buttonMetaId = $_POST['msgid'];
+	$buttonMetaArch = $row['archived'] == 0 ? 'arch' : 'unarch';
 }
 
 require_once 'footer.php';
