@@ -10,8 +10,15 @@ if ($userAuthenticated) {
 		echo '<table>';
 
 		while ($row = mysqli_fetch_assoc($result)) {
+			$userInfo = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($row['to']) . "'");
+			$user = mysqli_fetch_assoc($userInfo);
+
 			echo '<tr ' . 'data-id="' . htmlspecialchars($row['id']) . '"><td class="check"><input type="checkbox" /></td><td class="name">';
-			echo $row['to'];
+			if ($user['name'] != '') {
+				echo htmlspecialchars($user['name']) . ' (' . htmlspecialchars($row['to']) . ')';
+			} else {
+				echo htmlspecialchars($row['to']);
+			}
 			echo '</td><td class="subject"><span class="subject">';
 			echo htmlspecialchars($row['subject']);
 			echo '</span><span class="contentPreview"> - ';

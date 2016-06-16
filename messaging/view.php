@@ -11,9 +11,25 @@ if ($userAuthenticated) {
 		mysqli_query($db, "UPDATE `msglist` SET unread = 0 WHERE id = '" . sqlesc($mid) . "'");
 	}
 
+	$userFromInfo = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($row['from']) . "'");
+	$userFrom = mysqli_fetch_assoc($userFromInfo);
+	$userToInfo = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($row['to']) . "'");
+	$userTo = mysqli_fetch_assoc($userToInfo);
+
 	//Display message
-	echo '<strong>From:</strong> ' . htmlspecialchars($row['from']) . '<br>';
-	echo '<strong>To:</strong> ' . htmlspecialchars($row['to']) . '<br>';
+	echo '<strong>From:</strong> ';
+	if ($userFrom['name'] != '') {
+		echo htmlspecialchars($userFrom['name']) . ' (' . htmlspecialchars($row['from']) . ')';
+	} else {
+		echo htmlspecialchars($row['from']);
+	}
+	echo '<br><strong>To:</strong> ';
+	if ($userTo['name'] != '') {
+		echo htmlspecialchars($userTo['name']) . ' (' . htmlspecialchars($row['to']) . ')';
+	} else {
+		echo htmlspecialchars($row['to']);
+	}
+	echo '<br>';
 	echo '<strong>Subject:</strong> ' . htmlspecialchars($row['subject']) . '<br>';
 	echo '<p>' . $row['msg'] . '</p>';
 
