@@ -8,6 +8,7 @@ if ($userAuthenticated) {
 
 	$userEmail = $row['email'];
 	$dispName = $row['name'];
+	$newEmail = $row['newEmail'];
 
 	if ($action === 'changePass') {
 		//User wants to change password
@@ -84,6 +85,12 @@ if ($userAuthenticated) {
 		//Update settings and alert user
 		mysqli_query($db, "UPDATE `users` SET name = '$dispName' WHERE username = '" . sqlesc($username) . "'");
 		echo '<div class="toast success">Your settings have been saved</div>';
+	}
+
+	//Add email verification notice
+	//Variable set before email changed in database, so notice only shows on next page load
+	if ($newEmail != '') {
+		echo '<div class="toast info">Your new email has not yet been confirmed. Check the status of verification <a href="confirmemail.php?action=status">here</a>.</div>';
 	}
 
 	echo '<div class="floatbox">';
