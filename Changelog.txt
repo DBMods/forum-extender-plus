@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.7.1-----
+* Fixed messaging link bug redirecting to beta system
+
 -----2.7.0-----
 * Fixed erratic nav bar item styling
 
