@@ -41,7 +41,7 @@ if ($userAuthenticated) {
 		$dispName = sqlesc($_POST['dispName']);
 		$email = htmlspecialchars($_POST['email']);
 
-		if (sqlesc($email) !== $userEmail) {
+		if ($userVerified && sqlesc($email) !== $userEmail) {
 			//User has changed email, so we need to confirm it
 			mysqli_query($db, "UPDATE `users` SET newEmail = '$email' WHERE username = '" . sqlesc($username) . "'");
 
@@ -92,7 +92,7 @@ if ($userAuthenticated) {
 	echo '<form action="" method="post">';
 	echo '<strong>Username:</strong> ' . $username . '<br />';
 	echo '<input type="text" name="dispName" placeholder="Display Name" value="' . $dispName . '" /><br />';
-	echo '<input type="text" name="email" placeholder="Email" value="' . $userEmail . '" required /><br />';
+	echo '<input type="text" name="email" placeholder="Email" value="' . $userEmail . '" ' . ($userVerified ? '' : 'readonly ') . 'required /><br />';
 	echo '<button class="button blue" type="submit" name="action" value="changesettings">Submit</button>';
 	echo '</form>';
 	echo '</div><div class="large">';
