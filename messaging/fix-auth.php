@@ -1,4 +1,5 @@
 <?php
+$noRedirect = true;
 require_once 'header.php';
 
 //Grab UID if posted
