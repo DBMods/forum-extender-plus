@@ -46,7 +46,7 @@ if (!$userAuthenticated &&!$noRedirect) {
 
 						if ($userAuthenticated) {
 						?>
-						<form class='inline' action='' method='post'>
+						<form class='inline' action='signin.php?dest=<?php echo $pageName; ?>' method='post'>
 							<button type='submit' class='button last' name='action' value='logoff'>Log out</button>
 						</form>
 						<?php } ?>
@@ -107,3 +107,8 @@ if (!$userAuthenticated &&!$noRedirect) {
 				}
 				?>
 				<div id='content'>
+					<?php
+					if (isset($toast)) {
+						echo $toast;
+					}
+					?>

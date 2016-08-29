@@ -150,6 +150,7 @@ if ($_POST['returnto']) {
 if ($_POST['action'] === 'logoff') {
 	delCookie('userToken');
 	delCookie('userid');
+	$toast = '<div class="toast success">Successfully logged out</div>';
 }
 
 $userIsAdmin = false;
