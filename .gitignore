@@ -1,7 +1,7 @@
 db-login.php
 error_log
 *.tmp
-**/tests/**
+**/tests
 **/.sass-cache
 *.map
 todo.md
