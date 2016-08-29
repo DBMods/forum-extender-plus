@@ -4,7 +4,7 @@
 // @description Scrapes data for helpList.js
 // @include https://www.dropboxforum.com/hc/scrapeHelpList/*
 // @include https://www.dropboxforum.com/hc/scrapeHelpList
-// @version 1.1.1
+// @version 1.1.2
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
@@ -53,7 +53,7 @@ function getEntry(num) {
         if (title != 'Dropbox - 404') {
           missCounter = 0;
           var string = firstItem ? '' : ',';
-          var articleTitle = title.split(' (Dropbox Help Center)')[0].trim();
+          var articleTitle = title.split(' - Dropbox Help - Dropbox')[0].trim();
           string = '<span class="validEntry">' + string + '<br>\'' + num + '\': \'' + articleTitle.replace('\'', '\\\'').replace('’', '\\\'') + '\'</span>';
           $('#list').append(string);
           firstItem = false;
