@@ -4,7 +4,7 @@
 // @description Scrapes data for helpList.js
 // @include https://www.dropboxforum.com/hc/scrapeHelpList/*
 // @include https://www.dropboxforum.com/hc/scrapeHelpList
-// @version 1.1.2
+// @version 1.1.3
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
@@ -23,11 +23,12 @@ var urlVars = getUrlVars();
 var firstItem = true;
 var missCounter = 0;
 var articleNum = urlVars.start || 1;
+var validEntries = 0;
 var i, l;
 
 window.onload = function() {
   $('title').html('helpList.js Scraper');
-  $('body').html('Checking: <span id="check">*starting*</span><br>Consecutive misses: <span id="miss">0</span><br>Valid articles: <span id="found">0</span><br><br>var helpList = {<span id="list"></span><br>};');
+  $('body').html('Checking: <span id="check">*starting*</span><br>Consecutive misses: <span id="miss">0</span><br>Valid articles: <span id="found">0</span><br><br><textarea id="textList" style="width:100%" rows="20"></textarea><span id="list" style="display:none"></span>');
 
   while (missCounter <= 5000) {
     getEntry(articleNum);
@@ -54,14 +55,16 @@ function getEntry(num) {
           missCounter = 0;
           var string = firstItem ? '' : ',';
           var articleTitle = title.split(' - Dropbox Help - Dropbox')[0].trim();
-          string = '<span class="validEntry">' + string + '<br>\'' + num + '\': \'' + articleTitle.replace('\'', '\\\'').replace('’', '\\\'') + '\'</span>';
+          string = string + '&#10;&#9;\'' + num + '\': \'' + articleTitle.replace('\'', '\\\'').replace('’', '\\\'') + '\'';
           $('#list').append(string);
+          $('#textList').html('var helpList = {' + $('#list').html() + '&#10;}');
           firstItem = false;
+          validEntries++;
         } else {
           missCounter++;
         }
         $('#miss').html(missCounter);
-        $('#found').html($('.validEntry').length);
+        $('#found').html(validEntries);
       }
       //$('#check').html('*idle*');
     }
