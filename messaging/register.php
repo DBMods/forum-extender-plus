@@ -25,7 +25,7 @@ if (!$userAuthenticated) {
 	$email = $_POST['email'];
 
 	if (isset($userid) && is_numeric($userid) && isset($email)) {
-		//TODO Check if account doesn't exist for UID or email
+		//Check if account doesn't exist for UID or email
 		$idResult = mysqli_query($db, "SELECT * FROM `users` WHERE `userid` = '" . sqlesc($userid) . "'");
 		$emailResult = mysqli_query($db, "SELECT * FROM `users` WHERE `email` = '" . sqlesc(htmlspecialchars($email)) . "'");
 
