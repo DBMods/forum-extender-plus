@@ -5,7 +5,7 @@
 // @include https://www.dropboxforum.com/*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 1.2.0
+// @version 1.2.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
@@ -23,8 +23,21 @@
  */
 
 var fullUrl = window.location.href;
-var pageUrl = fullUrl.split('https://www.dropboxforum.com/hc/')[1] || '';
-var urlVars = getUrlVars();
+var lang = getLang();
+var strippedUrl = fullUrl.split('#')[0].split('?')[0],
+	slug = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')[1] || '',
+	urlVars = getUrlVars();
+
+function getLang() {
+	//Sanity check
+	if (fullUrl.indexOf('https://www.dropboxforum.com/hc/') !== 0) {
+		return 'en-us';
+	}
+
+	//If stub exists in appropriate location, check if it's a lang stub
+	var stub = fullUrl.split('https://www.dropboxforum.com/hc/')[1].split('#')[0].split('/')[0].split('?')[0];
+	return (stub.length === 2 || (stub.length === 5 && stub.indexOf('-') === 2)) ? stub : 'en-us';
+}
 
 var firstItem = true;
 var missCounter = 0;
@@ -32,9 +45,9 @@ var articleNum = urlVars.start || 1;
 var validEntries = 0;
 var i, l;
 
-$('#gsDropboxExtenderNav').append('<span><a href="https://www.dropboxforum.com/hc/scrapeHelpList">helpList.js Scraper</a></span>');
+$('#gsDropboxExtenderNav').append('<span><a href="' + new Url('scrapeHelpList').value + '">helpList.js Scraper</a></span>');
 
-if (pageUrl == 'scrapeHelpList') {
+if (slug == 'scrapeHelpList') {
   $('title').html('helpList.js Scraper');
   $('.error-page').html('<h1>helpList.js Scraper</h1>');
   $('.error-page').append('<p><span style="font-size:16px;color:#999">Checking: <span id="check" style="color:#000">*starting*</span><br>Consecutive misses: <span id="miss" style="color:#000">0</span>&emsp;&emsp;Valid articles: <span id="found" style="color:#000">0</span></span></p><textarea id="textList" style="width:100%" rows="15" placeholder="Sit tight, we\'re looking for pages"></textarea><span id="list" style="display:none"></span>');
@@ -47,7 +60,26 @@ if (pageUrl == 'scrapeHelpList') {
 }
 
 /*
- * Functions
+ * Methods and prototyping
+ */
+
+function Url(value) {
+	//Sanity check
+	if (typeof value === 'string') {
+		this.value = 'https://www.dropboxforum.com/hc/' + lang;
+		if (value) {
+			this.value += '/' + value;
+			this.value = this.value.split('?')[0].split('#')[0];
+		}
+		this.active = strippedUrl === this.value;
+	} else {
+		this.value = null;
+		this.active = false;
+	}
+}
+
+/*
+ * Helper functions
  */
 
 function getEntry(num) {
