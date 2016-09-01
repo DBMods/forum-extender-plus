@@ -301,8 +301,8 @@ Dropbox Forum Mod Icons Changelog
 * New highlighting bug fix
 
 -----2.2.6.3-----
-# Rewrote postHighlight function to accept a threshold of posts, and will highlight users with that many posts or more
 - Removed unnecessary lines of code
+# Rewrote postHighlight function to accept a threshold of posts, and will highlight users with that many posts or more
 
 -----2.2.6.2-----
 * Typo
@@ -333,8 +333,8 @@ Dropbox Forum Mod Icons Changelog
 # Made code faster and smaller
 
 -----2.2.5.6-----
-# 6.1% reduction in filesize, and 10.8% reduction in lines of code
 * Disabled pulse in production versions
+# 6.1% reduction in filesize, and 10.8% reduction in lines of code
 
 -----2.2.5.5-----
 + Added thread link
@@ -391,8 +391,8 @@ Dropbox Forum Mod Icons Changelog
 - Removed buggy stats
 
 -----2.1.8-----
-# Redid message counter
 + Added message stats
+# Redid message counter
 
 -----2.1.7-----
 + Added blockquote to the post markup
@@ -477,21 +477,20 @@ Dropbox Forum Mod Icons Changelog
 - Minified some code
 
 -----2013.10.30pre1a-----
+- Officially removed post streaks
 * Fixed typo in snippets
 # Made edit signature dynamic
 # Moved UI fix into forumVersion function
-* Fixed unpredictable layout with other themes
-- Officially removed post streaks
 
 -----2013.10.28pre1a-----
 + Added snippets
 
 -----2013.10.25pre1a-----
++ Added notification overlays, similar to those in the Dropbox web interface
++ Added super-secret easter egg
 # Merged addOptions() function into nav bar
 # merged post drafting into nav bar
 # Stripped down code
-+ Added notification overlays, similar to those in the Dropbox web interface
-+ Added super-secret easter egg
 
 -----2013.10.22pre1a-----
 * Fixed post drafting
@@ -503,8 +502,8 @@ Dropbox Forum Mod Icons Changelog
 + Added sticky updating (see for yourselves - https://forums.dropbox.com/topic.php?id=106500)
 
 -----2013.10.13pre1a-----
-# Made thread highlighting a lighter
 + Added post streaks
+# Made thread highlighting a lighter
 # Temporarily deprecated post streaks for further debugging
 
 -----2013.10.11pre1a-----
@@ -512,18 +511,18 @@ Dropbox Forum Mod Icons Changelog
 
 -----2013.10.9pre1a-----
 + Added alert messages
-* Fixed sticky reloading, so it skips if you are responding
 + Started fixing bbPress theme errors
+* Fixed sticky reloading, so it skips if you are responding
 
 -----1.3.1-----
 + Added post drafting
 + Added navigation bar
 + Added Super User activity monitor to navigation bar
++ Added highlighting for 1, 2, and 3 post-count threads
++ Added new thread highlighting
 - Removed need for manual internalVersion change
 # Rewrote postHighlight function
 # Rewrote highlightThread function
-+ Added highlighting for 1, 2, and 3 post-count threads
-+ Added new thread highlighting
 
 -----1.3.0-----
 + Added settings panel
@@ -532,43 +531,43 @@ Dropbox Forum Mod Icons Changelog
 # Rewrote page reloading function
 
 -----1.2.0-----
-# Rewrote postHighlight() function
 - Removed unnecessary importInformation() function
-# Simplified footer
 - Removed getIcon() function
-# Rewrote addIcon() function
-# Rewrote changeRoleName() function
 - Eliminated need for a list of elements
 - Eliminated need for getElementById calls
+# Rewrote postHighlight() function
+# Simplified footer
+# Rewrote addIcon() function
+# Rewrote changeRoleName() function
 
 -----1.1.0-----
-* Fixed original theme refresh behavior
-# Changed original theme's tag selection
 + Dynamic tag font sizing in original theme
-- Removed unnecessary code
 + Added slide-out panel for page footer to save space
 + Added modified 8.8.2012 theme for testing purposes - will have an official name later
+- Removed unnecessary code
+* Fixed original theme refresh behavior
+# Changed original theme's tag selection
 
 -----1.0.1-----
-* Restored regulars' highlighting
-- Removed inDev function
 + Added beta version, which includes all stable versions as well
+- Removed inDev function
+* Restored regulars' highlighting
 
 -----1.0-----
 + Implemented jQuery
-# Replaced versioning scheme
 - Almost completely removed the addSlideOut indev function, in preparation for a complete rewrite
+# Replaced versioning scheme
 
 -----2013.9.2-----
-# Made 8.8.2012 theme much more immersive, including topic and profile pages
 + Added option to highlight posts based on user ID
 + Forum regulars' posts are now highlighted green
+# Made 8.8.2012 theme much more immersive, including topic and profile pages
 
 -----2013.9.1-----
++ Added an inDev() function to hold functions being developed
 * Corrected behavior of reloadStickies() function
 # Denoted the user-customizable part of the code with comments
 # Made comments more human-readable
-+ Added an inDev() function to hold functions being developed
 # Moved addSlideOut() to the indev portion of the code
 
 -----2013.9-----
