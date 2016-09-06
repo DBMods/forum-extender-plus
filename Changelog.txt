@@ -1,6 +1,22 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.8.0-----
++ Added @n[text] syntax for Help Center links with custom link text
++ Added @n[] syntax for Help Center links with article title as link text
++ Added documentation for other developers
+* Critical bug with language URL stub detection
+* Fixed broken @n Help Center link syntax
+* Fixed dynamic modal resizing
+* Dropbox link button now redirects to a custom help page if it can't auth from the current one
+* Fixed makePage() function
+* Fixed bottom padding for .notification classed notifications
+* Typos
+# Link Dropbox button is now shown in red to grab attention
+# Major revamp of modal windows
+# Made hoverMsg() toasts emulate the style of the web interface's toasts
+# Minor backend code restructuring
+
 -----2.7.1-----
 * Fixed messaging link bug redirecting to beta system
 
