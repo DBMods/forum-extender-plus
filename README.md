@@ -1,8 +1,8 @@
 #Dropbox Forum Extender+
-Beefs up forum functionality, and makes it much easier to use
+The Dropbox Forum Extender+ is a Greasemonkey plugin for the Dropbox Forums. The script adds many features to the forums to make it easier to create and respond to threads.
 
 ##How to Install
-To install the script, simply download the ZIP, and install the user.js file as a Greasemonkey plugin just like you would any other. Alternatively, you can copy and paste the source or use the RAW link to the file.
+The easiest way to install the userscript is to use the RAW link to [forum-extender-plus.user.js](forum-extender-plus.user.js) by clicking the Raw button at the top of the file contents. Alternatively, you can download the ZIP and install the user.js file via drag and drop, or copy and paste the source or use the RAW link to the file.
 
 ##Features
 
