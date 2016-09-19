@@ -10,7 +10,23 @@ require_once '../header.php';
 
 if ($userAuthenticated) {
 	if ($userIsAdmin) {
-		$result = mysqli_query($db, "SELECT * FROM `users` ORDER BY `id` ASC");
+		$q = $_GET['q'];
+		$sqlStub = '';
+
+		if ($q) {
+			if(preg_match('/^\d+$/', $q)) {
+				//Query is number, which can match username or ID
+				$sqlStub = " WHERE username LIKE '%" . $q . "%' OR  id LIKE '%" . $q . "%'";
+			} else if (preg_match('/^[A-Za-z\d]+$/', $q)) {
+				//Query is alphanumeric, which can be username
+				$sqlStub = " WHERE username LIKE '%" . $q . "%'";
+			}
+		}
+
+		$result = mysqli_query($db, "SELECT * FROM users" . $sqlStub . " ORDER BY `id` ASC");
+
+		//Add in search box
+		echo '<form action="" method="get"><input type="text" name="q" placeholder="Search by ID or username" value="' . $q . '" autocomplete="off" style="box-sizing:border-box;width:100%;margin-bottom:8px" /></form>';
 
 		//List users in database
 		echo '<table><tr><th>ID</th><th>Dropbox UID</th><th>Username</th><th>Email</th><th>Verified</th></tr>';
