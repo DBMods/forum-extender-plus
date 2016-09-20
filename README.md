@@ -10,7 +10,7 @@ Dropbox Forum Extender+ adds many features to the forums in order to make workin
 ### Easy post tools
 The built in markup options for posts are pretty extensive. However, we've enhanced the existing tools to bring you much more functionality.
 
-<p align='center'>![Post tools showcase](bin/img/docs/posttools.png?raw=true)</p>
+<p align='center'><img src="bin/img/docs/posttools.png?raw=true" alt="Post tools showcase" /></p>
 
 > **Links for markup** - Adding markup is now easier than ever with one click links for things like lists or links.
 
@@ -18,13 +18,13 @@ The built in markup options for posts are pretty extensive. However, we've enhan
 
 > **Post snippets** - For more commonly used responses or links, such as explanations of a feature, or a list of things to accomplish a task with Dropbox, it can be tedious to type out a response that's nearly the same every time. We've added the ability to create predefined snippets, similar to those of a text expansion utility. These snippets can be loaded into the form wherever your cursor currently lies with the click of a button. These snippets can also be added, edited, or deleted at any time from the snippet manager.
 
-<p align='center'>![Help Center linking showcase](bin/img/docs/helpcenterlinks.png?raw=true)</p>
+<p align='center'><img src="bin/img/docs/helpcenterlinks.png?raw=true" alt="Help Center linking showcase" /></p>
 
 > **Help Center quick linking** - If you frequent the forums, you may eventually memorize some of the Help Center numbers. For example, article 175 will give you a rundown of Selective Sync. To save time when linking to these articles, referencing an article can be done via an @ notation (ex: @175). The script will convert all of these notations into clickable links on the fly when the post is submitted.
 
 > Additionally, the @ notation introduces an autocomplete list. If you don't remember the number exactly, a list of all articles matching what's currently typed will pop up, allowing you to select the proper option.
 
-<p align='center'>![Post quoting showcase](bin/img/docs/quoting.png?raw=true)</p>
+<p align='center'><img src="bin/img/docs/quoting.png?raw=true" alt="Post quoting showcase" /></p>
 
 > **Post quoting** - Posts by other users have controls appended to quote a user in your reply. These options allow you to quote either the entire post, or just a selection of text.
 
@@ -40,7 +40,7 @@ With the ever growing list of threads on the forums, for regulars, it can someti
 ### Navigation bar
 The navigation bar fixed to the bottom of the screen provides a quick and simple way to access common tools such as the messaging system or preferences. Use this to quickly open other parts and features of the script.
 
-<p align='center'>![Navbar showcase](bin/img/docs/navbar.png?raw=true)</p>
+<p align='center'><img src="bin/img/docs/navbar.png?raw=true" alt="Navbar showcase" /></p>
 
 > **Preferences** - Clicking the gold plus logo opens the userscript preferences.
 
@@ -51,7 +51,7 @@ The navigation bar fixed to the bottom of the screen provides a quick and simple
 > **Messaging system** - Most forum platforms offer a messaging backend to talk with other users. The messaging system here provides a simple, yet elegant way of privately talking with other users of the userscript without the need to post anything publicly.
 
 ### Preferences menu
-<p align='center'>![Preferences window showcase](bin/img/docs/prefs.png?raw=true)</p>
+<p align='center'><img src="bin/img/docs/prefs.png?raw=true" alt="Preferences window showcase" /></p>
 
 With all of the customization the script has to offer, there should be a central place to manage it. The preferences menu allows for easy customization of almost everything without having to manually edit any code.
 
