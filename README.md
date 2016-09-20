@@ -31,12 +31,6 @@ The built in markup options for posts are pretty extensive. However, we've enhan
 ### Thread highlighting
 With the ever growing list of threads on the forums, for regulars, it can sometimes be hard to quickly go through and answer help threads. Through the use of highlighting, you can now quickly scan to see which threads need response. Fresh threads show highlighted in green, while one or two replies are gold or red respectively.
 
-> <div style='height:38px;margin-top:6px'>**New thread** - <span style='padding: 8px 15px;background-color:#daffc7;color:#000'>Highlighted in green</span></div>
-
-> <div style='height:38px'>**One reply** - <span style='padding: 8px 15px;background-color:#fff8ce;color:#000'>Highlighted in gold</span></div>
-
-> <div style='height:24px'>**Two replies** - <span style='padding: 8px 15px;background-color:#ffe9e9;color:#000'>Highlighted in red</span></div>
-
 ### Navigation bar
 The navigation bar fixed to the bottom of the screen provides a quick and simple way to access common tools such as the messaging system or preferences. Use this to quickly open other parts and features of the script.
 
