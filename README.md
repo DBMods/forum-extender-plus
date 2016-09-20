@@ -18,7 +18,7 @@ The built in markup options for posts are pretty extensive. However, we've enhan
 
 > **Post snippets** - For more commonly used responses or links, such as explanations of a feature, or a list of things to accomplish a task with Dropbox, it can be tedious to type out a response that's nearly the same every time. We've added the ability to create predefined snippets, similar to those of a text expansion utility. These snippets can be loaded into the form wherever your cursor currently lies with the click of a button. These snippets can also be added, edited, or deleted at any time from the snippet manager.
 
-<p align='center'><img src="bin/img/docs/helpcenterlinks.png?raw=true" alt="Help Center linking showcase" /></p>
+<p align='center'><img src="bin/img/docs/helpcenter.png?raw=true" alt="Help Center linking showcase" /></p>
 
 > **Help Center quick linking** - If you frequent the forums, you may eventually memorize some of the Help Center numbers. For example, article 175 will give you a rundown of Selective Sync. To save time when linking to these articles, referencing an article can be done via an @ notation (ex: @175). The script will convert all of these notations into clickable links on the fly when the post is submitted.
 
