@@ -1,6 +1,12 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----2.8.1-----
+* Improved speed for @n Help Center links
+* Code is almost fully JSLint compliant
+# Minified code for old HTML to markdown function
+# Minor aesthetic tweaks
+
 -----2.8.0-----
 + Added @n[text] syntax for Help Center links with custom link text
 + Added @n[] syntax for Help Center links with article title as link text

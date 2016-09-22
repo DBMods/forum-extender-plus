@@ -11,7 +11,7 @@
 // @include http://localhost/dropboxextplus/register.php*
 // @exclude https://www.dropboxforum.com/hc/admin/*
 // @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 2.8.0
+// @version 2.8.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
 // @require https://github.com/DBMods/forum-extender-plus/raw/master/bin/js/helpList.js
@@ -138,7 +138,7 @@ var $body = $('body.community-enabled'),
 	$head = $('head');
 
 //Append necessary elements
-$head.append('<style>@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(359deg)}}.notification{bottom:33px!important}.bluebtn{padding:3px 8px;background:#007ee5;color:#fff;font-weight:600;border:1px solid #0074d2;border-radius:4px;box-shadow:2px 2px 4px -1px rgba(0,0,0,0.8)}.clickable{cursor:pointer;color:#007ee5}#gsDropboxExtenderNav > span{margin-left:20px}.gsDropboxExtenderHelpCenterLinkItem{padding:2px 10px}.gsDropboxExtenderHelpCenterLinkItem strong{color:#000}.gsDropboxExtenderHelpCenterLinkItem span{margin-left:16px}.gsDropboxExtenderHelpCenterLinkItem:hover{background:#439fe0;border-bottom:1px solid #2a80b9;padding-bottom:1px !important;cursor:pointer}.gsDropboxExtenderHelpCenterLinkItem:hover strong,.gsDropboxExtenderHelpCenterLinkItem:hover span{color:#fff !important}.gsDropboxExtenderModal h2{color:#007ee5;font-size:16px;font-weight:600;margin-bottom:7px;border-bottom:1px solid #ddd}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal textarea,.gsDropboxExtenderModal select{box-sizing:border-box;padding:0 8px;margin-bottom:8px;border:1px solid #c3c3c3}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal textarea{width:100%;border-radius:6px}.gsDropboxExtenderModal select{border-radius:6px 0 0 6px}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal select{height:28px}.alert p{margin-bottom:0}.alert-warning{background-color:#fcf8e3;border-color:#f5e79e;color:#8a6d3b}.alert-danger{background-color:#fef1f1;border-color:#e2a8a8;color:#d46d6d}.alert-success{background-color:#e8f7ed;border-color:#30b661;color:#1ba84e}.alert-info{background-color:#d9edf7;border-color:#9acfea;color:#31708f}</style>');
+$head.append('<style>@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(359deg)}}.notification{bottom:33px!important}.bluebtn{padding:3px 8px;background:#007ee5;color:#fff;font-weight:600;border:1px solid #0074d2;border-radius:4px;box-shadow:2px 2px 4px -1px rgba(0,0,0,0.8)}.clickable{cursor:pointer;color:#007ee5}#gsDropboxExtenderNav > span{margin-left:20px}#gsDropboxExtenderHelpCenterLinkContainer div{padding:2px 10px}#gsDropboxExtenderHelpCenterLinkContainer div strong{color:#000}#gsDropboxExtenderHelpCenterLinkContainer div span{margin-left:16px}#gsDropboxExtenderHelpCenterLinkContainer div:hover{background:#439fe0;border-bottom:1px solid #2a80b9;padding-bottom:1px !important;cursor:pointer}#gsDropboxExtenderHelpCenterLinkContainer div:hover strong,#gsDropboxExtenderHelpCenterLinkContainer div:hover span{color:#fff !important}.gsDropboxExtenderModal h2{color:#007ee5;font-size:16px;font-weight:600;margin-bottom:7px;border-bottom:1px solid #ddd}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal textarea,.gsDropboxExtenderModal select, input[type="text"].fancy, textarea.fancy, select.fancy{box-sizing:border-box;padding:0 8px;margin-bottom:8px;border:1px solid #c3c3c3}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal textarea, input[type="text"].fancy, textarea.fancy{width:100%;border-radius:6px}.gsDropboxExtenderModal select, select.fancy{border-radius:6px 0 0 6px}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal select{height:28px}.alert p{margin-bottom:0}.alert-warning{background-color:#fcf8e3;border-color:#f5e79e;color:#8a6d3b}.alert-danger{background-color:#fef1f1;border-color:#e2a8a8;color:#d46d6d}.alert-success{background-color:#e8f7ed;border-color:#30b661;color:#1ba84e}.alert-info{background-color:#d9edf7;border-color:#9acfea;color:#31708f}</style>');
 $body.append('<div id="gsDropboxExtenderModalContainer" style="position:fixed" /><div id="gsDropboxExtenderNav" style="position:fixed;bottom:0;height:32px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px"><img id="gsDropboxExtenderLogo" class="clickable" src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/bin/img/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /><span id="gsDropboxExtenderSyncIcon" style="position:fixed;left:65px;bottom:-15px;z-index:12"></span><span><a href="' + page.posts.sortedList.activity.value + '">All posts by activity</a></span><span><a href="' + page.posts.sortedList.create.value + '">All posts by create date</a></span><span><a href="https://www.dropboxforum.com/hc/en-us/community/posts/201168809-Dropbox-Forum-Extender-for-Greasemonkey">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"></span></span><span style="font-weight:bold;display:none">Important Notice: The messaging system has been updated. If you have previously registered, please trash your preferences and register again.</span></div>').css('padding-bottom', '33px');
 
 //Default synced icon to false until we can connect to the user's config
@@ -447,34 +447,32 @@ if (page.isPost) {
 		var ta = new Date().getTime();
 		var beforeCursor = $postField.val().substring(0, $postField[0].selectionStart);
 
-		var match = beforeCursor.match(/(^|[^\w])@\d*$/g); //Everybody stand back! I know regular expressions
+		var match = beforeCursor.match(/(^|[^\w])@\d*$/gm); //Everybody stand back! I know regular expressions
 		if (match) {
 			match = match + '';
 			match = match.split('@').pop() || '';
 			var tb = new Date().getTime();
 			var arr = Object.keys(helpList);
 			var items = [];
-			/*for (i = 0, l = arr.length; i < l; i++) {
-				if (arr[i].indexOf(match) === 0) {
-					items.push('<div class="gsDropboxExtenderHelpCenterLinkItem"><strong>' + arr[i] + '</strong><span>' + helpList[arr[i]] + '</span></div>');
-				}
-			}*/
+
 			for (i = 0, l = arr.length; i < l; i++) {
 				if (arr[i].indexOf(match) === 0) {
 					items.push(i);
 				}
 			}
+
+			console.log('Test ' + (new Date().getTime() - tb) + 'ms');
+
 			items = items.map(function(num) {
-                return '<div class="gsDropboxExtenderHelpCenterLinkItem"><strong>' + arr[num] + '</strong><span>' + helpList[arr[num]] + '</span></div>';
+                return '<div><strong>' + arr[num] + '</strong><span>' + helpList[arr[num]] + '</span></div>';
 			});
-            console.log(items);
 			$('#gsDropboxExtenderHelpCenterLinkContainer').html(items.join(''));
 			var tc = new Date().getTime();
 			var tt = tc - tb;
 			console.log('Loop executed in ' + tt + 'ms');
 			if (items) {
 				//Show autocomplete list only if there are items in it
-				$('.gsDropboxExtenderHelpCenterLinkItem').click(function() {
+				$('#gsDropboxExtenderHelpCenterLinkContainer div').click(function() {
 					var item = $(this).find('strong').html();
 					var text = item.substring(match.length, item.length);
 
@@ -501,15 +499,15 @@ if (page.isPost) {
     var postFormVal = $postField.val();
 
     //Link @n[text] => Custom text as text
-    postFormVal = postFormVal.replace(/(^|[^\w])@(\d+)\[(.+)\]([^\w]|$)/g, '$1<a href="https://www.dropbox.com/help/$2">$3</a>$4');
+    postFormVal = postFormVal.replace(/(^|[^\w])@(\d+)\[(.+)\]([^\w]|$)/gm, '$1<a href="https://www.dropbox.com/help/$2">$3</a>$4');
 
     //Link @n[] => Help Center article title as text
-    postFormVal = postFormVal.replace(/(^|[^\w])@(\d+)\[\]([^\w]|$)/g, function(match, p1, p2, p3) {
+    postFormVal = postFormVal.replace(/(^|[^\w])@(\d+)\[\]([^\w]|$)/gm, function(match, p1, p2, p3) {
 			return p1 + '<a href="https://www.dropbox.com/help/' + p2 + '">' + helpList[p2] + '</a>' + p3;
 		});
 
     //Link @n => Link URL as text
-    postFormVal = postFormVal.replace(/(^|[^\w])@(\d+)([^\w]|$)/g, '$1<a href="https://www.dropbox.com/help/$2">https://www.dropbox.com/help/$2</a>$3');
+    postFormVal = postFormVal.replace(/(^|[^\w])@(\d+)([^\w]|$)/gm, '$1<a href="https://www.dropbox.com/help/$2">https://www.dropbox.com/help/$2</a>$3');
 		$postField.val(postFormVal);
 	});
 }
@@ -759,7 +757,7 @@ if (client.isAuthenticated()) {
 		if (page.isPost) {
 			//Add post snippets
 			$('h3.answer-list-heading').css('margin-top', '5px');
-			$('#gsDropboxExtenderPostExtras').append('<br><span id="gsDropboxExtenderPostExtras-inner"><select id="snippets"><option name="default" value="">' + (len(snippets) ? 'Select a snippet' : 'You don\'t have any snippets') + '</option><optgroup label="--Snippets--" /></select></span>');
+			$('#gsDropboxExtenderPostExtras').append('<br><span id="gsDropboxExtenderPostExtras-inner"><select id="snippets" class="fancy" style="margin-top:2px"><option name="default" value="">' + (len(snippets) ? 'Select a snippet' : 'You don\'t have any snippets') + '</option><optgroup label="--Snippets--" /></select></span>');
 
 			tmp = [];
 			for (i in snippets) {
@@ -1671,22 +1669,21 @@ function manageSynced(test) {
 function htmlToMarkdown(base) {
 	//Sanity check
 	if (typeof base === 'string') {
-		var baseSelect = base.replace(/<li>/g, '* ').replace(/<p>/g, '\n\n').replace(/<h1>/g, '# ').replace(/<h2>/g, '## ').replace(/<h3>/g, '### ').replace(/<h4>/g, '#### ').replace(/<h5>/g, '##### ').replace(/<h6>/g, '###### ').replace(/<\/?strong>/g, '**').replace(/<\/?i>/g, '*').replace(/<\/h1>|<\/h2>|<\/h3>|<\/h4>|<\/h5>|<\/h6>|<\/?ul>|<\/p>|<\/li>|<ol>|<\/ol>|<ul>|<\/ul>/g, '').replace(/<a\ href="/g, '[').replace(/("\ .{1,})*">/g, '](').replace(/<\/a>/g, ')').replace(/\n\n/g, '\n');
-
-		//Split off links into separate array
-		var linkArray = baseSelect.match(/\[.+\]\(.+\)/g);
-		if (!!linkArray) {
-			var textArray = baseSelect.split(/\[.+\]\(.+\)/g);
-
-			//Swap text and link
-			for (i = 0, l = linkArray.length; i < l; i++) {
-				linkArray[i] = '[' + linkArray[i].split('](')[1].split(')')[0] + '](' + linkArray[i].split('[')[1].split('](')[0] + ')';
-			}
-
-			return $.trim(interleave(textArray, linkArray).join(''));
-		} else {
-			return $.trim(baseSelect);
-		}
+		var mdString = base.replace(/<h1(?:\b.*)?>(.*)<\/h1>/g, '# $1\n')
+				.replace(/<h2(?:\b.*)?>(.*)<\/h2>/g, '## $1\n')
+				.replace(/<h3(?:\b.*)?>(.*)<\/h3>/g, '### $1\n')
+				.replace(/<h4(?:\b.*)?>(.*)<\/h4>/g, '#### $1\n')
+				.replace(/<h5(?:\b.*)?>(.*)<\/h5>/g, '##### $1\n')
+				.replace(/<h6(?:\b.*)?>(.*)<\/h6>/g, '###### $1\n')
+				.replace(/<strong(?:\b.*)?>(.*)<\/strong>/g, '**$1**')
+				.replace(/<i(?:\b.*)?>(.*)<\/i>/g, '*$1*')
+				.replace(/<p(?:\b.*)?>(.*)<\/p>/g, '$1\n')
+				.replace(/<ol(?:\b.*)?><li(?:\b.*)?>(.*)<\/li><\/ol>/g, '1. $1')
+				.replace(/<ul(?:\b.*)?><li(?:\b.*)?>(.*)<\/li><\/ul>/g, '* $1')
+				.replace(/<a href="(.*)" *>(.*)<\/a>/g, '[$2]($1)')
+				.replace(/<\/?[ou]l(?:\b.)*>/g, '')
+				.replace(/(\n){3,}/g, '\n\n');
+		return $.trim(baseSelect);
 	} else {
 		//Invalid thing to convert
 		console.log('HTML to markdown not a string');
