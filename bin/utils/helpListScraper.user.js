@@ -3,9 +3,7 @@
 // @namespace DropboxMods
 // @description Scrapes data for helpList.js
 // @include https://www.dropboxforum.com/*
-// @exclude https://www.dropboxforum.com/hc/admin/*
-// @exclude https://www.dropboxforum.com/hc/user_avatars/*
-// @version 1.2.1
+// @version 1.3.0
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
@@ -23,20 +21,25 @@
  */
 
 var fullUrl = window.location.href;
-var lang = getLang();
 var strippedUrl = fullUrl.split('#')[0].split('?')[0],
-	slug = strippedUrl.split('https://www.dropboxforum.com/hc/' + lang + '/')[1] || '',
-	urlVars = getUrlVars();
+	slug = strippedUrl.split('https://forum-canary.dropboxforum.com/t5/')[1] || '',
+	urlVars = getUrlVars(fullUrl);
 
-function getLang() {
-	//Sanity check
-	if (fullUrl.indexOf('https://www.dropboxforum.com/hc/') !== 0) {
-		return 'en-us';
+function getUrlVars(url) {
+	if (typeof url === 'string') {
+		var vars = [], hash;
+		var hashes = fullUrl.split('#')[0].slice(fullUrl.indexOf('?') + 1).split('&');
+
+		for (i = 0, l = hashes.length; i < l; i++) {
+			hash = hashes[i].split('=');
+			vars.push(hash[0]);
+			vars[hash[0]] = hash[1];
+		}
+
+		return vars;
+	} else {
+		return url;
 	}
-
-	//If stub exists in appropriate location, check if it's a lang stub
-	var stub = fullUrl.split('https://www.dropboxforum.com/hc/')[1].split('#')[0].split('/')[0].split('?')[0];
-	return (stub.length === 2 || (stub.length === 5 && stub.indexOf('-') === 2)) ? stub : 'en-us';
 }
 
 var firstItem = true;
@@ -47,12 +50,52 @@ var i, l;
 
 $('#gsDropboxExtenderNav').append('<span><a href="' + new Url('scrapeHelpList').value + '">helpList.js Scraper</a></span>');
 
-if (slug == 'scrapeHelpList') {
-  $('title').html('helpList.js Scraper');
-  $('.error-page').html('<h1>helpList.js Scraper</h1>');
-  $('.error-page').append('<p><span style="font-size:16px;color:#999">Checking: <span id="check" style="color:#000">*starting*</span><br>Consecutive misses: <span id="miss" style="color:#000">0</span>&emsp;&emsp;Valid articles: <span id="found" style="color:#000">0</span></span></p><textarea id="textList" style="width:100%" rows="15" placeholder="Sit tight, we\'re looking for pages"></textarea><span id="list" style="display:none"></span>');
+if (slug === 'scrapeHelpList') {
+	var $cont = $('.error-page');
 
-  while (missCounter <= 5000) {
+	//Remove junk
+	$cont.siblings().remove();
+	$cont.find('.error-page__image').remove();
+	$cont.find('h2').remove();
+	$cont.find('p').remove();
+
+	//Add page title
+	$cont.find('h1').html('helpList.js Scraper').css({'border-bottom': '2px solid #007ee5', 'padding': '0 8px 4px'});
+	$('head title').html('helpList.js Scraper - Dropbox Forums');
+	$('li.lia-breadcrumb-node.crumb.final-crumb span').html('helpList.js Scraper');
+	$cont.append('<div><div style="display:flex;font-size:16px;font-weight:300;color:#999;padding-bottom:6px"><div style="flex-grow:1">Checking<div id="check" style="color:#000;font-size:42px;line-height:42px">0</div></div><div style="flex-grow:1">Consecutive misses<div id="miss" style="color:#000;font-size:42px;line-height:42px">0</div></div><div style="flex-grow:1">Valid articles<div id="found" style="color:#000;font-size:42px;line-height:42px">0</div></div><div style="flex-grow:1">Current/avg pages/min<div style="color:#000;font-size:42px;line-height:42px"><span id="curRate">0</span><span style="color:#ddd;font-weight:100"> / </span><span id="avgRate">0</span></div></div></div><textarea id="textList" style="width:100%" rows="15" placeholder="Sit tight, we\'re looking for pages"></textarea><span id="masterList" style="display:none"></span></div>');
+
+	//Left-align paragraphs
+	$cont.find('p').css('text-align', 'left');
+
+
+	var $cRate = $('#curRate'),
+		$aRate = $('#avgRate'),
+		checkpoints = [];
+		startTime = new Date().getTime();
+
+	(function getRates() {
+		//Add page count checkpoint
+		if (checkpoints.length === 13) {
+			checkpoints.shift();
+		}
+		checkpoints.push(articleNum - 1);
+
+		//Calculate rates
+		var curRate = 0;
+		if (checkpoints.length > 1) {
+			curRate = (checkpoints[checkpoints.length - 1] - checkpoints[0]) / (checkpoints.length - 1) * 12;
+		}
+		var avgRate = (articleNum - 1) / ((new Date().getTime() - startTime) / 60000);
+
+		//Update rate display
+		$cRate.html(Math.floor(curRate * 100) / 100);
+		$aRate.html(Math.floor(avgRate * 100) / 100);
+
+		setTimeout(getRates, 5000);
+	})();
+
+	while (missCounter <= 5000) {
     getEntry(articleNum);
 
     articleNum++;
@@ -63,20 +106,23 @@ if (slug == 'scrapeHelpList') {
  * Methods and prototyping
  */
 
-function Url(value) {
-	//Sanity check
-	if (typeof value === 'string') {
-		this.value = 'https://www.dropboxforum.com/hc/' + lang;
-		if (value) {
-			this.value += '/' + value;
-			this.value = this.value.split('?')[0].split('#')[0];
-		}
-		this.active = strippedUrl === this.value;
-	} else {
-		this.value = null;
-		this.active = false;
-	}
-}
+ function Url() {
+ 	var args = arguments;
+ 	var val = args[0];
+ 	var capParam = args[1] || false;
+
+ 	//Sanity check
+ 	if (typeof val === 'string') {
+ 		this.value = 'https://www.dropboxforum.com/t5';
+
+ 		if (val) {
+ 			this.value += '/' + val;
+			this.value = this.value.split('#')[0].split('?')[0];
+
+			this.active = this.value === strippedUrl;
+ 		}
+ 	}
+ }
 
 /*
  * Helper functions
@@ -96,9 +142,9 @@ function getEntry(num) {
           missCounter = 0;
           var string = firstItem ? '' : ',';
           var articleTitle = title.split(' - Dropbox Help - Dropbox')[0].trim();
-          string = string + '&#10;&#9;\'' + num + '\': \'' + articleTitle.replace('\'', '\\\'').replace('’', '\\\'') + '\'';
-          $('#list').append(string);
-          $('#textList').html('var helpList = {' + $('#list').html() + '&#10;}');
+          string = string + '\n&#9;\'' + num + '\': \'' + articleTitle.replace('\'', '\\\'').replace('’', '\\\'') + '\'';
+          $('#masterList').append(string);
+          $('#textList').val('var helpList = {' + $('#masterList').html() + '\n};');
           firstItem = false;
           validEntries++;
         } else {
@@ -110,17 +156,4 @@ function getEntry(num) {
       //$('#check').html('*idle*');
     }
   });
-}
-
-function getUrlVars() {
-	var vars = [], hash;
-	var hashes = fullUrl.split('#')[0].slice(fullUrl.indexOf('?') + 1).split('&');
-
-	for (i = 0, l = hashes.length; i < l; i++) {
-		hash = hashes[i].split('=');
-		vars.push(hash[0]);
-		vars[hash[0]] = hash[1];
-	}
-
-	return vars;
 }
