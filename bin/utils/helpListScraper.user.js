@@ -3,7 +3,7 @@
 // @namespace DropboxMods
 // @description Scrapes data for helpList.js
 // @include https://www.dropboxforum.com/*
-// @version 1.3.0
+// @version 1.3.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @downloadURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
 // @updateURL https://github.com/DBMods/forum-extender-plus/raw/master/bin/utils/helpListScraper.user.js
@@ -22,7 +22,7 @@
 
 var fullUrl = window.location.href;
 var strippedUrl = fullUrl.split('#')[0].split('?')[0],
-	slug = strippedUrl.split('https://forum-canary.dropboxforum.com/t5/')[1] || '',
+	slug = strippedUrl.split('https://www.dropboxforum.com/t5/')[1] || '',
 	urlVars = getUrlVars(fullUrl);
 
 function getUrlVars(url) {
