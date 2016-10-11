@@ -1,6 +1,20 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----3.0.0-----
++ Added reload timer notification in bottom right corner
+- Removed topic list hotfixes from old forum
+- Locked changes to forum theme, as it is not used
+- Removed legacy code
+* Fixed navbar and header appearing above modal shade
+* Modals have dynamic height instead of relying on hardcoded numbers for height changes
+* Fixed individual user tagging
+* Fixed Super User post highlighting
+* Super User icons are back!!
+* Reload timer now starts on page load, not on Dropbox API auth
+# Changed default width for modals
+# Fixed typos
+
 -----2.8.1-----
 * Improved speed for @n Help Center links
 * Code is almost fully JSLint compliant
