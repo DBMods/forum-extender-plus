@@ -1,6 +1,9 @@
 + Added     - Removed     * Fixed     # Changed
 Dropbox Forum Mod Icons Changelog
 
+-----3.0.1-----
+* Fixed post reply form link being removed
+
 -----3.0.0-----
 + Added reload timer notification in bottom right corner
 - Removed topic list hotfixes from old forum

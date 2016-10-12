@@ -8,7 +8,7 @@
 // @include https://techgeek01.com/dropboxextplus/beta/register.php*
 // @include http://techgeek01.com/dropboxextplus/beta/register.php*
 // @include http://localhost/dropboxextplus/register.php*
-// @version 3.0.0
+// @version 3.0.1
 // @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js
 // @require https://github.com/DBMods/forum-extender-plus/raw/master/bin/js/helpList.js
@@ -22,6 +22,9 @@
 'use strict';
 
 /*
+ ***** Bugs *****
+ * FIXME Super User highlighting notification is displaying on empty threads
+ * FIXME Check post ratio for SU highlighting?
  ***** General fixes *****
  * FIXME Thread reply emphasis
  * TODO Fix forum-side messaging
@@ -127,7 +130,7 @@ var page = {
 		authhelp: new Url('authhelp'),
 		credits: new Url('credits')
 	},
-	isPost: ['idi-p', 'm-p'].indexOf(slug.split('/')[2]) > -1,
+	isPost: ['idc-p', 'idi-p', 'm-p'].indexOf(slug.split('/')[2]) > -1,
 	isTopic: ['idb-p', 'bd-p', 'ct-p'].indexOf(slug.split('/')[1]) > -1
 };
 
@@ -142,7 +145,7 @@ var $body = $('body'),
 
 //Append necessary elements
 $head.append('<style>#gsDropboxExtenderNav,#gsDropboxExtenderModal{font-weight:100}.bluebtn{margin:0 3px;padding:5.25px 8px;background:#007ee5;color:#fff;font-weight:600;border:1px solid #0083e3;border-radius:4px;cursor:pointer}.clickable{cursor:pointer;color:#007ee5}.clickable:hover{color:#004a94;text-decoration:underline}#gsDropboxExtenderNav > span{margin-left:20px}#gsDropboxExtenderHelpCenterLinkContainer div{padding:2px 10px}#gsDropboxExtenderHelpCenterLinkContainer div strong{color:#000;font-size:14px}#gsDropboxExtenderHelpCenterLinkContainer div span{margin-left:16px;font-size:12px}#gsDropboxExtenderHelpCenterLinkContainer div:hover{background:#439fe0;border-bottom:1px solid #2a80b9;padding-bottom:1px !important;cursor:pointer}#gsDropboxExtenderHelpCenterLinkContainer div:hover strong,#gsDropboxExtenderHelpCenterLinkContainer div:hover span{color:#fff !important}.gsDropboxExtenderModal h2{color:#007ee5;font-size:16px;font-weight:600;margin:7px 0 6px;padding-bottom:4px;border-bottom:1px solid #ddd}.gsDropboxExtenderModal select,.gsDropboxExtenderModal select.fancy{border-radius:6px 0 0 6px}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal select{height:28px}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal textarea,.gsDropboxExtenderModal select,input[type="text"].fancy,textarea.fancy,select.fancy{box-sizing:border-box;padding:0 8px;margin-bottom:8px;border:1px solid #c3c3c3}.gsDropboxExtenderModal input[type="text"],.gsDropboxExtenderModal textarea,input[type="text"].fancy,textarea.fancy{width:100%;border-radius:6px}.alert p{margin-bottom:0}.alert-warning{background-color:#fcf8e3;border-color:#f5e79e;color:#8a6d3b}.alert-danger{background-color:#fef1f1;border-color:#e2a8a8;color:#d46d6d}.alert-success{background-color:#e8f7ed;border-color:#30b661;color:#1ba84e}.alert-info{background-color:#d9edf7;border-color:#9acfea;color:#31708f}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(359deg)}}</style>');
-$body.append('<div style="z-index:9999;position:fixed"><div id="gsDropboxExtenderModalContainer" style="position:fixed;z-index:50" /><div id="gsDropboxExtenderNav" style="position:fixed;bottom:0;height:32px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px;font-size:13px"><img id="gsDropboxExtenderLogo" class="clickable" src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/bin/img/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /><span id="gsDropboxExtenderSyncIcon" style="position:fixed;left:65px;bottom:-4px;z-index:12"></span><span><a href="https://www.dropboxforum.com/t5/Dropbox/Dropbox-Forum-Extender-for-Greasemonkey/idi-p/564">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"></span></span><span style="font-weight:bold;display:none">Important Notice: The messaging system has been updated. If you have previously registered, please trash your preferences and register again.</span></div></div>').css('padding-bottom', '33px');
+$body.append('<div style="z-index:9999;position:fixed"><div id="gsDropboxExtenderModalContainer" style="position:fixed;z-index:50" /><div id="gsDropboxExtenderNav" style="position:fixed;bottom:0;height:32px;border-top:1px solid #bbb;width:100%;line-height:30px;background:#fff;z-index:10;padding:0 0 0 105px;font-size:13px"><img id="gsDropboxExtenderLogo" class="clickable" src="https://raw.githubusercontent.com/DBMods/forum-extender-plus/master/bin/img/plus-sync-logo.png" style="height:150px;width:150px;position:fixed;bottom:-25px;left:-33px;z-index:11" /><span id="gsDropboxExtenderSyncIcon" style="position:fixed;left:65px;bottom:-4px;z-index:12"></span><span><a href="https://www.dropboxforum.com/t5/Dropbox/Dropbox-Forum-Extender-for-Greasemonkey/idc-p/225">Official thread</a></span><span id="gsDropboxExtenderMessageContainer"><a id="gsDropboxExtenderMessageLink" href="https://www.techgeek01.com/dropboxextplus/index.php" target="blank">Messages</a><span id="gsDropboxExtenderMsgCounter"></span></span><span style="font-weight:bold;display:none">Important Notice: The messaging system has been updated. If you have previously registered, please trash your preferences and register again.</span></div></div>').css('padding-bottom', '33px');
 $body.append('<div id="gsDropboxExtenderReloadTimerWrap" style="color:rgba(0,0,0,0.3);text-shadow:0 0 rgba(256,256,256,0.5);position:fixed;bottom:40px;right:8px;font-family:Helvetica,Arial,sans-serif;display:none"><div style="display:inline-block;width:17px"><div id="accent" style="transform:rotate(270deg);font-weight:bold;font-size:14px">RELOAD</div></div><div id="gsDropboxExtenderReloadTimer" style="display:inline-block;font-weight:bold;font-size:72px;line-height:64px">0:30</div></div>');
 
 //Default synced icon to false until we can connect to the user's config
@@ -305,9 +308,9 @@ if (page.isPost && !$postForm.length) {
 }*/
 
 //Fix post replying
-if (page.isPost) {
+/*if (page.isPost) {
 	$('.lia-button-wrapper.lia-component-reply-button').remove();
-}
+}*/
 
 if (page.posts.new.active || page.posts.reply.active || page.isPost) {
 	//Remove rich text tab
