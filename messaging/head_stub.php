@@ -106,8 +106,12 @@ function getMessages() {
 	global $db, $username, $count, $countBadge, $archCount, $archBadge;
 
 	//Count messages in inbox and archive
-	$count = mysqli_num_rows(mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 0 AND `unread` = 1 ORDER BY `time` DESC"));
-	$archCount = mysqli_num_rows(mysqli_query($db, "SELECT * FROM `msglist` WHERE `to` = '" . sqlesc($username) . "' AND `archived` = 1 AND `unread` = 1 ORDER BY `time` DESC"));
+	$count = mysqli_num_rows(mysqli_query($db, "SELECT * FROM msglist as m"
+			. " LEFT JOIN users as tu on m.to = tu.id"
+			. " WHERE tu.username = '" . sqlesc($username) . "' AND archived = 0 AND unread = 1"));
+	$archCount = mysqli_num_rows(mysqli_query($db, "SELECT * FROM msglist as m"
+			. " LEFT JOIN users as tu on m.to = tu.id"
+			. " WHERE tu.username = '" . sqlesc($username) . "' AND archived = 1 AND unread = 1"));
 
 	//Message counter navbar badges
 	$countBadge = $count > 0 ? (' (' . $count . ')') : '';
