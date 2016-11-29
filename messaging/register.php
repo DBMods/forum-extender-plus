@@ -79,8 +79,8 @@ if (!$userAuthenticated) {
 				mysqli_query($db, "INSERT INTO `users` (userid, uid_origin, username, password, email, verify_code, ext_token, create_time, create_ip) VALUES ('$userid', '$defaultUidOrigin', '" . sqlesc($username) . "', '$password', '" . sqlesc($email) . "', '" . sqlesc($verifyCode) . "', '$userToken', '$create_time', '$create_ip')");
 
 				//Send verification email to user
-				$verLink = $root . '/verify.php?user=' . $userid . '&authcode=' . $verifyCode . '&action=register';
-				$cancelLink = $root . '/verify.php?user=' . $userid . '&authcode=' . $verifyCode . '&action=decline';
+				$verLink = $root . '/verify.php?verType=account&user=' . $userid . '&authcode=' . $verifyCode . '&action=register';
+				$cancelLink = $root . '/verify.php?verType=account&user=' . $userid . '&authcode=' . $verifyCode . '&action=decline';
 
 				$headers = "From: Forum Extender+ Messenger <noreply@techgeek01.com>\r\n";
 				$headers .= "Reply-To: noreply@techgeek01.com\r\n";
