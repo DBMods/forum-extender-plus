@@ -17,7 +17,7 @@ if (isset($action)) {
 		} else {
 			if ($action === 'resend') {
 				//User is resending email
-				$result = mysqli_query($db, "SELECT email, userid, verify_code FROM `users` WHERE username = '" . sqlesc($username) . "'");
+				$result = mysqli_query($db, "SELECT email, userid, verify_code FROM users WHERE username = '" . sqlesc($username) . "'");
 				$row = mysqli_fetch_assoc($result);
 
 				if ($row) {
@@ -65,22 +65,22 @@ if (isset($action)) {
 	} else if (isset($user) && isset($authcode) && $user && strlen($authcode) === 60 && preg_match('/[A-Za-z\d]{60}/', $authcode) && ($action === 'confirm' || $action === 'decline')) {
 		if ($action === 'confirm') {
 			//Variables all exist, and match criteria
-			$result = $result = mysqli_query($db, "SELECT newEmail FROM `users` WHERE `userid` = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "' LIMIT 1");
+			$result = mysqli_query($db, "SELECT newEmail FROM users WHERE userid = '" . sqlesc($user) . "' AND verify_code = '" . sqlesc($authcode) . "' LIMIT 1");
 			$row = mysqli_fetch_assoc($result);
 
 			if ($row) {
-				mysqli_query($db, "UPDATE `users` SET email = '" . sqlesc($row['newEmail']) . "' WHERE userid = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "'");
+				mysqli_query($db, "UPDATE users SET email = '" . sqlesc($row['newEmail']) . "' WHERE userid = '" . sqlesc($user) . "' AND verify_code = '" . sqlesc($authcode) . "'");
 			} else {
 				//Invalid verification
 				echo '<p>The verification link provided does not correspond with any existing users. Please double check the URL for accuracy.</p>';
 			}
 		} else if ($action === 'decline') {
 			//Variables all exist, and match criteria
-			$result = $result = mysqli_query($db, "SELECT * FROM `users` WHERE `userid` = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "' LIMIT 1");
+			$result = mysqli_query($db, "SELECT * FROM users WHERE userid = '" . sqlesc($user) . "' AND verify_code = '" . sqlesc($authcode) . "' LIMIT 1");
 			$row = mysqli_fetch_assoc($result);
 
 			if ($row) {
-				mysqli_query($db, "UPDATE `users` SET newEmail = '' WHERE userid = '" . sqlesc($user) . "' AND `verify_code` = '" . sqlesc($authcode) . "'");
+				mysqli_query($db, "UPDATE users SET newEmail = '' WHERE userid = '" . sqlesc($user) . "' AND verify_code = '" . sqlesc($authcode) . "'");
 			} else {
 				//Invalid verification
 				echo '<p>The verification link provided does not correspond with any existing users. Please double check the URL for accuracy.</p>';
