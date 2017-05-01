@@ -178,16 +178,20 @@ if (count(get_included_files()) == 1) {
 
 		$('#modal, #modalShade').css('visibility', 'visible').show();
 
-		$('#modalConfirmButton').click(function() {
+		$('#modalConfirmButton').click(checkForm);
+		$('.modalConfirmForm').submit(checkForm);
+		
+		function checkForm() {
 			if ($('#modalConfirmBox').val().toLowerCase() == confirmText.toLowerCase()) {
 				$('#modal, #modalShade').hide();
 				$form.attr('onsubmit', '');
+				$form.append('<input type="hidden" name="action" value="delete" />'); //Fix for .submit() call, since a value associated with a button only passes when that button is clicked
 				$form.submit();
 			} else {
 				$('#modalConfirmBox').val('');
 				$('#modal').shake(4);
 			}
-		});
+		}
 	}
 
 	$.fn.shake = function(times){
