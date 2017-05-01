@@ -31,8 +31,10 @@ if (!$userAuthenticated &&!$noRedirect) {
 				<span class='message'></span> Type <span class='modalConfirmText'></span> to confirm.
 				<form class='modalConfirmForm' onsubmit='return false;'>
 					<input type='hidden' name='action' value='checkform' />
-					<input id='modalConfirmBox' class='fancy' style='position:relative;top:2px;' />
-					<button type='button' id='modalConfirmButton' class='button danger' href='javascript:void(0)'></button>
+					<div style='display:flex'>
+						<input id='modalConfirmBox' style='flex:99;border-top-right-radius:0;border-bottom-right-radius:0;border-right:none' />
+						<button type='button' id='modalConfirmButton' class='button danger' href='javascript:void(0)' style='border-top-left-radius:0;border-bottom-left-radius:0;margin:3px 0'></button>
+					</div>
 				</form>
 			</div>
 		</div>
