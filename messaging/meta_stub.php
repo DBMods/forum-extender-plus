@@ -7,8 +7,9 @@ if ($userAuthenticated) {
 
 	if ($action === 'delete') {
 		//If we're deleting messages, do that
+		$query = null;
 		for ($i = 0; $i < sizeof($msgIdList); $i++) {
-			$result = mysqli_query($db, "DELETE FROM `msglist` WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "'");
+			$result = mysqli_query($db, "DELETE FROM `msglist` WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . $userId . "'");
 		}
 	} else if ($action === 'arch' || $action === 'unarch' || $action === 'markRead' || $action === 'markUnread') {
 		//Otherwise, modify the database accordingly
@@ -34,7 +35,7 @@ if ($userAuthenticated) {
 
 		//Run query
 		for ($i = 0; $i < sizeof($msgIdList); $i++) {
-			$result = mysqli_query($db, "UPDATE `msglist` SET `" . $dbField . "` = " . $setVal . " WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . sqlesc($username) . "' AND `" . $dbField . "` = " . $checkVal);
+			$result = mysqli_query($db, "UPDATE `msglist` SET `" . $dbField . "` = " . $setVal . " WHERE `id` = '" . sqlesc($msgIdList[$i]) . "' AND `to` = '" . $userId . "' AND `" . $dbField . "` = " . $checkVal);
 		}
 	}
 
