@@ -11,23 +11,23 @@ if ($userAuthenticated) {
 		mysqli_query($db, "UPDATE `msglist` SET unread = 0 WHERE id = '" . sqlesc($mid) . "'");
 	}
 
-	$userFromInfo = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($row['from']) . "'");
+	$userFromInfo = mysqli_query($db, "SELECT * FROM `users` WHERE id = '" . sqlesc($row['from']) . "'");
 	$userFrom = mysqli_fetch_assoc($userFromInfo);
-	$userToInfo = mysqli_query($db, "SELECT * FROM `users` WHERE username = '" . sqlesc($row['to']) . "'");
+	$userToInfo = mysqli_query($db, "SELECT * FROM `users` WHERE id = '" . sqlesc($row['to']) . "'");
 	$userTo = mysqli_fetch_assoc($userToInfo);
 
 	//Display message
 	echo '<strong>From:</strong> ';
 	if ($userFrom['name'] != '') {
-		echo htmlspecialchars($userFrom['name']) . ' (' . htmlspecialchars($row['from']) . ')';
+		echo htmlspecialchars($userFrom['name']) . ' (' . htmlspecialchars($userFrom['username']) . ')';
 	} else {
-		echo htmlspecialchars($row['from']);
+		echo htmlspecialchars($userFrom['username']);
 	}
 	echo '<br><strong>To:</strong> ';
 	if ($userTo['name'] != '') {
-		echo htmlspecialchars($userTo['name']) . ' (' . htmlspecialchars($row['to']) . ')';
+		echo htmlspecialchars($userTo['name']) . ' (' . htmlspecialchars($userTo['username']) . ')';
 	} else {
-		echo htmlspecialchars($row['to']);
+		echo htmlspecialchars($userFrom['username']);
 	}
 	echo '<br>';
 	echo '<strong>Subject:</strong> ' . htmlspecialchars($row['subject']) . '<br>';

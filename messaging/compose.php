@@ -9,13 +9,16 @@ if ($userAuthenticated && $userVerified) {
 	if ($action === 'send') {
 		//User is trying to send message
 		//Check for valid recipient so we don't get unresolved messages stuck in the database
-		$result = mysqli_query($db, "SELECT * FROM `users` WHERE `username` = '" . sqlesc($dest) . "' LIMIT 1");
+		$result = mysqli_query($db, "SELECT id FROM users WHERE username = '" . sqlesc($dest) . "' LIMIT 1");
 		$row = mysqli_fetch_assoc($result);
 
 		if ($row) {
 			//Destination valid, so we can send the message
-			$vals = "'" . sqlesc($dest) . "', '" . sqlesc($username) . "', '" . sqlesc($subj) . "', '" . sqlesc($msg) . "', '" . time() . "'";
-			mysqli_query($db, "INSERT INTO `msglist` (`to`, `from`, `subject`, `msg`, `time`) VALUES(" . $vals . ")");
+			//Grab userID
+			$result = mysqli_query($db, "SELECT id FROM users WHERE username = '" . sqlesc($username) . "' LIMIT 1");
+			$fromrow = mysqli_fetch_assoc($result);
+			$vals = "'" . $row['id'] . "', '" . $fromrow['id'] . "', '" . sqlesc($subj) . "', '" . sqlesc($msg) . "', '" . time() . "'";
+			mysqli_query($db, "INSERT INTO msglist (`to`, `from`, subject, msg, time) VALUES(" . $vals . ")");
 
 			//Redirect to inbox after message sent
 			header('Location: ' . $root);
@@ -32,7 +35,7 @@ if ($userAuthenticated) {
 			echo '<div class="toast error">Invalid recipient</div>';
 		}
 
-		$result = mysqli_query($db, "SELECT * FROM `msglist` WHERE `id` = '" . sqlesc($_POST['msgid']) . "'");
+		$result = mysqli_query($db, "SELECT * FROM msglist WHERE id = '" . sqlesc($_POST['msgid']) . "'");
 		$row = mysqli_fetch_assoc($result);
 
 		if ($row) {
