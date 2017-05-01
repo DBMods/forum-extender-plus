@@ -48,8 +48,8 @@ if ($userAuthenticated) {
 
 			$verifyCode = genAlphaNum(60);
 
-			$confirmLink = $root . '/changeemail.php?user=' . $userid . '&authcode=' . $verifyCode . '&action=confirm';
-			$denyLink = $root . '/changeemail.php?user=' . $userid . '&authcode=' . $verifyCode . '&action=decline';
+			$confirmLink = $root . '/verify.php?verType=email&user=' . $userid . '&authcode=' . $verifyCode . '&action=confirm';
+			$denyLink = $root . '/verify.php?verType=email&user=' . $userid . '&authcode=' . $verifyCode . '&action=decline';
 
 			$headers = "From: Forum Extender+ Messenger <noreply@techgeek01.com>\r\n";
 			$headers .= "Reply-To: noreply@techgeek01.com\r\n";
@@ -90,7 +90,7 @@ if ($userAuthenticated) {
 	//Add email verification notice
 	//Variable set before email changed in database, so notice only shows on next page load
 	if ($newEmail != '') {
-		echo '<div class="toast info">Your new email has not yet been confirmed. Check the status of verification <a href="confirmemail.php?action=status">here</a>.</div>';
+		echo '<div class="toast info">Your new email has not yet been confirmed. Check the status of verification <a href="verify.php?verType=email&action=status">here</a>.</div>';
 	}
 
 	echo '<div class="floatbox">';
